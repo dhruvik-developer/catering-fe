@@ -1,0 +1,163 @@
+import { useState, useEffect } from "react";
+import { FiX } from "react-icons/fi";
+import toast from "react-hot-toast";
+import { createGroundCategory, updateGroundCategory } from "../../../apis/GroundApis";
+
+// eslint-disable-next-line react/prop-types
+const AddGroundCategory = ({ isOpen, onClose, onSuccess, editData = null }) => {
+  const [formData, setFormData] = useState({
+    name: "",
+    description: "",
+    is_active: true,
+  });
+  const [loading, setLoading] = useState(false);
+  const [currentEditId, setCurrentEditId] = useState(null);
+
+  // Sync form data when editData or isOpen changes
+  useEffect(() => {
+    if (!isOpen) return;
+    if (editData) {
+      setFormData({
+        name: editData.name || "",
+        description: editData.description || "",
+        is_active: editData.is_active !== undefined ? editData.is_active : true,
+      });
+      setCurrentEditId(editData.id);
+    } else {
+      setFormData({ name: "", description: "", is_active: true });
+      setCurrentEditId(null);
+    }
+  }, [editData, isOpen]);
+
+  if (!isOpen) return null;
+
+  const isEditMode = !!currentEditId;
+
+  const handleChange = (e) => {
+    const { name, value, type, checked } = e.target;
+    setFormData((prev) => ({
+      ...prev,
+      [name]: type === "checkbox" ? checked : value,
+    }));
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (!formData.name.trim()) {
+      toast.error("Category Name is required");
+      return;
+    }
+
+    try {
+      setLoading(true);
+      let res;
+      if (isEditMode) {
+        res = await updateGroundCategory(currentEditId, formData);
+      } else {
+        res = await createGroundCategory(formData);
+      }
+      if (res?.data?.status) {
+        toast.success(isEditMode ? "Category updated successfully" : "Category created successfully");
+        setFormData({ name: "", description: "", is_active: true });
+        setCurrentEditId(null);
+        onSuccess();
+      } else {
+        toast.error(res?.data?.message || `Failed to ${isEditMode ? "update" : "create"} category`);
+      }
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-gray-900/50 backdrop-blur-sm fade-in">
+      <div className="bg-white rounded-2xl shadow-xl w-full max-w-md overflow-hidden relative slide-up">
+        {/* Header */}
+        <div className="px-6 py-4 border-b border-gray-100 flex justify-between items-center bg-gray-50/50">
+          <h2 className="text-lg font-bold text-gray-800">
+            {isEditMode ? "Edit Ground Category" : "Add Ground Category"}
+          </h2>
+          <button
+            onClick={onClose}
+            className="p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-lg transition-colors"
+          >
+            <FiX size={20} />
+          </button>
+        </div>
+
+        {/* Form Body */}
+        <form onSubmit={handleSubmit} className="p-6">
+          <div className="space-y-4">
+            <div>
+              <label className="block text-sm font-semibold text-gray-700 mb-1.5">
+                Category Name <span className="text-red-500">*</span>
+              </label>
+              <input
+                type="text"
+                name="name"
+                value={formData.name}
+                onChange={handleChange}
+                placeholder="e.g. Hygiene Items"
+                className="w-full px-4 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#845cbd] focus:border-transparent transition-all"
+                required
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm font-semibold text-gray-700 mb-1.5">
+                Description
+              </label>
+              <textarea
+                name="description"
+                value={formData.description}
+                onChange={handleChange}
+                placeholder="Optional description"
+                rows={3}
+                className="w-full px-4 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#845cbd] focus:border-transparent transition-all resize-none"
+              />
+            </div>
+
+            <div className="flex items-center gap-2 pt-2">
+              <input
+                type="checkbox"
+                id="is_active"
+                name="is_active"
+                checked={formData.is_active}
+                onChange={handleChange}
+                className="w-4 h-4 text-[#845cbd] border-gray-300 rounded focus:ring-[#845cbd] cursor-pointer"
+              />
+              <label
+                htmlFor="is_active"
+                className="text-sm font-medium text-gray-700 cursor-pointer select-none"
+              >
+                Active
+              </label>
+            </div>
+          </div>
+
+          {/* Footer actions */}
+          <div className="mt-8 flex items-center justify-end gap-3 pt-4 border-t border-gray-100">
+            <button
+              type="button"
+              onClick={onClose}
+              className="px-4 py-2 text-sm font-medium text-gray-600 bg-white border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors"
+            >
+              Cancel
+            </button>
+            <button
+              type="submit"
+              disabled={loading}
+              className="px-5 py-2 text-sm font-medium text-white bg-[#845cbd] border border-transparent rounded-lg hover:bg-[#724eb0] transition-colors shadow-sm disabled:opacity-70 disabled:cursor-not-allowed flex items-center gap-2"
+            >
+              {loading ? "Saving..." : isEditMode ? "Update Category" : "Save Category"}
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  );
+};
+
+export default AddGroundCategory;

@@ -1,0 +1,660 @@
+import { useEffect, useState } from "react";
+import toast from "react-hot-toast";
+import AllOrderComponent from "./AllOrderComponent";
+
+// Parse date string in dd-mm-yyyy OR yyyy-mm-dd format
+function parseDate(str) {
+  if (!str) return null;
+  const ddmmyyyy = str.match(/^(\d{1,2})[\-\/](\d{1,2})[\-\/](\d{4})$/);
+  if (ddmmyyyy)
+    return new Date(
+      Number(ddmmyyyy[3]),
+      Number(ddmmyyyy[2]) - 1,
+      Number(ddmmyyyy[1])
+    );
+  const yyyymmdd = str.match(/^(\d{4})[\-\/](\d{1,2})[\-\/](\d{1,2})/);
+  if (yyyymmdd)
+    return new Date(
+      Number(yyyymmdd[1]),
+      Number(yyyymmdd[2]) - 1,
+      Number(yyyymmdd[3])
+    );
+  const d = new Date(str);
+  return isNaN(d.getTime()) ? null : d;
+}
+import DeleteConfirmation from "../../Components/common/DeleteConfirmation";
+import { getAllOrder, getSingleOrder } from "../../apis/FetchAllOrder";
+import { useNavigate, useSearchParams } from "react-router-dom";
+import { addPayment, updateOrder } from "../../apis/PostAllOrder";
+import Swal from "sweetalert2";
+
+function AllOrderController() {
+  const navigate = useNavigate();
+  const [searchParams, setSearchParams] = useSearchParams();
+  const [loading, setLoading] = useState(true);
+  const [allOrder, setAllOrder] = useState([]);
+
+  const [searchQuery, setSearchQuery] = useState("");
+  
+  // Initialize date filter from search params if present
+  const initDateRange = () => {
+    const upcomingFilter = searchParams.get("filter") === "upcoming";
+    const dateParam = searchParams.get("date");
+    if (upcomingFilter) {
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+      const sevenDaysLater = new Date(today);
+      sevenDaysLater.setDate(sevenDaysLater.getDate() + 7);
+      sevenDaysLater.setHours(23, 59, 59, 999);
+      return [today, sevenDaysLater];
+    }
+    if (dateParam) {
+      const d = parseDate(dateParam);
+      if (d && !isNaN(d.getTime())) {
+         d.setHours(0,0,0,0);
+         const dEnd = new Date(d);
+         dEnd.setHours(23,59,59,999);
+         return [d, dEnd];
+      }
+    }
+    return [null, null];
+  };
+
+  const [dateRange, setDateRange] = useState(initDateRange);
+
+  const handleQuickFilter = (type) => {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const currentDay = new Date();
+    
+    if (type === "today") {
+      setDateRange([today, today]);
+    } else if (type === "thisWeek") {
+      const first = currentDay.getDate() - currentDay.getDay() + (currentDay.getDay() === 0 ? -6 : 1);
+      const firstDay = new Date(currentDay.setDate(first));
+      firstDay.setHours(0, 0, 0, 0);
+      const lastDay = new Date(firstDay);
+      lastDay.setDate(lastDay.getDate() + 6);
+      lastDay.setHours(23, 59, 59, 999);
+      setDateRange([firstDay, lastDay]);
+    } else if (type === "thisMonth") {
+      const firstDay = new Date(today.getFullYear(), today.getMonth(), 1);
+      firstDay.setHours(0, 0, 0, 0);
+      const lastDay = new Date(today.getFullYear(), today.getMonth() + 1, 0);
+      lastDay.setHours(23, 59, 59, 999);
+      setDateRange([firstDay, lastDay]);
+    } else if (type === "upcoming") {
+      const sevenDaysLater = new Date(today);
+      sevenDaysLater.setDate(sevenDaysLater.getDate() + 7);
+      sevenDaysLater.setHours(23, 59, 59, 999);
+      setDateRange([today, sevenDaysLater]);
+    } else if (type === "clear") {
+      setDateRange([null, null]);
+    }
+  };
+
+  const fetchAllOrder = async () => {
+    try {
+      const response = await getAllOrder();
+      if (response.data.status) {
+        setAllOrder(response.data.data);
+      } else {
+        toast.error("Failed to fetch orders");
+      }
+    } catch (error) {
+      toast.error("Error fetching orders");
+      console.error("API Error:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchAllOrder();
+  }, []);
+
+  // Filter orders by search query and date range
+  const filteredOrders = (() => {
+    let filtered = allOrder;
+    
+    // Search filter
+    if (searchQuery.trim()) {
+      const query = searchQuery.toLowerCase();
+      filtered = filtered.filter((order) => {
+        const nameMatch = order.name?.toLowerCase().includes(query);
+        const mobileMatch = order.mobile_no?.includes(query);
+        return nameMatch || mobileMatch;
+      });
+    }
+
+    // Date range filter
+    const [startDate, endDate] = dateRange;
+    if (startDate || endDate) {
+      filtered = filtered.filter((order) => {
+        let eventDates = [];
+        if (order.sessions && order.sessions.length > 0) {
+          eventDates = order.sessions.map((s) => parseDate(s.event_date));
+        } else if (order.event_date) {
+          eventDates.push(parseDate(order.event_date));
+        }
+
+        const passesDateRange = eventDates.some((dateObj) => {
+          if (!dateObj || isNaN(dateObj.getTime())) return false;
+          dateObj.setHours(0,0,0,0);
+          
+          const start = startDate ? new Date(startDate) : null;
+          if (start) start.setHours(0,0,0,0);
+          const end = endDate ? new Date(endDate) : null;
+          if (end) end.setHours(23,59,59,999);
+
+          if (start && end) {
+            return dateObj >= start && dateObj <= end;
+          } else if (start) {
+            return dateObj >= start; 
+          } else if (end) {
+            return dateObj <= end;
+          }
+          return false;
+        });
+        return passesDateRange;
+      });
+    }
+
+    return filtered;
+  })();
+
+  //Handle View Order
+  const handleViewOrder = (id) => {
+    navigate(`/order-pdf/${id}`);
+  };
+
+  //Handle View Order
+  const handleShareOrder = (id) => {
+    navigate(`/share-order-pdf/${id}`);
+  };
+
+  //Handle View Ingredient
+  const handleViewIngredient = (id) => {
+    navigate(`/view-ingredient/${id}`, {
+      state: { customParents: { "view-ingredient": "all-order" } },
+    });
+  };
+
+  //Handle View Ingredient for a specific session
+  const handleViewIngredientBySession = (id, sessionTime) => {
+    navigate(
+      `/view-ingredient/${id}?session=${encodeURIComponent(sessionTime)}`,
+      { state: { customParents: { "view-ingredient": "all-order" } } }
+    );
+  };
+
+  //Handle View Order Details
+  const handleViewOrderDetails = (id) => {
+    navigate(`/view-order-details/${id}`, {
+      state: { customParents: { "view-order-details": "all-order" } },
+    });
+  };
+
+  const handleDownloadOrderPDF = (id) => {
+    // Open preview first; download/share options are available on the PDF view page
+    navigate(`/order-pdf/${id}`);
+  };
+
+  //Convert selected_item data into single array
+  const transformSelectedItems = (selectedItems) => {
+    if (!selectedItems || typeof selectedItems !== "object") return {};
+
+    const transformed = {};
+    Object.keys(selectedItems).forEach((category) => {
+      transformed[category] = selectedItems[category]
+        .map((item) => {
+          if (typeof item === "object" && item.name && item.name.name) {
+            return { name: item.name.name };
+          }
+          if (typeof item === "object" && item.name) {
+            return { name: item.name };
+          }
+          return { name: item };
+        })
+        .filter((item) => item && item.name);
+    });
+    return transformed;
+  };
+
+  //Handle Complete Order
+  const handleCompleteOrder = async (id) => {
+    try {
+      const response = await getSingleOrder(id);
+      if (!response.data.status) {
+        toast.error("Failed to fetch order details");
+        return;
+      }
+      const orderDetails = response.data.data;
+      const formatAmount = (amount) => Number(amount).toLocaleString("en-IN");
+      const formatDate = (date) => {
+        const d = new Date(date);
+        const day = String(d.getDate()).padStart(2, "0");
+        const month = String(d.getMonth() + 1).padStart(2, "0");
+        const year = d.getFullYear();
+        return `${day}-${month}-${year}`;
+      };
+
+      const sessions =
+        orderDetails.sessions && orderDetails.sessions.length > 0
+          ? orderDetails.sessions
+          : [orderDetails];
+      const hasMultipleSessions = sessions.length > 1;
+
+      let baseExtraCharge = 0;
+      let baseWaiterCharge = 0;
+
+      const sessionData = sessions.map((session) => {
+        baseExtraCharge += Number(session.extra_service_amount || 0);
+        baseWaiterCharge += Number(session.waiter_service_amount || 0);
+        return {
+          per_dish_amount: Number(session.per_dish_amount || 0),
+          estimated_persons: Number(session.estimated_persons || 0),
+        };
+      });
+
+      let extraServiceAmount = baseExtraCharge;
+      const waiterServiceAmount = baseWaiterCharge;
+
+      const calculateTotals = () => {
+        let dishAmount = 0;
+        let totalDishCount = 0;
+        sessionData.forEach((s) => {
+          dishAmount += s.per_dish_amount * s.estimated_persons;
+          totalDishCount += s.estimated_persons;
+        });
+        const totalAmount = dishAmount + extraServiceAmount + waiterServiceAmount;
+        const remainingAmount =
+          totalAmount - Number(orderDetails.advance_amount || 0);
+        return { dishAmount, totalDishCount, totalAmount, remainingAmount };
+      };
+
+      let { dishAmount, totalDishCount, totalAmount, remainingAmount } =
+        calculateTotals();
+
+      const formatSessionDate = (dateStr) => {
+        if (!dateStr) return "";
+        try {
+          const parts = dateStr.split("-");
+          if (parts.length === 3) {
+            let d;
+            if (parts[0].length === 4) {
+              d = new Date(`${parts[0]}-${parts[1]}-${parts[2]}`);
+            } else {
+              d = new Date(`${parts[2]}-${parts[1]}-${parts[0]}`);
+            }
+            if (!isNaN(d)) {
+              return d.toLocaleString("en-GB", {
+                day: "2-digit",
+                month: "short",
+                year: "numeric",
+              });
+            }
+          }
+        } catch {
+          /* ignore */
+        }
+        return dateStr;
+      };
+
+      const inputsHtml =
+        sessionData
+          .map((session, index) => {
+            const sessionTitle =
+              sessions[index].event_time || `Session ${index + 1}`;
+            const sessionDate = formatSessionDate(sessions[index].event_date);
+            const displayLabel = sessionDate
+              ? `${sessionTitle} (${sessionDate})`
+              : sessionTitle;
+              
+            const initialSlotTotal = Number(session.per_dish_amount || 0) * Number(session.estimated_persons || 0);
+
+            return `
+              <div class="mb-4 bg-purple-50/30 p-4 rounded-xl border border-purple-100">
+                <div class="font-bold text-left mb-3 text-[#845cbd]">
+                  <span>${displayLabel}</span>
+                </div>
+                
+                <div class="grid grid-cols-2 gap-4">
+                  <div class="text-left">
+                    <label class="block text-xs font-semibold text-gray-500 mb-1">Per Dish Price (₹)</label> 
+                    <input id="per-dish-amount-${index}" class="swal2-input custom-stock-input m-0 w-full px-3 py-2 border border-gray-200 rounded-lg text-sm bg-white focus:outline-none focus:border-[#845cbd] transition-all font-bold" placeholder="Price" type="number" value="${session.per_dish_amount}">
+                  </div>
+                  <div class="text-left">
+                    <label class="block text-xs font-semibold text-gray-500 mb-1">Dish Count</label> 
+                    <input id="estimated-persons-${index}" class="swal2-input custom-stock-input m-0 w-full px-3 py-2 border border-gray-200 rounded-lg text-sm bg-white focus:outline-none focus:border-[#845cbd] transition-all font-bold" placeholder="Count" type="number" value="${session.estimated_persons}">
+                  </div>
+                </div>
+                
+                <div class="mt-3 pt-3 border-t border-purple-100 flex flex-col gap-2 bg-white px-3 py-2 rounded-lg">
+                  <div class="flex justify-between items-center">
+                    <span class="text-xs font-bold text-gray-500">Slot Total</span>
+                    <span class="font-black text-purple-700 text-lg" id="slot-total-${index}">₹${formatAmount(initialSlotTotal)}</span>
+                  </div>
+                  ${Number(sessions[index].extra_service_amount) > 0 ? `
+                  <div class="flex justify-between items-center border-t border-gray-100 pt-2 mt-1">
+                    <span class="text-[11px] font-bold text-orange-500">Extra Service Charge</span>
+                    <span class="font-bold text-orange-600 text-sm">₹${formatAmount(sessions[index].extra_service_amount)}</span>
+                  </div>
+                  ` : ''}
+                  ${Number(sessions[index].waiter_service_amount) > 0 ? `
+                  <div class="flex justify-between items-center border-t border-gray-100 pt-2 mt-1">
+                    <span class="text-[11px] font-bold text-blue-500">Waiter Service</span>
+                    <span class="font-bold text-blue-600 text-sm">₹${formatAmount(sessions[index].waiter_service_amount)}</span>
+                  </div>
+                  ` : ''}
+                </div>
+              </div>
+        `;
+          })
+          .join("");
+
+      const { value: formValues } = await Swal.fire({
+        title: `<span class="text-[20px] font-bold">Complete Order: ${orderDetails.name}</span>`,
+        html: ` 
+          <div class="text-left overflow-y-auto max-h-[60vh] p-1 scrollbar-hide">
+            ${inputsHtml}
+            
+            <div class="bg-gray-50 rounded-xl p-4 border border-gray-200 mt-4">
+              <h3 class="text-left font-bold text-gray-700 mb-3 text-sm">Order Subtotals</h3>
+              
+              <div class="space-y-2 text-sm">
+                <div class="flex justify-between items-center text-gray-600">
+                  <span class="font-medium">Total Dish Count</span>
+                  <span id="total-dish-count" class="font-bold text-gray-800">${totalDishCount}</span>
+                </div>
+                <div class="flex justify-between items-center text-gray-600">
+                  <span class="font-medium">Total Dish Amount</span>
+                  <span id="dish-amount" class="font-bold text-gray-800">₹${formatAmount(dishAmount)}</span>
+                </div>
+                ${extraServiceAmount > 0 ? `
+                <div class="flex justify-between items-center text-gray-600">
+                  <span class="font-medium">Extra Charge</span>
+                  <span class="font-bold text-gray-800">₹${formatAmount(extraServiceAmount)}</span>
+                </div>` : ''}
+                ${waiterServiceAmount > 0 ? `
+                <div class="flex justify-between items-center text-gray-600">
+                  <span class="font-medium">Waiter Service</span>
+                  <span class="font-bold text-gray-800">₹${formatAmount(waiterServiceAmount)}</span>
+                </div>` : ''}
+              </div>
+              
+              <div class="mt-3 pt-3 border-t border-gray-200 flex justify-between items-center">
+                <span class="font-bold text-gray-700">Total Amount</span>
+                <span id="total-amount" class="font-black text-[#845cbd] text-lg">₹${formatAmount(totalAmount)}</span>
+              </div>
+            </div>
+
+            <div class="bg-white rounded-xl p-4 border border-gray-200 mt-4 space-y-4">
+              <h3 class="text-left font-bold text-gray-700 text-sm m-0">Payment Details</h3>
+              
+              <div class="flex justify-between items-center bg-green-50 p-3 rounded-lg border border-green-100 mb-2">
+                <span class="text-xs font-semibold text-green-700">Advance Paid at Confirmation</span>
+                <span class="font-bold text-green-700">₹${formatAmount(orderDetails.advance_amount || 0)}</span>
+              </div>
+              
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div class="text-left">
+                  <label class="block text-xs font-semibold text-gray-500 mb-1">Amount Paid at Completion (₹)</label> 
+                  <input id="completion-payment" class="swal2-input custom-stock-input w-full m-0 px-3 py-2 border border-gray-200 rounded-lg text-sm bg-white focus:outline-none focus:border-[#845cbd] transition-all" placeholder="Enter Amount" type="number">
+                </div>
+                <div class="text-left">
+                  <label class="block text-xs font-semibold text-gray-500 mb-1">Payment Mode</label> 
+                  <select id="payment-mode" class="swal2-input custom-stock-input w-full m-0 px-3 py-2 border border-gray-200 rounded-lg text-sm bg-white focus:outline-none focus:border-[#845cbd] transition-all">
+                    <option value="CASH">Cash</option>
+                    <option value="ONLINE">Online</option>
+                    <option value="CHEQUE">Cheque</option>
+                    <option value="OTHER">Other</option>
+                  </select>
+                </div>
+              </div>
+              
+              <div class="text-left">
+                <label class="block text-xs font-semibold text-gray-500 mb-1">Note / Reference</label> 
+                <input id="payment-note" class="swal2-input custom-stock-input w-full m-0 px-3 py-2 border border-gray-200 rounded-lg text-sm bg-white focus:outline-none focus:border-[#845cbd] transition-all" placeholder="Optional notes" type="text">
+              </div>
+            </div>
+            
+            <div class="mt-4 p-4 bg-[#845cbd]/10 rounded-xl border border-[#845cbd]/20 flex justify-between items-center">
+              <span class="font-bold text-[#845cbd] text-sm">Total Remaining Amount</span>
+              <span id="final-remaining-amount" class="text-2xl font-black text-[#845cbd]">₹${formatAmount(remainingAmount)}</span>
+            </div>
+          </div>
+        `,
+        width: "600px",
+        focusConfirm: false,
+        showCancelButton: true,
+        confirmButtonText: "Submit",
+        confirmButtonColor: "#845cbd",
+        cancelButtonText: "Cancel",
+        customClass: {
+          popup: "custom-popup",
+          confirmButton: "custom-confirm-button",
+          cancelButton: "custom-cancel-button",
+        },
+        didOpen: () => {
+          const dishAmountSpan = document.getElementById("dish-amount");
+          const totalDishCountSpan =
+            document.getElementById("total-dish-count");
+          const totalAmountSpan = document.getElementById("total-amount");
+          const completionPaymentInput =
+            document.getElementById("completion-payment");
+          const finalRemainingAmountSpan = document.getElementById(
+            "final-remaining-amount"
+          );
+
+          const updateCalculations = () => {
+            sessionData.forEach((s, index) => {
+              const perDishInput = document.getElementById(
+                `per-dish-amount-${index}`
+              );
+              const estimatedInput = document.getElementById(
+                `estimated-persons-${index}`
+              );
+              if (perDishInput)
+                s.per_dish_amount = parseFloat(perDishInput.value) || 0;
+              if (estimatedInput)
+                s.estimated_persons = parseFloat(estimatedInput.value) || 0;
+
+              const slotTotalSpan = document.getElementById(`slot-total-${index}`);
+              if (slotTotalSpan) {
+                slotTotalSpan.textContent = "₹" + formatAmount(s.per_dish_amount * s.estimated_persons);
+              }
+            });
+
+            ({ dishAmount, totalDishCount, totalAmount, remainingAmount } =
+              calculateTotals());
+
+            if (totalDishCountSpan)
+              totalDishCountSpan.textContent = totalDishCount;
+            if (dishAmountSpan)
+              dishAmountSpan.textContent = "₹" + formatAmount(dishAmount);
+            if (totalAmountSpan)
+              totalAmountSpan.textContent = "₹" + formatAmount(totalAmount);
+            if (finalRemainingAmountSpan)
+              finalRemainingAmountSpan.textContent = "₹" + formatAmount(remainingAmount);
+          };
+
+          sessionData.forEach((_, index) => {
+            const perDishInput = document.getElementById(
+              `per-dish-amount-${index}`
+            );
+            const estimatedInput = document.getElementById(
+              `estimated-persons-${index}`
+            );
+            if (perDishInput)
+              perDishInput.addEventListener("input", updateCalculations);
+            if (estimatedInput)
+              estimatedInput.addEventListener("input", updateCalculations);
+          });
+
+          if (completionPaymentInput) {
+            completionPaymentInput.addEventListener("input", (event) => {
+              let numericValue = event.target.value.replace(/[^0-9]/g, "");
+              if (parseFloat(numericValue) < 0) {
+                numericValue = "0";
+              }
+              event.target.value = numericValue;
+              const completionPayment = parseFloat(numericValue) || 0;
+              const newRemainingAmount = remainingAmount - completionPayment;
+              if (finalRemainingAmountSpan)
+                finalRemainingAmountSpan.textContent = "₹" + formatAmount(newRemainingAmount);
+            });
+          }
+        },
+        preConfirm: () => {
+          const completionPaymentInput =
+            document.getElementById("completion-payment");
+          const paymentModeInput = document.getElementById("payment-mode");
+          const paymentNoteInput = document.getElementById("payment-note");
+
+          const completionPayment = completionPaymentInput
+            ? parseFloat(completionPaymentInput.value.trim()) || 0
+            : 0;
+
+          if (completionPayment > remainingAmount) {
+            Swal.showValidationMessage(
+              `Payment cannot exceed the remaining amount (₹${formatAmount(remainingAmount)})`
+            );
+            return false;
+          }
+
+          const paymentMode = paymentModeInput
+            ? paymentModeInput.value
+            : "CASH";
+          const paymentNote = paymentNoteInput
+            ? paymentNoteInput.value.trim()
+            : "";
+
+          const updatedAdvanceAmount =
+            Number(orderDetails.advance_amount || 0) +
+            Number(completionPayment);
+
+          // Update session data one last time before submitting
+          sessionData.forEach((s, index) => {
+            const perDishInput = document.getElementById(
+              `per-dish-amount-${index}`
+            );
+            const estimatedInput = document.getElementById(
+              `estimated-persons-${index}`
+            );
+            if (perDishInput)
+              s.per_dish_amount = parseFloat(perDishInput.value) || 0;
+            if (estimatedInput)
+              s.estimated_persons = parseFloat(estimatedInput.value) || 0;
+          });
+
+          return {
+            sessionData,
+            advance_amount: updatedAdvanceAmount,
+            status: "done",
+            completion_payment: completionPayment,
+            payment_mode: paymentMode,
+            payment_note: paymentNote,
+          };
+        },
+      });
+
+      if (formValues) {
+        try {
+          const updatedOrder = {
+            ...orderDetails,
+            advance_amount: formValues.advance_amount,
+            status: "done",
+            per_dish_amount:
+              formValues.sessionData && formValues.sessionData.length > 0
+                ? formValues.sessionData[0].per_dish_amount
+                : orderDetails.per_dish_amount,
+            estimated_persons:
+              formValues.sessionData && formValues.sessionData.length > 0
+                ? formValues.sessionData[0].estimated_persons
+                : orderDetails.estimated_persons,
+            sessions: orderDetails.sessions
+              ? orderDetails.sessions.map((session, index) => ({
+                  ...session,
+                  per_dish_amount:
+                    formValues.sessionData[index]?.per_dish_amount,
+                  estimated_persons:
+                    formValues.sessionData[index]?.estimated_persons,
+                  selected_items: transformSelectedItems(
+                    session.selected_items
+                  ),
+                }))
+              : [],
+          };
+
+          const updateResponse = await updateOrder(id, updatedOrder);
+          if (!updateResponse) return;
+
+          //Calling Add-Payment API
+          const paymentPayload = {
+            booking: id,
+            total_amount: totalAmount,
+            pending_amount: totalAmount - formValues.advance_amount,
+            advance_amount: formValues.advance_amount,
+            payment_date: formatDate(new Date()),
+            transaction_amount: formValues.completion_payment || 0,
+            settlement_amount: 0,
+            payment_mode: formValues.payment_mode,
+            note: formValues.payment_note || "Order completion payment",
+            total_extra_amount: extraServiceAmount + waiterServiceAmount,
+          };
+          const paymentResponse = await addPayment(paymentPayload);
+          if (paymentResponse) {
+            toast.success("Order confirmed successfully!");
+            fetchAllOrder();
+            window.dispatchEvent(new Event("orderStatusChanged"));
+          }
+        } catch (error) {
+          toast.error("Failed to confirm order");
+          console.error(error);
+        }
+      }
+    } catch (error) {
+      toast.error("Failed to confirm order");
+      console.error(error);
+    }
+  };
+
+  // Handle Delete Order
+  const handleDeleteAllOrder = (id) => {
+    DeleteConfirmation({
+      id,
+      apiEndpoint: "/status-change-event-bookings",
+      name: "order",
+      successMessage: "Order deleted successfully!",
+      onSuccess: () => {
+        fetchAllOrder();
+        window.dispatchEvent(new Event("orderStatusChanged"));
+      },
+      method: "POST",
+      payload: { status: "cancelled" },
+    });
+  };
+  return (
+    <AllOrderComponent
+      allOrder={filteredOrders}
+      totalCount={allOrder.length}
+      loading={loading}
+      searchQuery={searchQuery}
+      setSearchQuery={setSearchQuery}
+      dateRange={dateRange}
+      setDateRange={setDateRange}
+      handleQuickFilter={handleQuickFilter}
+      handleViewOrder={handleViewOrder}
+      handleShareOrder={handleShareOrder}
+      handleViewIngredient={handleViewIngredient}
+      handleViewIngredientBySession={handleViewIngredientBySession}
+      handleCompleteOrder={handleCompleteOrder}
+      handleDeleteAllOrder={handleDeleteAllOrder}
+      handleViewOrderDetails={handleViewOrderDetails}
+      handleDownloadOrderPDF={handleDownloadOrderPDF}
+    />
+  );
+}
+
+export default AllOrderController;

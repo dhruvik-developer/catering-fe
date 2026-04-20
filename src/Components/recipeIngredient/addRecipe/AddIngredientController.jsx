@@ -1,0 +1,142 @@
+import { useEffect, useState } from "react";
+import AddIngredientComponent from "./AddIngredientComponent";
+import { useNavigate, useLocation } from "react-router-dom";
+import toast from "react-hot-toast";
+import { getItem } from "../../../apis/FetchItem";
+import { getIngredientItems } from "../../../apis/FetchIngredient";
+import { addRecipe } from "../../../apis/PostRecipe";
+
+function AddIngredientController() {
+  const [items, setItems] = useState([]);
+  const [ingredientItems, setIngredientItems] = useState([]);
+  const [selectedItem, setSelectedItem] = useState(null);
+  const [ingredients, setIngredients] = useState([
+    { ingredient: null, quantity: "", unit: "g" },
+  ]);
+  const [personCount, setPersonCount] = useState(100);
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  const predefinedItem = location.state?.predefinedItem;
+
+  useEffect(() => {
+    const fetchItems = async () => {
+      try {
+        const [itemsResponse, ingredientItemsResponse] = await Promise.all([
+          getItem(),
+          getIngredientItems(),
+        ]);
+
+        const itemsData =
+          Array.isArray(itemsResponse?.data)
+            ? itemsResponse.data
+            : Array.isArray(itemsResponse?.data?.data)
+            ? itemsResponse.data.data
+            : [];
+
+        const ingredientItemsData =
+          Array.isArray(ingredientItemsResponse?.data)
+            ? ingredientItemsResponse.data
+            : Array.isArray(ingredientItemsResponse?.data?.data)
+            ? ingredientItemsResponse.data.data
+            : [];
+
+        setItems(itemsData);
+        setIngredientItems(ingredientItemsData);
+
+        if (predefinedItem) {
+          const match = itemsData.find(
+            (i) => i.name?.trim() === predefinedItem.trim()
+          );
+          if (match) {
+            setSelectedItem(match.id);
+          }
+        }
+      } catch (error) {
+        toast.error("Error fetching items");
+        console.error("API Error:", error);
+      }
+    };
+    fetchItems();
+  }, [predefinedItem]);
+
+  const handleIngredientChange = (index, field, value) => {
+    setIngredients((prev) => {
+      const updated = [...prev];
+      updated[index] = { ...updated[index], [field]: value };
+
+      const isLastRow = index === updated.length - 1;
+      if (isLastRow && field === "ingredient" && value) {
+        updated.push({ ingredient: null, quantity: "", unit: "g" });
+      }
+
+      return updated;
+    });
+  };
+
+  const handleRemoveField = (index) => {
+    setIngredients((prev) => {
+      const filtered = prev.filter((_, i) => i !== index);
+      const lastItem = filtered[filtered.length - 1];
+      if (!lastItem || lastItem.ingredient) {
+        filtered.push({ ingredient: null, quantity: "", unit: "g" });
+      }
+      return filtered;
+    });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (!selectedItem) {
+      toast.error("Please select an item");
+      return;
+    }
+
+    const validIngredients = ingredients.filter(
+      (ing) => ing.ingredient && ing.quantity?.toString().trim() !== ""
+    );
+
+    if (validIngredients.length === 0) {
+      toast.error("Please add at least one ingredient");
+      return;
+    }
+
+    try {
+      await Promise.all(
+        validIngredients.map((ing) =>
+          addRecipe({
+            item: selectedItem,
+            ingredient: ing.ingredient,
+            quantity: ing.quantity,
+            unit: ing.unit || "g",
+            person_count: personCount,
+          })
+        )
+      );
+      navigate(-1);
+    } catch (error) {
+      toast.error("Error adding recipe ingredients");
+      console.error("Add Recipe API Error:", error);
+    }
+  };
+
+  return (
+    <div>
+      <AddIngredientComponent
+        items={items}
+        ingredientItems={ingredientItems}
+        selectedItem={selectedItem}
+        setSelectedItem={setSelectedItem}
+        personCount={personCount}
+        setPersonCount={setPersonCount}
+        ingredients={ingredients}
+        handleIngredientChange={handleIngredientChange}
+        handleRemoveField={handleRemoveField}
+        handleSubmit={handleSubmit}
+        navigate={navigate}
+      />
+    </div>
+  );
+}
+
+export default AddIngredientController;
