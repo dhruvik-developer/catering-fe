@@ -43,11 +43,6 @@ const menuItems = [
     icon: <HugeiconsIcon icon={Invoice02Icon} size={24} color="#845cbd" />,
   },
   {
-    name: "GST Billing",
-    path: "/gst-billing",
-    icon: <HugeiconsIcon icon={Invoice02Icon} size={24} color="#845cbd" />,
-  },
-  {
     name: "Stock",
     path: "/stock",
     icon: <HugeiconsIcon icon={StickyNote02Icon} size={24} color="#845cbd" />,
@@ -145,7 +140,6 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
       "/share-outsourced-pdf",
     ],
     "/invoice": ["/invoice", "/invoice-order-pdf/", "/complete-invoice"],
-    "/gst-billing": ["/gst-billing"],
     "/user": ["/user", "/add-rule"],
     "/people": [
       "/people",

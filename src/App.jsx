@@ -30,7 +30,6 @@ import {
   Calendar,
   ViewItemRecipe,
   Vendor,
-  GstBillingModule,
   SessionChecklistPreview,
   PeoplePage,
   Rules,
@@ -108,7 +107,6 @@ const App = () => (
               <Route path="/expense" element={<Expense />} />
               <Route path="/calendar" element={<Calendar />} />
               <Route path="/item-recipe/:itemId" element={<ViewItemRecipe />} />
-              <Route path="/gst-billing" element={<GstBillingModule />} />
               <Route path="/people" element={<PeoplePage />}>
                 <Route index element={<Navigate to="event-staff" replace />} />
                 <Route path="event-staff" element={<StaffController />} />
