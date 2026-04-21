@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { getRecipe, deleteRecipe } from "../../api/FetchRecipe";
+import { deleteRecipe } from "../../api/FetchRecipe";
 import { getItemById } from "../../api/FetchItem";
 import toast from "react-hot-toast";
 import ViewItemRecipeComponent from "./ViewItemRecipeComponent";
@@ -9,6 +9,7 @@ import { updateRecipe } from "../../api/PutRecipe";
 import { addRecipe } from "../../api/PostRecipe";
 import { useNavigate } from "react-router-dom";
 import { getIngredientItems } from "../../api/vendors";
+import { useRecipes } from "../../hooks/useRecipes";
 
 function ViewItemRecipeController({
   itemId,
@@ -19,10 +20,19 @@ function ViewItemRecipeController({
   disableItemDetailsFetch = false,
 }) {
   const navigate = useNavigate();
-  const [loading, setLoading] = useState(true);
   const [recipeData, setRecipeData] = useState(null);
-  const [recipeEntries, setRecipeEntries] = useState([]);
   const [itemDetail, setItemDetail] = useState(null);
+  const [isSupplementalLoading, setIsSupplementalLoading] = useState(true);
+  const {
+    data: recipeEntries = [],
+    isLoading: isRecipesLoading,
+    refetch: refetchRecipes,
+  } = useRecipes(
+    { item_id: itemId },
+    {
+      enabled: Boolean(itemId),
+    }
+  );
 
   const [currentBaseCost, setCurrentBaseCost] = useState(baseCost);
   const [currentSelectionRate, setCurrentSelectionRate] =
@@ -99,20 +109,13 @@ function ViewItemRecipeController({
     }
   };
 
-  const fetchRecipeData = async () => {
-    setLoading(true);
+  const fetchSupplementalData = async () => {
+    setIsSupplementalLoading(true);
     try {
-      const [recipeResponse, itemResponse, ingredientResponse] = await Promise.all([
-        getRecipe({ item_id: itemId }),
+      const [itemResponse, ingredientResponse] = await Promise.all([
         disableItemDetailsFetch ? Promise.resolve(null) : getItemById(itemId),
         getIngredientItems(),
       ]);
-
-      const recipes = Array.isArray(recipeResponse?.data)
-        ? recipeResponse.data
-        : Array.isArray(recipeResponse?.data?.data)
-        ? recipeResponse.data.data
-        : [];
 
       const item = itemResponse?.data?.data || itemResponse?.data || null;
       const ingredientData = Array.isArray(ingredientResponse?.data)
@@ -122,34 +125,12 @@ function ViewItemRecipeController({
         : [];
 
       setItemDetail(item);
-      setRecipeEntries(recipes);
       setIngredientOptions(ingredientData);
-
-      const ingredientMap = {};
-      recipes.forEach((rec) => {
-        const ingName = rec.ingredient?.name || rec.ingredient || "";
-        const qty = rec.quantity || "";
-        const unit = rec.unit ? ` ${rec.unit}` : "";
-        if (ingName) {
-          ingredientMap[ingName] = `${qty}${unit}`;
-        }
-      });
-
-      if (Object.keys(ingredientMap).length > 0 || item) {
-        setRecipeData({
-          id: null,
-          item: item || { id: itemId, name: itemName },
-          person_count: item?.person_count || recipes[0]?.person_count || 100,
-          ingredients: ingredientMap,
-        });
-      } else {
-        setRecipeData(null);
-      }
     } catch (error) {
-      toast.error("Error fetching recipe or item details");
+      toast.error("Error fetching item details");
       console.error("API Error:", error);
     } finally {
-      setLoading(false);
+      setIsSupplementalLoading(false);
     }
   };
 
@@ -231,8 +212,7 @@ function ViewItemRecipeController({
     const deletedRow = editIngredientsList[index];
     if (deletedRow?.id) {
       await deleteRecipe(deletedRow.id);
-      // refresh list after deletion
-      await fetchRecipeData();
+      await refetchRecipes();
       setIsEditing(false);
       return;
     }
@@ -292,7 +272,7 @@ function ViewItemRecipeController({
         })
       );
 
-      await fetchRecipeData();
+      await refetchRecipes();
       setEditIngredientsList([]);
       setIsEditing(false);
     } catch (error) {
@@ -385,7 +365,7 @@ function ViewItemRecipeController({
           })
         )
       );
-      await fetchRecipeData();
+      await refetchRecipes();
       setIsAdding(false);
     } catch (error) {
       console.error("Add Recipe API Error:", error);
@@ -397,14 +377,40 @@ function ViewItemRecipeController({
 
   useEffect(() => {
     if (itemId) {
-      fetchRecipeData();
+      fetchSupplementalData();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [itemId, itemName]);
 
+  useEffect(() => {
+    const ingredientMap = {};
+
+    recipeEntries.forEach((recipe) => {
+      const ingredientName = recipe.ingredient?.name || recipe.ingredient || "";
+      const quantity = recipe.quantity || "";
+      const unit = recipe.unit ? ` ${recipe.unit}` : "";
+
+      if (ingredientName) {
+        ingredientMap[ingredientName] = `${quantity}${unit}`;
+      }
+    });
+
+    if (Object.keys(ingredientMap).length > 0 || itemDetail) {
+      setRecipeData({
+        id: null,
+        item: itemDetail || { id: itemId, name: itemName },
+        person_count: itemDetail?.person_count || recipeEntries[0]?.person_count || 100,
+        ingredients: ingredientMap,
+      });
+      return;
+    }
+
+    setRecipeData(null);
+  }, [itemDetail, itemId, itemName, recipeEntries]);
+
   return (
     <ViewItemRecipeComponent
-      loading={loading}
+      loading={isRecipesLoading || isSupplementalLoading}
       navigate={navigate}
       recipeData={recipeData}
       itemName={itemName}

@@ -1,43 +1,19 @@
 /* eslint-disable no-unused-vars */
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
-import { getCategory } from "../../../api/FetchCategory";
 import EditItemComponent from "./EditItemComponent";
+import { useCategories } from "../../../hooks/useCategories";
 
 function EditItemController() {
   const navigate = useNavigate();
   const location = useLocation();
   const itemData = location?.state;
-  const [categories, setCategories] = useState([]);
+  const { data: categories = [], isLoading: loading } = useCategories();
   const [selectedItemsState, setSelectedItemsState] = useState({});
   const [formData, setFormData] = useState({});
   const [combinedFormData, setCombinedFormData] = useState({});
-  const [loading, setLoading] = useState(true);
   const [pdfPreview, setPdfPreview] = useState(null);
-  const isFetched = useRef(false);
-
-  const fetchCategories = async () => {
-    try {
-      const response = await getCategory();
-      if (response.data.status) {
-        setCategories(response.data.data);
-      } else {
-        toast.error("Failed to fetch categories");
-      }
-    } catch (error) {
-      toast.error("Error fetching categories");
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    if (!isFetched.current) {
-      fetchCategories();
-      isFetched.current = true;
-    }
-  }, []);
 
   useEffect(() => {
     if (itemData?.selected_items && categories.length > 0) {
@@ -66,27 +42,6 @@ function EditItemController() {
     }
   }, [itemData, categories]);
 
-  // const handleItemSelect = (categoryId, itemId, itemName, categoryName) => {
-  //     setSelectedItemsState((prev) => {
-  //         const categoryData = prev[categoryId] || { categoryName, items: [] };
-  //         const updatedItems = categoryData.items.some((item) => item.id === itemId)
-  //             ? categoryData.items.filter((item) => item.id !== itemId)
-  //             : [...categoryData.items, { id: itemId, name: itemName }];
-
-  //             const updatedSelectedItems = {
-  //                 ...prev,
-  //                 [categoryId]: { categoryName, items: updatedItems },
-  //             };
-
-  //             const updatedCombinedFormData = { itemData, dishData: updatedSelectedItems };
-
-  //             setFormData(updatedItems);
-  //             setCombinedFormData(updatedCombinedFormData);
-
-  //     return updatedSelectedItems;
-  //     });
-  // };
-
   const handleItemSelect = (
     categoryId,
     itemId,
@@ -106,21 +61,18 @@ function EditItemController() {
         );
 
         if (isAlreadySelected) {
-          // Deselect item
           updatedItems = existingCategory.items.filter(
             (item) => item.id !== itemId
           );
-          updatedPositions = existingCategory.positions; // 👈 Keep old positions
+          updatedPositions = existingCategory.positions;
         } else {
-          // Select new item
           updatedItems = [
             ...existingCategory.items,
             { id: itemId, name: itemName },
           ];
-          updatedPositions = existingCategory.positions || categoryPosition; // 👈 Keep old if exists, else set new
+          updatedPositions = existingCategory.positions || categoryPosition;
         }
       } else {
-        // First time selecting anything from this category
         updatedItems = [{ id: itemId, name: itemName }];
         updatedPositions = categoryPosition;
       }
@@ -134,8 +86,6 @@ function EditItemController() {
         },
       };
 
-      console.log("Updated:", updatedSelectedItems[categoryId]);
-
       setFormData(updatedItems);
       setCombinedFormData({ itemData, dishData: updatedSelectedItems });
 
@@ -148,7 +98,7 @@ function EditItemController() {
 
     if (!Object.keys(combinedFormData.dishData || {}).length) {
       if (Object.keys(selectedItemsState || {}).length) {
-        finalDishData = selectedItemsState; // ✅ Use existing data
+        finalDishData = selectedItemsState;
       } else {
         toast.error(
           "Please select at least one item before generating the PDF."

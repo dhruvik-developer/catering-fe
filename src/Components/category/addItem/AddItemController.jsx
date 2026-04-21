@@ -1,34 +1,17 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
-import { getCategory } from "../../../api/FetchCategory";
 import { createItem } from "../../../api/PostCategory";
 import AddItemComponent from "./AddItemComponent";
+import { useCategories } from "../../../hooks/useCategories";
 
 function AddItemController() {
   const [itemName, setItemName] = useState("");
   const [category, setCategory] = useState("");
   const [baseCost, setBaseCost] = useState("");
   const [selectionRate, setSelectionRate] = useState("");
-  const [categories, setCategories] = useState([]);
+  const { data: categories = [] } = useCategories();
   const navigate = useNavigate();
-
-  useEffect(() => {
-    const fetchCategories = async () => {
-      try {
-        const response = await getCategory();
-        if (response.data.status) {
-          setCategories(response.data.data);
-        } else {
-          toast.error("Failed to fetch categories");
-        }
-      } catch (error) {
-        toast.error("Error fetching categories");
-        console.error("API Error:", error);
-      }
-    };
-    fetchCategories();
-  }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();

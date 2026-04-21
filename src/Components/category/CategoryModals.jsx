@@ -15,10 +15,10 @@ import Input from "../common/formInputs/Input";
 import Dropdown from "../common/formDropDown/DropDown";
 import toast from "react-hot-toast";
 import { createCategory, createItem } from "../../api/PostCategory";
-import { getCategory } from "../../api/FetchCategory";
 import { getItem } from "../../api/FetchItem";
 import { getIngredientItems } from "../../api/vendors";
 import { addRecipe } from "../../api/PostRecipe";
+import { useCategories } from "../../hooks/useCategories";
 
 // ==================== MODAL WRAPPER ====================
 const ModalWrapper = ({ isOpen, onClose, children }) => {
@@ -146,8 +146,8 @@ export const AddItemModal = ({ isOpen, onClose, onSuccess, initialCategory }) =>
   const [category, setCategory] = useState("");
   const [baseCost, setBaseCost] = useState("");
   const [selectionRate, setSelectionRate] = useState("");
-  const [categories, setCategories] = useState([]);
   const [saving, setSaving] = useState(false);
+  const { data: categories = [] } = useCategories({}, { enabled: isOpen });
 
   useEffect(() => {
     if (isOpen) {
@@ -155,17 +155,8 @@ export const AddItemModal = ({ isOpen, onClose, onSuccess, initialCategory }) =>
       setCategory(initialCategory || "");
       setBaseCost("");
       setSelectionRate("");
-      const fetchCategories = async () => {
-        try {
-          const response = await getCategory();
-          if (response.data.status) setCategories(response.data.data);
-        } catch (error) {
-          console.error("API Error:", error);
-        }
-      };
-      fetchCategories();
     }
-  }, [isOpen]);
+  }, [initialCategory, isOpen]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();

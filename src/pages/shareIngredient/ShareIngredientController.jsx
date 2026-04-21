@@ -2,12 +2,12 @@
 import { useLocation, useNavigate } from "react-router-dom";
 import ShareIngredientComponent from "./ShareIngredientComponent";
 import toast from "react-hot-toast";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { updateOrder } from "../../api/PostAllOrder";
 import { getSingleOrder } from "../../api/FetchAllOrder";
-import { fetchVendors } from "../../api/vendors";
 import { getAllBusinessProfiles } from "../../api/BusinessProfile";
 import { assignIngredientVendor } from "../../api/VendorAssignmentApis";
+import { useVendors } from "../../hooks/useVendors";
 
 function ShareIngredientController() {
   const location = useLocation();
@@ -26,7 +26,6 @@ function ShareIngredientController() {
   const [deliveryTime, setDeliveryTime] = useState("");
   const [vendorName, setVendorName] = useState("");
   const [selectedVendor, setSelectedVendor] = useState(null); // full vendor object
-  const [vendors, setVendors] = useState([]); // filtered vendor list
   const [checkedItems, setCheckedItems] = useState({});
   const [modifiedData, setModifiedData] = useState([]);
   const [ingredients, setIngredients] = useState([]);
@@ -50,6 +49,7 @@ function ShareIngredientController() {
     "";
   const chosenVendorMobile =
     chosenVendor?.mobile_no || chosenVendor?.mobile || chosenVendor?.phone || "";
+  const { data: allVendors = [] } = useVendors();
 
   const normalizeValue = (val) =>
     (val || "")
@@ -253,42 +253,22 @@ function ShareIngredientController() {
     setItemSources((prev) => ({ ...prev, [key]: source }));
   };
 
-  // Fetch vendors filtered by the current category
-  useEffect(() => {
-    const loadVendors = async () => {
-      const result = await fetchVendors();
-      if (result) {
-        // API may return { data: [...] } or an array directly
-        const allVendors = Array.isArray(result)
-          ? result
-          : Array.isArray(result.data)
-            ? result.data
-            : [];
+  const vendors = useMemo(() => {
+    const categoryName = (ingridient_list_data?.name || "").trim().toLowerCase();
 
-        // Filter by category name (case-insensitive block)
-        const categoryName = (ingridient_list_data?.name || "")
-          .trim()
-          .toLowerCase();
-        const filtered = allVendors.filter((v) => {
-          if (v.vendor_categories && Array.isArray(v.vendor_categories)) {
-            return v.vendor_categories.some(
-              (vc) =>
-                (vc.category_name || "").trim().toLowerCase() === categoryName
-            );
-          }
-          // Fallback for older data format if any exists
-          const vCat = (v.category || v.category_name || "")
-            .trim()
-            .toLowerCase();
-          return vCat === categoryName;
-        });
-
-        // Set vendors exclusively to filtered. If none match the category, it will show an empty list or manual type
-        setVendors(filtered);
+    return allVendors.filter((vendor) => {
+      if (vendor.vendor_categories && Array.isArray(vendor.vendor_categories)) {
+        return vendor.vendor_categories.some(
+          (vc) => (vc.category_name || "").trim().toLowerCase() === categoryName
+        );
       }
-    };
-    loadVendors();
-  }, [ingridient_list_data]);
+
+      const vendorCategory = (vendor.category || vendor.category_name || "")
+        .trim()
+        .toLowerCase();
+      return vendorCategory === categoryName;
+    });
+  }, [allVendors, ingridient_list_data]);
 
   // Handle address selection (only one at a time)
   const handleAddressChange = (address) => {

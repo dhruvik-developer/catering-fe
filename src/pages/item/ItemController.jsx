@@ -1,70 +1,19 @@
 /* eslint-disable no-unused-vars */
-import React, { useEffect, useRef, useState } from "react";
+import React, { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import ItemComponent from "./ItemComponent";
 import toast from "react-hot-toast";
-import { getCategory } from "../../api/FetchCategory";
+import ItemComponent from "./ItemComponent";
+import { useCategories } from "../../hooks/useCategories";
 
 function ItemController() {
   const navigate = useNavigate();
   const location = useLocation();
   const itemData = location?.state;
-  const [categories, setCategories] = useState([]);
+  const { data: categories = [], isLoading: loading } = useCategories();
   const [selectedItemsState, setSelectedItemsState] = useState({});
   const [formData, setFormData] = useState({});
   const [combinedFormData, setCombinedFormData] = useState({});
-  const [loading, setLoading] = useState(true);
   const [pdfPreview, setPdfPreview] = useState(null);
-  const isFetched = useRef(false);
-
-  const fetchCategories = async () => {
-    try {
-      const response = await getCategory();
-      if (response.data.status) {
-        setCategories(response.data.data);
-      } else {
-        toast.error("Failed to fetch categories");
-      }
-    } catch (error) {
-      toast.error("Error fetching categories");
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    if (!isFetched.current) {
-      fetchCategories();
-      isFetched.current = true;
-    }
-  }, []);
-
-  // const handleItemSelect = (categoryId, itemId, itemName, categoryName) => {
-  //         setSelectedItemsState((prev) => {
-  //                 const categoryItems = prev[categoryId] || [];
-  //                 const updatedSelectedItems = categoryItems.includes(itemId)
-  //                         ? categoryItems.filter((id) => id !== itemId)
-  //                         : [...categoryItems, itemId];
-
-  //                 const updatedDishData = {
-  //                         ...prev,
-  //                         [categoryId]: {
-  //                                 categoryName,
-  //                                 items: updatedSelectedItems.map(id => {
-  //                                         const category = categories.find(cat => cat.id === categoryId);
-  //                                         const item = category?.items.find(it => it.id === id);
-  //                                         return item ? { id: item.id, name: item.name } : null;
-  //                                 }).filter(Boolean)
-  //                         }
-  //                 };
-
-  //                 setFormData(updatedSelectedItems);
-  //                 console.log("Updated Selected Items:", updatedDishData);
-  //                 setCombinedFormData({ itemData, dishData: updatedDishData });
-
-  //                 return updatedDishData;
-  //         });
-  // };
 
   const handleItemSelect = (
     categoryId,

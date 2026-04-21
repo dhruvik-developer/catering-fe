@@ -1,9 +1,11 @@
 import { useState, useEffect } from "react";
-import { getCategory } from "../api/FetchCategory";
+import { useCategories } from "./useCategories";
 
 export const usePdfCategorizer = (pdfData, isReady = true) => {
   const [categorizedData, setCategorizedData] = useState(pdfData);
   const [isCategorizing, setIsCategorizing] = useState(true);
+  const { data: categories = [], isLoading: isCategoriesLoading } =
+    useCategories({}, { enabled: isReady && Boolean(pdfData) });
 
   useEffect(() => {
     if (!isReady || !pdfData) {
@@ -12,94 +14,63 @@ export const usePdfCategorizer = (pdfData, isReady = true) => {
       return;
     }
 
-    let isMounted = true;
-    setIsCategorizing(true);
+    if (isCategoriesLoading) {
+      setIsCategorizing(true);
+      return;
+    }
 
-    const processCategories = async () => {
-      try {
-        const res = await getCategory();
-        const categories = res?.data?.data || [];
+    const newData = JSON.parse(JSON.stringify(pdfData));
+    const itemsToProcess = Array.isArray(newData) ? newData : [newData];
 
-        // Deep clone pdfData to avoid mutating original state props
-        const newData = JSON.parse(JSON.stringify(pdfData));
+    itemsToProcess.forEach((item) => {
+      if (item && item.sessions && Array.isArray(item.sessions)) {
+        item.sessions.forEach((session) => {
+          if (session.selected_items) {
+            const resolvedItems = {};
 
-        // Process single item or array based on how it's passed
-        const itemsToProcess = Array.isArray(newData) ? newData : [newData];
+            Object.entries(session.selected_items).forEach(([key, items]) => {
+              if (!items || !Array.isArray(items)) return;
 
-        itemsToProcess.forEach((item) => {
-          if (item && item.sessions && Array.isArray(item.sessions)) {
-            item.sessions.forEach((session) => {
-              if (session.selected_items) {
-                const resolvedItems = {};
+              items.forEach((dishObj) => {
+                const dishName =
+                  typeof dishObj === "string"
+                    ? dishObj
+                    : dishObj?.name || dishObj?.dishName || "";
+                if (!dishName) return;
 
-                Object.entries(session.selected_items).forEach(
-                  ([key, items]) => {
-                    if (!items || !Array.isArray(items)) return;
+                let foundCategoryName =
+                  key.toUpperCase() === "DISHES" ? null : key;
 
-                    items.forEach((dishObj) => {
-                      const dishName =
-                        typeof dishObj === "string"
-                          ? dishObj
-                          : dishObj?.name || dishObj?.dishName || "";
-                      if (!dishName) return;
-
-                      // Only re-map if the name is literally 'Dishes' or 'DISHES'
-                      // Otherwise, it was probably meant to be a custom name we can keep.
-                      let foundCategoryName =
-                        key.toUpperCase() === "DISHES" ? null : key;
-
-                      if (!foundCategoryName) {
-                        for (const cat of categories) {
-                          const match = cat.items?.find(
-                            (d) => d.name === dishName
-                          );
-                          if (match) {
-                            foundCategoryName = cat.name;
-                            break;
-                          }
-                        }
-                      }
-
-                      // Fallback if not found in db categories
-                      if (!foundCategoryName) foundCategoryName = "Dishes";
-
-                      if (!resolvedItems[foundCategoryName]) {
-                        resolvedItems[foundCategoryName] = [];
-                      }
-                      resolvedItems[foundCategoryName].push(dishObj);
-                    });
+                if (!foundCategoryName) {
+                  for (const category of categories) {
+                    const match = category.items?.find((dish) => dish.name === dishName);
+                    if (match) {
+                      foundCategoryName = category.name;
+                      break;
+                    }
                   }
-                );
+                }
 
-                session.selected_items = resolvedItems;
-              }
+                if (!foundCategoryName) foundCategoryName = "Dishes";
+
+                if (!resolvedItems[foundCategoryName]) {
+                  resolvedItems[foundCategoryName] = [];
+                }
+                resolvedItems[foundCategoryName].push(dishObj);
+              });
             });
+
+            session.selected_items = resolvedItems;
           }
         });
-
-        if (isMounted) {
-          setCategorizedData(
-            Array.isArray(newData) && !Array.isArray(pdfData)
-              ? newData[0]
-              : newData
-          );
-          setIsCategorizing(false);
-        }
-      } catch (err) {
-        console.error("Error categorizing pdf data:", err);
-        if (isMounted) {
-          setCategorizedData(pdfData);
-          setIsCategorizing(false);
-        }
       }
-    };
+    });
 
-    processCategories();
-
-    return () => {
-      isMounted = false;
-    };
-  }, [pdfData, isReady]);
+    setCategorizedData(
+      Array.isArray(newData) && !Array.isArray(pdfData) ? newData[0] : newData
+    );
+    setIsCategorizing(false);
+  }, [categories, isCategoriesLoading, isReady, pdfData]);
 
   return { categorizedData, isCategorizing };
 };

@@ -7,10 +7,10 @@ import {
   useSearchParams,
 } from "react-router-dom";
 import EditDishComponent from "./EditDishComponent";
-import { getCategory } from "../../../api/FetchCategory";
 import { getSingleOrder } from "../../../api/FetchAllOrder";
 import { getWaiterTypes } from "../../../api/EventStaffApis";
 import toast from "react-hot-toast";
+import { useCategories } from "../../../hooks/useCategories";
 
 function EditDishContoller() {
   const { id } = useParams();
@@ -20,9 +20,8 @@ function EditDishContoller() {
   const sessionIndexParam = searchParams.get("sessionIndex");
   const isSessionMode = sessionIndexParam !== null;
 
-  const [dishesList, setDishesList] = useState([]);
-  const [isDishesLoading, setIsDishesLoading] = useState(false);
   const [loading, setLoading] = useState(true);
+  const { data: dishesList = [], isLoading: isDishesLoading } = useCategories();
 
   const [waiterTypes, setWaiterTypes] = useState([]);
   const [isLoadingWaiterTypes, setIsLoadingWaiterTypes] = useState(false);
@@ -51,10 +50,10 @@ function EditDishContoller() {
   }, []);
 
   useEffect(() => {
-    if (id) {
+    if (id && !isDishesLoading) {
       fetchAllData();
     }
-  }, [id]);
+  }, [id, isDishesLoading, dishesList]);
 
   const fetchWaiterTypes = async () => {
     setIsLoadingWaiterTypes(true);
@@ -70,13 +69,9 @@ function EditDishContoller() {
   };
 
   const fetchAllData = async () => {
-    setIsDishesLoading(true);
     setLoading(true);
     try {
-      // 1. Fetch Categories/Dishes
-      const dishRes = await getCategory();
-      const categories = dishRes?.data?.data || [];
-      setDishesList(categories);
+      const categories = dishesList;
 
       // Helper to resolve dish IDs and selectionRate by name
       const resolveDishes = (selectedItemsObj) => {
@@ -282,7 +277,6 @@ function EditDishContoller() {
       toast.error("Failed to fetch order details");
       console.error("Fetch Error:", error);
     } finally {
-      setIsDishesLoading(false);
       setLoading(false);
     }
   };

@@ -1,54 +1,26 @@
-import { useEffect, useRef, useState } from "react";
+import { useMemo } from "react";
 import toast from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
+import Swal from "sweetalert2";
 import CategoryComponent from "./CategoryComponent";
 import DeleteConfirmation from "../../Components/common/DeleteConfirmation";
-import { getCategory } from "../../api/FetchCategory";
-import { getRecipe } from "../../api/FetchRecipe";
-import Swal from "sweetalert2";
 import { createCategory, swapCategories } from "../../api/PostCategory";
 import { editCategory } from "../../api/PutCategory";
-import { useNavigate } from "react-router-dom";
+import { useCategories } from "../../hooks/useCategories";
+import { useRecipes } from "../../hooks/useRecipes";
 
 function CategoryController() {
-  const [items, setItems] = useState([]);
-  const [categories, setCategories] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const isFetched = useRef(false);
   const navigate = useNavigate();
-
-  const extractArray = (value) => {
-    if (Array.isArray(value)) return value;
-    if (!value || typeof value !== "object") return [];
-
-    const directCandidates = [
-      value.data,
-      value.results,
-      value.items,
-      value.list,
-      value.rows,
-      value.payload,
-      value.data?.data,
-      value.data?.results,
-      value.results?.data,
-      value.results?.results,
-      value.payload?.data,
-      value.payload?.results,
-    ];
-
-    for (const candidate of directCandidates) {
-      if (Array.isArray(candidate)) return candidate;
-    }
-
-    for (const nested of Object.values(value)) {
-      if (Array.isArray(nested)) return nested;
-      if (nested && typeof nested === "object") {
-        const deep = extractArray(nested);
-        if (deep.length > 0) return deep;
-      }
-    }
-
-    return [];
-  };
+  const {
+    data: categoriesData = [],
+    isLoading: isCategoriesLoading,
+    refetch: refetchCategories,
+  } = useCategories();
+  const {
+    data: recipes = [],
+    isLoading: isRecipesLoading,
+    refetch: refetchRecipes,
+  } = useRecipes();
 
   const getRecipeItemId = (recipe) => {
     const rawItem =
@@ -90,70 +62,41 @@ function CategoryController() {
     return "";
   };
 
-  const fetchItems = async () => {
-    try {
-      const [categoriesResponse, recipesResponse] = await Promise.all([
-        getCategory(),
-        getRecipe(),
-      ]);
+  const categories = useMemo(() => {
+    const recipeItemIds = new Set(
+      recipes
+        .map((recipe) => getRecipeItemId(recipe))
+        .filter((value) => value !== undefined && value !== null)
+        .map((value) => String(value))
+    );
 
-      const recipes = extractArray(recipesResponse?.data);
+    const recipeItemNames = new Set(
+      recipes
+        .map((recipe) => getRecipeItemName(recipe))
+        .filter((value) => typeof value === "string" && value.trim() !== "")
+        .map((value) => value.trim().toLowerCase())
+    );
 
-      const recipeItemIds = new Set(
-        recipes
-          .map((r) => getRecipeItemId(r))
-          .filter((v) => v !== undefined && v !== null)
-          .map((v) => String(v))
-      );
-
-      const recipeItemNames = new Set(
-        recipes
-          .map((r) => getRecipeItemName(r))
-          .filter((v) => typeof v === "string" && v.trim() !== "")
-          .map((v) => v.trim().toLowerCase())
-      );
-
-      const categoriesData = extractArray(categoriesResponse?.data);
-
-      const categoriesWithRecipeInfo = categoriesData.map((category) => {
-        const itemsWithRecipeInfo = (category.items || []).map((item) => {
+    return [...categoriesData]
+      .map((category) => ({
+        ...category,
+        items: (category.items || []).map((item) => {
           const itemId = String(item?.id ?? "");
-          const itemName = String(item?.name ?? "")
-            .trim()
-            .toLowerCase();
+          const itemName = String(item?.name ?? "").trim().toLowerCase();
           const hasRecipe =
             recipeItemIds.has(itemId) ||
             (itemName !== "" && recipeItemNames.has(itemName));
+
           return { ...item, has_recipe: hasRecipe };
-        });
+        }),
+      }))
+      .sort((a, b) => (a.positions || 0) - (b.positions || 0));
+  }, [categoriesData, recipes]);
 
-        return {
-          ...category,
-          items: itemsWithRecipeInfo,
-        };
-      });
-
-      const sortedCategories = [...categoriesWithRecipeInfo].sort(
-        (a, b) => (a.positions || 0) - (b.positions || 0)
-      );
-
-      setCategories(sortedCategories);
-    } catch (error) {
-      toast.error("Error fetching categories");
-      console.error("API Error:", error);
-    } finally {
-      setLoading(false);
-    }
+  const refreshData = async () => {
+    await Promise.all([refetchCategories(), refetchRecipes()]);
   };
 
-  useEffect(() => {
-    if (!isFetched.current) {
-      fetchItems();
-      isFetched.current = true;
-    }
-  }, []);
-
-  // Handle Add Category
   const handleAddCategory = async () => {
     const { value: name } = await Swal.fire({
       title: "Create Category",
@@ -168,7 +111,6 @@ function CategoryController() {
         inputLabel: "custom-stock-input-label",
         input: "custom-stock-swal-input",
       },
-
       preConfirm: async (value) => {
         if (!value) {
           Swal.showValidationMessage("Category name is required");
@@ -196,13 +138,12 @@ function CategoryController() {
 
       const response = await createCategory(formattedName);
       if (response) {
-        fetchItems();
+        refreshData();
         Swal.close();
       }
     }
   };
 
-  // Handle Edit Category
   const handleEditCategory = async (categoryId, oldName) => {
     const { value: name } = await Swal.fire({
       title: "Edit Category Name",
@@ -218,7 +159,6 @@ function CategoryController() {
         inputLabel: "custom-stock-input-label",
         input: "custom-stock-swal-input",
       },
-
       preConfirm: async (value) => {
         if (!value || !value.trim()) {
           Swal.showValidationMessage("Category name is required");
@@ -248,35 +188,32 @@ function CategoryController() {
 
       const response = await editCategory(categoryId, formattedName);
       if (response) {
-        fetchItems();
+        refreshData();
         Swal.close();
       }
     }
   };
 
-  // Handle Delete Item (sub-item of category)
   const handleDeleteSubCategory = (id) => {
     DeleteConfirmation({
       id,
       apiEndpoint: "/items",
       name: "item",
       successMessage: "Item deleted successfully!",
-      onSuccess: fetchItems,
+      onSuccess: refreshData,
     });
   };
 
-  // Handle Delete Category
   const handleDeleteItem = (id) => {
     DeleteConfirmation({
       id,
       apiEndpoint: "/categories",
       name: "category",
       successMessage: "Category deleted successfully!",
-      onSuccess: fetchItems,
+      onSuccess: refreshData,
     });
   };
 
-  // Handle Swapping Categories
   const handleSwappingCategory = async (categoryId, categoryName) => {
     const { value: position } = await Swal.fire({
       title: `<p class="text-left">Change Number Of Category</p>`,
@@ -315,7 +252,7 @@ function CategoryController() {
     if (position) {
       const response = await swapCategories(categoryId, position);
       if (response) {
-        fetchItems();
+        refreshData();
         Swal.close();
       }
     }
@@ -324,15 +261,15 @@ function CategoryController() {
   return (
     <CategoryComponent
       categories={categories}
-      items={items}
+      items={[]}
       onAddCategory={handleAddCategory}
       onEditCategory={handleEditCategory}
       onSubCategoryDelete={handleDeleteSubCategory}
       onItemDelete={handleDeleteItem}
       onSwappingCategory={handleSwappingCategory}
-      loading={loading}
+      loading={isCategoriesLoading || isRecipesLoading}
       navigate={navigate}
-      onRefresh={fetchItems}
+      onRefresh={refreshData}
     />
   );
 }
