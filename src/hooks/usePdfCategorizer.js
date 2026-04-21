@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { getCategory } from "../apis/FetchCategory";
+import { getCategory } from "../api/FetchCategory";
 
 export const usePdfCategorizer = (pdfData, isReady = true) => {
   const [categorizedData, setCategorizedData] = useState(pdfData);

@@ -3,7 +3,7 @@ import { FiFolder, FiTag, FiSearch, FiEdit2, FiTrash2 } from "react-icons/fi";
 import { IoIosWarning } from "react-icons/io";
 import toast from "react-hot-toast";
 import Loader from "../../../Components/common/Loader";
-import { getGroundCategories, deleteGroundCategory, deleteGroundItem } from "../../../apis/GroundApis";
+import { getGroundCategories, deleteGroundCategory, deleteGroundItem } from "../../../api/GroundApis";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { TaskAdd01Icon } from "@hugeicons/core-free-icons";
 import AddGroundCategory from "../categories/AddGroundCategory";

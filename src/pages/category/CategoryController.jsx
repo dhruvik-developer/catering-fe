@@ -2,11 +2,11 @@ import { useEffect, useRef, useState } from "react";
 import toast from "react-hot-toast";
 import CategoryComponent from "./CategoryComponent";
 import DeleteConfirmation from "../../Components/common/DeleteConfirmation";
-import { getCategory } from "../../apis/FetchCategory";
-import { getRecipe } from "../../apis/FetchRecipe";
+import { getCategory } from "../../api/FetchCategory";
+import { getRecipe } from "../../api/FetchRecipe";
 import Swal from "sweetalert2";
-import { createCategory, swapCategories } from "../../apis/PostCategory";
-import { editCategory } from "../../apis/PutCategory";
+import { createCategory, swapCategories } from "../../api/PostCategory";
+import { editCategory } from "../../api/PutCategory";
 import { useNavigate } from "react-router-dom";
 
 function CategoryController() {

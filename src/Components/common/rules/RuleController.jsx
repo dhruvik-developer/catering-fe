@@ -1,9 +1,9 @@
 import { useEffect, useRef, useState } from "react";
 import toast from "react-hot-toast";
-import { getRules } from "../../../apis/FetchRules";
+import { getRules } from "../../../api/FetchRules";
 import RuleComponent from "./RuleComponent";
 import { useLocation, useNavigate } from "react-router-dom";
-import { updateRule } from "../../../apis/PutRules";
+import { updateRule } from "../../../api/PutRules";
 
 function RuleController() {
   const isFetched = useRef(false);

@@ -9,8 +9,8 @@ import {
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import toast from "react-hot-toast";
-import { getInvoice } from "../../apis/FetchInvoice";
-import { updatePayment } from "../../apis/PutInvoice";
+import { getInvoice } from "../../api/FetchInvoice";
+import { updatePayment } from "../../api/PutInvoice";
 
 const PAYMENT_MODES = [
   { value: "CASH", label: "CASH" },

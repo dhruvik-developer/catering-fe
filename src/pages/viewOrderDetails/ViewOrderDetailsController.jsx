@@ -2,9 +2,9 @@ import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import ViewOrderDetailsComponent from "./ViewOrderDetailsComponent";
-import { getSingleOrder } from "../../apis/FetchAllOrder";
-import { getAllBusinessProfiles } from "../../apis/BusinessProfile";
-import { updateEventBooking } from "../../apis/PutEventBooking";
+import { getSingleOrder } from "../../api/FetchAllOrder";
+import { getAllBusinessProfiles } from "../../api/BusinessProfile";
+import { updateEventBooking } from "../../api/PutEventBooking";
 function ViewOrderDetailsController() {
   const { id } = useParams();
   const navigate = useNavigate();

@@ -2,10 +2,10 @@
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import PdfBillComponent from "./PdfBillComponent";
-import { getInvoice } from "../../../../../apis/FetchInvoice";
+import { getInvoice } from "../../../../../api/FetchInvoice";
 import { useParams } from "react-router-dom";
 import { exportToPDF, shareToWhatsApp } from "../../../../../utils/pdfExport";
-import { getAllBusinessProfiles } from "../../../../../apis/BusinessProfile";
+import { getAllBusinessProfiles } from "../../../../../api/BusinessProfile";
 import { generatePdfFilename } from "../../../../../utils/generatePdfFilename";
 function PdfBillController() {
   const { id } = useParams();

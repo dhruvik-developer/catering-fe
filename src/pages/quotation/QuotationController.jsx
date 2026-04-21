@@ -2,11 +2,11 @@ import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import QuotationComponent from "./QuotationComponent";
 import DeleteConfirmation from "../../Components/common/DeleteConfirmation";
-import { getQuotation, getSingleQuotation } from "../../apis/FetchQuotation";
+import { getQuotation, getSingleQuotation } from "../../api/FetchQuotation";
 import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
-import { updateQuotation } from "../../apis/PostQuotation";
-import { addPayment } from "../../apis/PostAllOrder";
+import { updateQuotation } from "../../api/PostQuotation";
+import { addPayment } from "../../api/PostAllOrder";
 
 function QuotationController() {
   const navigate = useNavigate();
@@ -314,7 +314,7 @@ function QuotationController() {
   //                         selected_items: transformSelectedItems(quotationDetails.selected_items),
   //                     };
 
-  //                     const updateResponse = await ApiInstance.put(`/event-bookings/${id}/`, updatedQuotation);
+  //                     const updateResponse = await updateEventBooking(id, updatedQuotation);
   //                     if (updateResponse.data.status) {
   //                         toast.success("Quotation confirmed successfully!");
   //                         fetchQuotation();

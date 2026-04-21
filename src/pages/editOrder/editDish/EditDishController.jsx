@@ -7,9 +7,9 @@ import {
   useSearchParams,
 } from "react-router-dom";
 import EditDishComponent from "./EditDishComponent";
-import { getCategory } from "../../../apis/FetchCategory";
-import { getSingleOrder } from "../../../apis/FetchAllOrder";
-import { getWaiterTypes } from "../../../apis/EventStaffApis";
+import { getCategory } from "../../../api/FetchCategory";
+import { getSingleOrder } from "../../../api/FetchAllOrder";
+import { getWaiterTypes } from "../../../api/EventStaffApis";
 import toast from "react-hot-toast";
 
 function EditDishContoller() {

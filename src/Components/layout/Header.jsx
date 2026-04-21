@@ -16,8 +16,8 @@ import {
 } from "react-icons/fi";
 import { useNavigate, useLocation } from "react-router-dom";
 import { UserContext } from "../../context/UserContext";
-import { getStockCategory } from "../../apis/FetchStockCategory";
-import { getAllOrder } from "../../apis/FetchAllOrder";
+import { getStockCategory } from "../../api/FetchStockCategory";
+import { getAllOrder } from "../../api/FetchAllOrder";
 import toast from "react-hot-toast";
 
 // Parse date string in dd-mm-yyyy OR yyyy-mm-dd format

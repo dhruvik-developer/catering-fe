@@ -3,7 +3,7 @@ import EditIngredientComponent from "./EditIngredientComponent";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import toast from "react-hot-toast";
 import DeleteConfirmation from "../../common/DeleteConfirmation";
-import { updateRecipe } from "../../../apis/PutRecipe";
+import { updateRecipe } from "../../../api/PutRecipe";
 
 function EditIngredientController() {
   const { id } = useParams();

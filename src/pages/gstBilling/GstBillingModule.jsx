@@ -17,7 +17,7 @@ import {
   FiX,
   FiChevronDown
 } from "react-icons/fi";
-import { getItem, createItem, updateItem, deleteItem } from "../../apis/FetchItem";
+import { getItem, createItem, updateItem, deleteItem } from "../../api/FetchItem";
 import Dropdown from "../../Components/common/formDropDown/DropDown";
 import toast from "react-hot-toast";
 import {
@@ -34,7 +34,7 @@ import {
   deletePartyInformation,
   getGlobalConfig,
   updateGlobalConfig,
-} from "../../apis/GstBillingApis";
+} from "../../api/GstBillingApis";
 
 const DEFAULT_SETTINGS = {
   defaultHsn: "996331",

@@ -2,9 +2,9 @@
 import { useEffect, useState } from "react";
 import CompleteInvoiceComponent from "./completeInvoiceComponent";
 import toast from "react-hot-toast";
-import { getInvoice } from "../../apis/FetchInvoice";
+import { getInvoice } from "../../api/FetchInvoice";
 import { useNavigate, useParams } from "react-router-dom";
-import { updatePayment } from "../../apis/PutInvoice";
+import { updatePayment } from "../../api/PutInvoice";
 
 function CompleteInvoiceController() {
   const { id } = useParams();

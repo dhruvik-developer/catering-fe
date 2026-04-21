@@ -5,7 +5,7 @@ import {
   createWaiterType,
   updateWaiterType,
   deleteWaiterType,
-} from "../../apis/EventStaffApis";
+} from "../../api/EventStaffApis";
 
 export default function WaiterTypeManagerModal({
   isOpen,

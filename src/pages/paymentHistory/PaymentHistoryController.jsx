@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import PaymentHistoryComponent from "./PaymentHistoryComponent";
-import { getPaymentHistory } from "../../apis/FetchPaymentHistory";
+import { getPaymentHistory } from "../../api/FetchPaymentHistory";
 import toast from "react-hot-toast";
 
 function PaymentHistoryController() {

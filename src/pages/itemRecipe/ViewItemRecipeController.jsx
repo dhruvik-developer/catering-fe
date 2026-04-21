@@ -1,14 +1,14 @@
 import { useEffect, useState } from "react";
-import { getRecipe, deleteRecipe } from "../../apis/FetchRecipe";
-import { getItemById } from "../../apis/FetchItem";
+import { getRecipe, deleteRecipe } from "../../api/FetchRecipe";
+import { getItemById } from "../../api/FetchItem";
 import toast from "react-hot-toast";
 import ViewItemRecipeComponent from "./ViewItemRecipeComponent";
 import Swal from "sweetalert2";
-import { updateItemCosts } from "../../apis/PutItem";
-import { updateRecipe } from "../../apis/PutRecipe";
-import { addRecipe } from "../../apis/PostRecipe";
+import { updateItemCosts } from "../../api/PutItem";
+import { updateRecipe } from "../../api/PutRecipe";
+import { addRecipe } from "../../api/PostRecipe";
 import { useNavigate } from "react-router-dom";
-import { getIngredientItems } from "../../apis/FetchIngredient";
+import { getIngredientItems } from "../../api/vendors";
 
 function ViewItemRecipeController({
   itemId,

@@ -2,7 +2,7 @@ import toast from "react-hot-toast";
 import AddEditUserComponent from "./AddEditUserComponent";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { addUser, updateUserPassword } from "../../../apis/PostUsers";
+import { addUser, updateUserPassword } from "../../../api/PostUsers";
 import { getApiMessage } from "../../../utils/apiResponse";
 
 function AddEditUserController() {

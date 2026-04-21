@@ -1,10 +1,10 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
-import { getSingleQuotation } from "../../../../apis/FetchQuotation";
+import { getSingleQuotation } from "../../../../api/FetchQuotation";
 import PdfQuotationComponent from "./PdfQuotationComponent";
 import { useParams } from "react-router-dom";
-import { getAllBusinessProfiles } from "../../../../apis/BusinessProfile";
+import { getAllBusinessProfiles } from "../../../../api/BusinessProfile";
 
 import { generatePdfFilename } from "../../../../utils/generatePdfFilename";
 import { usePdfCategorizer } from "../../../../hooks/usePdfCategorizer";

@@ -2,7 +2,7 @@
 import { useState, useEffect, useMemo } from "react";
 import { FiX, FiSearch, FiSave, FiBox, FiTag, FiChevronRight } from "react-icons/fi";
 import toast from "react-hot-toast";
-import { getGroundCategories } from "../../apis/GroundApis";
+import { getGroundCategories } from "../../api/GroundApis";
 
 /**
  * GroundManagementModal

@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 import { useEffect, useState } from "react";
 import RecipeIngredientComponent from "./RecipeIngredientComponent";
-import { getRecipe } from "../../apis/FetchRecipe";
+import { getRecipe } from "../../api/FetchRecipe";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 

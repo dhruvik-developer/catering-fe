@@ -7,7 +7,7 @@ import {
   updateFixedSalaryPayment,
   updateAssignment,
   createStaffWithdrawal,
-} from "../../../apis/EventStaffApis";
+} from "../../../api/EventStaffApis";
 import toast from "react-hot-toast";
 
 function FixedStaffPaymentController() {

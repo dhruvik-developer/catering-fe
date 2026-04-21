@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
-import { getIngredientCategories } from "../../../apis/FetchIngredient";
+import { getIngredientCategories } from "../../../api/vendors";
 import AddIngredientItemComponent from "./AddIngredientItemComponent";
-import { addIngredientItem } from "../../../apis/PostIngredient";
+import { addIngredientItem } from "../../../api/PostIngredient";
 
 function AddIngredientItemController() {
   const [itemName, setItemName] = useState("");

@@ -7,7 +7,7 @@ import {
   updateAssignment,
   getAllStaff,
   getRoles,
-} from "../../../apis/EventStaffApis";
+} from "../../../api/EventStaffApis";
 import AddEditAssignmentComponent from "./AddEditAssignmentComponent";
 
 function AddEditAssignmentController() {

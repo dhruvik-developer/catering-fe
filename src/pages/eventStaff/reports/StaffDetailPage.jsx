@@ -5,7 +5,7 @@ import Swal from "sweetalert2";
 import {
   getAllAssignments,
   updateAssignment,
-} from "../../../apis/EventStaffApis";
+} from "../../../api/EventStaffApis";
 import Loader from "../../../Components/common/Loader";
 import {
   FaArrowLeft,

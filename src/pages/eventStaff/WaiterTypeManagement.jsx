@@ -6,7 +6,7 @@ import {
   createWaiterType,
   updateWaiterType,
   deleteWaiterType,
-} from "../../apis/EventStaffApis";
+} from "../../api/EventStaffApis";
 import Loader from "../../Components/common/Loader";
 
 const waitersFromApi = async (setWaiterTypes, setLoading) => {

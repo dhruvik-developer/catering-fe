@@ -2,11 +2,11 @@
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import PdfInvoiceComponent from "./PdfInvoiceComponent";
-import { getInvoice } from "../../../../../apis/FetchInvoice";
-import { getSingleOrder } from "../../../../../apis/FetchAllOrder";
+import { getInvoice } from "../../../../../api/FetchInvoice";
+import { getSingleOrder } from "../../../../../api/FetchAllOrder";
 import { useParams } from "react-router-dom";
 import { exportToPDF, shareToWhatsApp } from "../../../../../utils/pdfExport";
-import { getAllBusinessProfiles } from "../../../../../apis/BusinessProfile";
+import { getAllBusinessProfiles } from "../../../../../api/BusinessProfile";
 import { generatePdfFilename } from "../../../../../utils/generatePdfFilename";
 import { usePdfCategorizer } from "../../../../../hooks/usePdfCategorizer";
 

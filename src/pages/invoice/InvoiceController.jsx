@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import InvoiceComponent from "./InvoiceComponent";
 import toast from "react-hot-toast";
-import { getInvoice } from "../../apis/FetchInvoice";
+import { getInvoice } from "../../api/FetchInvoice";
 import { useNavigate } from "react-router-dom";
 
 function InvoiceController() {

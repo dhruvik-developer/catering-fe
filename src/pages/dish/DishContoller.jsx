@@ -2,9 +2,9 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import DishComponent from "./DishComponent";
-import { getCategory } from "../../apis/FetchCategory";
-import { getWaiterTypes } from "../../apis/EventStaffApis";
-import { createEventBooking } from "../../apis/PostEventBooking";
+import { getCategory } from "../../api/FetchCategory";
+import { getWaiterTypes } from "../../api/EventStaffApis";
+import { createEventBooking } from "../../api/PostEventBooking";
 
 function DishContoller() {
   const navigate = useNavigate();

@@ -1,10 +1,10 @@
 import { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { updateEventBooking } from "../../../../apis/PutEventBooking";
+import { updateEventBooking } from "../../../../api/PutEventBooking";
 import PdfEditDishComponenet from "./PdfEditDishComponenet";
 import toast from "react-hot-toast";
 import { exportToPDF, shareToWhatsApp } from "../../../../utils/pdfExport";
-import { getAllBusinessProfiles } from "../../../../apis/BusinessProfile";
+import { getAllBusinessProfiles } from "../../../../api/BusinessProfile";
 import { generatePdfFilename } from "../../../../utils/generatePdfFilename";
 
 const PDFViewPage = () => {

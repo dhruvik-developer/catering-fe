@@ -1,7 +1,7 @@
 import { useEffect, useState, useCallback } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import toast from "react-hot-toast";
-import { getAllOrder } from "../../apis/FetchAllOrder";
+import { getAllOrder } from "../../api/FetchAllOrder";
 import CalendarComponent from "./CalendarComponent";
 
 function CalendarController() {

@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { FiPlus, FiEdit2, FiTrash2, FiSearch, FiFilter } from "react-icons/fi";
 import toast from "react-hot-toast";
 import Loader from "../../../Components/common/Loader";
-import { getGroundItems, getGroundCategories } from "../../../apis/GroundApis";
+import { getGroundItems, getGroundCategories } from "../../../api/GroundApis";
 import AddGroundItem from "./AddGroundItem";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { StickyNote02Icon } from "@hugeicons/core-free-icons";

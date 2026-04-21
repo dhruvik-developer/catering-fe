@@ -1,7 +1,7 @@
 import toast from "react-hot-toast";
 import ApiInstance from "../services/ApiInstance";
 
-export const getCategory = async (params = {}) => {
+export const getCategories = async (params = {}) => {
   try {
     const response = await ApiInstance.get("/categories/", { params });
     return response;
@@ -9,3 +9,5 @@ export const getCategory = async (params = {}) => {
     toast.error("Error fetching categories");
   }
 };
+
+export const getCategory = getCategories;

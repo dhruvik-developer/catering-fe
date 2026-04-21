@@ -2,9 +2,9 @@ import { useEffect, useState } from "react";
 import AddIngredientComponent from "./AddIngredientComponent";
 import { useNavigate, useLocation } from "react-router-dom";
 import toast from "react-hot-toast";
-import { getItem } from "../../../apis/FetchItem";
-import { getIngredientItems } from "../../../apis/FetchIngredient";
-import { addRecipe } from "../../../apis/PostRecipe";
+import { getItem } from "../../../api/FetchItem";
+import { getIngredientItems } from "../../../api/vendors";
+import { addRecipe } from "../../../api/PostRecipe";
 
 function AddIngredientController() {
   const [items, setItems] = useState([]);

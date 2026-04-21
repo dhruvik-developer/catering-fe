@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { FiX } from "react-icons/fi";
 import toast from "react-hot-toast";
-import { createGroundItem, updateGroundItem } from "../../../apis/GroundApis";
+import { createGroundItem, updateGroundItem } from "../../../api/GroundApis";
 
 // eslint-disable-next-line react/prop-types
 const AddGroundItem = ({ isOpen, onClose, onSuccess, categories = [], editData = null }) => {

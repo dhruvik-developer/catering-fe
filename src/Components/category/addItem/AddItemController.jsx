@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
-import { getCategory } from "../../../apis/FetchCategory";
-import { createItem } from "../../../apis/PostCategory";
+import { getCategory } from "../../../api/FetchCategory";
+import { createItem } from "../../../api/PostCategory";
 import AddItemComponent from "./AddItemComponent";
 
 function AddItemController() {

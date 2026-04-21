@@ -4,7 +4,7 @@ import Swal from "sweetalert2";
 import {
   getAllAssignments,
   updateAssignment,
-} from "../../../apis/EventStaffApis";
+} from "../../../api/EventStaffApis";
 import EventSummaryComponent from "./EventSummaryComponent";
 
 function EventSummaryController() {

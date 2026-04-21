@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import toast from "react-hot-toast";
-import { getAgencySummary } from "../../../apis/EventStaffApis";
+import { getAgencySummary } from "../../../api/EventStaffApis";
 import AgencySummaryComponent from "./AgencySummaryComponent";
 
 function AgencySummaryController() {

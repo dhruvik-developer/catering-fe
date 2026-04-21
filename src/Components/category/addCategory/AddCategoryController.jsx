@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { createCategory } from "../../../apis/PostCategory";
+import { createCategory } from "../../../api/PostCategory";
 import AddCategoryComponent from "./AddCategoryComponent";
 
 function AddCategoryController() {

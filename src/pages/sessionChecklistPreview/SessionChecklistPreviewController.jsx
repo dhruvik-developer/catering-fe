@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import toast from "react-hot-toast";
-import { getSingleOrder } from "../../apis/FetchAllOrder";
+import { getSingleOrder } from "../../api/FetchAllOrder";
 import SessionChecklistPreviewComponent from "./SessionChecklistPreviewComponent";
 import { exportToPDF } from "../../utils/pdfExport";
 

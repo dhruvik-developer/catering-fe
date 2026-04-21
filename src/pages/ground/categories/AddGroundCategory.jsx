@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { FiX } from "react-icons/fi";
 import toast from "react-hot-toast";
-import { createGroundCategory, updateGroundCategory } from "../../../apis/GroundApis";
+import { createGroundCategory, updateGroundCategory } from "../../../api/GroundApis";
 
 // eslint-disable-next-line react/prop-types
 const AddGroundCategory = ({ isOpen, onClose, onSuccess, editData = null }) => {

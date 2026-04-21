@@ -2,7 +2,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
-import { getCategory } from "../../../apis/FetchCategory";
+import { getCategory } from "../../../api/FetchCategory";
 import EditItemComponent from "./EditItemComponent";
 
 function EditItemController() {

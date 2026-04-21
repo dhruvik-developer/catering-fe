@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import UserComponent from "./UserComponent";
 import toast from "react-hot-toast";
-import { getUsers } from "../../apis/FetchUsers";
+import { getUsers } from "../../api/FetchUsers";
 import DeleteConfirmation from "../../Components/common/DeleteConfirmation";
 
 function UserController() {

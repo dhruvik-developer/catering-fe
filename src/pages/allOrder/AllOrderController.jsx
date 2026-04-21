@@ -23,9 +23,9 @@ function parseDate(str) {
   return isNaN(d.getTime()) ? null : d;
 }
 import DeleteConfirmation from "../../Components/common/DeleteConfirmation";
-import { getAllOrder, getSingleOrder } from "../../apis/FetchAllOrder";
+import { getAllOrder, getSingleOrder } from "../../api/FetchAllOrder";
 import { useNavigate, useSearchParams } from "react-router-dom";
-import { addPayment, updateOrder } from "../../apis/PostAllOrder";
+import { addPayment, updateOrder } from "../../api/PostAllOrder";
 import Swal from "sweetalert2";
 
 function AllOrderController() {

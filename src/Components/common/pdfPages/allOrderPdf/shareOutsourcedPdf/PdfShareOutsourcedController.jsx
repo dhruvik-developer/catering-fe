@@ -3,7 +3,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { exportToPDF, shareToWhatsApp } from "../../../../../utils/pdfExport";
 import toast from "react-hot-toast";
 import PdfShareOutsourcedComponent from "./PdfShareOutsourcedComponent";
-import { getAllBusinessProfiles } from "../../../../../apis/BusinessProfile";
+import { getAllBusinessProfiles } from "../../../../../api/BusinessProfile";
 import { generatePdfFilename } from "../../../../../utils/generatePdfFilename";
 
 function PdfShareOutsourcedController() {

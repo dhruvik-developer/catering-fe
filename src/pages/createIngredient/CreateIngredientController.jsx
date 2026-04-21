@@ -2,9 +2,9 @@
 import { useEffect, useRef, useState } from "react";
 import toast from "react-hot-toast";
 import DeleteConfirmation from "../../Components/common/DeleteConfirmation";
-import { getIngredientCategories } from "../../apis/FetchIngredient";
+import { getIngredientCategories } from "../../api/vendors";
 import Swal from "sweetalert2";
-import { addIngredientCategory } from "../../apis/PostIngredient";
+import { addIngredientCategory } from "../../api/PostIngredient";
 import { useNavigate } from "react-router-dom";
 import CreateIngredientComponent from "./CreateIngredientComponent";
 

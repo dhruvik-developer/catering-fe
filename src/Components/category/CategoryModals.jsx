@@ -14,11 +14,11 @@ import { FaTimes } from "react-icons/fa";
 import Input from "../common/formInputs/Input";
 import Dropdown from "../common/formDropDown/DropDown";
 import toast from "react-hot-toast";
-import { createCategory, createItem } from "../../apis/PostCategory";
-import { getCategory } from "../../apis/FetchCategory";
-import { getItem } from "../../apis/FetchItem";
-import { getIngredientItems } from "../../apis/FetchIngredient";
-import { addRecipe } from "../../apis/PostRecipe";
+import { createCategory, createItem } from "../../api/PostCategory";
+import { getCategory } from "../../api/FetchCategory";
+import { getItem } from "../../api/FetchItem";
+import { getIngredientItems } from "../../api/vendors";
+import { addRecipe } from "../../api/PostRecipe";
 
 // ==================== MODAL WRAPPER ====================
 const ModalWrapper = ({ isOpen, onClose, children }) => {

@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import AssignmentComponent from "./AssignmentComponent";
 import toast from "react-hot-toast";
-import { getAllAssignments } from "../../../apis/EventStaffApis";
+import { getAllAssignments } from "../../../api/EventStaffApis";
 import DeleteConfirmation from "../../../Components/common/DeleteConfirmation";
 
 function AssignmentController() {

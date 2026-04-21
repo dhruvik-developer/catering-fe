@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import StaffComponent from "./StaffComponent";
 import toast from "react-hot-toast";
-import { getAllStaff } from "../../../apis/EventStaffApis";
+import { getAllStaff } from "../../../api/EventStaffApis";
 import DeleteConfirmation from "../../../Components/common/DeleteConfirmation";
 
 function StaffController() {

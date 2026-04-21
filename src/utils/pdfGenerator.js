@@ -1,5 +1,5 @@
-import { getSingleOrder } from "../apis/FetchAllOrder";
-import { getAllBusinessProfiles } from "../apis/BusinessProfile";
+import { getSingleOrder } from "../api/FetchAllOrder";
+import { getAllBusinessProfiles } from "../api/BusinessProfile";
 import { generateOrderMasterPDF as serviceGenOrderMaster, generateSessionChecklistPDF as serviceGenSessionChecklist } from "./pdf/pdfService";
 
 export const generateOrderMasterPDF = async (orderId) => {

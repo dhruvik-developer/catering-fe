@@ -8,7 +8,7 @@ import {
   getSingleStaff,
   getWaiterTypes,
   updateStaff,
-} from "../../../apis/EventStaffApis";
+} from "../../../api/EventStaffApis";
 import {
   getApiErrorMessage,
   getCollectionResponse,

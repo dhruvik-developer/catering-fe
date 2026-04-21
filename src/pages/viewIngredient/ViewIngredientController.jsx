@@ -5,9 +5,9 @@ import { useEffect, useState } from "react";
 import {
   fetchEventIngredientList,
   getSingleOrder,
-} from "../../apis/FetchAllOrder";
+} from "../../api/FetchAllOrder";
 import toast from "react-hot-toast";
-import { updateOrder } from "../../apis/PostAllOrder";
+import { updateOrder } from "../../api/PostAllOrder";
 
 function ViewIngredientController() {
   const navigate = useNavigate();

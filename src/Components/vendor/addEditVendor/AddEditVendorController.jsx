@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
-import { addVendor, updateVendor } from "../../../apis/PostVendor";
+import { addVendor, updateVendor } from "../../../api/PostVendor";
 import { getIngredientCategories, getVendor } from "../../../api/vendors";
 import {
   getApiErrorMessage,

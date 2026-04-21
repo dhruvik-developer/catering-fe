@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import toast from "react-hot-toast";
 import { fetchVendors } from "../../api/vendors";
-import { assignItemVendor, getItemVendorAssignments } from "../../apis/VendorAssignmentApis";
+import { assignItemVendor, getItemVendorAssignments } from "../../api/VendorAssignmentApis";
 import { FiX, FiCheck } from "react-icons/fi";
 
 const ItemVendorModal = ({ isOpen, onClose, session, eventId }) => {

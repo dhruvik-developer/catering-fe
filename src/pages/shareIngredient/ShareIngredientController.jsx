@@ -3,11 +3,11 @@ import { useLocation, useNavigate } from "react-router-dom";
 import ShareIngredientComponent from "./ShareIngredientComponent";
 import toast from "react-hot-toast";
 import { useEffect, useState } from "react";
-import { updateOrder } from "../../apis/PostAllOrder";
-import { getSingleOrder } from "../../apis/FetchAllOrder";
+import { updateOrder } from "../../api/PostAllOrder";
+import { getSingleOrder } from "../../api/FetchAllOrder";
 import { fetchVendors } from "../../api/vendors";
-import { getAllBusinessProfiles } from "../../apis/BusinessProfile";
-import { assignIngredientVendor } from "../../apis/VendorAssignmentApis";
+import { getAllBusinessProfiles } from "../../api/BusinessProfile";
+import { assignIngredientVendor } from "../../api/VendorAssignmentApis";
 
 function ShareIngredientController() {
   const location = useLocation();

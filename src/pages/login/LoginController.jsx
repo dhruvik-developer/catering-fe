@@ -1,7 +1,7 @@
 import { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { UserContext } from "../../context/UserContext";
-import { postLogin } from "../../apis/AuthApis";
+import { postLogin } from "../../api/AuthApis";
 import toast from "react-hot-toast";
 import LoginComponent from "./LoginComponent";
 import { USER_ROLE_ADMIN } from "../../services/tokenService";

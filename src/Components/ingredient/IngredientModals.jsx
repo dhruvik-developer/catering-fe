@@ -5,8 +5,8 @@ import { FiX, FiTag } from "react-icons/fi";
 import Input from "../common/formInputs/Input";
 import Dropdown from "../common/formDropDown/DropDown";
 import toast from "react-hot-toast";
-import { addIngredientItem } from "../../apis/PostIngredient";
-import { getIngredientCategories } from "../../apis/FetchIngredient";
+import { addIngredientItem } from "../../api/PostIngredient";
+import { getIngredientCategories } from "../../api/vendors";
 
 // ==================== MODAL WRAPPER ====================
 const ModalWrapper = ({ isOpen, onClose, children }) => {

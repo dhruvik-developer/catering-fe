@@ -4,7 +4,7 @@ import {
   getAllBusinessProfiles,
   createBusinessProfile,
   updateBusinessProfile,
-} from "../../apis/BusinessProfile";
+} from "../../api/BusinessProfile";
 import toast from "react-hot-toast";
 
 function SettingsController() {

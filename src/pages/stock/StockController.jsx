@@ -1,13 +1,13 @@
 import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import StockComponent from "./StockComponent";
-import { getStockCategory } from "../../apis/FetchStockCategory";
+import { getStockCategory } from "../../api/FetchStockCategory";
 import {
   addStockCategory,
   addStockItem,
   decreaseStockItem,
   increaseStockItem,
-} from "../../apis/PostStock";
+} from "../../api/PostStock";
 import toast from "react-hot-toast";
 import Swal from "sweetalert2";
 import DeleteConfirmation from "../../Components/common/DeleteConfirmation";

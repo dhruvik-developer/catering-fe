@@ -2,8 +2,8 @@ import { useLocation, useNavigate } from "react-router-dom";
 import ShareOutsourcedComponent from "./ShareOutsourcedComponent";
 import toast from "react-hot-toast";
 import { useEffect, useState } from "react";
-import { getAllBusinessProfiles } from "../../apis/BusinessProfile";
-import { getSingleOrder, updateEventBooking } from "../../apis/FetchAllOrder";
+import { getAllBusinessProfiles } from "../../api/BusinessProfile";
+import { getSingleOrder, updateEventBooking } from "../../api/FetchAllOrder";
 
 function ShareOutsourcedController() {
   const location = useLocation();

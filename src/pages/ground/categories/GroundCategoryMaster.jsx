@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { FiPlus, FiEdit2, FiTrash2, FiSearch } from "react-icons/fi";
 import toast from "react-hot-toast";
 import Loader from "../../../Components/common/Loader";
-import { getGroundCategories, createGroundCategory } from "../../../apis/GroundApis";
+import { getGroundCategories, createGroundCategory } from "../../../api/GroundApis";
 import AddGroundCategory from "./AddGroundCategory";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { MenuRestaurantIcon } from "@hugeicons/core-free-icons";

@@ -3,7 +3,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import ItemComponent from "./ItemComponent";
 import toast from "react-hot-toast";
-import { getCategory } from "../../apis/FetchCategory";
+import { getCategory } from "../../api/FetchCategory";
 
 function ItemController() {
   const navigate = useNavigate();

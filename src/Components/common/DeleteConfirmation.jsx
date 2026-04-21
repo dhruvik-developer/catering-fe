@@ -1,6 +1,6 @@
 import Swal from "sweetalert2";
 import { toast } from "react-hot-toast";
-import ApiInstance from "../../services/ApiInstance";
+import { executeConfirmationRequest } from "../../api/requestActions";
 
 const DeleteConfirmation = async ({
   id,
@@ -23,13 +23,12 @@ const DeleteConfirmation = async ({
 
   if (result.isConfirmed) {
     try {
-      let response;
-
-      if (method === "DELETE") {
-        response = await ApiInstance.delete(`${apiEndpoint}/${id}/`);
-      } else if (method === "POST") {
-        response = await ApiInstance.post(`${apiEndpoint}/${id}/`, payload);
-      }
+      const response = await executeConfirmationRequest({
+        apiEndpoint,
+        id,
+        method,
+        payload,
+      });
 
       if (response.data.status) {
         toast.success(successMessage);

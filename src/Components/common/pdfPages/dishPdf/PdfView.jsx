@@ -4,7 +4,7 @@ import { Rules } from "../../rules";
 import BaseImage from "../../BaseImage";
 import { exportToPDF, shareToWhatsApp } from "../../../../utils/pdfExport";
 import toast from "react-hot-toast";
-import { getAllBusinessProfiles } from "../../../../apis/BusinessProfile";
+import { getAllBusinessProfiles } from "../../../../api/BusinessProfile";
 import { generatePdfFilename } from "../../../../utils/generatePdfFilename";
 import { usePdfCategorizer } from "../../../../hooks/usePdfCategorizer";
 

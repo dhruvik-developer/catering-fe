@@ -6,6 +6,10 @@ const handleError = (message, error) => {
   toast.error(message);
 };
 
+// ============================================
+// VENDOR FUNCTIONS
+// ============================================
+
 export const fetchVendors = async (params = {}) => {
   try {
     const response = await ApiInstance.get("/vendors/", { params });
@@ -26,6 +30,9 @@ export const getVendor = async (id) => {
   }
 };
 
+// Alias for backwards compatibility
+export const getSingleVendor = getVendor;
+
 export const getVendorsByCategory = async (categoryId) => {
   try {
     const response = await ApiInstance.get("/vendors/", {
@@ -38,12 +45,50 @@ export const getVendorsByCategory = async (categoryId) => {
   }
 };
 
-export const getIngredientCategories = async () => {
+// Alias for backwards compatibility
+export const getVendors = fetchVendors;
+
+// ============================================
+// INGREDIENT FUNCTIONS
+// (Consolidated from apis/FetchIngredient.js)
+// ============================================
+
+export const getIngredientCategories = async (params = {}) => {
   try {
-    const response = await ApiInstance.get("/ingredients-categories/");
+    const response = await ApiInstance.get("/ingredients-categories/", { params });
     return response.data;
   } catch (error) {
     handleError("Error fetching ingredient categories", error);
+    return null;
+  }
+};
+
+export const getIngredientCategoryById = async (id) => {
+  try {
+    const response = await ApiInstance.get(`/ingredients-categories/${id}/`);
+    return response.data;
+  } catch (error) {
+    handleError("Error fetching ingredient category details", error);
+    return null;
+  }
+};
+
+export const getIngredientItems = async (params = {}) => {
+  try {
+    const response = await ApiInstance.get("/ingredients-items/", { params });
+    return response.data;
+  } catch (error) {
+    handleError("Error fetching ingredient items", error);
+    return null;
+  }
+};
+
+export const getIngredientItemById = async (id) => {
+  try {
+    const response = await ApiInstance.get(`/ingredients-items/${id}/`);
+    return response.data;
+  } catch (error) {
+    handleError("Error fetching ingredient item details", error);
     return null;
   }
 };

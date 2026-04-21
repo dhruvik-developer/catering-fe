@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react";
 import ExpenseComponent from "./ExpenseComponent";
-import { getExpenses, getExpenseCategories } from "../../apis/FetchExpense";
+import { getExpenses, getExpenseCategories } from "../../api/FetchExpense";
 import {
   createExpense,
   updateExpense,
   createExpenseCategory,
   deleteExpense,
-} from "../../apis/PostExpense";
+} from "../../api/PostExpense";
 import toast from "react-hot-toast";
 import Swal from "sweetalert2";
 import DeleteConfirmation from "../../Components/common/DeleteConfirmation";
