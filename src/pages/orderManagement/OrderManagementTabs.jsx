@@ -1,35 +1,39 @@
 import { Link, useLocation } from "react-router-dom";
-import { FiBriefcase, FiLock, FiTruck, FiUsers } from "react-icons/fi";
+import { FiClipboard, FiFileText, FiFile, FiBarChart2 } from "react-icons/fi";
 import usePermissions from "../../hooks/usePermissions";
 
 const tabs = [
   {
-    label: "Event Staff",
-    icon: FiUsers,
-    path: "/people/event-staff",
-    requiredPermission: "eventstaff.view",
+    label: "Quotation",
+    description: "Create and manage customer quotations.",
+    icon: FiFileText,
+    path: "/order-management/quotation",
+    requiredPermission: "quotations.view",
   },
   {
-    label: "Vendor",
-    icon: FiTruck,
-    path: "/people/vendor",
-    requiredPermission: "vendors.view",
+    label: "All Order",
+    description: "Track and manage all event orders.",
+    icon: FiClipboard,
+    path: "/order-management/all-order",
+    requiredPermission: "event_bookings.view",
   },
   {
-    label: "Waiter Types",
-    icon: FiBriefcase,
-    path: "/people/waiter-types",
-    requiredPermission: "eventstaff.view", // Waiters are part of eventstaff
+    label: "Invoice",
+    description: "Generate and complete billing invoices.",
+    icon: FiFile,
+    path: "/order-management/invoice",
+    requiredPermission: "invoices.view",
   },
   {
-    label: "Permissions",
-    icon: FiLock,
-    path: "/people/permissions",
-    requiredPermission: "*", // Only superuser/admin can manage permissions
+    label: "Event Summary",
+    description: "View event-level reports and summaries.",
+    icon: FiBarChart2,
+    path: "/order-management/event-summary",
+    requiredPermission: "event_summary.view",
   },
 ];
 
-function PeopleTabs() {
+function OrderManagementTabs() {
   const location = useLocation();
   const { hasPermission } = usePermissions();
 
@@ -37,7 +41,7 @@ function PeopleTabs() {
     <div className="rounded-2xl border border-[#ede7f6] bg-white p-2 shadow-sm">
       <nav
         className="flex flex-col gap-2 md:flex-row"
-        aria-label="People module sections"
+        aria-label="Order management sections"
       >
         {tabs.map((tab) => {
           if (tab.requiredPermission && !hasPermission(tab.requiredPermission)) {
@@ -50,23 +54,30 @@ function PeopleTabs() {
             <Link
               key={tab.path}
               to={tab.path}
-              className={`group flex flex-1 items-center gap-3 rounded-2xl border px-4 py-2.5 transition-all duration-200 ${
+              className={`group flex flex-1 items-start gap-3 rounded-2xl border px-4 py-3 transition-all duration-200 ${
                 isActive
                   ? "border-[#845cbd] bg-gradient-to-r from-[#845cbd] to-[#6f49a9] text-white shadow-lg shadow-[#845cbd]/15"
                   : "border-transparent bg-transparent text-gray-600 hover:border-[#ede7f6] hover:bg-[#faf8fd]"
               }`}
             >
               <div
-                className={`flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-xl transition-colors ${
+                className={`mt-0.5 flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-xl transition-colors ${
                   isActive
                     ? "bg-white/15 text-white"
                     : "bg-[#f4effc] text-[#845cbd] group-hover:bg-white"
                 }`}
               >
-                <Icon size={18} />
+                <Icon size={20} />
               </div>
               <div className="min-w-0">
                 <p className="text-sm font-semibold sm:text-base">{tab.label}</p>
+                <p
+                  className={`mt-1 text-xs leading-5 sm:text-sm ${
+                    isActive ? "text-white/75" : "text-gray-400"
+                  }`}
+                >
+                  {tab.description}
+                </p>
               </div>
             </Link>
           );
@@ -76,4 +87,4 @@ function PeopleTabs() {
   );
 }
 
-export default PeopleTabs;
+export default OrderManagementTabs;

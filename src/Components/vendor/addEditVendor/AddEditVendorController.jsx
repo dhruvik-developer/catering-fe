@@ -53,7 +53,7 @@ function AddEditVendorController() {
       is_active:
         vendorData?.is_active !== undefined ? vendorData.is_active : true,
       login_enabled: existingLogin,
-      login_username: vendorData?.linked_username || "",
+      login_username: vendorData?.login_username || vendorData?.linked_username || "",
       login_password: "",
       login_email: vendorData?.login_email || vendorData?.email || "",
     });

@@ -30,7 +30,7 @@ const handleMutationSuccess = (response, successMessage, failureMessage) => {
 
 export const getVendors = async (params = {}) => {
   try {
-    const response = await ApiInstance.get("/vendor/vendors/", { params });
+    const response = await ApiInstance.get("/vendors/", { params });
     return response.data;
   } catch (error) {
     return handleQueryError("Error fetching vendors", error);
@@ -48,7 +48,7 @@ export const getVendorById = async (id) => {
 
 export const createVendor = async (data) => {
   try {
-    const response = await ApiInstance.post("/vendor/vendors/", data);
+    const response = await ApiInstance.post("/vendors/", data);
     return handleMutationSuccess(
       response,
       response.data?.message || "Vendor added successfully!",
@@ -105,20 +105,40 @@ export const getIngredientCategoryById = async (id) => {
 
 export const createIngredientCategory = async (name, isCommon = false) => {
   try {
-    const response = await ApiInstance.post("/vendor/categories/", {
+    const response = await ApiInstance.post("/categories/", {
       name,
       is_common: isCommon,
     });
     return handleMutationSuccess(
       response,
-      "Ingredient Category added successfully!",
-      "Failed to add ingredient category"
+      "Category added successfully!",
+      "Failed to add category"
     );
   } catch (error) {
     return handleMutationError(
       "Add Category API Error:",
       error,
-      "Failed to add ingredient category"
+      "Failed to add category"
+    );
+  }
+};
+
+export const updateIngredientCategory = async (id, name, isCommon = false) => {
+  try {
+    const response = await ApiInstance.put(`/categories/${id}/`, {
+      name,
+      is_common: isCommon,
+    });
+    return handleMutationSuccess(
+      response,
+      "Category updated successfully!",
+      "Failed to update category"
+    );
+  } catch (error) {
+    return handleMutationError(
+      "Update Category API Error:",
+      error,
+      "Failed to update category"
     );
   }
 };

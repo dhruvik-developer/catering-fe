@@ -22,6 +22,7 @@ const Vendor = lazy(() => import("../pages/vendor/VendorController"));
 const GstBillingModule = lazy(() => import("../pages/gstBilling/GstBillingModule"));
 const SessionChecklistPreview = lazy(() => import("../pages/sessionChecklistPreview/SessionChecklistPreviewController"));
 const PeoplePage = lazy(() => import("../pages/people/PeoplePage"));
+const OrderManagementPage = lazy(() => import("../pages/orderManagement/OrderManagementPage"));
 const PermissionsController = lazy(() => import("../pages/people/permissions/PermissionsController"));
 
 const Rules = lazy(() => import("../Components/common/rules/RuleController"));
@@ -89,6 +90,7 @@ export {
   GstBillingModule,
   SessionChecklistPreview,
   PeoplePage,
+  OrderManagementPage,
   Rules,
   EditDish,
   EditItem,

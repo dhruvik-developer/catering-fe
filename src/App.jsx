@@ -32,6 +32,7 @@ import {
   Vendor,
   SessionChecklistPreview,
   PeoplePage,
+  OrderManagementPage,
   PermissionsController,
   Rules,
   EditDish,
@@ -83,9 +84,13 @@ const App = () => (
               {/* All main routes */}
               <Route path="/dish" element={<Dish />} />
               <Route path="/category" element={<Category />} />
-              <Route path="/quotation" element={<Quotation />} />
-              <Route path="/all-order" element={<AllOrder />} />
-              <Route path="/invoice" element={<Invoice />} />
+              <Route path="/order-management" element={<OrderManagementPage />}>
+                <Route index element={<Navigate to="all-order" replace />} />
+                <Route path="quotation" element={<Quotation />} />
+                <Route path="all-order" element={<AllOrder />} />
+                <Route path="invoice" element={<Invoice />} />
+                <Route path="event-summary" element={<EventSummaryController />} />
+              </Route>
               <Route path="/stock" element={<StockManagement />} />
               <Route path="/payment-history" element={<PaymentHistory />} />
               <Route path="/recipe-ingredient" element={<RecipeIngredient />} />
@@ -149,6 +154,25 @@ const App = () => (
               />
               {/* End of legacy People entry routes */}
 
+              {/* Legacy Order Management entry routes */}
+              <Route
+                path="/quotation"
+                element={<Navigate to="/order-management/quotation" replace />}
+              />
+              <Route
+                path="/all-order"
+                element={<Navigate to="/order-management/all-order" replace />}
+              />
+              <Route
+                path="/invoice"
+                element={<Navigate to="/order-management/invoice" replace />}
+              />
+              <Route
+                path="/event-summary"
+                element={<Navigate to="/order-management/event-summary" replace />}
+              />
+              {/* End of legacy Order Management entry routes */}
+
               {/* Event Staff Routes */}
               <Route path="/add-staff" element={<AddEditStaffController />} />
               <Route
@@ -167,7 +191,6 @@ const App = () => (
                 path="/edit-assignment/:id"
                 element={<AddEditAssignmentController />}
               />
-              <Route path="/event-summary" element={<EventSummaryController />} />
               <Route
                 path="/staff-detail/:staffId"
                 element={<StaffDetailPage />}

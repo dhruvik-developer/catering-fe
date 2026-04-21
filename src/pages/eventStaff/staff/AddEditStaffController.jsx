@@ -133,7 +133,7 @@ function AddEditStaffController() {
           : "0.00",
       is_active: data.is_active !== undefined ? data.is_active : true,
       login_enabled: existingLogin,
-      login_username: data.linked_username || "",
+      login_username: data.login_username || data.linked_username || "",
       login_password: "",
       login_email: data.login_email || data.email || "",
     });

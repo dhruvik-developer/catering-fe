@@ -2,8 +2,6 @@
 import { HugeiconsIcon } from "@hugeicons/react";
 import {
   Dish01Icon,
-  Invoice02Icon,
-  NoteEditIcon,
   MenuRestaurantIcon,
   MoneyReceiveSquareIcon,
   Note03Icon,
@@ -14,7 +12,7 @@ import {
 import { useRef, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import BaseImage from "../common/BaseImage";
-import { FiUsers, FiFileText } from "react-icons/fi";
+import { FiUsers } from "react-icons/fi";
 import usePermissions from "../../hooks/usePermissions";
 
 const menuItems = [
@@ -32,31 +30,13 @@ const menuItems = [
   },
   {
     name: "Order Management",
+    path: "/order-management",
     icon: <HugeiconsIcon icon={Note03Icon} size={24} color="#845cbd" />,
     requiredPermission: [
       "quotations.view",
       "event_bookings.view",
       "invoices.view",
-    ],
-    children: [
-      {
-        name: "Quotation",
-        path: "/quotation",
-        icon: <HugeiconsIcon icon={NoteEditIcon} size={20} color="#845cbd" />,
-        requiredPermission: "quotations.view",
-      },
-      {
-        name: "All Order",
-        path: "/all-order",
-        icon: <HugeiconsIcon icon={Note03Icon} size={20} color="#845cbd" />,
-        requiredPermission: "event_bookings.view",
-      },
-      {
-        name: "Invoice",
-        path: "/invoice",
-        icon: <HugeiconsIcon icon={Invoice02Icon} size={20} color="#845cbd" />,
-        requiredPermission: "invoices.view",
-      },
+      "event_summary.view",
     ],
   },
   {
@@ -92,12 +72,6 @@ const menuItems = [
     path: "/people",
     icon: <FiUsers size={24} color="#845cbd" />,
     requiredPermission: ["vendors.view", "eventstaff.view"],
-  },
-  {
-    name: "Event Summary",
-    path: "/event-summary",
-    icon: <FiFileText size={24} color="#845cbd" />,
-    requiredPermission: "event_summary.view",
   },
   {
     name: "Ground Checklist",
@@ -152,9 +126,16 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
       "/create-ingredient",
       "/edit-ingredient",
     ],
-    "/quotation": ["/quotation", "/quotation-pdf/"],
-    "/all-order": [
+    "/order-management": [
+      "/order-management",
+      "/quotation",
       "/all-order",
+      "/invoice",
+      "/order-management/quotation",
+      "/order-management/all-order",
+      "/order-management/invoice",
+      "/order-management/event-summary",
+      "/quotation-pdf/",
       "/order-pdf/",
       "/share-order-pdf",
       "/view-ingredient",
@@ -163,8 +144,11 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
       "/share-full-ingredient-pdf",
       "/share-outsourced",
       "/share-outsourced-pdf",
+      "/invoice-order-pdf/",
+      "/invoice-bill-pdf/",
+      "/complete-invoice",
+      "/event-summary",
     ],
-    "/invoice": ["/invoice", "/invoice-order-pdf/", "/complete-invoice"],
     "/user": ["/user", "/add-rule"],
     "/people": [
       "/people",
@@ -182,7 +166,6 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
       "/create-recipe-ingredient",
       "/add-ingredient-item",
     ],
-    "/event-summary": ["/event-summary"],
     "/ground-checklist": ["/ground-checklist", "/ground-categories", "/ground-items"],
   };
 
@@ -219,18 +202,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
             if (item.requiredPermission && !hasPermission(item.requiredPermission)) {
               return null;
             }
-
-            const visibleChildren = item.children?.filter((child) =>
-              child.requiredPermission ? hasPermission(child.requiredPermission) : true
-            ) || [];
-
-            if (item.children && visibleChildren.length === 0) {
-              return null;
-            }
-
-            const parentActive = item.children
-              ? visibleChildren.some((child) => isMenuItemActive(child.path))
-              : isMenuItemActive(item.path);
+            const parentActive = isMenuItemActive(item.path);
 
             return (
               <li key={index} className="space-y-1">
@@ -241,55 +213,19 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
                         : "hover:bg-gray-100 text-gray-600"
                   }`}
                 >
-                  {item.children ? (
-                    <div className="flex items-center space-x-4 flex-1">
-                      <div className="p-2 rounded-xl transition-colors bg-white">
-                        {item.icon}
-                      </div>
-                      <span className="font-semibold text-[15px]">{item.name}</span>
+                  <Link
+                    to={item.path}
+                    className="flex items-center space-x-4 flex-1"
+                    onClick={handleItemClick}
+                  >
+                    <div className={`p-2 rounded-xl transition-colors bg-white  ${
+                      parentActive ? "" : "shadow-sm"
+                    }`}>
+                      {item.icon}
                     </div>
-                  ) : (
-                    <Link
-                      to={item.path}
-                      className="flex items-center space-x-4 flex-1"
-                      onClick={handleItemClick}
-                    >
-                      <div className={`p-2 rounded-xl transition-colors bg-white  ${
-                        parentActive ? "" : "shadow-sm"
-                      }`}>
-                        {item.icon}
-                      </div>
-                      <span className="font-semibold text-[15px]">{item.name}</span>
-                    </Link>
-                  )}
+                    <span className="font-semibold text-[15px]">{item.name}</span>
+                  </Link>
                 </div>
-
-                {item.children && (
-                  <ul className="mt-2 ml-5 space-y-1">
-                    {visibleChildren.map((child) => {
-                      const childActive = isMenuItemActive(child.path);
-
-                      return (
-                        <li key={child.path}>
-                          <Link
-                            to={child.path}
-                            onClick={handleItemClick}
-                            className={`flex items-center space-x-3 px-3 py-2 rounded-lg transition-all ${
-                              childActive
-                                ? "bg-[#f2ecfc] text-[#6e4ca5] font-semibold"
-                                : "text-gray-600 hover:bg-gray-100"
-                            }`}
-                          >
-                            <div className="p-1.5 rounded-lg bg-white shadow-sm">
-                              {child.icon}
-                            </div>
-                            <span className="text-[14px]">{child.name}</span>
-                          </Link>
-                        </li>
-                      );
-                    })}
-                  </ul>
-                )}
               </li>
             );
           })}
