@@ -6,7 +6,6 @@ function PermissionsComponent({
     isSaving,
     modules,
     users,
-    roles,
     selectedType,
     selectedId,
     currentPermissions,
@@ -17,7 +16,7 @@ function PermissionsComponent({
 }) {
     const [expandedModule, setExpandedModule] = useState(null);
 
-    const subjects = selectedType === 'role' ? roles : users;
+    const subjects = users;
 
     return (
         <div className="flex flex-col h-[calc(100vh-200px)] gap-6 lg:flex-row">
@@ -25,7 +24,7 @@ function PermissionsComponent({
             <div className="w-full lg:w-80 flex flex-col bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
                 <div className="p-4 border-b border-gray-50 bg-gray-50/50">
                     <div className="flex p-1 bg-white border border-gray-100 rounded-xl">
-                        {['staff', 'vendor', 'role'].map((type) => (
+                        {["staff", "vendor"].map((type) => (
                             <button
                                 key={type}
                                 onClick={() => onTypeChange(type)}
@@ -62,7 +61,7 @@ function PermissionsComponent({
                             <div className={`h-10 w-10 rounded-full flex items-center justify-center ${
                                 selectedId === sub.id ? 'bg-[#845cbd] text-white' : 'bg-gray-100 text-gray-500'
                             }`}>
-                                {selectedType === 'role' ? <FiShield size={18} /> : <FiUser size={18} />}
+                                <FiUser size={18} />
                             </div>
                             <div className="text-left overflow-hidden">
                                 <p className={`text-sm font-bold truncate ${selectedId === sub.id ? 'text-[#845cbd]' : 'text-gray-700'}`}>

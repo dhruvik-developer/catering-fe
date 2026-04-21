@@ -4,11 +4,8 @@ import {
     getPermissionModules, 
     getPermissionUsers, 
     getUserPermissions, 
-    updateUserPermissions,
-    getRolePermissions,
-    updateRolePermissions
+    updateUserPermissions
 } from "../../../api/AccessControlApis";
-import { getRoles } from "../../../api/EventStaffApis";
 import { getCollectionResponse } from "../../../utils/apiResponse";
 import PermissionsComponent from "./PermissionsComponent";
 
@@ -16,9 +13,8 @@ function PermissionsController() {
     const [loading, setLoading] = useState(true);
     const [modules, setModules] = useState([]);
     const [users, setUsers] = useState([]);
-    const [roles, setRoles] = useState([]);
     const [selectedId, setSelectedId] = useState(null);
-    const [selectedType, setSelectedType] = useState("staff"); // 'staff', 'vendor', or 'role'
+    const [selectedType, setSelectedType] = useState("staff"); // 'staff' or 'vendor'
     const [currentPermissions, setCurrentPermissions] = useState([]);
     const [isSaving, setIsSaving] = useState(false);
 
@@ -29,15 +25,13 @@ function PermissionsController() {
     const fetchInitialData = async () => {
         setLoading(true);
         try {
-            const [modulesRes, staffRes, rolesRes] = await Promise.all([
+            const [modulesRes, staffRes] = await Promise.all([
                 getPermissionModules(),
-                getPermissionUsers("staff"),
-                getRoles()
+                getPermissionUsers("staff")
             ]);
 
             setModules(getCollectionResponse(modulesRes));
             setUsers(getCollectionResponse(staffRes));
-            setRoles(getCollectionResponse(rolesRes));
         } catch (error) {
             console.error("Error fetching permission data:", error);
             toast.error("Failed to load permission management data");
@@ -50,8 +44,6 @@ function PermissionsController() {
         setSelectedType(type);
         setSelectedId(null);
         setCurrentPermissions([]);
-        
-        if (type === "role") return;
 
         setLoading(true);
         try {
@@ -68,17 +60,10 @@ function PermissionsController() {
         setSelectedId(id);
         setLoading(true);
         try {
-            let res;
-            if (selectedType === "role") {
-                res = await getRolePermissions(id);
-                // Role API might return { permission_codes: [] }
-                setCurrentPermissions(res.data?.data?.permission_codes || []);
-            } else {
-                res = await getUserPermissions(id);
-                // User API returns { allowed_permissions: [], denied_permissions: [] }
-                // For simplicity, we'll focus on allowed_permissions in this UI
-                setCurrentPermissions(res.data?.data?.allowed_permissions || []);
-            }
+            const res = await getUserPermissions(id);
+            // User API returns { allowed_permissions: [], denied_permissions: [] }
+            // For simplicity, we'll focus on allowed_permissions in this UI
+            setCurrentPermissions(res.data?.data?.allowed_permissions || []);
         } catch (error) {
             toast.error("Failed to fetch permissions for selection");
         } finally {
@@ -98,16 +83,10 @@ function PermissionsController() {
         if (!selectedId) return;
         setIsSaving(true);
         try {
-            if (selectedType === "role") {
-                await updateRolePermissions(selectedId, {
-                    permission_codes: currentPermissions
-                });
-            } else {
-                await updateUserPermissions(selectedId, {
-                    allowed_permissions: currentPermissions,
-                    denied_permissions: [] // Reset denied for now or handle separately
-                });
-            }
+            await updateUserPermissions(selectedId, {
+                allowed_permissions: currentPermissions,
+                denied_permissions: [] // Reset denied for now or handle separately
+            });
             toast.success("Permissions updated successfully");
         } catch (error) {
             toast.error("Failed to update permissions");
@@ -122,7 +101,6 @@ function PermissionsController() {
             isSaving={isSaving}
             modules={modules}
             users={users}
-            roles={roles}
             selectedType={selectedType}
             selectedId={selectedId}
             currentPermissions={currentPermissions}
