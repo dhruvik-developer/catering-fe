@@ -6,7 +6,7 @@ import Input from "../common/formInputs/Input";
 import Dropdown from "../common/formDropDown/DropDown";
 import toast from "react-hot-toast";
 import { addIngredientItem } from "../../api/PostIngredient";
-import { getIngredientCategories } from "../../api/vendors";
+import { useIngredientCategories } from "../../hooks/useIngredientCategories";
 
 // ==================== MODAL WRAPPER ====================
 const ModalWrapper = ({ isOpen, onClose, children }) => {
@@ -38,26 +38,18 @@ const ModalWrapper = ({ isOpen, onClose, children }) => {
 export const AddIngredientItemModal = ({ isOpen, onClose, onSuccess, initialCategory }) => {
   const [itemName, setItemName] = useState("");
   const [category, setCategory] = useState("");
-  const [categories, setCategories] = useState([]);
   const [saving, setSaving] = useState(false);
+  const { data: categories = [] } = useIngredientCategories(
+    {},
+    { enabled: isOpen }
+  );
 
   useEffect(() => {
     if (isOpen) {
       setItemName("");
       setCategory(initialCategory || "");
-      const fetchIngredientCategories = async () => {
-        try {
-          const response = await getIngredientCategories();
-          if (response.data.status) {
-            setCategories(response.data.data);
-          }
-        } catch (error) {
-          console.error("API Error:", error);
-        }
-      };
-      fetchIngredientCategories();
     }
-  }, [isOpen]);
+  }, [initialCategory, isOpen]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();

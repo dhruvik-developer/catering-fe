@@ -15,10 +15,10 @@ import Input from "../common/formInputs/Input";
 import Dropdown from "../common/formDropDown/DropDown";
 import toast from "react-hot-toast";
 import { createCategory, createItem } from "../../api/PostCategory";
-import { getItem } from "../../api/FetchItem";
-import { getIngredientItems } from "../../api/vendors";
 import { addRecipe } from "../../api/PostRecipe";
 import { useCategories } from "../../hooks/useCategories";
+import { useBranchItems } from "../../hooks/useBranchItems";
+import { useIngredientItems } from "../../hooks/useIngredientItems";
 
 // ==================== MODAL WRAPPER ====================
 const ModalWrapper = ({ isOpen, onClose, children }) => {
@@ -335,50 +335,23 @@ export const AddItemModal = ({ isOpen, onClose, onSuccess, initialCategory }) =>
 
 // ==================== ADD INGREDIENT (RECIPE) MODAL ====================
 export const AddIngredientModal = ({ isOpen, onClose, onSuccess }) => {
-  const [items, setItems] = useState([]);
-  const [ingredientItems, setIngredientItems] = useState([]);
   const [selectedItem, setSelectedItem] = useState(null);
   const [personCount, setPersonCount] = useState(100);
   const [ingredients, setIngredients] = useState([
     { ingredient: null, quantity: "", unit: "g" },
   ]);
   const [saving, setSaving] = useState(false);
+  const { data: items = [] } = useBranchItems({}, { enabled: isOpen });
+  const { data: ingredientItems = [] } = useIngredientItems(
+    {},
+    { enabled: isOpen }
+  );
 
   useEffect(() => {
     if (isOpen) {
       setSelectedItem(null);
       setPersonCount(100);
       setIngredients([{ ingredient: null, quantity: "", unit: "g" }]);
-
-      const fetchData = async () => {
-        try {
-          const [itemsResponse, ingredientsResponse] = await Promise.all([
-            getItem(),
-            getIngredientItems(),
-          ]);
-
-          const itemsData =
-            Array.isArray(itemsResponse?.data)
-              ? itemsResponse.data
-              : Array.isArray(itemsResponse?.data?.data)
-              ? itemsResponse.data.data
-              : [];
-
-          const ingredientData =
-            Array.isArray(ingredientsResponse?.data)
-              ? ingredientsResponse.data
-              : Array.isArray(ingredientsResponse?.data?.data)
-              ? ingredientsResponse.data.data
-              : [];
-
-          setItems(itemsData);
-          setIngredientItems(ingredientData);
-        } catch (error) {
-          console.error("API Error:", error);
-        }
-      };
-
-      fetchData();
     }
   }, [isOpen]);
 
