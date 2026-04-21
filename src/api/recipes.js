@@ -40,8 +40,6 @@ export const getRecipes = async (params = {}) => {
   }
 };
 
-export const getRecipe = getRecipes;
-
 export const getRecipeById = async (id) => {
   try {
     return await ApiInstance.get(`/recipes/${id}/`);
@@ -72,8 +70,6 @@ export const createRecipe = async (recipeData) => {
     );
   }
 };
-
-export const addRecipe = createRecipe;
 
 export const updateRecipe = async (id, recipeData) => {
   try {

@@ -37,28 +37,12 @@ export const getVendors = async (params = {}) => {
   }
 };
 
-export const fetchVendors = getVendors;
-
 export const getVendorById = async (id) => {
   try {
     const response = await ApiInstance.get(`/vendors/${id}/`);
     return response.data;
   } catch (error) {
     return handleQueryError("Error fetching vendor details", error);
-  }
-};
-
-export const getVendor = getVendorById;
-export const getSingleVendor = getVendorById;
-
-export const getVendorsByCategory = async (categoryId) => {
-  try {
-    const response = await ApiInstance.get("/vendors/", {
-      params: { category_id: categoryId },
-    });
-    return response.data;
-  } catch (error) {
-    return handleQueryError("Error fetching vendors by category", error);
   }
 };
 
@@ -78,8 +62,6 @@ export const createVendor = async (data) => {
     );
   }
 };
-
-export const addVendor = createVendor;
 
 export const updateVendor = async (id, data) => {
   try {
@@ -141,8 +123,6 @@ export const createIngredientCategory = async (name, isCommon = false) => {
   }
 };
 
-export const addIngredientCategory = createIngredientCategory;
-
 export const getIngredientItems = async (params = {}) => {
   try {
     const response = await ApiInstance.get("/ingredients-items/", { params });
@@ -185,5 +165,3 @@ export const createIngredientItem = async (itemName, category) => {
     );
   }
 };
-
-export const addIngredientItem = createIngredientItem;

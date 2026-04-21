@@ -36,8 +36,6 @@ export const getCategories = async (params = {}) => {
   }
 };
 
-export const getCategory = getCategories;
-
 export const createCategory = async (categoryName) => {
   try {
     const response = await ApiInstance.post("/categories/", {
@@ -77,8 +75,6 @@ export const updateCategory = async (categoryId, newName) => {
     );
   }
 };
-
-export const editCategory = updateCategory;
 
 export const createItem = async (
   itemName,

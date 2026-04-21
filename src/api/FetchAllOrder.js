@@ -1,6 +1,6 @@
 import toast from "react-hot-toast";
 import ApiInstance from "../services/ApiInstance";
-import { getRecipe } from "./FetchRecipe";
+import { getRecipes } from "./recipes";
 
 const inFlightAllOrderRequests = new Map();
 
@@ -177,7 +177,7 @@ export const fetchEventIngredientList = async (eventId) => {
   try {
     const [response, recipeResponse] = await Promise.all([
       getSingleOrder(eventId),
-      getRecipe(),
+      getRecipes(),
     ]);
 
     // Transform the response to match the expected format
