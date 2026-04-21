@@ -480,7 +480,7 @@ const Header = ({ toggleSidebar }) => {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  // Fetch low stock count & upcoming orders — re-fetch on every page navigation
+  // Fetch low stock/upcoming data once, then refresh only on explicit events
   useEffect(() => {
     const fetchHeaderData = async () => {
       const [stockResult, orderResult] = await Promise.allSettled([
@@ -583,13 +583,15 @@ const Header = ({ toggleSidebar }) => {
     };
     fetchHeaderData();
 
-    // Listen for custom event triggered when an order is completed or cancelled
+    // Listen for custom events triggered when order/stock data changes
     window.addEventListener("orderStatusChanged", fetchHeaderData);
+    window.addEventListener("stockDataChanged", fetchHeaderData);
 
     return () => {
       window.removeEventListener("orderStatusChanged", fetchHeaderData);
+      window.removeEventListener("stockDataChanged", fetchHeaderData);
     };
-  }, [location.pathname]);
+  }, []);
 
   const handleLogout = () => {
     logout();

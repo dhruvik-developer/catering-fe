@@ -121,6 +121,7 @@ function StockController() {
       const response = await addStockCategory(name);
       if (response) {
         fetchStockCategories();
+        window.dispatchEvent(new Event("stockDataChanged"));
         Swal.close();
       }
     }
@@ -230,6 +231,7 @@ function StockController() {
       const response = await addStockItem(formValues);
       if (response) {
         fetchStockCategories();
+        window.dispatchEvent(new Event("stockDataChanged"));
       }
     }
   };
@@ -241,7 +243,10 @@ function StockController() {
       apiEndpoint: "/stoke-categories",
       name: "stock category",
       successMessage: "Category deleted successfully!",
-      onSuccess: fetchStockCategories,
+      onSuccess: () => {
+        fetchStockCategories();
+        window.dispatchEvent(new Event("stockDataChanged"));
+      },
     });
   };
 
@@ -252,7 +257,10 @@ function StockController() {
       apiEndpoint: "/stoke-items",
       name: "stock item",
       successMessage: "Item deleted successfully!",
-      onSuccess: fetchStockCategories,
+      onSuccess: () => {
+        fetchStockCategories();
+        window.dispatchEvent(new Event("stockDataChanged"));
+      },
     });
   };
 
@@ -318,6 +326,7 @@ function StockController() {
       const response = await increaseStockItem(formValues);
       if (response) {
         fetchStockCategories();
+        window.dispatchEvent(new Event("stockDataChanged"));
       }
     }
   };
@@ -384,6 +393,7 @@ function StockController() {
       const response = await decreaseStockItem(formValues);
       if (response) {
         fetchStockCategories();
+        window.dispatchEvent(new Event("stockDataChanged"));
       }
     }
   };
