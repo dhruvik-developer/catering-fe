@@ -7,6 +7,8 @@
     "dev": "vite",
     "build": "vite build",
     "lint": "eslint .",
+    "lint:theme": "node scripts/check-primary-hover-mismatch.mjs",
+    "ci:check": "npm run lint && npm run lint:theme && npm run build",
     "preview": "vite preview",
     "fonts:pdf": "node scripts/convert-pdf-fonts.mjs"
   },
