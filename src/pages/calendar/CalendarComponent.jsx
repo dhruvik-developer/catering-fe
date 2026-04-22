@@ -165,7 +165,7 @@ function CalendarComponent({ orders, loading, navigate }) {
       {/* Month Navigation Header */}
       <div className="bg-white rounded-xl shadow-lg px-6 py-4 mb-4 flex items-center justify-between flex-shrink-0">
         <div className="flex items-center gap-3">
-          <div className="p-2.5 rounded-xl bg-[#f4effc]">
+          <div className="p-2.5 rounded-xl bg-[var(--color-primary-soft)]">
             <FiCalendar className="text-[var(--color-primary)]" size={22} />
           </div>
           <div>
@@ -183,7 +183,7 @@ function CalendarComponent({ orders, loading, navigate }) {
             onChange={(e) =>
               setCurrentMonth(new Date(year, parseInt(e.target.value), 1))
             }
-            className="text-sm font-semibold text-gray-700 bg-[#f4effc] border border-[#e8ddf5] rounded-lg px-3 py-2.5 cursor-pointer hover:bg-[#e8ddf5] transition-colors focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)]/30 appearance-none"
+            className="text-sm font-semibold text-gray-700 bg-[var(--color-primary-soft)] border border-[var(--color-primary-soft)] rounded-lg px-3 py-2.5 cursor-pointer hover:bg-[var(--color-primary-soft)] transition-colors focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)]/30 appearance-none"
             style={{
               backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23845cbd' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E")`,
               backgroundRepeat: "no-repeat",
@@ -202,7 +202,7 @@ function CalendarComponent({ orders, loading, navigate }) {
             onChange={(e) =>
               setCurrentMonth(new Date(parseInt(e.target.value), month, 1))
             }
-            className="text-sm font-semibold text-gray-700 bg-[#f4effc] border border-[#e8ddf5] rounded-lg px-3 py-2.5 cursor-pointer hover:bg-[#e8ddf5] transition-colors focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)]/30 appearance-none"
+            className="text-sm font-semibold text-gray-700 bg-[var(--color-primary-soft)] border border-[var(--color-primary-soft)] rounded-lg px-3 py-2.5 cursor-pointer hover:bg-[var(--color-primary-soft)] transition-colors focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)]/30 appearance-none"
             style={{
               backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23845cbd' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E")`,
               backgroundRepeat: "no-repeat",
@@ -230,13 +230,13 @@ function CalendarComponent({ orders, loading, navigate }) {
           </button>
           <button
             onClick={prevMonth}
-            className="p-3 rounded-lg bg-[#f4effc] hover:bg-[#e8ddf5] text-[var(--color-primary)] transition-colors cursor-pointer"
+            className="p-3 rounded-lg bg-[var(--color-primary-soft)] hover:bg-[var(--color-primary-soft)] text-[var(--color-primary)] transition-colors cursor-pointer"
           >
             <FiChevronLeft size={22} />
           </button>
           <button
             onClick={nextMonth}
-            className="p-3 rounded-lg bg-[#f4effc] hover:bg-[#e8ddf5] text-[var(--color-primary)] transition-colors cursor-pointer"
+            className="p-3 rounded-lg bg-[var(--color-primary-soft)] hover:bg-[var(--color-primary-soft)] text-[var(--color-primary)] transition-colors cursor-pointer"
           >
             <FiChevronRight size={22} />
           </button>
@@ -250,7 +250,7 @@ function CalendarComponent({ orders, loading, navigate }) {
           {DAY_NAMES.map((d) => (
             <div
               key={d}
-              className="text-center text-xs font-bold text-gray-400 uppercase tracking-wider py-3 bg-[#faf8fd]"
+              className="text-center text-xs font-bold text-gray-400 uppercase tracking-wider py-3 bg-[var(--color-primary-tint)]"
             >
               {d}
             </div>
@@ -287,9 +287,9 @@ function CalendarComponent({ orders, loading, navigate }) {
                 key={`cell-${cellIndex}`}
                 onClick={() => dayEntries.length > 0 && setSelectedDate(dateKey)}
                 className={`border-r border-b border-gray-100 flex flex-col overflow-hidden transition-all duration-150
-                                    ${todayFlag ? "bg-[#faf5ff]" : "bg-white"}
-                                    ${dayEntries.length > 0 ? "cursor-pointer hover:bg-[#faf8fd]" : ""}
-                                    ${isSelected ? "ring-2 ring-[var(--color-primary)] ring-inset bg-[#faf5ff]" : ""}
+                                    ${todayFlag ? "bg-[var(--color-primary-tint)]" : "bg-white"}
+                                    ${dayEntries.length > 0 ? "cursor-pointer hover:bg-[var(--color-primary-tint)]" : ""}
+                                    ${isSelected ? "ring-2 ring-[var(--color-primary)] ring-inset bg-[var(--color-primary-tint)]" : ""}
                                 `}
               >
                 {/* Date Number */}
@@ -307,7 +307,7 @@ function CalendarComponent({ orders, loading, navigate }) {
                     {dayNumber}
                   </span>
                   {dayEntries.length > 0 && (
-                    <span className="text-[9px] font-bold text-[var(--color-primary)] bg-[#f4effc] px-1.5 py-0.5 rounded-full">
+                    <span className="text-[9px] font-bold text-[var(--color-primary)] bg-[var(--color-primary-soft)] px-1.5 py-0.5 rounded-full">
                       {dayEntries.length}
                     </span>
                   )}
@@ -318,7 +318,7 @@ function CalendarComponent({ orders, loading, navigate }) {
                   {visibleEntries.map((entry) => (
                     <div
                       key={entry.order.id}
-                      className="px-1.5 py-0.5 rounded text-[10px] font-medium truncate bg-[#f4effc] text-[#6b3fa0] border border-[#e8ddf5]"
+                      className="px-1.5 py-0.5 rounded text-[10px] font-medium truncate bg-[var(--color-primary-soft)] text-[#6b3fa0] border border-[var(--color-primary-soft)]"
                     >
                       {entry.order.name}
                       {entry.sessions.length > 1 && (
@@ -349,7 +349,7 @@ function CalendarComponent({ orders, loading, navigate }) {
           />
           <div className="fixed top-0 right-0 h-full w-[420px] bg-white shadow-2xl z-50 flex flex-col animate-slide-in-right">
             {/* Sidebar Header */}
-            <div className="px-6 py-5 border-b border-gray-100 flex items-center justify-between flex-shrink-0 bg-[#f4effc]">
+            <div className="px-6 py-5 border-b border-gray-100 flex items-center justify-between flex-shrink-0 bg-[var(--color-primary-soft)]">
               <div className="flex items-center gap-3">
                 <div className="p-2 rounded-xl bg-white">
                   <FiCalendar className="text-[var(--color-primary)]" size={20} />
@@ -390,9 +390,9 @@ function CalendarComponent({ orders, loading, navigate }) {
                 return (
                   <div
                     key={order.id}
-                    className="rounded-xl overflow-hidden bg-[#faf8fd] border border-[#e8e0f3] hover:shadow-md transition-shadow"
+                    className="rounded-xl overflow-hidden bg-[var(--color-primary-tint)] border border-[var(--color-primary-border)] hover:shadow-md transition-shadow"
                   >
-                    <div className="flex items-center justify-between px-4 py-3 bg-[#f4effc] border-b border-[#ede7f6]">
+                    <div className="flex items-center justify-between px-4 py-3 bg-[var(--color-primary-soft)] border-b border-[var(--color-primary-border)]">
                       <div className="flex items-center gap-2.5">
                         <div className="w-8 h-8 rounded-full bg-[var(--color-primary)] text-white flex items-center justify-center font-bold text-xs">
                           {order.name?.charAt(0)?.toUpperCase() || "?"}
@@ -456,7 +456,7 @@ function CalendarComponent({ orders, loading, navigate }) {
                           {sessions.map((session, sIdx) => (
                             <div
                               key={session.id || sIdx}
-                              className="flex items-center gap-3 text-xs bg-white rounded-lg px-3 py-2 border border-[#ede7f6]"
+                              className="flex items-center gap-3 text-xs bg-white rounded-lg px-3 py-2 border border-[var(--color-primary-border)]"
                             >
                               <span className="flex items-center gap-1 text-[var(--color-primary)] font-semibold min-w-0">
                                 <FiClock
@@ -500,10 +500,10 @@ function CalendarComponent({ orders, loading, navigate }) {
                       )}
                     </div>
 
-                    <div className="px-4 py-3 border-t border-[#ede7f6]">
+                    <div className="px-4 py-3 border-t border-[var(--color-primary-border)]">
                       <button
                         onClick={() => navigate(`/view-order-details/${order.id}`)}
-                        className="w-full flex items-center justify-center gap-2 py-2 bg-[#f4effc] hover:bg-[var(--color-primary)] text-[var(--color-primary)] hover:text-white text-[13px] font-semibold rounded-lg cursor-pointer transition-colors"
+                        className="w-full flex items-center justify-center gap-2 py-2 bg-[var(--color-primary-soft)] hover:bg-[var(--color-primary)] text-[var(--color-primary)] hover:text-white text-[13px] font-semibold rounded-lg cursor-pointer transition-colors"
                       >
                         <FiEye size={14} /> View Order Details
                       </button>

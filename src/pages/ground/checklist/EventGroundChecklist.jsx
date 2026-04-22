@@ -140,7 +140,7 @@ const EventGroundChecklist = () => {
       {/* Header */}
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 md:gap-0 mb-6">
         <div className="flex items-center gap-3">
-          <div className="p-2.5 rounded-xl bg-[#f4effc]">
+          <div className="p-2.5 rounded-xl bg-[var(--color-primary-soft)]">
             <HugeiconsIcon
               icon={TaskAdd01Icon}
               size={22}
@@ -172,7 +172,7 @@ const EventGroundChecklist = () => {
               setEditItemData(null);
               setShowAddItem(true);
             }}
-            className="px-4 py-2.5 bg-white border border-[var(--color-primary)] text-[var(--color-primary)] hover:bg-[#f4effc] rounded-lg cursor-pointer transition-colors duration-200 text-sm font-medium"
+            className="px-4 py-2.5 bg-white border border-[var(--color-primary)] text-[var(--color-primary)] hover:bg-[var(--color-primary-soft)] rounded-lg cursor-pointer transition-colors duration-200 text-sm font-medium"
           >
             + Add Item
           </button>
@@ -252,7 +252,7 @@ const EventGroundChecklist = () => {
                           handleEditCategory(category);
                         }}
                         title="Edit Category"
-                        className="p-1.5 rounded-lg text-gray-400 hover:text-[var(--color-primary)] hover:bg-[#f4effc] transition-all cursor-pointer"
+                        className="p-1.5 rounded-lg text-gray-400 hover:text-[var(--color-primary)] hover:bg-[var(--color-primary-soft)] transition-all cursor-pointer"
                       >
                         <FiEdit2 size={14} />
                       </button>
@@ -308,7 +308,7 @@ const EventGroundChecklist = () => {
                   {filteredItems.map((item) => (
                     <div
                       key={item.id}
-                      className="group flex items-center justify-between p-3.5 rounded-2xl bg-white border border-gray-100 hover:border-[#b39ddb] hover:shadow-sm transition-all duration-200"
+                      className="group flex items-center justify-between p-3.5 rounded-2xl bg-white border border-gray-100 hover:border-[var(--color-primary-light)] hover:shadow-sm transition-all duration-200"
                     >
                       <div className="flex items-center gap-3 min-w-0 pr-2 flex-1">
                         <div className="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 bg-purple-50">
@@ -330,7 +330,7 @@ const EventGroundChecklist = () => {
                         <button
                           onClick={() => handleEditItem(item)}
                           title="Edit Item"
-                          className="p-1.5 rounded-lg text-gray-400 hover:text-[var(--color-primary)] hover:bg-[#f4effc] transition-all cursor-pointer"
+                          className="p-1.5 rounded-lg text-gray-400 hover:text-[var(--color-primary)] hover:bg-[var(--color-primary-soft)] transition-all cursor-pointer"
                         >
                           <FiEdit2 size={14} />
                         </button>

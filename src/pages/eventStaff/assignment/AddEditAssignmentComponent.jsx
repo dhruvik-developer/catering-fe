@@ -110,7 +110,7 @@ function AddEditAssignmentComponent({
     <div className="max-w-5xl mx-auto p-4 sm:p-6 lg:p-8">
       <div className="bg-white rounded-2xl shadow-xl overflow-hidden">
         {/* Header */}
-        <div className="bg-gradient-to-r from-[var(--color-primary)] to-[#6a3faf] px-6 py-5 sm:px-8 sm:py-6">
+        <div className="bg-gradient-to-r from-[var(--color-primary)] to-[var(--color-primary-dark)] px-6 py-5 sm:px-8 sm:py-6">
           <div className="flex justify-between items-center sm:flex-row flex-col gap-4">
             <div className="flex items-center gap-3 w-full sm:w-auto">
               <div className="bg-white/20 p-2.5 rounded-xl backdrop-blur-sm self-start">
@@ -275,7 +275,7 @@ function AddEditAssignmentComponent({
                       onClick={() => onToggleStaff(staff)}
                       className={`relative cursor-pointer p-4 rounded-2xl border-2 transition-all duration-200 group ${
                         selected
-                          ? "border-[var(--color-primary)] bg-gradient-to-br from-[#f8f4ff] to-[#f0e8ff] shadow-md ring-1 ring-[var(--color-primary)]/20"
+                          ? "border-[var(--color-primary)] bg-gradient-to-br from-[var(--color-primary-tint)] to-[var(--color-primary-tint)] shadow-md ring-1 ring-[var(--color-primary)]/20"
                           : "border-gray-100 bg-white hover:border-purple-200 hover:shadow-sm"
                       }`}
                     >
@@ -347,7 +347,7 @@ function AddEditAssignmentComponent({
                     return (
                       <div
                         key={entry.staffId}
-                        className="flex items-center gap-2 bg-[#f4effc] border border-[var(--color-primary)]/20 text-[var(--color-primary)] px-3 py-1.5 rounded-xl text-sm font-semibold"
+                        className="flex items-center gap-2 bg-[var(--color-primary-soft)] border border-[var(--color-primary)]/20 text-[var(--color-primary)] px-3 py-1.5 rounded-xl text-sm font-semibold"
                       >
                         <span className="w-5 h-5 rounded-full bg-[var(--color-primary)] text-white flex items-center justify-center text-[10px] font-black">
                           {staffObj?.name?.charAt(0).toUpperCase() || "?"}
@@ -434,7 +434,7 @@ function AddEditAssignmentComponent({
                         </p>
                       </div>
                       {!isFixed && (
-                        <div className="bg-[#f4effc] px-3 py-1.5 rounded-lg text-right">
+                        <div className="bg-[var(--color-primary-soft)] px-3 py-1.5 rounded-lg text-right">
                           <span className="text-[10px] font-bold text-gray-400 uppercase block">
                             Amount
                           </span>
@@ -610,7 +610,7 @@ function AddEditAssignmentComponent({
     return (
       <div className="max-w-4xl mx-auto p-4 sm:p-6 lg:p-8">
         <div className="bg-white rounded-2xl shadow-xl overflow-hidden">
-          <div className="bg-gradient-to-r from-[var(--color-primary)] to-[#6a3faf] px-6 py-5 sm:px-8 sm:py-6 flex justify-between items-center">
+          <div className="bg-gradient-to-r from-[var(--color-primary)] to-[var(--color-primary-dark)] px-6 py-5 sm:px-8 sm:py-6 flex justify-between items-center">
             <div className="flex items-center gap-3">
               <div className="bg-white/20 p-2.5 rounded-xl backdrop-blur-sm">
                 <FiBriefcase className="text-white" size={24} />

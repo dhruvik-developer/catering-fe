@@ -54,7 +54,7 @@ function PermissionsComponent({
                             onClick={() => onSelectSubject(sub.id)}
                             className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all ${
                                 selectedId === sub.id
-                                ? 'bg-[#f4effc] border-[var(--color-primary)]/20 border'
+                                ? 'bg-[var(--color-primary-soft)] border-[var(--color-primary)]/20 border'
                                 : 'hover:bg-gray-50 border-transparent border'
                             }`}
                         >
@@ -131,7 +131,7 @@ function PermissionsComponent({
                                                             key={perm.code}
                                                             className={`flex items-center justify-between p-2.5 rounded-xl border transition-all cursor-pointer ${
                                                                 currentPermissions.includes(perm.code)
-                                                                ? 'bg-[#f4effc] border-[var(--color-primary)]/20 text-[var(--color-primary)]'
+                                                                ? 'bg-[var(--color-primary-soft)] border-[var(--color-primary)]/20 text-[var(--color-primary)]'
                                                                 : 'bg-white border-gray-50 text-gray-600 hover:bg-gray-50'
                                                             }`}
                                                         >

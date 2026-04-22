@@ -16,7 +16,7 @@ function UserComponent({
       {/* Header */}
       <div className="flex justify-between items-center mb-6">
         <div className="flex items-center gap-3">
-          <div className="p-2.5 rounded-xl bg-[#f4effc]">
+          <div className="p-2.5 rounded-xl bg-[var(--color-primary-soft)]">
             <FiUsers className="text-[var(--color-primary)]" size={22} />
           </div>
           <div>
@@ -37,7 +37,7 @@ function UserComponent({
           </button>
           <button
             onClick={() => navigate("/add-rule", { state: "addrule" })}
-            className="flex items-center gap-1.5 px-4 py-2.5 bg-white hover:bg-[#f4effc] text-[var(--color-primary)] text-sm font-medium rounded-lg border border-[var(--color-primary)] cursor-pointer transition-colors duration-200"
+            className="flex items-center gap-1.5 px-4 py-2.5 bg-white hover:bg-[var(--color-primary-soft)] text-[var(--color-primary)] text-sm font-medium rounded-lg border border-[var(--color-primary)] cursor-pointer transition-colors duration-200"
           >
             <FiBook size={15} />
             Add Rule

@@ -196,7 +196,7 @@ const GroundManagementModal = ({ isOpen, onClose, onSave, existingData, sessionN
                         }}
                         className={`w-full text-left px-4 py-3 border-b border-gray-100 last:border-0 transition-all duration-150 flex items-center gap-3 ${
                           isActive
-                            ? "bg-[#f4effc] border-l-3 border-l-[var(--color-primary)]"
+                            ? "bg-[var(--color-primary-soft)] border-l-3 border-l-[var(--color-primary)]"
                             : "hover:bg-gray-50 border-l-3 border-l-transparent"
                         }`}
                       >
@@ -257,7 +257,7 @@ const GroundManagementModal = ({ isOpen, onClose, onSave, existingData, sessionN
                             key={item.id}
                             className={`flex items-center gap-3 p-3 rounded-xl border transition-all duration-150 ${
                               hasQuantity
-                                ? "border-[var(--color-primary)]/30 bg-[#f4effc]/30"
+                                ? "border-[var(--color-primary)]/30 bg-[var(--color-primary-soft)]/30"
                                 : "border-gray-100 hover:border-gray-200"
                             }`}
                           >

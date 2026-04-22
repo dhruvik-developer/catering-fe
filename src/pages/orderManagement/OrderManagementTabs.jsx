@@ -34,7 +34,7 @@ function OrderManagementTabs() {
   const { hasPermission } = usePermissions();
 
   return (
-    <div className="rounded-2xl border border-[#ede7f6] bg-white p-2 shadow-sm">
+    <div className="rounded-2xl border border-[var(--color-primary-border)] bg-white p-2 shadow-sm">
       <nav
         className="flex flex-col gap-2 md:flex-row"
         aria-label="Order management sections"
@@ -52,15 +52,15 @@ function OrderManagementTabs() {
               to={tab.path}
               className={`group flex flex-1 items-center gap-3 rounded-2xl border px-4 py-2 transition-all duration-200 ${
                 isActive
-                  ? "border-[var(--color-primary)] bg-gradient-to-r from-[var(--color-primary)] to-[#6f49a9] text-white shadow-lg shadow-[var(--color-primary)]/15"
-                  : "border-transparent bg-transparent text-gray-600 hover:border-[#ede7f6] hover:bg-[#faf8fd]"
+                  ? "border-[var(--color-primary)] bg-gradient-to-r from-[var(--color-primary)] to-[var(--color-primary-dark)] text-white shadow-lg shadow-[var(--color-primary)]/15"
+                  : "border-transparent bg-transparent text-gray-600 hover:border-[var(--color-primary-border)] hover:bg-[var(--color-primary-tint)]"
               }`}
             >
               <div
                 className={`flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-xl transition-colors ${
                   isActive
                     ? "bg-white/15 text-white"
-                    : "bg-[#f4effc] text-[var(--color-primary)] group-hover:bg-white"
+                    : "bg-[var(--color-primary-soft)] text-[var(--color-primary)] group-hover:bg-white"
                 }`}
               >
                 <Icon size={18} />

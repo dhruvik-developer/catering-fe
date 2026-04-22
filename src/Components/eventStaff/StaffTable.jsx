@@ -42,12 +42,12 @@ function StaffTable({ staffList, onStaffEdit, onStaffDelete, onStaffPaymentSumma
             staffList.map((staff, index) => (
               <tr
                 key={staff.id}
-                className="bg-white hover:bg-[#fcfafc] transition-all duration-300 shadow-[0_2px_10px_rgba(0,0,0,0.02)] hover:shadow-[0_4px_15px_rgba(132,92,189,0.08)] group rounded-xl"
+                className="bg-white hover:bg-[var(--color-primary-tint)] transition-all duration-300 shadow-[0_2px_10px_rgba(0,0,0,0.02)] hover:shadow-[0_4px_15px_rgba(132,92,189,0.08)] group rounded-xl"
               >
-                <td className="px-6 py-4 first:rounded-l-xl last:rounded-r-xl border-y border-transparent group-hover:border-[#e2d5f8] first:border-l last:border-r font-medium text-gray-500 w-12">
+                <td className="px-6 py-4 first:rounded-l-xl last:rounded-r-xl border-y border-transparent group-hover:border-[var(--color-primary-border)] first:border-l last:border-r font-medium text-gray-500 w-12">
                   {(index + 1).toString().padStart(2, "0")}
                 </td>
-                <td className="px-6 py-4 border-y border-transparent group-hover:border-[#e2d5f8]">
+                <td className="px-6 py-4 border-y border-transparent group-hover:border-[var(--color-primary-border)]">
                   <div className="flex items-center gap-4">
                     <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[var(--color-primary)] to-purple-400 text-white flex items-center justify-center font-bold text-sm shadow-md ring-4 ring-purple-50 group-hover:ring-purple-100 transition-all flex-shrink-0">
                       {staff.name ? staff.name.charAt(0).toUpperCase() : "?"}
@@ -59,10 +59,10 @@ function StaffTable({ staffList, onStaffEdit, onStaffDelete, onStaffPaymentSumma
                     </div>
                   </div>
                 </td>
-                <td className="px-6 py-4 border-y border-transparent group-hover:border-[#e2d5f8] font-medium text-gray-500">
+                <td className="px-6 py-4 border-y border-transparent group-hover:border-[var(--color-primary-border)] font-medium text-gray-500">
                   {staff.phone || "-"}
                 </td>
-                <td className="px-6 py-4 border-y border-transparent group-hover:border-[#e2d5f8]">
+                <td className="px-6 py-4 border-y border-transparent group-hover:border-[var(--color-primary-border)]">
                   <div className="flex flex-col gap-2 items-start">
                     <span className="font-bold text-[var(--color-primary)] text-sm break-words line-clamp-2">
                       {staff.role_name || staff.role || "N/A"}
@@ -79,7 +79,7 @@ function StaffTable({ staffList, onStaffEdit, onStaffDelete, onStaffPaymentSumma
                     </span>
                   </div>
                 </td>
-                <td className="px-6 py-4 border-y border-transparent group-hover:border-[#e2d5f8]">
+                <td className="px-6 py-4 border-y border-transparent group-hover:border-[var(--color-primary-border)]">
                   <div className="flex flex-col gap-2 text-sm">
                     {parseFloat(staff.per_person_rate) > 0 && (
                       <div className="flex items-center justify-between text-xs w-36 bg-gray-50/80 px-3 py-1.5 rounded-lg border border-gray-100 shadow-sm">
@@ -132,7 +132,7 @@ function StaffTable({ staffList, onStaffEdit, onStaffDelete, onStaffPaymentSumma
                       )}
                   </div>
                 </td>
-                <td className="px-6 py-4 border-y border-transparent group-hover:border-[#e2d5f8] text-center">
+                <td className="px-6 py-4 border-y border-transparent group-hover:border-[var(--color-primary-border)] text-center">
                   <span
                     className={`inline-flex items-center px-3 py-1 rounded-full text-[11px] font-bold uppercase tracking-wide border shadow-sm ${staff.is_active ? "bg-green-50 text-green-700 border-green-200" : "bg-red-50 text-red-600 border-red-200"}`}
                   >
@@ -142,7 +142,7 @@ function StaffTable({ staffList, onStaffEdit, onStaffDelete, onStaffPaymentSumma
                     {staff.is_active ? "Active" : "Inactive"}
                   </span>
                 </td>
-                <td className="px-6 py-4 border-y border-transparent group-hover:border-[#e2d5f8] text-center w-40 first:rounded-l-xl last:rounded-r-xl first:border-l last:border-r">
+                <td className="px-6 py-4 border-y border-transparent group-hover:border-[var(--color-primary-border)] text-center w-40 first:rounded-l-xl last:rounded-r-xl first:border-l last:border-r">
                   <div className="flex items-center justify-center gap-2 opacity-60 group-hover:opacity-100 transition-opacity">
                     {staff.staff_type === "Fixed" && onStaffPaymentSummary && (
                       <button
@@ -157,7 +157,7 @@ function StaffTable({ staffList, onStaffEdit, onStaffDelete, onStaffPaymentSumma
                       <button
                         onClick={() => onStaffEdit(staff)}
                         title="Edit Staff"
-                        className="p-2 rounded-lg text-gray-500 hover:text-[var(--color-primary)] hover:bg-[#f4effc] transition-all cursor-pointer shadow-sm border border-transparent hover:border-purple-100"
+                        className="p-2 rounded-lg text-gray-500 hover:text-[var(--color-primary)] hover:bg-[var(--color-primary-soft)] transition-all cursor-pointer shadow-sm border border-transparent hover:border-purple-100"
                       >
                         <FiEdit2 size={16} />
                       </button>

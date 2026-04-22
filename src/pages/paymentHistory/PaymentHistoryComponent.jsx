@@ -29,7 +29,7 @@ function PaymentHistoryComponent({ paymentData, loading }) {
       ) : (
         <div className="space-y-4">
           {/* Total Balance - Hero Card */}
-          <div className="bg-gradient-to-r from-[var(--color-primary)] to-[#6a3fa0] text-white rounded-xl p-6 shadow-md">
+          <div className="bg-gradient-to-r from-[var(--color-primary)] to-[var(--color-primary-dark)] text-white rounded-xl p-6 shadow-md">
             <div className="flex items-center gap-3 mb-2">
               <div className="bg-white/20 p-2.5 rounded-lg">
                 <FaWallet size={22} />

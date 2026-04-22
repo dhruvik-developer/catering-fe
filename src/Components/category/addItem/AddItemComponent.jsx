@@ -27,7 +27,7 @@ function AddItemComponent({
       </button>
 
       <div className="flex items-center gap-3 mb-6">
-        <div className="p-2.5 rounded-xl bg-[#f4effc]">
+        <div className="p-2.5 rounded-xl bg-[var(--color-primary-soft)]">
           <FiTag className="text-[var(--color-primary)]" size={22} />
         </div>
         <div>

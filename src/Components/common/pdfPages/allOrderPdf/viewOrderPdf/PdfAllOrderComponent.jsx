@@ -14,9 +14,9 @@ function PdfAllOrderComponent({
 
   const THEME = {
     primary: "var(--color-primary)",
-    primaryDark: "#6F47B8",
-    primaryBorder: "#E7D9FF",
-    primaryText: "#5B34A8",
+    primaryDark: "var(--color-primary-dark)",
+    primaryBorder: "var(--color-primary-border)",
+    primaryText: "var(--color-primary-text)",
   };
 
   const btnStyle = (bg, color, border) => ({
@@ -39,7 +39,7 @@ function PdfAllOrderComponent({
         alignItems: "center", // ✅ CENTER FIX
         minHeight: "100vh",
         padding: "24px 16px",
-        background: "linear-gradient(180deg, #faf7ff 0%, #f3ecff 100%)",
+        background: "linear-gradient(180deg, var(--color-primary-tint) 0%, var(--color-primary-soft) 100%)",
         fontFamily: "Arial, sans-serif",
       }}
     >

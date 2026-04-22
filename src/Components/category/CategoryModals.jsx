@@ -87,7 +87,7 @@ export const AddCategoryModal = ({ isOpen, onClose, onSuccess }) => {
     <ModalWrapper isOpen={isOpen} onClose={onClose}>
       <div className="bg-white rounded-2xl shadow-2xl w-[95vw] sm:w-[480px] max-h-[90vh] overflow-hidden flex flex-col">
         {/* Header */}
-        <div className="flex justify-between items-center p-6 border-b border-gray-100 bg-gradient-to-r from-[#f4effc] to-white">
+        <div className="flex justify-between items-center p-6 border-b border-gray-100 bg-gradient-to-r from-[var(--color-primary-soft)] to-white">
           <div className="flex items-center gap-3">
             <div className="p-2.5 rounded-xl bg-[var(--color-primary)] shadow-sm">
               <FiFolder className="text-white" size={20} />
@@ -222,7 +222,7 @@ export const AddItemModal = ({ isOpen, onClose, onSuccess, initialCategory }) =>
     <ModalWrapper isOpen={isOpen} onClose={onClose}>
       <div className="bg-white rounded-2xl shadow-2xl w-[95vw] sm:w-[540px] max-h-[90vh] flex flex-col overflow-visible">
         {/* Header */}
-        <div className="flex justify-between items-center p-6 border-b border-gray-100 bg-gradient-to-r from-[#f4effc] to-white">
+        <div className="flex justify-between items-center p-6 border-b border-gray-100 bg-gradient-to-r from-[var(--color-primary-soft)] to-white">
           <div className="flex items-center gap-3">
             <div className="p-2.5 rounded-xl bg-[var(--color-primary)] shadow-sm">
               <FiTag className="text-white" size={20} />
@@ -435,7 +435,7 @@ export const AddIngredientModal = ({ isOpen, onClose, onSuccess }) => {
     <ModalWrapper isOpen={isOpen} onClose={onClose}>
       <div className="bg-white rounded-2xl shadow-2xl w-[95vw] sm:w-[650px] max-h-[90vh] flex flex-col overflow-visible">
         {/* Header */}
-        <div className="flex justify-between items-center p-6 border-b border-gray-100 bg-gradient-to-r from-[#f4effc] to-white">
+        <div className="flex justify-between items-center p-6 border-b border-gray-100 bg-gradient-to-r from-[var(--color-primary-soft)] to-white">
           <div className="flex items-center gap-3">
             <div className="p-2.5 rounded-xl bg-[var(--color-primary)] shadow-sm">
               <FiBookOpen className="text-white" size={20} />

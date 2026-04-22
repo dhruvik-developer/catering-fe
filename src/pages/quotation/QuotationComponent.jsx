@@ -39,7 +39,7 @@ function QuotationComponent({
       {/* Header */}
       <div className="flex flex-wrap justify-between items-center gap-4 mb-6">
         <div className="flex items-center gap-3">
-          <div className="p-2.5 rounded-xl bg-[#f4effc]">
+          <div className="p-2.5 rounded-xl bg-[var(--color-primary-soft)]">
             <FiFileText className="text-[var(--color-primary)]" size={22} />
           </div>
           <div>
@@ -123,10 +123,10 @@ function QuotationComponent({
           {quotation.map((quote) => (
               <div
                 key={quote.id}
-                className="flex flex-col h-full rounded-xl overflow-hidden transition-all duration-200 hover:shadow-lg bg-[#faf8fd] border border-[#e8e0f3]"
+                className="flex flex-col h-full rounded-xl overflow-hidden transition-all duration-200 hover:shadow-lg bg-[var(--color-primary-tint)] border border-[var(--color-primary-border)]"
               >
-                {/* Card Header - Light purple */}
-                <div className="flex items-center justify-between px-5 py-4 bg-[#f4effc] border-b border-[#ede7f6]">
+                {/* Card Header */}
+                <div className="flex items-center justify-between px-5 py-4 bg-[var(--color-primary-soft)] border-b border-[var(--color-primary-border)]">
                   <div className="flex items-center gap-3">
                     <div className="w-10 h-10 rounded-full bg-[var(--color-primary)] text-white flex items-center justify-center font-bold text-sm">
                       {quote.name?.charAt(0)?.toUpperCase() || "?"}
@@ -145,7 +145,7 @@ function QuotationComponent({
 
                   <div className="flex items-center gap-2">
                     <span
-                      className="text-xs font-medium px-3 py-1.5 rounded-full bg-white text-[var(--color-primary)] border border-[#ede7f6] max-w-[200px] truncate"
+                      className="text-xs font-medium px-3 py-1.5 rounded-full bg-white text-[var(--color-primary)] border border-[var(--color-primary-border)] max-w-[200px] truncate"
                       title={
                         quote.sessions?.length > 0
                           ? Array.from(
@@ -175,7 +175,7 @@ function QuotationComponent({
                 <div className="flex-1 px-5 py-4">
                   <div className="flex flex-col gap-3">
                     {/* Phone */}
-                    <div className="flex items-center gap-2.5 text-sm text-gray-600 bg-white rounded-lg px-3 py-2.5 border border-[#ede7f6] w-max">
+                    <div className="flex items-center gap-2.5 text-sm text-gray-600 bg-white rounded-lg px-3 py-2.5 border border-[var(--color-primary-border)] w-max">
                       <FiPhone size={14} className="text-[var(--color-primary)]" />
                       <span className="font-medium">
                         {quote.mobile_no || "—"}
@@ -201,7 +201,7 @@ function QuotationComponent({
                       );
                       return (
                         <div
-                          className="flex flex-col gap-2 bg-indigo-50/40 border border-[#ede7f6] rounded-lg px-4 py-3 cursor-pointer hover:bg-[#f4effc] hover:border-[var(--color-primary)] transition-all duration-150 group"
+                          className="flex flex-col gap-2 bg-[var(--color-primary-tint)] border border-[var(--color-primary-border)] rounded-lg px-4 py-3 cursor-pointer hover:brightness-95 transition-all duration-150 group"
                           onClick={() =>
                             setSessionsModal({
                               name: quote.name,
@@ -249,9 +249,9 @@ function QuotationComponent({
                 </div>
 
                 {/* Card Footer - Actions */}
-                <div className="flex flex-col sm:flex-row gap-2 sm:gap-3 px-5 py-3 border-t border-[#ede7f6]">
+                <div className="flex flex-col sm:flex-row gap-2 sm:gap-3 px-5 py-3 border-t border-[var(--color-primary-border)]">
                   <button
-                    className="flex-1 flex items-center justify-center gap-1.5 py-2.5 bg-[#f4effc] hover:bg-[#e8ddf5] text-[var(--color-primary)] text-sm font-semibold rounded-lg cursor-pointer transition-colors duration-200"
+                    className="flex-1 flex items-center justify-center gap-1.5 py-2.5 bg-[var(--color-primary-soft)] hover:brightness-95 text-[var(--color-primary)] text-sm font-semibold rounded-lg cursor-pointer transition-colors duration-200"
                     onClick={() => handleViewQuotation(quote.id)}
                   >
                     <FiEye size={14} />
@@ -289,7 +289,7 @@ function QuotationComponent({
             onClick={(e) => e.stopPropagation()}
           >
             {/* Modal Header */}
-            <div className="flex justify-between items-center px-5 py-4 border-b border-gray-100 bg-gradient-to-r from-[#f8f5fc] to-white">
+            <div className="flex justify-between items-center px-5 py-4 border-b border-gray-100 bg-gradient-to-r from-[var(--color-primary-tint)] to-white">
               <div>
                 <h3 className="text-base font-bold text-gray-800">
                   All Event Schedules
@@ -313,7 +313,7 @@ function QuotationComponent({
               {sessionsModal.sessions.map((session, sIdx) => (
                 <div
                   key={sIdx}
-                  className="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-3 bg-indigo-50/40 border border-[#ede7f6] rounded-lg px-4 py-3"
+                  className="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-3 bg-indigo-50/40 border border-[var(--color-primary-border)] rounded-lg px-4 py-3"
                 >
                   <div className="flex items-center gap-2 text-sm text-gray-700">
                     <FiClock size={14} className="text-[var(--color-primary)]" />

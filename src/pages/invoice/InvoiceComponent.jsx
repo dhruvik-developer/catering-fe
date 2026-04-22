@@ -41,7 +41,7 @@ function InvoiceComponent({
       {/* Header */}
       <div className="flex flex-wrap justify-between items-center gap-4 mb-6">
         <div className="flex items-center gap-3">
-          <div className="p-2.5 rounded-xl bg-[#f4effc]">
+          <div className="p-2.5 rounded-xl bg-[var(--color-primary-soft)]">
             <FiFileText className="text-[var(--color-primary)]" size={22} />
           </div>
           <div>
@@ -134,10 +134,10 @@ function InvoiceComponent({
           {invoice.map((invo) => (
             <div
               key={invo.id}
-              className="flex flex-col h-full rounded-xl overflow-hidden transition-all duration-200 hover:shadow-lg bg-[#faf8fd] border border-[#e8e0f3]"
+              className="flex flex-col h-full rounded-xl overflow-hidden transition-all duration-200 hover:shadow-lg bg-[var(--color-primary-tint)] border border-[var(--color-primary-border)]"
             >
               {/* Card Header */}
-              <div className="flex items-center justify-between px-5 py-4 bg-[#f4effc] border-b border-[#ede7f6]">
+              <div className="flex items-center justify-between px-5 py-4 bg-[var(--color-primary-soft)] border-b border-[var(--color-primary-border)]">
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 rounded-full bg-[var(--color-primary)] text-white flex items-center justify-center font-bold text-sm">
                     {invo.name?.charAt(0)?.toUpperCase() || "?"}
@@ -173,13 +173,13 @@ function InvoiceComponent({
                 return (
                   <div className="flex-1 px-5 py-4">
                     <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                      <div className="flex items-center gap-2.5 text-sm text-gray-600 bg-white rounded-lg px-3 py-2.5 border border-[#ede7f6]">
+                      <div className="flex items-center gap-2.5 text-sm text-gray-600 bg-white rounded-lg px-3 py-2.5 border border-[var(--color-primary-border)]">
                         <FiCreditCard size={14} className="text-[var(--color-primary)]" />
                         <span className="font-medium">
                           {invo.payment_mode || "—"}
                         </span>
                       </div>
-                      <div className="flex items-center gap-2.5 text-sm text-gray-600 bg-white rounded-lg px-3 py-2.5 border border-[#ede7f6]">
+                      <div className="flex items-center gap-2.5 text-sm text-gray-600 bg-white rounded-lg px-3 py-2.5 border border-[var(--color-primary-border)]">
                         <FiDollarSign
                           size={14}
                           className={
@@ -194,7 +194,7 @@ function InvoiceComponent({
                             : `Adv: ₹ ${Number(invo.advance_amount || 0).toFixed(2)}`}
                         </span>
                       </div>
-                      <div className="flex items-center gap-2.5 text-sm text-gray-800 bg-white rounded-lg px-3 py-2.5 border border-[#ede7f6]">
+                      <div className="flex items-center gap-2.5 text-sm text-gray-800 bg-white rounded-lg px-3 py-2.5 border border-[var(--color-primary-border)]">
                         <FiDollarSign size={14} className="text-[var(--color-primary)]" />
                         <span className="font-semibold text-gray-800">
                           Total: ₹ {Number(invo.total_amount || 0).toFixed(2)}
@@ -219,9 +219,9 @@ function InvoiceComponent({
               })()}
 
               {/* Card Footer - Actions */}
-              <div className="flex flex-col sm:flex-row gap-2 sm:gap-3 px-5 py-3 border-t border-[#ede7f6]">
+              <div className="flex flex-col sm:flex-row gap-2 sm:gap-3 px-5 py-3 border-t border-[var(--color-primary-border)]">
                 <button
-                  className="flex-1 flex items-center justify-center gap-1.5 py-2.5 bg-[#f4effc] hover:bg-[#e8ddf5] text-[var(--color-primary)] text-sm font-semibold rounded-lg cursor-pointer transition-colors duration-200"
+                  className="flex-1 flex items-center justify-center gap-1.5 py-2.5 bg-[var(--color-primary-soft)] hover:bg-[var(--color-primary-soft)] text-[var(--color-primary)] text-sm font-semibold rounded-lg cursor-pointer transition-colors duration-200"
                   onClick={() => navigate(`/invoice-order-pdf/${invo.id}`)}
                 >
                   <FiEye size={14} />

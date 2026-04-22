@@ -313,7 +313,7 @@ function Step2_MenuSelection({
                       onClick={() => toggleDish(dish)}
                       className={`relative p-4 border-2 rounded-xl cursor-pointer transition-all duration-200 group min-h-[90px] flex flex-col justify-center ${
                         selected
-                          ? "border-[var(--color-primary)] bg-[#f4effc] shadow-md shadow-[var(--color-primary)]/10"
+                          ? "border-[var(--color-primary)] bg-[var(--color-primary-soft)] shadow-md shadow-[var(--color-primary)]/10"
                           : "border-gray-200 bg-white hover:border-gray-300 hover:shadow-sm"
                       }`}
                     >

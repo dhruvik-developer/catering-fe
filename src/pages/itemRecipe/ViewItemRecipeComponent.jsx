@@ -71,7 +71,7 @@ function ViewItemRecipeComponent({
       onClick={(e) => e.stopPropagation()}
     >
       {/* Edit Header */}
-      <div className="flex justify-between items-center p-5 border-b border-gray-100 bg-gradient-to-r from-[#f4effc] to-white">
+      <div className="flex justify-between items-center p-5 border-b border-gray-100 bg-gradient-to-r from-[var(--color-primary-soft)] to-white">
         <div className="flex items-center gap-3">
           <button
             onClick={onCancelEdit}
@@ -247,7 +247,7 @@ function ViewItemRecipeComponent({
       {/* Header */}
       <div className="flex justify-between items-center p-6 border-b border-gray-100 bg-gray-50/50">
         <div className="flex items-center gap-4">
-          <div className="p-3 rounded-xl bg-[#f4effc] shadow-sm">
+          <div className="p-3 rounded-xl bg-[var(--color-primary-soft)] shadow-sm">
             <FiBookOpen className="text-[var(--color-primary)]" size={24} />
           </div>
           <div>
@@ -356,7 +356,7 @@ function ViewItemRecipeComponent({
               </div>
               <button
                 onClick={onStartEdit}
-                className="flex items-center gap-1.5 px-3.5 py-1.5 bg-[#f4effc] text-[var(--color-primary)] hover:bg-[var(--color-primary)] hover:text-white border border-[#e8e0f3] rounded-lg font-bold transition-all cursor-pointer shadow-sm text-sm ml-auto"
+                className="flex items-center gap-1.5 px-3.5 py-1.5 bg-[var(--color-primary-soft)] text-[var(--color-primary)] hover:bg-[var(--color-primary)] hover:text-white border border-[var(--color-primary-border)] rounded-lg font-bold transition-all cursor-pointer shadow-sm text-sm ml-auto"
                 title="Edit Recipe Ingredients"
               >
                 <FiEdit2 size={14} />
@@ -436,7 +436,7 @@ function ViewItemRecipeComponent({
       onClick={(e) => e.stopPropagation()}
     >
       {/* Add Header */}
-      <div className="flex justify-between items-center p-5 border-b border-gray-100 bg-gradient-to-r from-[#f4effc] to-white">
+      <div className="flex justify-between items-center p-5 border-b border-gray-100 bg-gradient-to-r from-[var(--color-primary-soft)] to-white">
         <div className="flex items-center gap-3">
           <button
             onClick={onCancelAdd}

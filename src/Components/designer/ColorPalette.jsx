@@ -36,7 +36,7 @@ const THEMES = [
     label: "Pastel",
     emoji: "🎀",
     text: "#6b21a8",
-    bg: "#faf5ff",
+    bg: "var(--color-primary-tint)",
     border: "#e9d5ff",
   },
   {

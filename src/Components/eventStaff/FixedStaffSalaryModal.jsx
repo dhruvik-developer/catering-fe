@@ -221,7 +221,7 @@ function FixedStaffSalaryModal({
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
       <div className="bg-white rounded-2xl shadow-xl w-full max-w-lg overflow-hidden animate-fade-in-up">
-        <div className="bg-gradient-to-r from-[var(--color-primary)] to-[#a97dd6] px-6 py-4 flex justify-between items-center">
+        <div className="bg-gradient-to-r from-[var(--color-primary)] to-[var(--color-primary-dark)] px-6 py-4 flex justify-between items-center">
           <h2 className="text-xl font-bold text-white">
             {mode === "add" ? "Add" : "Edit"} Salary Payment
           </h2>

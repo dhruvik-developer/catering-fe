@@ -231,7 +231,7 @@ const MiniCalendar = ({ onDateSelect, onClose, orderDates = new Set() }) => {
       <div className="flex items-center justify-between mb-3">
         <button
           onClick={prevMonth}
-          className="p-1.5 rounded-lg hover:bg-[#f4effc] text-gray-500 hover:text-[var(--color-primary)] transition-colors cursor-pointer"
+          className="p-1.5 rounded-lg hover:bg-[var(--color-primary-soft)] text-gray-500 hover:text-[var(--color-primary)] transition-colors cursor-pointer"
         >
           <FiChevronLeft size={16} />
         </button>
@@ -240,7 +240,7 @@ const MiniCalendar = ({ onDateSelect, onClose, orderDates = new Set() }) => {
         </span>
         <button
           onClick={nextMonth}
-          className="p-1.5 rounded-lg hover:bg-[#f4effc] text-gray-500 hover:text-[var(--color-primary)] transition-colors cursor-pointer"
+          className="p-1.5 rounded-lg hover:bg-[var(--color-primary-soft)] text-gray-500 hover:text-[var(--color-primary)] transition-colors cursor-pointer"
         >
           <FiChevronRight size={16} />
         </button>
@@ -274,8 +274,8 @@ const MiniCalendar = ({ onDateSelect, onClose, orderDates = new Set() }) => {
                                   todayFlag
                                     ? "bg-[var(--color-primary)] text-white font-bold shadow-sm"
                                     : orderFlag
-                                      ? "bg-[#f4effc] text-[var(--color-primary)] font-semibold ring-1 ring-[var(--color-primary)]/30"
-                                      : "text-gray-600 hover:bg-[#f4effc] hover:text-[var(--color-primary)]"
+                                      ? "bg-[var(--color-primary-soft)] text-[var(--color-primary)] font-semibold ring-1 ring-[var(--color-primary)]/30"
+                                      : "text-gray-600 hover:bg-[var(--color-primary-soft)] hover:text-[var(--color-primary)]"
                                 }`}
             >
               {day}
@@ -296,7 +296,7 @@ const MiniCalendar = ({ onDateSelect, onClose, orderDates = new Set() }) => {
           <span className="text-[10px] text-gray-400">Today</span>
         </div>
         <div className="flex items-center gap-1.5">
-          <span className="w-3 h-3 rounded bg-[#f4effc] ring-1 ring-[var(--color-primary)]/30 flex items-center justify-center">
+          <span className="w-3 h-3 rounded bg-[var(--color-primary-soft)] ring-1 ring-[var(--color-primary)]/30 flex items-center justify-center">
             <span className="w-1 h-1 rounded-full bg-[var(--color-primary)]" />
           </span>
           <span className="text-[10px] text-gray-400">Has Order</span>
@@ -791,7 +791,7 @@ const Header = ({ toggleSidebar }) => {
           {showUpcoming && (
             <div className="absolute right-0 mt-2 bg-white rounded-xl shadow-2xl z-50 border border-gray-100 w-[320px] overflow-hidden">
               {/* Dropdown Header */}
-              <div className="px-4 py-3 bg-[#f4effc] border-b border-gray-100">
+              <div className="px-4 py-3 bg-[var(--color-primary-soft)] border-b border-gray-100">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
                     <FiClipboard size={14} className="text-[var(--color-primary)]" />
@@ -843,9 +843,9 @@ const Header = ({ toggleSidebar }) => {
                           setShowUpcoming(false);
                           navigate(`/order-pdf/${order.id}`);
                         }}
-                        className="w-full flex items-center gap-3 px-4 py-3 hover:bg-[#faf8fd] transition-colors duration-150 border-b border-gray-50 last:border-b-0 cursor-pointer text-left"
+                        className="w-full flex items-center gap-3 px-4 py-3 hover:bg-[var(--color-primary-tint)] transition-colors duration-150 border-b border-gray-50 last:border-b-0 cursor-pointer text-left"
                       >
-                        <div className="w-9 h-9 rounded-full bg-[#f4effc] text-[var(--color-primary)] flex items-center justify-center font-bold text-xs flex-shrink-0">
+                        <div className="w-9 h-9 rounded-full bg-[var(--color-primary-soft)] text-[var(--color-primary)] flex items-center justify-center font-bold text-xs flex-shrink-0">
                           {order.name?.charAt(0)?.toUpperCase() || "?"}
                         </div>
                         <div className="flex-1 min-w-0">
@@ -889,7 +889,7 @@ const Header = ({ toggleSidebar }) => {
                       setShowUpcoming(false);
                       navigate("/all-order?filter=upcoming");
                     }}
-                    className="w-full flex items-center justify-center gap-1.5 py-2.5 text-xs font-semibold text-[var(--color-primary)] hover:bg-[#f4effc] transition-colors cursor-pointer"
+                    className="w-full flex items-center justify-center gap-1.5 py-2.5 text-xs font-semibold text-[var(--color-primary)] hover:bg-[var(--color-primary-soft)] transition-colors cursor-pointer"
                   >
                     View All Upcoming Orders
                     <FiChevronRight size={12} />
@@ -940,7 +940,7 @@ const Header = ({ toggleSidebar }) => {
                 setIsOpen(false);
                 navigate("/user");
               }}
-              className="flex items-center gap-3 w-full px-4 py-3 text-sm text-gray-600 hover:bg-[#f4effc] hover:text-[var(--color-primary)] transition-colors duration-200 cursor-pointer"
+              className="flex items-center gap-3 w-full px-4 py-3 text-sm text-gray-600 hover:bg-[var(--color-primary-soft)] hover:text-[var(--color-primary)] transition-colors duration-200 cursor-pointer"
             >
               <FiUsers size={16} />
               <span className="font-medium">Users</span>
@@ -951,7 +951,7 @@ const Header = ({ toggleSidebar }) => {
                 setIsOpen(false);
                 navigate("/settings");
               }}
-              className="flex items-center gap-3 w-full px-4 py-3 text-sm text-gray-600 hover:bg-[#f4effc] hover:text-[var(--color-primary)] transition-colors duration-200 cursor-pointer"
+              className="flex items-center gap-3 w-full px-4 py-3 text-sm text-gray-600 hover:bg-[var(--color-primary-soft)] hover:text-[var(--color-primary)] transition-colors duration-200 cursor-pointer"
             >
               <FiSettings size={16} />
               <span className="font-medium">Settings</span>

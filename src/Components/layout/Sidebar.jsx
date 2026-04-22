@@ -218,7 +218,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
       <div
         ref={sidebarRef}
         onMouseLeave={() => setSidebarOpen(false)}
-        className={`fixed top-0 left-0 h-screen max-h-screen w-72 bg-[#fcfcfd] border-r-2 border-gray-100 z-50 overflow-y-auto transition-transform duration-300 ease-in-out ${
+        className={`fixed top-0 left-0 h-screen max-h-screen w-72 bg-[var(--color-primary-tint)] border-r-2 border-gray-100 z-50 overflow-y-auto transition-transform duration-300 ease-in-out ${
           sidebarOpen ? "translate-x-0" : "-translate-x-full"
         }`}
       >

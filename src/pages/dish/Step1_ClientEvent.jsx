@@ -39,7 +39,7 @@ function Step1_ClientEvent({
       {/* ====== Section 1: Client Information ====== */}
       <div>
         <div className="flex items-center gap-3 mb-5">
-          <div className="p-2.5 rounded-xl bg-[#f4effc]">
+          <div className="p-2.5 rounded-xl bg-[var(--color-primary-soft)]">
             <FiUser className="text-[var(--color-primary)]" size={20} />
           </div>
           <div>
@@ -172,10 +172,10 @@ function Step1_ClientEvent({
                 {day.timeSlots.map((slot, sIdx) => (
                   <div
                     key={sIdx}
-                    className="p-4 bg-gradient-to-r from-[#f8f5fc] to-white border-2 border-[var(--color-primary)]/20 rounded-xl shadow-md relative overflow-hidden"
+                    className="p-4 bg-gradient-to-r from-[var(--color-primary-tint)] to-white border-2 border-[var(--color-primary)]/20 rounded-xl shadow-md relative overflow-hidden"
                   >
                     {/* Highlighted left accent bar */}
-                    <div className="absolute left-0 top-0 bottom-0 w-1.5 bg-gradient-to-b from-[var(--color-primary)] to-[#6a3faf] rounded-l-xl" />
+                    <div className="absolute left-0 top-0 bottom-0 w-1.5 bg-gradient-to-b from-[var(--color-primary)] to-[var(--color-primary-dark)] rounded-l-xl" />
 
                     <div className="flex flex-col md:flex-row items-start md:items-center gap-4 pl-3">
                       <div className="flex items-center gap-2">

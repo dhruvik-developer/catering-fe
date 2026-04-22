@@ -41,7 +41,7 @@ function AddEditStaffComponent({
   return (
     <div className="max-w-4xl mx-auto p-4 sm:p-6 lg:p-8">
       <div className="bg-white rounded-2xl shadow-xl overflow-hidden">
-        <div className="bg-gradient-to-r from-[var(--color-primary)] to-[#6a3faf] px-6 py-5 sm:px-8 sm:py-6">
+        <div className="bg-gradient-to-r from-[var(--color-primary)] to-[var(--color-primary-dark)] px-6 py-5 sm:px-8 sm:py-6">
           <div className="flex items-center gap-3">
             <div className="bg-white/20 p-2.5 rounded-xl backdrop-blur-sm">
               <FiUsers className="text-white" size={24} />

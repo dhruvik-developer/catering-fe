@@ -128,7 +128,7 @@ const WaiterTypeManagement = () => {
       {/* Page Header */}
       <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
         <div className="flex items-center gap-3">
-          <div className="p-3 bg-[#f4effc] rounded-xl">
+          <div className="p-3 bg-[var(--color-primary-soft)] rounded-xl">
             <FiUsers className="text-[var(--color-primary)]" size={24} />
           </div>
           <div>
@@ -152,7 +152,7 @@ const WaiterTypeManagement = () => {
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-gray-900/50 backdrop-blur-sm p-4">
           <div className="w-full max-w-md rounded-2xl bg-white shadow-2xl overflow-hidden animate-in zoom-in-95 duration-200">
             {/* Modal Header */}
-            <div className="bg-gradient-to-r from-[var(--color-primary)] to-[#6a3faf] px-6 py-4 flex items-center justify-between text-white">
+            <div className="bg-gradient-to-r from-[var(--color-primary)] to-[var(--color-primary-dark)] px-6 py-4 flex items-center justify-between text-white">
               <h3 className="text-lg font-bold flex items-center gap-2">
                 <FiPlus size={18} /> Add New Waiter Type
               </h3>
@@ -254,7 +254,7 @@ const WaiterTypeManagement = () => {
           </div>
         ) : waiterTypes.length === 0 ? (
           <div className="flex flex-col items-center justify-center py-20 text-gray-400">
-            <div className="p-4 bg-[#f4effc] rounded-full mb-4">
+            <div className="p-4 bg-[var(--color-primary-soft)] rounded-full mb-4">
               <FiUsers size={32} className="text-[var(--color-primary)]" />
             </div>
             <p className="text-lg font-semibold text-gray-600">No Waiter Types Found</p>
@@ -283,7 +283,7 @@ const WaiterTypeManagement = () => {
                   <tr key={type.id} className="hover:bg-gray-50/50 transition-colors group">
                     {editMode[type.id] ? (
                       /* EDIT MODE ROW */
-                      <td colSpan={5} className="px-4 py-3 bg-[#faf8fd]">
+                      <td colSpan={5} className="px-4 py-3 bg-[var(--color-primary-tint)]">
                         <div className="grid grid-cols-1 md:grid-cols-12 gap-3 items-center">
                           <div className="md:col-span-3">
                             <input
@@ -372,7 +372,7 @@ const WaiterTypeManagement = () => {
                       <>
                         <td className="px-6 py-4">
                           <div className="flex items-center gap-3">
-                            <div className="w-8 h-8 rounded-full bg-[#f4effc] flex items-center justify-center text-[var(--color-primary)] font-bold text-xs flex-shrink-0">
+                            <div className="w-8 h-8 rounded-full bg-[var(--color-primary-soft)] flex items-center justify-center text-[var(--color-primary)] font-bold text-xs flex-shrink-0">
                               {type.name.charAt(0).toUpperCase()}
                             </div>
                             <span className="font-semibold text-gray-800">{type.name}</span>

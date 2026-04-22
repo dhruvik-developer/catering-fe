@@ -156,8 +156,8 @@ function StaffDetailPage() {
       ) : (
         <>
           {/* Staff Profile Card */}
-          <div className="bg-white rounded-2xl shadow-lg border border-[#ede7f6] overflow-hidden">
-            <div className="bg-gradient-to-r from-[var(--color-primary)] to-[#a97dd6] px-8 py-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-5">
+          <div className="bg-white rounded-2xl shadow-lg border border-[var(--color-primary-border)] overflow-hidden">
+            <div className="bg-gradient-to-r from-[var(--color-primary)] to-[var(--color-primary-dark)] px-8 py-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-5">
               <div className="flex items-center gap-5">
                 <div className="w-16 h-16 rounded-full bg-white/20 flex items-center justify-center">
                   <FaUser size={28} className="text-white" />
@@ -235,7 +235,7 @@ function StaffDetailPage() {
           </div>
 
           {/* Event Assignments */}
-          <div className="bg-white rounded-2xl shadow-lg border border-[#ede7f6] overflow-hidden">
+          <div className="bg-white rounded-2xl shadow-lg border border-[var(--color-primary-border)] overflow-hidden">
             <div className="px-6 py-4 border-b border-gray-100 flex items-center gap-3">
               <FaMoneyBillWave className="text-[var(--color-primary)]" size={18} />
               <h2 className="font-bold text-gray-800 text-lg">

@@ -46,7 +46,7 @@ function AssignmentTable({
                     <span className="font-semibold text-gray-800">
                       {assignment.event_name || "N/A"}
                     </span>
-                    <span className="text-xs text-[var(--color-primary)] bg-[#f4effc] px-2 py-0.5 rounded-full w-fit font-medium">
+                    <span className="text-xs text-[var(--color-primary)] bg-[var(--color-primary-soft)] px-2 py-0.5 rounded-full w-fit font-medium">
                       {assignment.role_at_event || "General"}
                     </span>
                   </div>
@@ -118,7 +118,7 @@ function AssignmentTable({
                     <button
                       onClick={() => onAssignmentEdit(assignment)}
                       title="Edit Assignment"
-                      className="p-1.5 rounded-md text-gray-500 hover:text-[var(--color-primary)] hover:bg-[#f4effc] transition-colors cursor-pointer"
+                      className="p-1.5 rounded-md text-gray-500 hover:text-[var(--color-primary)] hover:bg-[var(--color-primary-soft)] transition-colors cursor-pointer"
                     >
                       <FiEdit2 size={18} />
                     </button>

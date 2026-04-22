@@ -23,7 +23,7 @@ function EventSummaryComponent({
       {/* Header */}
       <div className="flex justify-between items-center mb-6">
         <div className="flex items-center gap-3">
-          <div className="p-2.5 rounded-xl bg-[#f4effc]">
+          <div className="p-2.5 rounded-xl bg-[var(--color-primary-soft)]">
             <FiFileText className="text-[var(--color-primary)]" size={22} />
           </div>
           <div>
@@ -81,7 +81,7 @@ function EventSummaryComponent({
         <div className="overflow-x-auto">
           <table className="min-w-[700px] w-full border-collapse">
             <thead>
-              <tr className="bg-[#f4effc] text-[var(--color-primary)]">
+              <tr className="bg-[var(--color-primary-soft)] text-[var(--color-primary)]">
                 <th className="px-4 py-3 text-left font-bold text-sm rounded-tl-lg">
                   Staff Name
                 </th>

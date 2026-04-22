@@ -117,7 +117,7 @@ function EditDishComponent({
   return (
     <div className="bg-white rounded-2xl shadow-lg overflow-hidden">
       {/* Header Bar */}
-      <div className="bg-gradient-to-r from-[var(--color-primary)] to-[#6a3faf] px-6 py-4 flex items-center justify-between">
+      <div className="bg-gradient-to-r from-[var(--color-primary)] to-[var(--color-primary-dark)] px-6 py-4 flex items-center justify-between">
         <div>
           <h2 className="text-white text-lg font-bold tracking-wide">
             {isSessionMode ? "Edit Session Details" : "Edit Booking Details"}
@@ -253,7 +253,7 @@ function EditDishComponent({
                 className="rounded-xl border border-gray-200 overflow-hidden bg-white shadow-sm"
               >
                 {/* Day Header */}
-                <div className="flex items-center justify-between px-4 py-3 bg-gradient-to-r from-[#f7f3fc] to-white border-b border-gray-100">
+                <div className="flex items-center justify-between px-4 py-3 bg-gradient-to-r from-[var(--color-primary-soft)] to-white border-b border-gray-100">
                   <div className="flex items-center gap-3">
                     <span className="w-9 h-9 rounded-lg bg-[var(--color-primary)] text-white flex items-center justify-center font-black text-xs shadow">
                       D{dIdx + 1}
@@ -469,7 +469,7 @@ function EditDishComponent({
                                   return (
                                     <span
                                       key={dish.dishId}
-                                      className={`text-[11px] font-medium px-2 py-0.5 rounded-md truncate max-w-[150px] ${isNewZeroPrice ? "text-red-600 bg-red-50 border border-red-200" : "text-[var(--color-primary)] bg-[#f4effc] border border-purple-100"}`}
+                                      className={`text-[11px] font-medium px-2 py-0.5 rounded-md truncate max-w-[150px] ${isNewZeroPrice ? "text-red-600 bg-red-50 border border-red-200" : "text-[var(--color-primary)] bg-[var(--color-primary-soft)] border border-purple-100"}`}
                                     >
                                       {dish.dishName}
                                     </span>
@@ -744,7 +744,7 @@ function EditDishComponent({
             </label>
             <button
               type="submit"
-              className="w-full py-3.5 font-bold text-sm bg-gradient-to-r from-[var(--color-primary)] to-[#6a3faf] hover:from-[#7350a8] hover:to-[#5c339e] text-white rounded-xl shadow-lg shadow-[var(--color-primary)]/20 transition-all active:scale-[0.98] flex items-center justify-center gap-2 cursor-pointer"
+              className="w-full py-3.5 font-bold text-sm bg-gradient-to-r from-[var(--color-primary)] to-[var(--color-primary-dark)] hover:brightness-95 text-white rounded-xl shadow-lg shadow-[var(--color-primary)]/20 transition-all active:scale-[0.98] flex items-center justify-center gap-2 cursor-pointer"
             >
               <FiSave size={16} />
               Review & Generate PDF
@@ -758,7 +758,7 @@ function EditDishComponent({
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4">
           <div className="bg-white rounded-2xl shadow-2xl w-full max-w-3xl max-h-[85vh] flex flex-col overflow-hidden">
             {/* Modal Header */}
-            <div className="flex justify-between items-center px-5 py-4 border-b border-gray-100 bg-gradient-to-r from-[#f8f5fc] to-white">
+            <div className="flex justify-between items-center px-5 py-4 border-b border-gray-100 bg-gradient-to-r from-[var(--color-primary-soft)] to-white">
               <div>
                 <h3 className="text-base font-bold text-gray-800">
                   Select Dishes
@@ -845,7 +845,7 @@ function EditDishComponent({
                                     isSelected
                                       ? isNewZeroPrice
                                         ? "border-red-300 bg-red-50 font-semibold text-red-600"
-                                        : "border-[var(--color-primary)] bg-[#f4effc] font-semibold text-[var(--color-primary)]"
+                                        : "border-[var(--color-primary)] bg-[var(--color-primary-soft)] font-semibold text-[var(--color-primary)]"
                                       : isZeroPrice
                                         ? "border-red-200 bg-red-50/30 hover:border-red-300 text-red-500"
                                         : "border-gray-200 hover:border-gray-300 text-gray-700"

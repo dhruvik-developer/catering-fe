@@ -6,20 +6,20 @@ import * as mapper from "../../../utils/orderMasterDataMapping";
 
 const THEME = {
   primary: "var(--color-primary)",
-  primaryDark: "#6F47B8",
-  primarySoft: "#F6F0FF",
-  primaryTint: "#FBF8FF",
-  primaryBorder: "#E7D9FF",
-  primaryText: "#5B34A8",
-  titleBarText: "#6D44B8",
-  bodyBorder: "#E9DFFB",
-  bodyAlt: "#FAF7FF",
+  primaryDark: "var(--color-primary-dark)",
+  primarySoft: "var(--color-primary-soft)",
+  primaryTint: "var(--color-primary-tint)",
+  primaryBorder: "var(--color-primary-border)",
+  primaryText: "var(--color-primary-text)",
+  titleBarText: "var(--color-primary-dark)",
+  bodyBorder: "var(--color-primary-soft)",
+  bodyAlt: "var(--color-primary-tint)",
   bodyText: "#241B35",
-  muted: "#8E7AB3",
-  noteBg: "#F7F2FF",
-  noteBorder: "#DCCBFF",
-  noteTitle: "#6D44B8",
-  noteText: "#4A3A73",
+  muted: "var(--color-primary-text)",
+  noteBg: "var(--color-primary-tint)",
+  noteBorder: "var(--color-primary-border)",
+  noteTitle: "var(--color-primary-dark)",
+  noteText: "var(--color-primary-text)",
 };
 
 const SectionTitle = ({ number, title }) => (
@@ -117,7 +117,7 @@ const OrderMasterReport = ({ order, businessProfile }) => {
       {/* Document Header */}
       <div
         style={{
-          background: "linear-gradient(135deg, var(--color-primary) 0%, #6F47B8 100%)",
+          background: "linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-dark) 100%)",
           color: "#fff",
           padding: "16px 24px",
           display: "flex",
@@ -237,7 +237,7 @@ const OrderMasterReport = ({ order, businessProfile }) => {
             >
               <div
                 style={{
-                  background: "linear-gradient(135deg, var(--color-primary) 0%, #6F47B8 100%)",
+                  background: "linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-dark) 100%)",
                   color: "#fff",
                   fontWeight: "bold",
                   fontSize: "12px",
@@ -600,7 +600,7 @@ const OrderMasterReport = ({ order, businessProfile }) => {
       {/* Document Footer */}
       <div
         style={{
-          background: "linear-gradient(135deg, #6F47B8 0%, var(--color-primary) 100%)",
+          background: "linear-gradient(135deg, var(--color-primary-dark) 0%, var(--color-primary) 100%)",
           color: "#fff",
           textAlign: "center",
           padding: "10px",

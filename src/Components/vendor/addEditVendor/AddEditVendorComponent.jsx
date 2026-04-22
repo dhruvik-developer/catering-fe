@@ -45,7 +45,7 @@ function AddEditVendorComponent({
       </button>
 
       <div className="flex items-center gap-3 mb-6">
-        <div className="p-2.5 rounded-xl bg-[#f4effc]">
+        <div className="p-2.5 rounded-xl bg-[var(--color-primary-soft)]">
           <FiTruck className="text-[var(--color-primary)]" size={22} />
         </div>
         <div>
@@ -226,7 +226,7 @@ function AddEditVendorComponent({
               <button
                 type="button"
                 onClick={handleAddCategoryRow}
-                className="flex items-center gap-1 px-3 py-1.5 text-sm font-medium text-[var(--color-primary)] bg-[#f4effc] rounded-lg hover:bg-[#e8ddf5] transition-colors cursor-pointer"
+                className="flex items-center gap-1 px-3 py-1.5 text-sm font-medium text-[var(--color-primary)] bg-[var(--color-primary-soft)] rounded-lg hover:bg-[var(--color-primary-soft)] transition-colors cursor-pointer"
               >
                 <FiPlus size={14} /> Add Category
               </button>

@@ -18,7 +18,7 @@ function StaffComponent({
       {/* Header */}
       <div className="flex justify-between items-center mb-6">
         <div className="flex items-center gap-3">
-          <div className="p-2.5 rounded-xl bg-[#f4effc]">
+          <div className="p-2.5 rounded-xl bg-[var(--color-primary-soft)]">
             <FiUsers className="text-[var(--color-primary)]" size={22} />
           </div>
           <div>

@@ -64,7 +64,7 @@ function Step3_Summary({
       {/* ====== Page Header ====== */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">
-          <div className="p-2.5 rounded-xl bg-[#f4effc]">
+          <div className="p-2.5 rounded-xl bg-[var(--color-primary-soft)]">
             <FiClipboard className="text-[var(--color-primary)]" size={20} />
           </div>
           <div>
@@ -128,7 +128,7 @@ function Step3_Summary({
             className="border-2 border-purple-100 rounded-xl overflow-hidden shadow-sm"
           >
             {/* Event Card Header */}
-            <div className="bg-gradient-to-r from-[var(--color-primary)] to-[#6a3faf] px-5 py-3.5 flex items-center justify-between text-white">
+            <div className="bg-gradient-to-r from-[var(--color-primary)] to-[var(--color-primary-dark)] px-5 py-3.5 flex items-center justify-between text-white">
               <div className="flex items-center gap-4">
                 <div className="w-9 h-9 rounded-lg bg-white/20 flex items-center justify-center font-bold text-sm backdrop-blur-sm">
                   {cardIdx + 1}
@@ -706,7 +706,7 @@ function Step3_Summary({
           <button
             type="button"
             onClick={handleSubmit}
-            className="px-10 py-3.5 font-bold text-lg text-white bg-gradient-to-r from-[var(--color-primary)] to-[#6a3faf] hover:from-[#7350a8] hover:to-[#5e33a0] rounded-xl shadow-xl shadow-[var(--color-primary)]/30 transition-all active:scale-[0.98] flex items-center gap-2"
+            className="px-10 py-3.5 font-bold text-lg text-white bg-gradient-to-r from-[var(--color-primary)] to-[var(--color-primary-dark)] hover:brightness-95 rounded-xl shadow-xl shadow-[var(--color-primary)]/30 transition-all active:scale-[0.98] flex items-center gap-2"
           >
             <FiSend size={18} /> Review & Generate PDF
           </button>

@@ -18,8 +18,24 @@
 
 :root {
   --color-primary: #845cbd;
+  --color-primary-dark: color-mix(in srgb, var(--color-primary), black 20%);
+  --color-primary-light: color-mix(in srgb, var(--color-primary), white 40%);
+  --color-primary-soft: color-mix(in srgb, var(--color-primary), white 85%);
+  --color-primary-tint: color-mix(in srgb, var(--color-primary), white 95%);
+  --color-primary-border: color-mix(in srgb, var(--color-primary), white 70%);
+  --color-primary-text: color-mix(in srgb, var(--color-primary), black 40%);
+  
   --pdf-unicode-font-stack: "Noto Sans Gujarati PDF", "Noto Sans Devanagari PDF",
     sans-serif;
+}
+
+@theme {
+  --color-primary-dark: var(--color-primary-dark);
+  --color-primary-light: var(--color-primary-light);
+  --color-primary-soft: var(--color-primary-soft);
+  --color-primary-tint: var(--color-primary-tint);
+  --color-primary-border: var(--color-primary-border);
+  --color-primary-text: var(--color-primary-text);
 }
 
 html,

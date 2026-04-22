@@ -39,7 +39,7 @@ function AllOrderComponent({
       {/* Header */}
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 md:gap-0 mb-6 w-full">
         <div className="flex items-center gap-3">
-          <div className="p-2.5 rounded-xl bg-[#f4effc]">
+          <div className="p-2.5 rounded-xl bg-[var(--color-primary-soft)]">
             <FiClipboard className="text-[var(--color-primary)]" size={22} />
           </div>
           <div>
@@ -122,10 +122,10 @@ function AllOrderComponent({
           {allOrder.map((order) => (
             <div
               key={order.id}
-              className="flex flex-col h-full rounded-xl overflow-hidden transition-all duration-200 hover:shadow-lg bg-[#faf8fd] border border-[#e8e0f3]"
+              className="flex flex-col h-full rounded-xl overflow-hidden transition-all duration-200 hover:shadow-lg bg-[var(--color-primary-tint)] border border-[var(--color-primary-border)]"
             >
               {/* Card Header */}
-              <div className="flex items-center justify-between px-5 py-4 bg-[#f4effc] border-b border-[#ede7f6]">
+              <div className="flex items-center justify-between px-5 py-4 bg-[var(--color-primary-soft)] border-b border-[var(--color-primary-border)]">
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 rounded-full bg-[var(--color-primary)] text-white flex items-center justify-center font-bold text-sm">
                     {order.name?.charAt(0)?.toUpperCase() || "?"}
@@ -143,7 +143,7 @@ function AllOrderComponent({
                 </div>
                 <div className="flex items-center gap-2">
                   <span
-                    className="text-xs font-medium px-3 py-1.5 rounded-full bg-white text-[var(--color-primary)] border border-[#ede7f6] max-w-[200px] truncate"
+                    className="text-xs font-medium px-3 py-1.5 rounded-full bg-white text-[var(--color-primary)] border border-[var(--color-primary-border)] max-w-[200px] truncate"
                     title={
                       order.sessions?.length > 0
                         ? Array.from(
@@ -165,14 +165,14 @@ function AllOrderComponent({
               {/* Card Body */}
               <div className="flex-1 px-5 py-4 flex flex-col gap-3">
                 {/* Phone */}
-                <div className="flex items-center gap-2.5 text-sm text-gray-600 bg-white rounded-lg px-3 py-2.5 border border-[#ede7f6] w-max">
+                <div className="flex items-center gap-2.5 text-sm text-gray-600 bg-white rounded-lg px-3 py-2.5 border border-[var(--color-primary-border)] w-max">
                   <FiPhone size={14} className="text-[var(--color-primary)]" />
                   <span className="font-medium">{order.mobile_no || "—"}</span>
                 </div>
 
                 {/* Order Summary — clickable */}
                 <div
-                  className="flex flex-col gap-2 bg-indigo-50/40 border border-[#ede7f6] rounded-lg px-4 py-3 cursor-pointer hover:bg-[#f4effc] hover:border-[var(--color-primary)] transition-all duration-150 group"
+                  className="flex flex-col gap-2 bg-indigo-50/40 border border-[var(--color-primary-border)] rounded-lg px-4 py-3 cursor-pointer hover:bg-[var(--color-primary-soft)] hover:border-[var(--color-primary)] transition-all duration-150 group"
                   onClick={() => handleViewOrderDetails(order.id)}
                   title="View Detailed Order"
                 >
@@ -217,7 +217,7 @@ function AllOrderComponent({
               </div>
 
               {/* Card Footer - Actions */}
-              <div className="flex flex-col sm:flex-row gap-2 sm:gap-3 px-5 py-3 border-t border-[#ede7f6]">
+              <div className="flex flex-col sm:flex-row gap-2 sm:gap-3 px-5 py-3 border-t border-[var(--color-primary-border)]">
                 <button
                   className="flex-1 flex items-center justify-center gap-1.5 py-2.5 bg-emerald-50 hover:bg-emerald-100 text-emerald-600 text-sm font-semibold rounded-lg cursor-pointer transition-colors duration-200"
                   onClick={() => handleCompleteOrder(order.id)}

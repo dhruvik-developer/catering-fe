@@ -31,7 +31,7 @@ function CategoryComponent({
       {/* Header */}
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 md:gap-0 mb-6">
         <div className="flex items-center gap-3">
-          <div className="p-2.5 rounded-xl bg-[#f4effc]">
+          <div className="p-2.5 rounded-xl bg-[var(--color-primary-soft)]">
             <FiFolder className="text-[var(--color-primary)]" size={22} />
           </div>
           <div>
@@ -55,13 +55,13 @@ function CategoryComponent({
           </button>
           <button
             onClick={() => setShowAddIngredient(true)}
-            className="px-4 py-2.5 bg-white border border-[var(--color-primary)] text-[var(--color-primary)] hover:bg-[#f4effc] rounded-lg cursor-pointer transition-colors duration-200 text-sm font-medium"
+            className="px-4 py-2.5 bg-white border border-[var(--color-primary)] text-[var(--color-primary)] hover:bg-[var(--color-primary-soft)] rounded-lg cursor-pointer transition-colors duration-200 text-sm font-medium"
           >
             + Add Ingredient
           </button>
           <button
             onClick={() => setShowAddItem(true)}
-            className="px-4 py-2.5 bg-white border border-[var(--color-primary)] text-[var(--color-primary)] hover:bg-[#f4effc] rounded-lg cursor-pointer transition-colors duration-200 text-sm font-medium"
+            className="px-4 py-2.5 bg-white border border-[var(--color-primary)] text-[var(--color-primary)] hover:bg-[var(--color-primary-soft)] rounded-lg cursor-pointer transition-colors duration-200 text-sm font-medium"
           >
             + Add Item
           </button>

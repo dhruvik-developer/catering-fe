@@ -37,7 +37,7 @@ function RecipeIngredientComponent({ loading, navigate, recipe }) {
       {/* Header */}
       <div className="flex justify-between items-center mb-6">
         <div className="flex items-center gap-3">
-          <div className="p-2.5 rounded-xl bg-[#f4effc]">
+          <div className="p-2.5 rounded-xl bg-[var(--color-primary-soft)]">
             <FiBookOpen className="text-[var(--color-primary)]" size={22} />
           </div>
           <div>
@@ -79,10 +79,10 @@ function RecipeIngredientComponent({ loading, navigate, recipe }) {
               return (
                 <div
                   key={rec.id}
-                  className="rounded-xl overflow-hidden border border-[#e8e0f3] transition-all duration-200 hover:shadow-md"
+                  className="rounded-xl overflow-hidden border border-[var(--color-primary-border)] transition-all duration-200 hover:shadow-md"
                 >
                   <div
-                    className="flex justify-between items-center bg-[#f4effc] px-5 py-4 cursor-pointer transition-colors duration-200 hover:bg-[#eee5f8]"
+                    className="flex justify-between items-center bg-[var(--color-primary-soft)] px-5 py-4 cursor-pointer transition-colors duration-200 hover:brightness-95"
                     onClick={() => toggleExpand(rec.id)}
                   >
                     <div className="flex items-center gap-3">
@@ -100,7 +100,7 @@ function RecipeIngredientComponent({ loading, navigate, recipe }) {
                           {rec.person_count}
                         </span>
                       )}
-                      <span className="text-xs font-medium px-2.5 py-1 rounded-full bg-white text-[var(--color-primary)] border border-[#ede7f6]">
+                      <span className="text-xs font-medium px-2.5 py-1 rounded-full bg-white text-[var(--color-primary)] border border-[var(--color-primary-border)]">
                         {ingredientEntries.length} items
                       </span>
                       <button
@@ -133,20 +133,20 @@ function RecipeIngredientComponent({ loading, navigate, recipe }) {
                     transition={{ duration: 0.3, ease: "easeInOut" }}
                     className="overflow-hidden"
                   >
-                    <div className="px-5 py-4 bg-[#faf8fd] border-t border-[#ede7f6]">
+                    <div className="px-5 py-4 bg-[var(--color-primary-tint)] border-t border-[var(--color-primary-border)]">
                       {ingredientEntries.length > 0 ? (
                         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2">
                           {ingredientEntries.map(([name, qty], index) => (
                             <div
                               key={index}
-                              className="flex items-center gap-2 text-sm text-gray-600 bg-white rounded-lg px-3 py-2 border border-[#ede7f6]"
+                              className="flex items-center gap-2 text-sm text-gray-600 bg-white rounded-lg px-3 py-2 border border-[var(--color-primary-border)]"
                             >
-                              <span className="w-5 h-5 rounded bg-[#f4effc] text-[var(--color-primary)] text-xs font-bold flex items-center justify-center flex-shrink-0">
+                              <span className="w-5 h-5 rounded bg-[var(--color-primary-soft)] text-[var(--color-primary)] text-xs font-bold flex items-center justify-center flex-shrink-0">
                                 {index + 1}
                               </span>
                               <span className="font-medium flex-1">{name}</span>
                               {qty && (
-                                <span className="text-xs font-semibold px-2 py-0.5 rounded-md bg-[#f4effc] text-[var(--color-primary)] border border-[#ede7f6]">
+                                <span className="text-xs font-semibold px-2 py-0.5 rounded-md bg-[var(--color-primary-soft)] text-[var(--color-primary)] border border-[var(--color-primary-border)]">
                                   {qty}
                                 </span>
                               )}

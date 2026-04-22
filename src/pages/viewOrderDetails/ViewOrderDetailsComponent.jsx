@@ -151,7 +151,7 @@ function ViewOrderDetailsComponent({
 
           <button
             onClick={() => handleEditOrder(id)}
-            className="flex-1 sm:flex-none flex items-center justify-center gap-2 px-5 py-2.5 text-sm font-semibold text-white bg-gradient-to-r from-indigo-500 to-[var(--color-primary)] hover:from-indigo-600 hover:to-[#724eb0] rounded-xl shadow-md transition-all duration-200 cursor-pointer"
+            className="flex-1 sm:flex-none flex items-center justify-center gap-2 px-5 py-2.5 text-sm font-semibold text-white bg-gradient-to-r from-indigo-500 to-[var(--color-primary)] hover:brightness-95 rounded-xl shadow-md transition-all duration-200 cursor-pointer"
             title="Edit entire order (all sessions)"
           >
             <FiEdit2 size={16} /> Edit Complete Order
@@ -258,7 +258,7 @@ function ViewOrderDetailsComponent({
               className="flex flex-col bg-white border border-gray-200 rounded-2xl overflow-hidden hover:shadow-md transition-shadow"
             >
               {/* Session Header */}
-              <div className="bg-gradient-to-r from-[#f4effc] to-white border-b border-gray-100 px-5 py-3 flex justify-between items-center text-gray-800">
+              <div className="bg-gradient-to-r from-[var(--color-primary-soft)] to-white border-b border-gray-100 px-5 py-3 flex justify-between items-center text-gray-800">
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 rounded-full bg-[var(--color-primary)] text-white flex items-center justify-center font-bold text-sm shadow-sm ring-2 ring-white">
                     S{index + 1}

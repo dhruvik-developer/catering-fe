@@ -55,7 +55,7 @@ function StockComponent({
       {/* Header */}
       <div className="flex justify-between items-center mb-6">
         <div className="flex items-center gap-3">
-          <div className="p-2.5 rounded-xl bg-[#f4effc]">
+          <div className="p-2.5 rounded-xl bg-[var(--color-primary-soft)]">
             <FiPackage className="text-[var(--color-primary)]" size={22} />
           </div>
           <div>
@@ -72,7 +72,7 @@ function StockComponent({
       ) : (
         <>
           {/* Controls Bar */}
-          <div className="flex items-center justify-between gap-3 mb-5 p-4 bg-[#faf8fd] rounded-xl border border-[#e8e0f3]">
+          <div className="flex items-center justify-between gap-3 mb-5 p-4 bg-[var(--color-primary-tint)] rounded-xl border border-[var(--color-primary-border)]">
             {categories.length > 0 && (
               <div className="flex gap-2 flex-1 items-center">
                 <Dropdown
@@ -103,7 +103,7 @@ function StockComponent({
               </button>
               {selectedCategory !== "low_stock" && selectedCategory !== "all_items" && (
                 <button
-                  className="px-4 py-2.5 bg-white hover:bg-[#f4effc] text-[var(--color-primary)] text-sm font-medium rounded-lg border border-[var(--color-primary)] cursor-pointer transition-colors duration-200"
+                  className="px-4 py-2.5 bg-white hover:bg-[var(--color-primary-soft)] text-[var(--color-primary)] text-sm font-medium rounded-lg border border-[var(--color-primary)] cursor-pointer transition-colors duration-200"
                   onClick={handleAddItem}
                 >
                   Add Item
@@ -114,7 +114,7 @@ function StockComponent({
 
           {/* Stats Summary Cards */}
           <div className="grid grid-cols-3 gap-4 mb-6">
-            <div className="bg-gradient-to-br from-[var(--color-primary)] to-[#6a3faf] text-white rounded-xl p-4 shadow-md shadow-[var(--color-primary)]/10">
+            <div className="bg-gradient-to-br from-[var(--color-primary)] to-[var(--color-primary-dark)] text-white rounded-xl p-4 shadow-md shadow-[var(--color-primary)]/10">
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-white/60 text-xs font-semibold uppercase tracking-wider">
@@ -195,7 +195,7 @@ function StockComponent({
                     className={`rounded-2xl overflow-hidden transition-all duration-300 hover:shadow-lg border group ${
                       isLowStock
                         ? "bg-gradient-to-br from-red-50 to-white border-red-200 hover:border-red-300"
-                        : "bg-gradient-to-br from-[#faf8fd] to-white border-[#e8e0f3] hover:border-[#c9b8e3]"
+                        : "bg-gradient-to-br from-[var(--color-primary-tint)] to-white border-[var(--color-primary-border)] hover:border-[var(--color-primary-light)]"
                     }`}
                   >
                     {/* Card Header */}
@@ -204,7 +204,7 @@ function StockComponent({
                         <div className="flex items-center gap-3 flex-1 min-w-0">
                           <div
                             className={`w-11 h-11 rounded-xl flex items-center justify-center flex-shrink-0 shadow-sm ${
-                              isLowStock ? "bg-red-100" : "bg-[#f4effc]"
+                              isLowStock ? "bg-red-100" : "bg-[var(--color-primary-soft)]"
                             }`}
                           >
                             <FiBox
@@ -301,7 +301,7 @@ function StockComponent({
                     <div className="px-5 pb-4">
                       <div className="flex gap-2">
                         <button
-                          className="flex-1 flex items-center justify-center gap-2 py-2.5 bg-[#f4effc] hover:bg-[#e8ddf5] text-[var(--color-primary)] rounded-xl cursor-pointer transition-all duration-200 text-sm font-semibold active:scale-[0.97]"
+                          className="flex-1 flex items-center justify-center gap-2 py-2.5 bg-[var(--color-primary-soft)] hover:brightness-95 text-[var(--color-primary)] rounded-xl cursor-pointer transition-all duration-200 text-sm font-semibold active:scale-[0.97]"
                           title="Increase Stock"
                           onClick={() => handleIncreaseItem(item)}
                         >

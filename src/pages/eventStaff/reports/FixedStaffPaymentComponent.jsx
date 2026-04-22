@@ -96,8 +96,8 @@ function FixedStaffPaymentComponent({
       ) : (
         <>
           {/* Top Profile & Mega Summary Card */}
-          <div className="bg-white rounded-2xl shadow-lg border border-[#ede7f6] overflow-hidden">
-            <div className="bg-gradient-to-r from-[var(--color-primary)] to-[#a97dd6] px-8 py-6 flex flex-col md:flex-row md:items-center justify-between gap-4">
+          <div className="bg-white rounded-2xl shadow-lg border border-[var(--color-primary-border)] overflow-hidden">
+            <div className="bg-gradient-to-r from-[var(--color-primary)] to-[var(--color-primary-dark)] px-8 py-6 flex flex-col md:flex-row md:items-center justify-between gap-4">
               <div className="flex items-center gap-5">
                 <div className="w-16 h-16 rounded-full bg-white/20 flex items-center justify-center shadow-inner">
                   <FaUser size={28} className="text-white drop-shadow-md" />
@@ -221,7 +221,7 @@ function FixedStaffPaymentComponent({
           {/* Detailed Lists Grid */}
           <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
             {/* Salary Payments Table Card */}
-            <div className="bg-white rounded-2xl shadow-lg border border-[#ede7f6] overflow-hidden flex flex-col">
+            <div className="bg-white rounded-2xl shadow-lg border border-[var(--color-primary-border)] overflow-hidden flex flex-col">
               <div className="bg-gray-50/80 px-6 py-4 border-b border-gray-100 flex items-center justify-between sticky top-0 z-10">
                 <div className="flex items-center gap-3">
                   <div className="p-2 bg-purple-100 rounded-lg text-[var(--color-primary)]">
@@ -334,7 +334,7 @@ function FixedStaffPaymentComponent({
             </div>
 
             {/* Event Assignments Table Card */}
-            <div className="bg-white rounded-2xl shadow-lg border border-[#ede7f6] overflow-hidden flex flex-col">
+            <div className="bg-white rounded-2xl shadow-lg border border-[var(--color-primary-border)] overflow-hidden flex flex-col">
               <div className="bg-gray-50/80 px-6 py-4 border-b border-gray-100 flex items-center gap-3 sticky top-0 z-10">
                 <div className="p-2 bg-blue-100 rounded-lg text-blue-600">
                   <FaMoneyBillWave size={16} />

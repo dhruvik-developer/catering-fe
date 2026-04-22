@@ -37,7 +37,7 @@ function EditItemComponent({
       {/* Header */}
       <div className="flex justify-between items-center mb-6">
         <div className="flex items-center gap-3">
-          <div className="p-2.5 rounded-xl bg-[#f4effc]">
+          <div className="p-2.5 rounded-xl bg-[var(--color-primary-soft)]">
             <FiList className="text-[var(--color-primary)]" size={22} />
           </div>
           <div>
@@ -83,7 +83,7 @@ function EditItemComponent({
                       >
                         {/* Category Header */}
                         <div
-                          className="flex items-center justify-between px-5 py-4 bg-gradient-to-r from-[#f8f5fc] to-white cursor-pointer select-none"
+                          className="flex items-center justify-between px-5 py-4 bg-gradient-to-r from-[var(--color-primary-tint)] to-white cursor-pointer select-none"
                           onClick={() => toggleCollapse(category.id)}
                         >
                           <div className="flex items-center gap-3">
@@ -93,7 +93,7 @@ function EditItemComponent({
                             <span className="font-semibold text-gray-800 text-base">
                               {category.name}
                             </span>
-                            <span className="text-xs font-medium px-2.5 py-1 rounded-full bg-[#ede7f6] text-[var(--color-primary)]">
+                            <span className="text-xs font-medium px-2.5 py-1 rounded-full bg-[var(--color-primary-border)] text-[var(--color-primary)]">
                               {category.items?.length || 0} items
                             </span>
                             {selectedCount > 0 && (
@@ -142,7 +142,7 @@ function EditItemComponent({
                                       }
                                       className={`flex items-center gap-3 px-3.5 py-2.5 rounded-lg cursor-pointer transition-all duration-200 border ${
                                         isSelected
-                                          ? "bg-[#f4effc] border-[var(--color-primary)] shadow-sm"
+                                          ? "bg-[var(--color-primary-soft)] border-[var(--color-primary)] shadow-sm"
                                           : "bg-white border-gray-100 hover:bg-gray-50 hover:border-gray-200"
                                       }`}
                                     >

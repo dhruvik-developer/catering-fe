@@ -144,7 +144,7 @@ const IngredientTable = ({
               {filteredSubcategories.map((sub, index) => (
                 <div
                   key={sub.id}
-                  className="group flex items-center justify-between p-3.5 rounded-2xl bg-white border border-gray-100 hover:border-[#b39ddb] hover:shadow-sm transition-all duration-200"
+                  className="group flex items-center justify-between p-3.5 rounded-2xl bg-white border border-gray-100 hover:border-[var(--color-primary-light)] hover:shadow-sm transition-all duration-200"
                 >
                   <div className="flex items-center gap-3 min-w-0 pr-2">
                     <div className="w-8 h-8 rounded-full bg-purple-50 flex items-center justify-center flex-shrink-0">

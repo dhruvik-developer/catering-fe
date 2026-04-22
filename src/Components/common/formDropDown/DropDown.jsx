@@ -95,7 +95,7 @@ const Dropdown = ({
                     key={option.id}
                     className={({ focus, active }) =>
                       `relative cursor-pointer select-none py-1.5 pl-8 pr-3 mx-1 my-0.5 rounded-md transition-colors text-sm ${
-                        focus || active ? "bg-[#f4effc] text-[var(--color-primary)] font-medium" : "text-gray-700 hover:bg-[#f4effc] hover:text-[var(--color-primary)]"
+                        focus || active ? "bg-[var(--color-primary-soft)] text-[var(--color-primary)] font-medium" : "text-gray-700 hover:bg-[var(--color-primary-soft)] hover:text-[var(--color-primary)]"
                       }`
                     }
                   value={option.id}
