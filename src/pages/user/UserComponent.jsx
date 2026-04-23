@@ -1,6 +1,8 @@
 /* eslint-disable react/prop-types */
 import Loader from "../../Components/common/Loader";
 import UsersTable from "../../Components/user/UserTable";
+import Button from "../../Components/common/Button";
+import PageHeader from "../../Components/common/PageHeader";
 import { FiUsers, FiUserPlus, FiBook } from "react-icons/fi";
 
 function UserComponent({
@@ -12,38 +14,30 @@ function UserComponent({
   onUserDelete,
 }) {
   return (
-    <div className="p-6 bg-white rounded-xl shadow-lg">
-      {/* Header */}
-      <div className="flex justify-between items-center mb-6">
-        <div className="flex items-center gap-3">
-          <div className="p-2.5 rounded-xl bg-[var(--color-primary-soft)]">
-            <FiUsers className="text-[var(--color-primary-text)]" size={22} />
-          </div>
-          <div>
-            <h2 className="text-2xl font-bold text-gray-800">Users</h2>
-            <p className="text-sm text-gray-400">
-              {users?.length || 0} user{users?.length !== 1 ? "s" : ""}{" "}
-              registered
-            </p>
-          </div>
-        </div>
-        <div className="flex gap-2">
-          <button
-            onClick={onUserAdd}
-            className="flex items-center gap-1.5 px-4 py-2.5 bg-[var(--color-primary)] hover:brightness-95 text-white text-sm font-medium rounded-lg cursor-pointer transition-colors duration-200"
-          >
-            <FiUserPlus size={15} />
-            Add User
-          </button>
-          <button
-            onClick={() => navigate("/add-rule", { state: "addrule" })}
-            className="flex items-center gap-1.5 px-4 py-2.5 bg-white hover:bg-[var(--color-primary-soft)] text-[var(--color-primary)] text-sm font-medium rounded-lg border border-[var(--color-primary)] cursor-pointer transition-colors duration-200"
-          >
-            <FiBook size={15} />
-            Add Rule
-          </button>
-        </div>
-      </div>
+    <div className="p-4 sm:p-6 bg-white rounded-xl shadow-lg">
+      <PageHeader
+        icon={<FiUsers size={22} />}
+        title="Users"
+        subtitle={`${users?.length || 0} user${users?.length !== 1 ? "s" : ""} registered`}
+        actions={
+          <>
+            <Button
+              onClick={onUserAdd}
+              leftIcon={<FiUserPlus size={15} />}
+            >
+              Add User
+            </Button>
+            <Button
+              variant="secondary"
+              onClick={() => navigate("/add-rule", { state: "addrule" })}
+              leftIcon={<FiBook size={15} />}
+            >
+              Add Rule
+            </Button>
+          </>
+        }
+        className="mb-6"
+      />
       {loading ? (
         <Loader message="Loading users..." />
       ) : (

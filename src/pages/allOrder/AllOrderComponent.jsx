@@ -1,6 +1,6 @@
 /* eslint-disable react/prop-types */
-import { IoIosWarning } from "react-icons/io";
 import Loader from "../../Components/common/Loader";
+import EmptyState from "../../Components/common/EmptyState";
 import {
   FiClipboard,
   FiPhone,
@@ -53,9 +53,9 @@ function AllOrderComponent({
         </div>
 
         {/* Search + Date Filter */}
-        <div className="flex items-center gap-2">
+        <div className="flex flex-wrap items-center gap-2 w-full md:w-auto">
           {/* Search */}
-          <div className="relative">
+          <div className="relative flex-1 min-w-[160px] md:flex-none">
             <FiSearch
               className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"
               size={14}
@@ -65,7 +65,7 @@ function AllOrderComponent({
               placeholder="Search name or mobile..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="pl-9 pr-8 py-2 border border-gray-200 rounded-lg text-sm font-medium bg-gray-50 focus:outline-none focus:border-[var(--color-primary)] focus:ring-2 focus:ring-[var(--color-primary)]/15 w-56 transition-all"
+              className="pl-9 pr-8 py-2 border border-gray-200 rounded-lg text-sm font-medium bg-gray-50 focus:outline-none focus:border-[var(--color-primary)] focus:ring-2 focus:ring-[var(--color-primary)]/15 w-full md:w-56 transition-all"
             />
             {searchQuery && (
               <button
@@ -78,7 +78,7 @@ function AllOrderComponent({
           </div>
 
           {/* Quick Filters */}
-          <div className="hidden lg:flex items-center gap-1.5 mr-1">
+          <div className="order-3 md:order-none flex flex-wrap items-center gap-1.5 w-full md:w-auto">
             <button onClick={() => handleQuickFilter("today")} className="px-2.5 py-1.5 text-[11px] font-bold text-gray-600 bg-gray-100 hover:bg-gray-200 rounded-md transition-colors cursor-pointer">Today</button>
             <button onClick={() => handleQuickFilter("thisWeek")} className="px-2.5 py-1.5 text-[11px] font-bold text-gray-600 bg-gray-100 hover:bg-gray-200 rounded-md transition-colors cursor-pointer">This Week</button>
             <button onClick={() => handleQuickFilter("thisMonth")} className="px-2.5 py-1.5 text-[11px] font-bold text-gray-600 bg-gray-100 hover:bg-gray-200 rounded-md transition-colors cursor-pointer">This Month</button>
@@ -86,7 +86,7 @@ function AllOrderComponent({
           </div>
 
           {/* Date Range Filter */}
-          <div className="relative flex items-center">
+          <div className="relative flex items-center flex-1 min-w-[200px] md:flex-none">
             <FiCalendar
               className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none z-10"
               size={14}
@@ -99,7 +99,8 @@ function AllOrderComponent({
               dateFormat="dd MMM yyyy"
               placeholderText="Select event date range"
               isClearable
-              className="pl-9 pr-7 py-2 border border-gray-200 rounded-lg text-sm font-medium bg-gray-50 focus:outline-none focus:border-[var(--color-primary)] focus:ring-2 focus:ring-[var(--color-primary)]/15 w-[220px] transition-all cursor-pointer"
+              wrapperClassName="w-full md:w-auto"
+              className="pl-9 pr-7 py-2 border border-gray-200 rounded-lg text-sm font-medium bg-gray-50 focus:outline-none focus:border-[var(--color-primary)] focus:ring-2 focus:ring-[var(--color-primary)]/15 w-full md:w-[220px] transition-all cursor-pointer"
             />
           </div>
         </div>
@@ -108,15 +109,19 @@ function AllOrderComponent({
       {loading ? (
         <Loader message="Loading Orders..." />
       ) : allOrder.length === 0 ? (
-        <div className="flex flex-col items-center justify-center py-16 px-6 bg-[var(--color-primary-tint)] rounded-3xl border border-[var(--color-primary-border)]/30">
-          <IoIosWarning size={48} className="text-[var(--color-primary-light)] mb-3" />
-          <p className="text-lg font-bold text-[var(--color-primary-text)] text-center">
-            No Orders Available
-          </p>
-          <p className="text-sm text-[var(--color-primary-text)]/60 mt-1 font-medium text-center">
-            Orders will appear here once created
-          </p>
-        </div>
+        <EmptyState
+          icon={<FiClipboard size={24} />}
+          title={
+            searchQuery || dateRange[0] || dateRange[1]
+              ? "No Orders Match Your Filters"
+              : "No Orders Available"
+          }
+          message={
+            searchQuery || dateRange[0] || dateRange[1]
+              ? "Try clearing the filters to see all orders."
+              : "Orders will appear here once created."
+          }
+        />
       ) : (
         <div className="grid grid-cols-1 xl:grid-cols-2 gap-4">
           {allOrder.map((order) => (
