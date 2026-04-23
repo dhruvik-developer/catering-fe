@@ -10,16 +10,6 @@ export const getExpenses = async (params = {}) => {
   }
 };
 
-export const getSingleExpense = async (id) => {
-  try {
-    const response = await ApiInstance.get(`/expenses/${id}/`);
-    return response;
-  } catch (error) {
-    toast.error("Error fetching expense details");
-    console.error("API Error:", error);
-  }
-};
-
 export const getExpenseCategories = async (params = {}) => {
   try {
     const response = await ApiInstance.get("/expenses-categories/", { params });

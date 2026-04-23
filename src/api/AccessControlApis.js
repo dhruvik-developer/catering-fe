@@ -25,19 +25,3 @@ export const updateUserPermissions = async (userId, data) => {
     // data: { allowed_permissions: [], denied_permissions: [] }
     return await ApiInstance.put(`/access-control/users/${userId}/permissions/`, data);
 };
-
-// Fetch permissions for an entire staff role
-export const getRolePermissions = async (roleId) => {
-    return await ApiInstance.get(`/access-control/staff-roles/${roleId}/permissions/`);
-};
-
-// Update permissions for an entire staff role
-export const updateRolePermissions = async (roleId, data) => {
-    // data: { permission_codes: [] }
-    return await ApiInstance.put(`/api/access-control/staff-roles/${roleId}/permissions/`, data);
-};
-
-// Check logged-in user's permissions
-export const getMyPermissions = async () => {
-    return await ApiInstance.get("/api/me/permissions/");
-};

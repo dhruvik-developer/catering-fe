@@ -40,18 +40,6 @@ export const getRecipes = async (params = {}) => {
   }
 };
 
-export const getRecipeById = async (id) => {
-  try {
-    return await ApiInstance.get(`/recipes/${id}/`);
-  } catch (error) {
-    return handleQueryError(
-      "Get Recipe By ID API Error:",
-      "Error fetching recipe details",
-      error
-    );
-  }
-};
-
 export const createRecipe = async (recipeData) => {
   try {
     const response = await ApiInstance.post(

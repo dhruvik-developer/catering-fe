@@ -89,36 +89,3 @@ export const deleteGroundItem = async (id) => {
   }
 };
 
-/**
- * EVENT GROUND REQUIREMENTS
- */
-
-export const getEventGroundRequirements = async (params = {}) => {
-  try {
-    const response = await ApiInstance.get("/ground/event-requirements/", { params });
-    return response;
-  } catch (error) {
-    toast.error("Error fetching event ground requirements");
-    throw error;
-  }
-};
-
-export const createEventGroundRequirements = async (data) => {
-  try {
-    const response = await ApiInstance.post("/ground/event-requirements/", data);
-    return response;
-  } catch (error) {
-    toast.error(error?.response?.data?.message || "Error assigning requirements");
-    throw error;
-  }
-};
-
-export const updateEventGroundRequirement = async (id, data) => {
-  try {
-    const response = await ApiInstance.put(`/ground/event-requirements/${id}/`, data);
-    return response;
-  } catch (error) {
-    toast.error(error?.response?.data?.message || "Error updating requirement");
-    throw error;
-  }
-};

@@ -91,18 +91,6 @@ export const getIngredientCategories = async (params = {}) => {
   }
 };
 
-export const getIngredientCategoryById = async (id) => {
-  try {
-    const response = await ApiInstance.get(`/ingredients-categories/${id}/`);
-    return response.data;
-  } catch (error) {
-    return handleQueryError(
-      "Error fetching ingredient category details",
-      error
-    );
-  }
-};
-
 export const createIngredientCategory = async (name, isCommon = false) => {
   try {
     const response = await ApiInstance.post("/categories/", {
@@ -123,41 +111,12 @@ export const createIngredientCategory = async (name, isCommon = false) => {
   }
 };
 
-export const updateIngredientCategory = async (id, name, isCommon = false) => {
-  try {
-    const response = await ApiInstance.put(`/categories/${id}/`, {
-      name,
-      is_common: isCommon,
-    });
-    return handleMutationSuccess(
-      response,
-      "Category updated successfully!",
-      "Failed to update category"
-    );
-  } catch (error) {
-    return handleMutationError(
-      "Update Category API Error:",
-      error,
-      "Failed to update category"
-    );
-  }
-};
-
 export const getIngredientItems = async (params = {}) => {
   try {
     const response = await ApiInstance.get("/ingredients-items/", { params });
     return response.data;
   } catch (error) {
     return handleQueryError("Error fetching ingredient items", error);
-  }
-};
-
-export const getIngredientItemById = async (id) => {
-  try {
-    const response = await ApiInstance.get(`/ingredients-items/${id}/`);
-    return response.data;
-  } catch (error) {
-    return handleQueryError("Error fetching ingredient item details", error);
   }
 };
 

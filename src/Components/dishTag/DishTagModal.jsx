@@ -79,56 +79,6 @@ export default function DishTagModal({
     }, 1000);
   };
 
-  // const handleAlignLogo = (pos) => {
-  //   const logoSize = Number(settings.logo?.size) || 100;
-
-  //   const fw = Number(settings.width);
-  //   const fh = Number(settings.height);
-
-  //   const padding = 16;
-
-  //   let x = 0;
-  //   let y = 0;
-
-  //   switch (pos) {
-  //     case "top-left":
-  //       x = padding;
-  //       y = padding;
-  //       break;
-
-  //     case "top-right":
-  //       x = fw - logoSize - padding * 2;
-  //       y = padding;
-  //       break;
-
-  //     case "bottom-left":
-  //       x = padding;
-  //       y = fh - logoSize - padding * 2;
-  //       break;
-
-  //     case "bottom-right":
-  //       x = fw - logoSize - padding * 2;
-  //       y = fh - logoSize - padding * 2;
-  //       break;
-
-  //     case "center":
-  //       x = (fw - logoSize) / 2 - padding;
-  //       y = (fh - logoSize) / 2 - padding;
-  //       break;
-  //   }
-
-  //   setSettings((s) => ({
-  //     ...s,
-  //     layout: {
-  //       ...s.layout,
-  //       logo: {
-  //         x: Math.round(x),
-  //         y: Math.round(y),
-  //       },
-  //     },
-  //   }));
-  // };
-
   // Tag padding for text scale calculations
   const TAG_PADDING = 32; // 16px * 2 sides
   const maxTextWidth = settings.width - TAG_PADDING;
