@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { exportToPDF, shareToWhatsApp } from "../../../../../utils/pdfExport";
+import { exportToPDF } from "../../../../../utils/pdfExport";
 import toast from "react-hot-toast";
 import PdfShareFullIngredientComponent from "./PdfShareFullIngredientComponent";
 import { getAllBusinessProfiles } from "../../../../../api/BusinessProfile";
@@ -58,14 +58,6 @@ function PdfShareFullIngredientController() {
     exportToPDF("pdf-content", fileName, toast);
   };
 
-  const shareOnWhatsApp = () =>
-    shareToWhatsApp(
-      "pdf-content",
-      "Full-Ingredient-List.pdf",
-      fullPayload?.mobileNo || "",
-      toast
-    );
-
   return (
     <PdfShareFullIngredientComponent
       ingredients={transformedIngredients}
@@ -75,7 +67,6 @@ function PdfShareFullIngredientController() {
       estimatedPersons={estimatedPersons}
       navigate={navigate}
       downloadPDF={downloadPDF}
-      shareOnWhatsApp={shareOnWhatsApp}
       businessProfile={businessProfile}
     />
   );

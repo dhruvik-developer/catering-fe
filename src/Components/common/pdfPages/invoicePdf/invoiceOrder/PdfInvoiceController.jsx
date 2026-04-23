@@ -5,7 +5,7 @@ import PdfInvoiceComponent from "./PdfInvoiceComponent";
 import { getInvoice } from "../../../../../api/FetchInvoice";
 import { getSingleOrder } from "../../../../../api/FetchAllOrder";
 import { useParams } from "react-router-dom";
-import { exportToPDF, shareToWhatsApp } from "../../../../../utils/pdfExport";
+import { exportToPDF } from "../../../../../utils/pdfExport";
 import { getAllBusinessProfiles } from "../../../../../api/BusinessProfile";
 import { generatePdfFilename } from "../../../../../utils/generatePdfFilename";
 import { usePdfCategorizer } from "../../../../../hooks/usePdfCategorizer";
@@ -110,16 +110,6 @@ function PdfInvoiceController() {
     exportToPDF("pdf-content", fileName, toast);
   };
 
-  const shareOnWhatsApp = () => {
-    const fileName = generatePdfFilename({
-      customerName: pdfInvoice?.name,
-      type: "invoice",
-      number: pdfInvoice?.bill_no || id,
-    });
-    const mobileNo = pdfInvoice?.mobile_no;
-    shareToWhatsApp("pdf-content", fileName, mobileNo, toast);
-  };
-
   const { categorizedData, isCategorizing } = usePdfCategorizer(
     pdfInvoice,
     !loading
@@ -132,7 +122,6 @@ function PdfInvoiceController() {
         loading={loading || isCategorizing}
         generateUniqueKey={generateUniqueKey}
         downloadPDF={downloadPDF}
-        shareOnWhatsApp={shareOnWhatsApp}
         businessProfile={businessProfile}
       />
     </div>

@@ -5,9 +5,8 @@ import { getSingleOrder } from "../../../../../api/FetchAllOrder";
 import PdfShareOrderComponent from "./PdfShareOrderComponent";
 import { useParams } from "react-router-dom";
 import { getAllBusinessProfiles } from "../../../../../api/BusinessProfile";
-import { generatePdfFilename } from "../../../../../utils/generatePdfFilename";
 import { usePdfCategorizer } from "../../../../../hooks/usePdfCategorizer";
-import { exportToPDF, shareToWhatsApp } from "../../../../../utils/pdfExport";
+import { exportToPDF } from "../../../../../utils/pdfExport";
 
 function PdfShareOrderCotroller() {
   const { id } = useParams();
@@ -55,16 +54,6 @@ function PdfShareOrderCotroller() {
     }
   };
 
-  const shareOnWhatsApp = async () => {
-    try {
-      const fileName = `SharedOrder_${pdfShareOrder?.booking_no || id}.pdf`;
-      await shareToWhatsApp("pdf-content", fileName, pdfShareOrder?.mobile_no, toast);
-    } catch (err) {
-      console.error(err);
-      toast.error("Failed to generate shareable PDF");
-    }
-  };
-
   const { categorizedData, isCategorizing } = usePdfCategorizer(
     pdfShareOrder,
     !loading
@@ -76,7 +65,6 @@ function PdfShareOrderCotroller() {
         pdfShareOrder={categorizedData}
         loading={loading || isCategorizing}
         downloadPDF={downloadPDF}
-        shareOnWhatsApp={shareOnWhatsApp}
         businessProfile={businessProfile}
       />
     </div>

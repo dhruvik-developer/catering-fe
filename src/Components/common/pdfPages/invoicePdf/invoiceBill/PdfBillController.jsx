@@ -4,7 +4,7 @@ import toast from "react-hot-toast";
 import PdfBillComponent from "./PdfBillComponent";
 import { getInvoice } from "../../../../../api/FetchInvoice";
 import { useParams } from "react-router-dom";
-import { exportToPDF, shareToWhatsApp } from "../../../../../utils/pdfExport";
+import { exportToPDF } from "../../../../../utils/pdfExport";
 import { getAllBusinessProfiles } from "../../../../../api/BusinessProfile";
 import { generatePdfFilename } from "../../../../../utils/generatePdfFilename";
 function PdfBillController() {
@@ -70,23 +70,12 @@ function PdfBillController() {
     exportToPDF("pdf-content", fileName, toast);
   };
 
-  const shareOnWhatsApp = () => {
-    const fileName = generatePdfFilename({
-      customerName: pdfInvoice?.name,
-      type: "bill",
-      number: pdfInvoice?.bill_no || id,
-    });
-    const mobileNo = pdfInvoice?.mobile_no;
-    shareToWhatsApp("pdf-content", fileName, mobileNo, toast);
-  };
-
   return (
     <div>
       <PdfBillComponent
         pdfInvoice={pdfInvoice}
         loading={loading}
         downloadPDF={downloadPDF}
-        shareOnWhatsApp={shareOnWhatsApp}
         businessProfile={businessProfile}
       />
     </div>

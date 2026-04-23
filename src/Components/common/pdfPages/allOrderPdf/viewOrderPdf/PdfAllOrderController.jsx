@@ -6,7 +6,7 @@ import PdfAllOrderComponent from "./PdfAllOrderComponent";
 import { useParams } from "react-router-dom";
 import { getAllBusinessProfiles } from "../../../../../api/BusinessProfile";
 import { usePdfCategorizer } from "../../../../../hooks/usePdfCategorizer";
-import { exportToPDF, shareToWhatsApp } from "../../../../../utils/pdfExport";
+import { exportToPDF } from "../../../../../utils/pdfExport";
 
 function PdfAllOrderController() {
   const pdfMargin = 16;
@@ -85,28 +85,6 @@ function PdfAllOrderController() {
   };
 
 
-  const shareOnWhatsApp = async () => {
-    try {
-      const fileName = `OrderMaster_${pdfAllOrder?.booking_no || id}.pdf`;
-      await shareToWhatsApp("pdf-content", fileName, pdfAllOrder?.mobile_no, toast, {
-        margin: pdfMargin,
-        html2canvas: {
-          scale: 3,
-          useCORS: true,
-          logging: false,
-          letterRendering: true,
-          windowWidth: 794,
-          scrollY: 0,
-        },
-        jsPDF: { unit: "px", format: [794, 1123], orientation: "portrait" },
-        pagebreak: { mode: ["css", "legacy"] },
-      });
-    } catch (err) {
-      console.error(err);
-      toast.error("Failed to generate shareable PDF");
-    }
-  };
-
   const { categorizedData, isCategorizing } = usePdfCategorizer(
     pdfAllOrder,
     !loading
@@ -119,7 +97,6 @@ function PdfAllOrderController() {
         loading={loading || isCategorizing}
         generateUniqueKey={generateUniqueKey}
         downloadPDF={downloadPDF}
-        shareOnWhatsApp={shareOnWhatsApp}
         businessProfile={businessProfile}
       />
     </div>

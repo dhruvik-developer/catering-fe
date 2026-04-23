@@ -3,7 +3,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { updateEventBooking } from "../../../../api/PutEventBooking";
 import PdfEditDishComponenet from "./PdfEditDishComponenet";
 import toast from "react-hot-toast";
-import { exportToPDF, shareToWhatsApp } from "../../../../utils/pdfExport";
+import { exportToPDF } from "../../../../utils/pdfExport";
 import { getAllBusinessProfiles } from "../../../../api/BusinessProfile";
 import { generatePdfFilename } from "../../../../utils/generatePdfFilename";
 
@@ -65,22 +65,11 @@ const PDFViewPage = () => {
     exportToPDF("pdf-content", fileName, toast);
   };
 
-  const shareOnWhatsApp = () => {
-    const fileName = generatePdfFilename({
-      customerName: apiPayload?.name,
-      type: "order",
-      number: apiPayload?.booking_no || id,
-    });
-    const mobileNo = apiPayload?.mobile_no;
-    shareToWhatsApp("pdf-content", fileName, mobileNo, toast);
-  };
-
   return (
     <PdfEditDishComponenet
       itemData={apiPayload}
       handleUpdateBooking={handleUpdateBooking}
       downloadPDF={downloadPDF}
-      shareOnWhatsApp={shareOnWhatsApp}
       businessProfile={businessProfile}
     />
   );

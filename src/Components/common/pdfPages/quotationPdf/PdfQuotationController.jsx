@@ -8,10 +8,7 @@ import { getAllBusinessProfiles } from "../../../../api/BusinessProfile";
 
 import { generatePdfFilename } from "../../../../utils/generatePdfFilename";
 import { usePdfCategorizer } from "../../../../hooks/usePdfCategorizer";
-import {
-  exportToPDF,
-  shareToWhatsApp,
-} from "../../../../utils/pdfExport";
+import { exportToPDF } from "../../../../utils/pdfExport";
 
 function PdfQuotationController() {
   const { id } = useParams();
@@ -19,9 +16,6 @@ function PdfQuotationController() {
   const [pdfQuotation, setPdfQuotation] = useState([]);
   const pdfDownloadOptions = {
     margin: [6, 0, 6, 0],
-  };
-  const pdfShareOptions = {
-    margin: [6, 2, 6, 2],
   };
 
   // Fetch Business Profile
@@ -88,27 +82,6 @@ function PdfQuotationController() {
     }
   };
 
-  const shareOnWhatsApp = async () => {
-    try {
-      const fileName = generatePdfFilename({
-        customerName: pdfQuotation?.name,
-        type: "quotation",
-        number: pdfQuotation?.booking_no || id,
-      });
-      const mobileNo = pdfQuotation?.mobile_no;
-      await shareToWhatsApp(
-        "pdf-content",
-        fileName,
-        mobileNo,
-        toast,
-        pdfShareOptions
-      );
-    } catch (err) {
-      console.error(err);
-      toast.error("Failed to generate shareable PDF");
-    }
-  };
-
   const { categorizedData, isCategorizing } = usePdfCategorizer(
     pdfQuotation,
     !loading
@@ -121,7 +94,6 @@ function PdfQuotationController() {
         loading={loading || isCategorizing}
         generateUniqueKey={generateUniqueKey}
         downloadPDF={downloadPDF}
-        shareOnWhatsApp={shareOnWhatsApp}
         businessProfile={businessProfile}
       />
     </div>
