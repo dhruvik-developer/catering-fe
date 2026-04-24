@@ -27,7 +27,7 @@ function PdfShareFullIngredientController() {
   const eventDate = fullPayload.eventDate;
   const eventTime = fullPayload.eventTime;
   const estimatedPersons = fullPayload.estimatedPersons;
-  const ingredients = fullPayload.ingridient_list_data || [];
+  const ingredients = fullPayload.ingredient_list_data || [];
 
   //Formate Data From Ingredients
   const transformedIngredients = ingredients.map((category) => ({

@@ -1,5 +1,28 @@
 /* eslint-disable react/prop-types */
 import { useState } from "react";
+import {
+  Avatar,
+  Box,
+  Button,
+  ButtonGroup,
+  Card,
+  CardActions,
+  CardContent,
+  Chip,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  Divider,
+  IconButton,
+  InputAdornment,
+  Paper,
+  Stack,
+  TextField,
+  Typography,
+} from "@mui/material";
+import { useTheme } from "@mui/material/styles";
+import Grid from "@mui/material/Grid";
 import Loader from "../../Components/common/Loader";
 import EmptyState from "../../Components/common/EmptyState";
 import {
@@ -14,6 +37,7 @@ import {
   FiXCircle,
   FiSearch,
   FiX,
+  FiChevronRight,
 } from "react-icons/fi";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
@@ -32,67 +56,133 @@ function QuotationComponent({
   handleEditOrder,
   handleCompleteQuotation,
 }) {
+  const theme = useTheme();
   const [sessionsModal, setSessionsModal] = useState(null);
+  const hasFilters = Boolean(searchQuery || dateRange[0] || dateRange[1]);
 
   return (
-    <div className="p-6 bg-white rounded-xl shadow-lg">
-      {/* Header */}
-      <div className="flex flex-wrap justify-between items-center gap-4 mb-6">
-        <div className="flex items-center gap-3">
-          <div className="p-2.5 rounded-xl bg-[var(--color-primary-soft)]">
-            <FiFileText className="text-[var(--color-primary-text)]" size={22} />
-          </div>
-          <div>
-            <h2 className="text-2xl font-bold text-gray-800">Quotation List</h2>
-            <p className="text-sm text-gray-400">
-              {quotation?.length || 0}
-              {totalCount !== quotation?.length ? ` of ${totalCount}` : ""}{" "}
-              quotation{quotation?.length !== 1 ? "s" : ""}
-            </p>
-          </div>
-        </div>
+    <Paper
+      elevation={0}
+      sx={{ p: { xs: 2, sm: 3 }, borderRadius: 3, bgcolor: "background.paper" }}
+    >
+      {/* Title */}
+      <Stack direction="row" spacing={1.5} alignItems="center" sx={{ mb: 2.5 }}>
+        <Avatar
+          variant="rounded"
+          sx={{
+            bgcolor: (t) => t.palette.primary.light + "33",
+            color: "primary.main",
+            width: 44,
+            height: 44,
+          }}
+        >
+          <FiFileText size={20} />
+        </Avatar>
+        <Box>
+          <Typography variant="h5" fontWeight={700} color="text.primary">
+            Quotation List
+          </Typography>
+          <Typography variant="body2" color="text.secondary">
+            {quotation?.length || 0}
+            {totalCount !== quotation?.length ? ` of ${totalCount}` : ""}{" "}
+            quotation{quotation?.length !== 1 ? "s" : ""}
+          </Typography>
+        </Box>
+      </Stack>
 
-        {/* Search + Date Filter */}
-        <div className="flex flex-wrap items-center gap-2 w-full md:w-auto">
-          {/* Search */}
-          <div className="relative flex-1 min-w-[160px] md:flex-none">
-            <FiSearch
-              className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"
+      {/* Filter row */}
+      <Stack
+        direction={{ xs: "column", md: "row" }}
+        spacing={{ xs: 1.5, md: 2 }}
+        alignItems={{ xs: "stretch", md: "center" }}
+        justifyContent="space-between"
+        sx={{ mb: 3 }}
+      >
+        <TextField
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+          placeholder="Search name or mobile..."
+          autoComplete="off"
+          sx={{
+            width: { xs: "100%", md: 280 },
+            flexShrink: 0,
+          }}
+          InputProps={{
+            startAdornment: (
+              <InputAdornment position="start">
+                <FiSearch size={14} />
+              </InputAdornment>
+            ),
+            endAdornment: searchQuery ? (
+              <InputAdornment position="end">
+                <IconButton
+                  size="small"
+                  onClick={() => setSearchQuery("")}
+                  edge="end"
+                >
+                  <FiX size={14} />
+                </IconButton>
+              </InputAdornment>
+            ) : null,
+          }}
+        />
+
+        <Stack
+          direction="row"
+          spacing={1}
+          flexWrap="wrap"
+          useFlexGap
+          alignItems="center"
+          justifyContent={{ xs: "flex-start", md: "flex-end" }}
+        >
+          <ButtonGroup size="small">
+            <Button onClick={() => handleQuickFilter("today")}>Today</Button>
+            <Button onClick={() => handleQuickFilter("next7Days")}>
+              Next 7 Days
+            </Button>
+            <Button onClick={() => handleQuickFilter("next30Days")}>
+              Next 30 Days
+            </Button>
+          </ButtonGroup>
+
+          <Box
+            sx={{
+              width: { xs: "100%", md: 240 },
+              flexShrink: 0,
+              position: "relative",
+              "& .react-datepicker-wrapper": { width: "100%" },
+              "& input": {
+                width: "100%",
+                padding: "8.5px 12px 8.5px 34px",
+                borderRadius: theme.shape.borderRadius + "px",
+                border: "1px solid",
+                borderColor: theme.palette.divider,
+                backgroundColor: theme.palette.background.paper,
+                font: "inherit",
+                color: theme.palette.text.primary,
+                outline: "none",
+              },
+              "& input:focus": {
+                borderColor: theme.palette.primary.main,
+                boxShadow: `0 0 0 2px ${theme.palette.primary.main}33`,
+              },
+            }}
+          >
+            <Box
+              component={FiCalendar}
               size={14}
-            />
-            <input
-              type="text"
-              placeholder="Search name or mobile..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              autoComplete="off"
-              className="pl-9 pr-8 py-2 border border-gray-200 rounded-lg text-sm font-medium bg-gray-50 focus:outline-none focus:border-[var(--color-primary)] focus:ring-2 focus:ring-[var(--color-primary)]/15 w-full md:w-56 transition-all"
-            />
-            {searchQuery && (
-              <button
-                onClick={() => setSearchQuery("")}
-                className="absolute right-2.5 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 cursor-pointer"
-              >
-                <FiX size={14} />
-              </button>
-            )}
-          </div>
-
-          {/* Quick Filters */}
-          <div className="order-3 md:order-none flex flex-wrap items-center gap-1.5 w-full md:w-auto">
-            <button onClick={() => handleQuickFilter("today")} className="px-2.5 py-1.5 text-[11px] font-bold text-gray-600 bg-gray-100 hover:bg-gray-200 rounded-md transition-colors cursor-pointer">Today</button>
-            <button onClick={() => handleQuickFilter("next7Days")} className="px-2.5 py-1.5 text-[11px] font-bold text-gray-600 bg-gray-100 hover:bg-gray-200 rounded-md transition-colors cursor-pointer">Next 7 Days</button>
-            <button onClick={() => handleQuickFilter("next30Days")} className="px-2.5 py-1.5 text-[11px] font-bold text-gray-600 bg-gray-100 hover:bg-gray-200 rounded-md transition-colors cursor-pointer">Next 30 Days</button>
-          </div>
-
-          {/* Date Range Filter */}
-          <div className="relative flex items-center flex-1 min-w-[200px] md:flex-none">
-            <FiCalendar
-              className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none z-10"
-              size={14}
+              sx={{
+                position: "absolute",
+                left: 12,
+                top: "50%",
+                transform: "translateY(-50%)",
+                pointerEvents: "none",
+                color: "text.secondary",
+                zIndex: 1,
+              }}
             />
             <DatePicker
-              selectsRange={true}
+              selectsRange
               startDate={dateRange[0]}
               endDate={dateRange[1]}
               onChange={(update) => setDateRange(update)}
@@ -100,12 +190,10 @@ function QuotationComponent({
               placeholderText="Select date range"
               minDate={new Date()}
               isClearable
-              wrapperClassName="w-full md:w-auto"
-              className="pl-9 pr-7 py-2 border border-gray-200 rounded-lg text-sm font-medium bg-gray-50 focus:outline-none focus:border-[var(--color-primary)] focus:ring-2 focus:ring-[var(--color-primary)]/15 w-full md:w-[220px] transition-all cursor-pointer"
             />
-          </div>
-        </div>
-      </div>
+          </Box>
+        </Stack>
+      </Stack>
 
       {loading ? (
         <Loader message="Loading Quotations..." />
@@ -113,247 +201,346 @@ function QuotationComponent({
         <EmptyState
           icon={<FiFileText size={24} />}
           title={
-            searchQuery || dateRange[0] || dateRange[1]
-              ? "No Quotations Match Your Filters"
-              : "No Quotations Yet"
+            hasFilters ? "No Quotations Match Your Filters" : "No Quotations Yet"
           }
           message={
-            searchQuery || dateRange[0] || dateRange[1]
+            hasFilters
               ? "Try adjusting your date range or search."
               : "Quotations will appear here once created."
           }
         />
       ) : (
-        <div className="grid grid-cols-1 xl:grid-cols-2 gap-4">
-          {quotation.map((quote) => (
-              <div
-                key={quote.id}
-                className="flex flex-col h-full rounded-xl overflow-hidden transition-all duration-200 hover:shadow-lg bg-[var(--color-primary-tint)] border border-[var(--color-primary-border)]"
-              >
-                {/* Card Header */}
-                <div className="flex items-center justify-between px-5 py-4 bg-[var(--color-primary-soft)] border-b border-[var(--color-primary-border)]">
-                  <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-full bg-[var(--color-primary)] text-white flex items-center justify-center font-bold text-sm">
-                      {quote.name?.charAt(0)?.toUpperCase() || "?"}
-                    </div>
-                    <div>
-                      <h3 className="text-base font-semibold text-gray-800">
-                        {quote.name}
-                      </h3>
-                      {quote.reference && (
-                        <p className="text-xs text-gray-400">
-                          Ref: {quote.reference}
-                        </p>
-                      )}
-                    </div>
-                  </div>
+        <Grid container spacing={2}>
+          {quotation.map((quote) => {
+            const allSessions =
+              quote.sessions?.length > 0
+                ? quote.sessions
+                : [
+                    {
+                      event_date: quote.event_date,
+                      event_time: quote.event_time,
+                      estimated_persons: quote.estimated_persons,
+                    },
+                  ];
+            const totalPersons = allSessions.reduce(
+              (total, session) =>
+                total + (Number(session.estimated_persons) || 0),
+              0
+            );
+            const dateLabel =
+              quote.sessions?.length > 0
+                ? Array.from(
+                    new Set(quote.sessions.map((s) => s.event_date))
+                  ).join(", ")
+                : quote.event_date || "—";
 
-                  <div className="flex items-center gap-2">
-                    <span
-                      className="text-xs font-medium px-3 py-1.5 rounded-full bg-white text-[var(--color-primary-text)] border border-[var(--color-primary-border)] max-w-[200px] truncate"
-                      title={
-                        quote.sessions?.length > 0
-                          ? Array.from(
-                              new Set(quote.sessions.map((s) => s.event_date))
-                            ).join(", ")
-                          : quote.event_date || "—"
-                      }
+            return (
+              <Grid key={quote.id} size={{ xs: 12, xl: 6 }}>
+                <Card
+                  sx={{
+                    height: "100%",
+                    display: "flex",
+                    flexDirection: "column",
+                    transition: "box-shadow 0.2s",
+                    "&:hover": { boxShadow: 4 },
+                  }}
+                >
+                  {/* Card Header */}
+                  <Stack
+                    direction="row"
+                    alignItems="center"
+                    justifyContent="space-between"
+                    spacing={2}
+                    sx={{
+                      px: 2.5,
+                      py: 2,
+                      bgcolor: (t) => t.palette.primary.light + "1f",
+                      borderBottom: 1,
+                      borderColor: "divider",
+                    }}
+                  >
+                    <Stack
+                      direction="row"
+                      spacing={1.5}
+                      alignItems="center"
+                      minWidth={0}
                     >
-                      <FiCalendar className="inline mr-1.5 -mt-0.5" size={12} />
-                      {quote.sessions?.length > 0
-                        ? Array.from(
-                            new Set(quote.sessions.map((s) => s.event_date))
-                          ).join(", ")
-                        : quote.event_date || "—"}
-                    </span>
-                    <button
-                      onClick={() => handleEditOrder(quote.id)}
-                      className="p-2 rounded-lg text-gray-400 hover:text-[var(--color-primary)] hover:bg-white transition-colors duration-200 cursor-pointer"
-                      title="Edit Quotation"
+                      <Avatar sx={{ bgcolor: "primary.main" }}>
+                        {quote.name?.charAt(0)?.toUpperCase() || "?"}
+                      </Avatar>
+                      <Box minWidth={0}>
+                        <Typography variant="subtitle1" fontWeight={600} noWrap>
+                          {quote.name}
+                        </Typography>
+                        {quote.reference && (
+                          <Typography
+                            variant="caption"
+                            color="text.secondary"
+                            noWrap
+                          >
+                            Ref: {quote.reference}
+                          </Typography>
+                        )}
+                      </Box>
+                    </Stack>
+                    <Stack
+                      direction="row"
+                      spacing={1}
+                      alignItems="center"
+                      flexShrink={0}
                     >
-                      <FiEdit2 size={15} />
-                    </button>
-                  </div>
-                </div>
+                      <Chip
+                        icon={<FiCalendar size={12} />}
+                        label={dateLabel}
+                        size="small"
+                        title={dateLabel}
+                        sx={{
+                          bgcolor: "background.paper",
+                          color: "primary.main",
+                          maxWidth: 200,
+                          "& .MuiChip-label": {
+                            overflow: "hidden",
+                            textOverflow: "ellipsis",
+                          },
+                        }}
+                      />
+                      <IconButton
+                        size="small"
+                        onClick={() => handleEditOrder(quote.id)}
+                        title="Edit Quotation"
+                      >
+                        <FiEdit2 size={15} />
+                      </IconButton>
+                    </Stack>
+                  </Stack>
 
-                {/* Card Body - Details */}
-                <div className="flex-1 px-5 py-4">
-                  <div className="flex flex-col gap-3">
-                    {/* Phone */}
-                    <div className="flex items-center gap-2.5 text-sm text-gray-600 bg-white rounded-lg px-3 py-2.5 border border-[var(--color-primary-border)] w-max">
-                      <FiPhone size={14} className="text-[var(--color-primary-text)]" />
-                      <span className="font-medium">
+                  {/* Card Body */}
+                  <CardContent
+                    sx={{
+                      flex: 1,
+                      display: "flex",
+                      flexDirection: "column",
+                      gap: 1.5,
+                    }}
+                  >
+                    <Stack
+                      direction="row"
+                      spacing={1}
+                      alignItems="center"
+                      sx={{
+                        alignSelf: "flex-start",
+                        px: 1.5,
+                        py: 1,
+                        border: 1,
+                        borderColor: "divider",
+                        borderRadius: 2,
+                      }}
+                    >
+                      <FiPhone size={14} />
+                      <Typography variant="body2" fontWeight={500}>
                         {quote.mobile_no || "—"}
-                      </span>
-                    </div>
+                      </Typography>
+                    </Stack>
 
-                    {/* Order Summary — clickable */}
-                    {(() => {
-                      const allSessions =
-                        quote.sessions?.length > 0
-                          ? quote.sessions
-                          : [
-                              {
-                                event_date: quote.event_date,
-                                event_time: quote.event_time,
-                                estimated_persons: quote.estimated_persons,
-                              },
-                            ];
-                      const totalPersons = allSessions.reduce(
-                        (total, session) =>
-                          total + (Number(session.estimated_persons) || 0),
-                        0
-                      );
-                      return (
-                        <div
-                          className="flex flex-col gap-2 bg-[var(--color-primary-tint)] border border-[var(--color-primary-border)] rounded-lg px-4 py-3 cursor-pointer hover:brightness-95 transition-all duration-150 group"
-                          onClick={() =>
-                            setSessionsModal({
-                              name: quote.name,
-                              sessions: allSessions,
-                            })
-                          }
-                          title="View All Events"
+                    <Box
+                      onClick={() =>
+                        setSessionsModal({
+                          name: quote.name,
+                          sessions: allSessions,
+                        })
+                      }
+                      title="View All Events"
+                      sx={{
+                        display: "flex",
+                        flexDirection: "column",
+                        gap: 0.5,
+                        px: 2,
+                        py: 1.5,
+                        borderRadius: 2,
+                        border: 1,
+                        borderColor: "divider",
+                        bgcolor: (t) => t.palette.primary.light + "14",
+                        cursor: "pointer",
+                        transition: "all 0.15s",
+                        "&:hover": {
+                          bgcolor: (t) => t.palette.primary.light + "26",
+                          borderColor: "primary.main",
+                        },
+                      }}
+                    >
+                      <Stack
+                        direction="row"
+                        alignItems="center"
+                        justifyContent="space-between"
+                      >
+                        <Stack direction="row" spacing={1} alignItems="center">
+                          <FiFileText size={14} />
+                          <Typography variant="body2" fontWeight={600}>
+                            Total Sessions: {allSessions.length}
+                          </Typography>
+                        </Stack>
+                        <Stack
+                          direction="row"
+                          spacing={0.5}
+                          alignItems="center"
+                          color="primary.main"
                         >
-                          <div className="flex items-center justify-between text-sm text-gray-700">
-                            <div className="flex items-center gap-2">
-                              <FiFileText
-                                size={14}
-                                className="text-[var(--color-primary-text)]"
-                              />
-                              <span className="font-semibold text-gray-800">
-                                Total Sessions: {allSessions.length}
-                              </span>
-                            </div>
-                            <div className="flex items-center gap-1 text-sm text-[var(--color-primary)] font-semibold">
-                              View Details
-                              <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                className="h-4 w-4 transform group-hover:translate-x-1 transition-transform"
-                                viewBox="0 0 20 20"
-                                fill="currentColor"
-                              >
-                                <path
-                                  fillRule="evenodd"
-                                  d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
-                                  clipRule="evenodd"
-                                />
-                              </svg>
-                            </div>
-                          </div>
-                          <div className="flex items-center gap-2 text-xs text-gray-500 pl-6">
-                            <span className="font-medium text-gray-400">
-                              Total Estimated Persons:
-                            </span>
-                            <span>{totalPersons || "—"}</span>
-                          </div>
-                        </div>
-                      );
-                    })()}
-                  </div>
-                </div>
+                          <Typography variant="body2" fontWeight={600}>
+                            View Details
+                          </Typography>
+                          <FiChevronRight size={14} />
+                        </Stack>
+                      </Stack>
+                      <Stack
+                        direction="row"
+                        spacing={1}
+                        alignItems="center"
+                        sx={{ pl: 3 }}
+                      >
+                        <FiUsers size={12} />
+                        <Typography variant="caption" color="text.secondary">
+                          Estimated Persons:
+                        </Typography>
+                        <Typography variant="caption" fontWeight={600}>
+                          {totalPersons || "—"}
+                        </Typography>
+                      </Stack>
+                    </Box>
+                  </CardContent>
 
-                {/* Card Footer - Actions */}
-                <div className="flex flex-col sm:flex-row gap-2 sm:gap-3 px-5 py-3 border-t border-[var(--color-primary-border)]">
-                  <button
-                    className="flex-1 flex items-center justify-center gap-1.5 py-2.5 bg-[var(--color-primary-soft)] hover:brightness-95 text-[var(--color-primary)] text-sm font-semibold rounded-lg cursor-pointer transition-colors duration-200"
-                    onClick={() => handleViewQuotation(quote.id)}
-                  >
-                    <FiEye size={14} />
-                    View
-                  </button>
+                  <Divider />
 
-                  <button
-                    className="flex-1 flex items-center justify-center gap-1.5 py-2.5 bg-[var(--color-primary-tint)] hover:bg-[var(--color-primary-soft)] text-[var(--color-primary)] text-sm font-semibold rounded-lg cursor-pointer transition-colors duration-200"
-                    onClick={() => handleCompleteQuotation(quote.id)}
+                  {/* Card Footer - Actions */}
+                  <CardActions
+                    sx={{
+                      px: 2.5,
+                      py: 1.5,
+                      flexDirection: { xs: "column", sm: "row" },
+                      alignItems: "stretch",
+                      gap: 1,
+                    }}
                   >
-                    <FiCheckCircle size={14} />
-                    Confirm
-                  </button>
-
-                  <button
-                    className="flex-1 flex items-center justify-center gap-1.5 py-2.5 bg-red-50 hover:bg-red-100 text-red-500 text-sm font-semibold rounded-lg cursor-pointer transition-colors duration-200"
-                    onClick={() => handleDeleteQuotation(quote.id)}
-                  >
-                    <FiXCircle size={14} />
-                    Cancel
-                  </button>
-                </div>
-              </div>
-            ))}
-        </div>
+                    <Button
+                      size="small"
+                      variant="outlined"
+                      color="primary"
+                      startIcon={<FiEye size={14} />}
+                      onClick={() => handleViewQuotation(quote.id)}
+                      sx={{ flex: { sm: 1 } }}
+                    >
+                      View
+                    </Button>
+                    <Button
+                      size="small"
+                      variant="outlined"
+                      color="primary"
+                      startIcon={<FiCheckCircle size={14} />}
+                      onClick={() => handleCompleteQuotation(quote.id)}
+                      sx={{ flex: { sm: 1 } }}
+                    >
+                      Confirm
+                    </Button>
+                    <Button
+                      size="small"
+                      variant="outlined"
+                      color="error"
+                      startIcon={<FiXCircle size={14} />}
+                      onClick={() => handleDeleteQuotation(quote.id)}
+                      sx={{ flex: { sm: 1 } }}
+                    >
+                      Cancel
+                    </Button>
+                  </CardActions>
+                </Card>
+              </Grid>
+            );
+          })}
+        </Grid>
       )}
+
       {/* Sessions Modal */}
-      {sessionsModal && (
-        <div
-          className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4"
-          onClick={() => setSessionsModal(null)}
-        >
-          <div
-            className="bg-white rounded-2xl shadow-2xl w-full max-w-lg max-h-[80vh] flex flex-col overflow-hidden"
-            onClick={(e) => e.stopPropagation()}
+      <Dialog
+        open={Boolean(sessionsModal)}
+        onClose={() => setSessionsModal(null)}
+        fullWidth
+        maxWidth="sm"
+      >
+        <DialogTitle sx={{ pb: 1 }}>
+          <Stack
+            direction="row"
+            justifyContent="space-between"
+            alignItems="center"
           >
-            {/* Modal Header */}
-            <div className="flex justify-between items-center px-5 py-4 border-b border-gray-100 bg-gradient-to-r from-[var(--color-primary-tint)] to-white">
-              <div>
-                <h3 className="text-base font-bold text-gray-800">
-                  All Event Schedules
-                </h3>
-                <p className="text-xs text-gray-400">
+            <Box>
+              <Typography variant="h6" fontWeight={700}>
+                All Event Schedules
+              </Typography>
+              {sessionsModal && (
+                <Typography variant="caption" color="text.secondary">
                   {sessionsModal.name} — {sessionsModal.sessions.length} event
                   {sessionsModal.sessions.length !== 1 ? "s" : ""}
-                </p>
-              </div>
-              <button
-                type="button"
-                onClick={() => setSessionsModal(null)}
-                className="p-2 text-gray-400 hover:text-gray-600 bg-white rounded-lg border border-gray-200 cursor-pointer hover:bg-gray-50"
+                </Typography>
+              )}
+            </Box>
+            <IconButton size="small" onClick={() => setSessionsModal(null)}>
+              <FiX size={18} />
+            </IconButton>
+          </Stack>
+        </DialogTitle>
+        <DialogContent dividers>
+          <Stack spacing={1.5}>
+            {sessionsModal?.sessions.map((session, sIdx) => (
+              <Grid
+                key={sIdx}
+                container
+                spacing={1.5}
+                sx={{
+                  px: 2,
+                  py: 1.5,
+                  borderRadius: 2,
+                  border: 1,
+                  borderColor: "divider",
+                  bgcolor: (t) => t.palette.primary.light + "14",
+                }}
               >
-                <FiX size={18} />
-              </button>
-            </div>
-
-            {/* Modal Body */}
-            <div className="flex-1 overflow-y-auto p-4 space-y-2">
-              {sessionsModal.sessions.map((session, sIdx) => (
-                <div
-                  key={sIdx}
-                  className="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-3 bg-[var(--color-primary-tint)]/40 border border-[var(--color-primary-border)] rounded-lg px-4 py-3"
-                >
-                  <div className="flex items-center gap-2 text-sm text-gray-700">
-                    <FiClock size={14} className="text-[var(--color-primary-text)]" />
-                    <span className="font-medium text-sm break-all">
-                      <span className="text-gray-400 mr-1">
+                <Grid size={{ xs: 12, sm: 6 }}>
+                  <Stack direction="row" spacing={1} alignItems="center">
+                    <FiClock size={14} />
+                    <Typography variant="body2">
+                      <Box component="span" color="text.secondary" mr={0.5}>
                         {session.event_date}
-                      </span>{" "}
-                      <strong>{session.event_time || "—"}</strong>
-                    </span>
-                  </div>
-                  <div className="flex items-center gap-2 text-sm text-gray-700">
-                    <FiUsers size={14} className="text-[var(--color-primary-text)]" />
-                    <span className="font-medium text-sm">
-                      <strong>{session.estimated_persons || "—"}</strong>{" "}
+                      </Box>
+                      <Box component="strong">
+                        {session.event_time || "—"}
+                      </Box>
+                    </Typography>
+                  </Stack>
+                </Grid>
+                <Grid size={{ xs: 12, sm: 6 }}>
+                  <Stack direction="row" spacing={1} alignItems="center">
+                    <FiUsers size={14} />
+                    <Typography variant="body2">
+                      <Box component="strong">
+                        {session.estimated_persons || "—"}
+                      </Box>{" "}
                       persons
-                    </span>
-                  </div>
-                </div>
-              ))}
-            </div>
-
-            {/* Modal Footer */}
-            <div className="px-5 py-3 border-t border-gray-100 bg-gray-50 flex justify-end">
-              <button
-                type="button"
-                onClick={() => setSessionsModal(null)}
-                className="px-5 py-2 rounded-lg font-bold text-sm text-white bg-[var(--color-primary)] hover:brightness-95 cursor-pointer shadow-sm"
-              >
-                Close
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
-    </div>
+                    </Typography>
+                  </Stack>
+                </Grid>
+              </Grid>
+            ))}
+          </Stack>
+        </DialogContent>
+        <DialogActions>
+          <Button
+            variant="contained"
+            onClick={() => setSessionsModal(null)}
+          >
+            Close
+          </Button>
+        </DialogActions>
+      </Dialog>
+    </Paper>
   );
 }
 

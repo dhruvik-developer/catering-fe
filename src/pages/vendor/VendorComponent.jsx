@@ -1,11 +1,18 @@
 /* eslint-disable react/prop-types */
+import {
+  Avatar,
+  Box,
+  Button,
+  Paper,
+  Stack,
+  Typography,
+} from "@mui/material";
 import Loader from "../../Components/common/Loader";
 import VendorTable from "../../Components/vendor/VendorTable";
 import { FiTruck, FiUserPlus } from "react-icons/fi";
 import usePermissions from "../../hooks/usePermissions";
 
 function VendorComponent({
-  navigate,
   loading,
   vendors,
   onVendorAdd,
@@ -14,33 +21,51 @@ function VendorComponent({
 }) {
   const { hasPermission } = usePermissions();
   return (
-    <div className="p-6 bg-white rounded-xl shadow-lg">
-      {/* Header */}
-      <div className="flex justify-between items-center mb-6">
-        <div className="flex items-center gap-3">
-          <div className="p-2.5 rounded-xl bg-[var(--color-primary-soft)]">
-            <FiTruck className="text-[var(--color-primary-text)]" size={22} />
-          </div>
-          <div>
-            <h2 className="text-2xl font-bold text-gray-800">Vendors</h2>
-            <p className="text-sm text-gray-400">
-              {vendors?.length || 0} vendor{vendors?.length !== 1 ? "s" : ""}{" "}
-              registered
-            </p>
-          </div>
-        </div>
-        <div className="flex gap-2">
-          {hasPermission("vendors.create") && (
-            <button
-              onClick={onVendorAdd}
-              className="flex items-center gap-1.5 px-4 py-2.5 bg-[var(--color-primary)] hover:brightness-95 text-white text-sm font-medium rounded-lg cursor-pointer transition-colors duration-200"
-            >
-              <FiUserPlus size={15} />
-              Add Vendor
-            </button>
-          )}
-        </div>
-      </div>
+    <Paper
+      elevation={0}
+      sx={{ p: { xs: 2, sm: 3 }, borderRadius: 3, bgcolor: "background.paper" }}
+    >
+      <Stack
+        direction={{ xs: "column", sm: "row" }}
+        spacing={2}
+        alignItems={{ xs: "stretch", sm: "center" }}
+        justifyContent="space-between"
+        sx={{ mb: 3 }}
+      >
+        <Stack direction="row" spacing={1.5} alignItems="center">
+          <Avatar
+            variant="rounded"
+            sx={{
+              bgcolor: (t) => t.palette.primary.light + "33",
+              color: "primary.main",
+              width: 44,
+              height: 44,
+            }}
+          >
+            <FiTruck size={20} />
+          </Avatar>
+          <Box>
+            <Typography variant="h5" fontWeight={700} color="text.primary">
+              Vendors
+            </Typography>
+            <Typography variant="body2" color="text.secondary">
+              {vendors?.length || 0} vendor
+              {vendors?.length !== 1 ? "s" : ""} registered
+            </Typography>
+          </Box>
+        </Stack>
+        {hasPermission("vendors.create") && (
+          <Button
+            variant="contained"
+            color="primary"
+            startIcon={<FiUserPlus size={15} />}
+            onClick={onVendorAdd}
+          >
+            Add Vendor
+          </Button>
+        )}
+      </Stack>
+
       {loading ? (
         <Loader message="Loading vendors..." />
       ) : (
@@ -50,7 +75,7 @@ function VendorComponent({
           onVendorDelete={onVendorDelete}
         />
       )}
-    </div>
+    </Paper>
   );
 }
 

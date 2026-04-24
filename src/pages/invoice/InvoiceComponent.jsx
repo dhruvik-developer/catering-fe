@@ -1,7 +1,27 @@
 /* eslint-disable react/prop-types */
-import { IoIosWarning } from "react-icons/io";
+import {
+  Avatar,
+  Box,
+  Button,
+  ButtonGroup,
+  Card,
+  CardActions,
+  CardContent,
+  Chip,
+  Divider,
+  IconButton,
+  InputAdornment,
+  MenuItem,
+  Paper,
+  Select,
+  Stack,
+  TextField,
+  Typography,
+} from "@mui/material";
+import { useTheme } from "@mui/material/styles";
+import Grid from "@mui/material/Grid";
 import Loader from "../../Components/common/Loader";
-import Dropdown from "../../Components/common/formDropDown/DropDown";
+import EmptyState from "../../Components/common/EmptyState";
 import {
   FiFileText,
   FiCalendar,
@@ -16,6 +36,13 @@ import {
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 
+const getStatusChipColor = (status) => {
+  const normalized = String(status || "").toUpperCase();
+  if (normalized === "PAID") return "success";
+  if (normalized === "UNPAID") return "error";
+  return "warning";
+};
+
 function InvoiceComponent({
   loading,
   invoice,
@@ -28,73 +55,131 @@ function InvoiceComponent({
   dateRange,
   setDateRange,
   handleQuickFilter,
-  getStatusColor,
 }) {
-  const filterOptions = [
-    { id: "All", name: "All" },
-    { id: "Paid", name: "Paid" },
-    { id: "Unpaid", name: "Unpaid" },
-  ];
+  const theme = useTheme();
+  const hasFilters = Boolean(searchQuery || dateRange[0] || dateRange[1]);
 
   return (
-    <div className="p-6 bg-white rounded-xl shadow-lg">
-      {/* Header */}
-      <div className="flex flex-wrap justify-between items-center gap-4 mb-6">
-        <div className="flex items-center gap-3">
-          <div className="p-2.5 rounded-xl bg-[var(--color-primary-soft)]">
-            <FiFileText className="text-[var(--color-primary-text)]" size={22} />
-          </div>
-          <div>
-            <h2 className="text-2xl font-bold text-gray-800">Invoice List</h2>
-            <p className="text-sm text-gray-400">
-              {invoice?.length || 0}
-              {totalCount !== invoice?.length ? ` of ${totalCount}` : ""}{" "}
-              invoice{invoice?.length !== 1 ? "s" : ""}
-            </p>
-          </div>
-        </div>
+    <Paper
+      elevation={0}
+      sx={{ p: { xs: 2, sm: 3 }, borderRadius: 3, bgcolor: "background.paper" }}
+    >
+      {/* Title */}
+      <Stack direction="row" spacing={1.5} alignItems="center" sx={{ mb: 2.5 }}>
+        <Avatar
+          variant="rounded"
+          sx={{
+            bgcolor: (t) => t.palette.primary.light + "33",
+            color: "primary.main",
+            width: 44,
+            height: 44,
+          }}
+        >
+          <FiFileText size={20} />
+        </Avatar>
+        <Box>
+          <Typography variant="h5" fontWeight={700} color="text.primary">
+            Invoice List
+          </Typography>
+          <Typography variant="body2" color="text.secondary">
+            {invoice?.length || 0}
+            {totalCount !== invoice?.length ? ` of ${totalCount}` : ""}{" "}
+            invoice{invoice?.length !== 1 ? "s" : ""}
+          </Typography>
+        </Box>
+      </Stack>
 
-        {/* Search + Date Filter + Status Dropdown */}
-        <div className="flex items-center gap-2">
-          {/* Search */}
-          <div className="relative">
-            <FiSearch
-              className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"
+      {/* Filter row */}
+      <Stack
+        direction={{ xs: "column", md: "row" }}
+        spacing={{ xs: 1.5, md: 2 }}
+        alignItems={{ xs: "stretch", md: "center" }}
+        justifyContent="space-between"
+        sx={{ mb: 3 }}
+      >
+        <TextField
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+          placeholder="Search name or mobile..."
+          autoComplete="off"
+          sx={{
+            width: { xs: "100%", md: 280 },
+            flexShrink: 0,
+          }}
+          InputProps={{
+            startAdornment: (
+              <InputAdornment position="start">
+                <FiSearch size={14} />
+              </InputAdornment>
+            ),
+            endAdornment: searchQuery ? (
+              <InputAdornment position="end">
+                <IconButton
+                  size="small"
+                  onClick={() => setSearchQuery("")}
+                  edge="end"
+                >
+                  <FiX size={14} />
+                </IconButton>
+              </InputAdornment>
+            ) : null,
+          }}
+        />
+
+        <Stack
+          direction="row"
+          spacing={1}
+          flexWrap="wrap"
+          useFlexGap
+          alignItems="center"
+          justifyContent={{ xs: "flex-start", md: "flex-end" }}
+        >
+          <ButtonGroup size="small">
+            <Button onClick={() => handleQuickFilter("today")}>Today</Button>
+            <Button onClick={() => handleQuickFilter("thisWeek")}>Week</Button>
+            <Button onClick={() => handleQuickFilter("thisMonth")}>
+              Month
+            </Button>
+          </ButtonGroup>
+
+          <Box
+            sx={{
+              width: { xs: "100%", md: 220 },
+              flexShrink: 0,
+              position: "relative",
+              "& .react-datepicker-wrapper": { width: "100%" },
+              "& input": {
+                width: "100%",
+                padding: "8.5px 12px 8.5px 34px",
+                borderRadius: theme.shape.borderRadius + "px",
+                border: "1px solid",
+                borderColor: theme.palette.divider,
+                backgroundColor: theme.palette.background.paper,
+                font: "inherit",
+                color: theme.palette.text.primary,
+                outline: "none",
+              },
+              "& input:focus": {
+                borderColor: theme.palette.primary.main,
+                boxShadow: `0 0 0 2px ${theme.palette.primary.main}33`,
+              },
+            }}
+          >
+            <Box
+              component={FiCalendar}
               size={14}
-            />
-            <input
-              type="text"
-              placeholder="Search name or mobile..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              autoComplete="off"
-              className="pl-9 pr-8 py-2 border border-gray-200 rounded-lg text-sm font-medium bg-gray-50 focus:outline-none focus:border-[var(--color-primary)] focus:ring-2 focus:ring-[var(--color-primary)]/15 w-56 transition-all"
-            />
-            {searchQuery && (
-              <button
-                onClick={() => setSearchQuery("")}
-                className="absolute right-2.5 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 cursor-pointer"
-              >
-                <FiX size={14} />
-              </button>
-            )}
-          </div>
-
-          {/* Quick Filters */}
-          <div className="hidden lg:flex items-center gap-1.5 mr-1">
-            <button onClick={() => handleQuickFilter("today")} className="px-2.5 py-1.5 text-[11px] font-bold text-gray-600 bg-gray-100 hover:bg-gray-200 rounded-md transition-colors cursor-pointer">Today</button>
-            <button onClick={() => handleQuickFilter("thisWeek")} className="px-2.5 py-1.5 text-[11px] font-bold text-gray-600 bg-gray-100 hover:bg-gray-200 rounded-md transition-colors cursor-pointer">This Week</button>
-            <button onClick={() => handleQuickFilter("thisMonth")} className="px-2.5 py-1.5 text-[11px] font-bold text-gray-600 bg-gray-100 hover:bg-gray-200 rounded-md transition-colors cursor-pointer">This Month</button>
-          </div>
-
-          {/* Date Range Filter */}
-          <div className="relative flex items-center">
-            <FiCalendar
-              className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none z-10"
-              size={14}
+              sx={{
+                position: "absolute",
+                left: 12,
+                top: "50%",
+                transform: "translateY(-50%)",
+                pointerEvents: "none",
+                color: "text.secondary",
+                zIndex: 1,
+              }}
             />
             <DatePicker
-              selectsRange={true}
+              selectsRange
               startDate={dateRange[0]}
               endDate={dateRange[1]}
               onChange={(update) => setDateRange(update)}
@@ -102,155 +187,279 @@ function InvoiceComponent({
               placeholderText="Select date range"
               maxDate={new Date()}
               isClearable
-              className="pl-9 pr-7 py-2 border border-gray-200 rounded-lg text-sm font-medium bg-gray-50 focus:outline-none focus:border-[var(--color-primary)] focus:ring-2 focus:ring-[var(--color-primary)]/15 w-[220px] transition-all cursor-pointer"
             />
-          </div>
+          </Box>
 
-          {/* Status Dropdown */}
-          <div className="w-[120px]">
-            <Dropdown
-              options={filterOptions}
-              selectedValue={selectedFilter}
-              onChange={setSelectedFilter}
-            />
-          </div>
-        </div>
-      </div>
+          <Select
+            size="small"
+            value={selectedFilter || "All"}
+            onChange={(e) => setSelectedFilter(e.target.value)}
+            sx={{ minWidth: 120 }}
+          >
+            <MenuItem value="All">All</MenuItem>
+            <MenuItem value="Paid">Paid</MenuItem>
+            <MenuItem value="Unpaid">Unpaid</MenuItem>
+          </Select>
+        </Stack>
+      </Stack>
 
       {loading ? (
         <Loader message="Loading Invoices..." />
       ) : !invoice || invoice.length === 0 ? (
-        <div className="flex flex-col items-center justify-center py-16 px-6 bg-[var(--color-primary-tint)] rounded-3xl border border-[var(--color-primary-border)]/30">
-          <IoIosWarning size={48} className="text-[var(--color-primary-light)] mb-3" />
-          <p className="text-lg font-bold text-[var(--color-primary-text)] text-center">
-            No invoices found for the selected date range.
-          </p>
-          <p className="text-sm text-[var(--color-primary-text)]/60 mt-1 font-medium text-center">
-            Try adjusting your date filters or search parameters.
-          </p>
-        </div>
+        <EmptyState
+          icon={<FiFileText size={24} />}
+          title={
+            hasFilters
+              ? "No Invoices Match Your Filters"
+              : "No Invoices Yet"
+          }
+          message={
+            hasFilters
+              ? "Try adjusting your date filters or search parameters."
+              : "Invoices will appear here once generated."
+          }
+        />
       ) : (
-        <div className="grid grid-cols-1 xl:grid-cols-2 gap-4">
-          {invoice.map((invo) => (
-            <div
-              key={invo.id}
-              className="flex flex-col h-full rounded-xl overflow-hidden transition-all duration-200 hover:shadow-lg bg-[var(--color-primary-tint)] border border-[var(--color-primary-border)]"
-            >
-              {/* Card Header */}
-              <div className="flex items-center justify-between px-5 py-4 bg-[var(--color-primary-soft)] border-b border-[var(--color-primary-border)]">
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-full bg-[var(--color-primary)] text-white flex items-center justify-center font-bold text-sm">
-                    {invo.name?.charAt(0)?.toUpperCase() || "?"}
-                  </div>
-                  <div>
-                    <h3 className="text-base font-semibold text-gray-800">
-                      {invo.name}
-                    </h3>
-                    <p className="text-xs text-gray-400">
-                      <FiCalendar className="inline mr-1 -mt-0.5" size={11} />
-                      {invo.sessions?.length > 0
-                        ? Array.from(
-                            new Set(invo.sessions.map((s) => s.event_date))
-                          ).join(", ")
-                        : invo.event_date || "—"}
-                    </p>
-                  </div>
-                </div>
+        <Grid container spacing={2}>
+          {invoice.map((invo) => {
+            const calculatedPending =
+              invo.payment_status === "PAID"
+                ? 0
+                : Number(invo.total_amount || 0) -
+                  Number(invo.advance_amount || 0) -
+                  Number(invo.transaction_amount || 0);
 
-                <span
-                  className={`${getStatusColor(invo.payment_status)} px-3 py-1.5 rounded-full text-xs font-semibold`}
+            const dateLabel =
+              invo.sessions?.length > 0
+                ? Array.from(
+                    new Set(invo.sessions.map((s) => s.event_date))
+                  ).join(", ")
+                : invo.event_date || "—";
+
+            return (
+              <Grid key={invo.id} size={{ xs: 12, xl: 6 }}>
+                <Card
+                  sx={{
+                    height: "100%",
+                    display: "flex",
+                    flexDirection: "column",
+                    transition: "box-shadow 0.2s",
+                    "&:hover": { boxShadow: 4 },
+                  }}
                 >
-                  {invo.payment_status}
-                </span>
-              </div>
-
-              {/* Dynamic Calculation for Pending Amount */}
-              {(() => {
-                const calculatedPending = invo.payment_status === "PAID"
-                  ? 0
-                  : Number(invo.total_amount || 0) - Number(invo.advance_amount || 0) - Number(invo.transaction_amount || 0);
-                
-                return (
-                  <div className="flex-1 px-5 py-4">
-                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                      <div className="flex items-center gap-2.5 text-sm text-gray-600 bg-white rounded-lg px-3 py-2.5 border border-[var(--color-primary-border)]">
-                        <FiCreditCard size={14} className="text-[var(--color-primary-text)]" />
-                        <span className="font-medium">
-                          {invo.payment_mode || "—"}
-                        </span>
-                      </div>
-                      <div className="flex items-center gap-2.5 text-sm text-gray-600 bg-white rounded-lg px-3 py-2.5 border border-[var(--color-primary-border)]">
-                        <FiDollarSign
-                          size={14}
-                          className={
-                            invo.payment_status === "PAID"
-                              ? "text-[var(--color-primary-tint)]"
-                              : "text-[var(--color-primary-tint)]"
-                          }
-                        />
-                        <span className="font-medium">
-                          {invo.payment_status === "PAID"
-                            ? `Paid: ₹ ${Number(invo.total_amount || 0).toFixed(2)}`
-                            : `Adv: ₹ ${Number(invo.advance_amount || 0).toFixed(2)}`}
-                        </span>
-                      </div>
-                      <div className="flex items-center gap-2.5 text-sm text-gray-800 bg-white rounded-lg px-3 py-2.5 border border-[var(--color-primary-border)]">
-                        <FiDollarSign size={14} className="text-[var(--color-primary-text)]" />
-                        <span className="font-semibold text-gray-800">
-                          Total: ₹ {Number(invo.total_amount || 0).toFixed(2)}
-                        </span>
-                      </div>
-                      {invo.payment_status !== "PAID" && (
-                        <div className="col-span-1 sm:col-span-3 mt-1 flex items-center justify-between text-sm text-red-600 bg-red-50/50 rounded-lg px-4 py-2 border border-red-100">
-                          <div className="flex items-center gap-2">
-                            <span className="w-1.5 h-1.5 rounded-full bg-red-500"></span>
-                            <span className="font-medium tracking-wide">
-                              Pending Amount
-                            </span>
-                          </div>
-                          <span className="font-bold">
-                            ₹ {Math.max(0, calculatedPending).toFixed(2)}
-                          </span>
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                );
-              })()}
-
-              {/* Card Footer - Actions */}
-              <div className="flex flex-col sm:flex-row gap-2 sm:gap-3 px-5 py-3 border-t border-[var(--color-primary-border)]">
-                <button
-                  className="flex-1 flex items-center justify-center gap-1.5 py-2.5 bg-[var(--color-primary-soft)] hover:bg-[var(--color-primary-soft)] text-[var(--color-primary)] text-sm font-semibold rounded-lg cursor-pointer transition-colors duration-200"
-                  onClick={() => navigate(`/invoice-order-pdf/${invo.id}`)}
-                >
-                  <FiEye size={14} />
-                  View Order
-                </button>
-
-                {invo.payment_status !== "PAID" && (
-                  <button
-                    className="flex-1 flex items-center justify-center gap-1.5 py-2.5 bg-[var(--color-primary-tint)] hover:bg-[var(--color-primary-soft)] text-[var(--color-primary)] text-sm font-semibold rounded-lg cursor-pointer transition-colors duration-200"
-                    onClick={() => navigate(`/complete-invoice-pdf/${invo.id}`)}
+                  {/* Card Header */}
+                  <Stack
+                    direction="row"
+                    alignItems="center"
+                    justifyContent="space-between"
+                    spacing={2}
+                    sx={{
+                      px: 2.5,
+                      py: 2,
+                      bgcolor: (t) => t.palette.primary.light + "1f",
+                      borderBottom: 1,
+                      borderColor: "divider",
+                    }}
                   >
-                    <FiCheckCircle size={14} />
-                    Complete Payment
-                  </button>
-                )}
+                    <Stack
+                      direction="row"
+                      spacing={1.5}
+                      alignItems="center"
+                      minWidth={0}
+                    >
+                      <Avatar sx={{ bgcolor: "primary.main" }}>
+                        {invo.name?.charAt(0)?.toUpperCase() || "?"}
+                      </Avatar>
+                      <Box minWidth={0}>
+                        <Typography variant="subtitle1" fontWeight={600} noWrap>
+                          {invo.name}
+                        </Typography>
+                        <Typography
+                          variant="caption"
+                          color="text.secondary"
+                          noWrap
+                          sx={{
+                            display: "inline-flex",
+                            alignItems: "center",
+                            gap: 0.5,
+                          }}
+                        >
+                          <FiCalendar size={11} />
+                          {dateLabel}
+                        </Typography>
+                      </Box>
+                    </Stack>
+                    <Chip
+                      label={invo.payment_status || "—"}
+                      size="small"
+                      color={getStatusChipColor(invo.payment_status)}
+                      sx={{ fontWeight: 700, flexShrink: 0 }}
+                    />
+                  </Stack>
 
-                <button
-                  className="flex-1 flex items-center justify-center gap-1.5 py-2.5 bg-[var(--color-primary-tint)] hover:bg-[var(--color-primary-soft)] text-[var(--color-primary)] text-sm font-semibold rounded-lg cursor-pointer transition-colors duration-200"
-                  onClick={() => navigate(`/invoice-bill-pdf/${invo.id}`)}
-                >
-                  <FiSend size={14} />
-                  Send Bill
-                </button>
-              </div>
-            </div>
-          ))}
-        </div>
+                  {/* Card Body */}
+                  <CardContent sx={{ flex: 1 }}>
+                    <Grid container spacing={1.5}>
+                      <Grid size={{ xs: 12, sm: 4 }}>
+                        <Stack
+                          direction="row"
+                          spacing={1}
+                          alignItems="center"
+                          sx={{
+                            px: 1.5,
+                            py: 1,
+                            border: 1,
+                            borderColor: "divider",
+                            borderRadius: 2,
+                          }}
+                        >
+                          <FiCreditCard size={14} />
+                          <Typography variant="body2" fontWeight={500} noWrap>
+                            {invo.payment_mode || "—"}
+                          </Typography>
+                        </Stack>
+                      </Grid>
+                      <Grid size={{ xs: 12, sm: 4 }}>
+                        <Stack
+                          direction="row"
+                          spacing={1}
+                          alignItems="center"
+                          sx={{
+                            px: 1.5,
+                            py: 1,
+                            border: 1,
+                            borderColor: "divider",
+                            borderRadius: 2,
+                          }}
+                        >
+                          <FiDollarSign size={14} />
+                          <Typography variant="body2" fontWeight={500}>
+                            {invo.payment_status === "PAID"
+                              ? `Paid: ₹${Number(invo.total_amount || 0).toFixed(2)}`
+                              : `Adv: ₹${Number(invo.advance_amount || 0).toFixed(2)}`}
+                          </Typography>
+                        </Stack>
+                      </Grid>
+                      <Grid size={{ xs: 12, sm: 4 }}>
+                        <Stack
+                          direction="row"
+                          spacing={1}
+                          alignItems="center"
+                          sx={{
+                            px: 1.5,
+                            py: 1,
+                            border: 1,
+                            borderColor: "divider",
+                            borderRadius: 2,
+                          }}
+                        >
+                          <FiDollarSign size={14} />
+                          <Typography
+                            variant="body2"
+                            fontWeight={600}
+                            color="text.primary"
+                          >
+                            Total: ₹{Number(invo.total_amount || 0).toFixed(2)}
+                          </Typography>
+                        </Stack>
+                      </Grid>
+                      {invo.payment_status !== "PAID" && (
+                        <Grid size={12}>
+                          <Stack
+                            direction="row"
+                            justifyContent="space-between"
+                            alignItems="center"
+                            sx={{
+                              px: 2,
+                              py: 1.25,
+                              borderRadius: 2,
+                              border: 1,
+                              borderColor: "error.light",
+                              bgcolor: "error.light",
+                              color: "error.dark",
+                              opacity: 0.9,
+                            }}
+                          >
+                            <Stack
+                              direction="row"
+                              spacing={1}
+                              alignItems="center"
+                            >
+                              <Box
+                                sx={{
+                                  width: 6,
+                                  height: 6,
+                                  borderRadius: "50%",
+                                  bgcolor: "error.main",
+                                }}
+                              />
+                              <Typography variant="body2" fontWeight={600}>
+                                Pending Amount
+                              </Typography>
+                            </Stack>
+                            <Typography variant="body2" fontWeight={700}>
+                              ₹ {Math.max(0, calculatedPending).toFixed(2)}
+                            </Typography>
+                          </Stack>
+                        </Grid>
+                      )}
+                    </Grid>
+                  </CardContent>
+
+                  <Divider />
+
+                  {/* Card Footer - Actions */}
+                  <CardActions
+                    sx={{
+                      px: 2.5,
+                      py: 1.5,
+                      flexDirection: { xs: "column", sm: "row" },
+                      alignItems: "stretch",
+                      gap: 1,
+                    }}
+                  >
+                    <Button
+                      size="small"
+                      variant="outlined"
+                      color="primary"
+                      startIcon={<FiEye size={14} />}
+                      onClick={() => navigate(`/invoice-order-pdf/${invo.id}`)}
+                      sx={{ flex: { sm: 1 } }}
+                    >
+                      View Order
+                    </Button>
+                    {invo.payment_status !== "PAID" && (
+                      <Button
+                        size="small"
+                        variant="outlined"
+                        color="primary"
+                        startIcon={<FiCheckCircle size={14} />}
+                        onClick={() =>
+                          navigate(`/complete-invoice-pdf/${invo.id}`)
+                        }
+                        sx={{ flex: { sm: 1 } }}
+                      >
+                        Complete Payment
+                      </Button>
+                    )}
+                    <Button
+                      size="small"
+                      variant="outlined"
+                      color="primary"
+                      startIcon={<FiSend size={14} />}
+                      onClick={() => navigate(`/invoice-bill-pdf/${invo.id}`)}
+                      sx={{ flex: { sm: 1 } }}
+                    >
+                      Send Bill
+                    </Button>
+                  </CardActions>
+                </Card>
+              </Grid>
+            );
+          })}
+        </Grid>
       )}
-    </div>
+    </Paper>
   );
 }
 

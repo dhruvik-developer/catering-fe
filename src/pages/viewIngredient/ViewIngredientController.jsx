@@ -355,9 +355,9 @@ function ViewIngredientController() {
 
       const fullPayload = {
         event_id: id,
-        ingridient_list_data: selectedIngredients,
+        ingredient_list_data: selectedIngredients,
       };
-      const selectedCategory = fullPayload.ingridient_list_data.find(
+      const selectedCategory = fullPayload.ingredient_list_data.find(
         (cat) => cat.name === categoryName
       );
       const matchedSession = sessionLabel
@@ -374,7 +374,7 @@ function ViewIngredientController() {
         event_id: id,
         eventAddress: actualEventAddress,
         eventDate: actualEventDate,
-        ingridient_list_data: selectedCategory,
+        ingredient_list_data: selectedCategory,
         preCheckedItemNames,
         sessionLabel: sessionLabel || null,
         sessionIdFilter: sessionIdFilter || null,
@@ -603,7 +603,7 @@ function ViewIngredientController() {
         matchedSession?.estimated_persons ||
         viewIngredient.estimated_persons ||
         0,
-      ingridient_list_data: selectedIngredients,
+      ingredient_list_data: selectedIngredients,
     };
 
     navigate("/share-full-ingredient-pdf", {

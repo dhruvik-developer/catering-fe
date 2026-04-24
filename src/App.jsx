@@ -5,6 +5,7 @@ import {
   Navigate,
 } from "react-router-dom";
 import { Suspense, useEffect } from "react";
+import { useDispatch } from "react-redux";
 import { Toaster } from "react-hot-toast";
 import "./index.css";
 import PrivateRoute from "./routes/PrivateRoute";
@@ -12,6 +13,7 @@ import Layout from "./Components/layout/Layout";
 import { UserProvider } from "./context/UserContext";
 import { BASE_PATH } from "./utils/Config";
 import { getAllBusinessProfiles } from "./api/BusinessProfile";
+import { setPrimaryColor, DEFAULT_PRIMARY_COLOR as DEFAULT_PRIMARY_FROM_STORE } from "./redux/themeSlice";
 import {
   Login,
   Dish,
@@ -100,7 +102,13 @@ const getContrastColor = (hexColor) => {
 };
 
 const App = () => {
+  const dispatch = useDispatch();
+
   useEffect(() => {
+    // Fetch the client's chosen primary color and hand it to Redux.
+    // ThemeBridge then builds the MUI theme from it and also mirrors the value
+    // to the --color-primary / --color-primary-contrast CSS custom properties
+    // that Tailwind-based pages still depend on during the migration.
     const applyPrimaryColor = async () => {
       try {
         const response = await getAllBusinessProfiles();
@@ -112,25 +120,14 @@ const App = () => {
 
         const apiColorCode = profileList[0]?.color_code;
         const primaryColor = resolvePrimaryColor(apiColorCode);
-        const contrastColor = getContrastColor(primaryColor);
-
-        document.documentElement.style.setProperty("--color-primary", primaryColor);
-        document.documentElement.style.setProperty("--color-primary-contrast", contrastColor);
+        dispatch(setPrimaryColor(primaryColor));
       } catch {
-        const contrastColor = getContrastColor(DEFAULT_PRIMARY_COLOR);
-        document.documentElement.style.setProperty(
-          "--color-primary",
-          DEFAULT_PRIMARY_COLOR
-        );
-        document.documentElement.style.setProperty(
-          "--color-primary-contrast",
-          contrastColor
-        );
+        dispatch(setPrimaryColor(DEFAULT_PRIMARY_FROM_STORE));
       }
     };
 
     applyPrimaryColor();
-  }, []);
+  }, [dispatch]);
 
   return (
     <UserProvider>

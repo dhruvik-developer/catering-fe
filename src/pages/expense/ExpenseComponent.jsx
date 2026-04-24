@@ -1,6 +1,27 @@
 /* eslint-disable react/prop-types */
-import { IoIosWarning } from "react-icons/io";
+import {
+  Avatar,
+  Box,
+  Button,
+  Card,
+  CardContent,
+  Chip,
+  IconButton,
+  Paper,
+  Stack,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Typography,
+  useMediaQuery,
+} from "@mui/material";
+import { useTheme } from "@mui/material/styles";
+import Grid from "@mui/material/Grid";
 import Loader from "../../Components/common/Loader";
+import EmptyState from "../../Components/common/EmptyState";
 import { FiDollarSign, FiPlus, FiTag, FiTrash2, FiEdit2 } from "react-icons/fi";
 
 function ExpenseComponent({
@@ -16,187 +37,294 @@ function ExpenseComponent({
   handleAddCategory,
   handleDeleteCategory,
 }) {
+  const theme = useTheme();
+  const isDesktop = useMediaQuery(theme.breakpoints.up("md"));
+
   return (
-    <div className="p-6 bg-white rounded-xl shadow-lg">
+    <Paper
+      elevation={0}
+      sx={{ p: { xs: 2, sm: 3 }, borderRadius: 3, bgcolor: "background.paper" }}
+    >
       {/* Header */}
-      <div className="flex justify-between items-center mb-6">
-        <div className="flex items-center gap-3">
-          <div className="p-2.5 rounded-xl bg-[var(--color-primary-soft)]">
-            <FiDollarSign className="text-[var(--color-primary-text)]" size={22} />
-          </div>
-          <div>
-            <h2 className="text-2xl font-bold text-gray-800">Expenses</h2>
-            <p className="text-sm text-gray-400">
+      <Stack
+        direction={{ xs: "column", sm: "row" }}
+        justifyContent="space-between"
+        alignItems={{ xs: "stretch", sm: "center" }}
+        spacing={2}
+        sx={{ mb: 3 }}
+      >
+        <Stack direction="row" spacing={1.5} alignItems="center">
+          <Avatar
+            variant="rounded"
+            sx={{
+              bgcolor: (t) => t.palette.primary.light + "33",
+              color: "primary.main",
+              width: 44,
+              height: 44,
+            }}
+          >
+            <FiDollarSign size={20} />
+          </Avatar>
+          <Box>
+            <Typography variant="h5" fontWeight={700} color="text.primary">
+              Expenses
+            </Typography>
+            <Typography variant="body2" color="text.secondary">
               {expenses?.length || 0} expense{expenses?.length !== 1 ? "s" : ""}{" "}
               recorded
-            </p>
-          </div>
-        </div>
-        <div className="flex gap-2">
-          <button
-            className="flex items-center gap-1.5 px-4 py-2.5 bg-[var(--color-primary)] hover:brightness-95 text-white text-sm font-medium rounded-lg cursor-pointer transition-colors duration-200"
+            </Typography>
+          </Box>
+        </Stack>
+        <Stack direction="row" spacing={1} flexWrap="wrap" useFlexGap>
+          <Button
+            variant="contained"
+            color="primary"
+            startIcon={<FiPlus size={15} />}
             onClick={handleAddExpense}
           >
-            <FiPlus size={15} />
             Add Expense
-          </button>
-          <button
-            className="flex items-center gap-1.5 px-4 py-2.5 bg-white hover:bg-[var(--color-primary-soft)] text-[var(--color-primary)] text-sm font-medium rounded-lg border border-[var(--color-primary)] cursor-pointer transition-colors duration-200"
+          </Button>
+          <Button
+            variant="outlined"
+            color="primary"
+            startIcon={<FiTag size={15} />}
             onClick={handleAddCategory}
           >
-            <FiTag size={15} />
             Add Category
-          </button>
-        </div>
-      </div>
+          </Button>
+        </Stack>
+      </Stack>
 
       {/* Total Expense Card */}
-      <div className="p-5 bg-[var(--color-primary-soft)] rounded-xl mb-5 border border-[var(--color-primary-border)]">
-        <div className="flex items-center gap-3">
-          <div className="w-12 h-12 rounded-xl bg-[var(--color-primary)] flex items-center justify-center">
-            <FiDollarSign size={22} className="text-white" />
-          </div>
-          <div>
-            <p className="text-sm text-gray-500 font-medium">Total Expense</p>
-            <p className="text-2xl font-bold text-gray-800">
-              ₹ {totalExpense.toLocaleString("en-IN")}
-            </p>
-          </div>
-        </div>
-      </div>
+      <Card
+        sx={{
+          mb: 2.5,
+          bgcolor: (t) => t.palette.primary.light + "26",
+          border: 1,
+          borderColor: "divider",
+        }}
+      >
+        <CardContent>
+          <Stack direction="row" spacing={1.5} alignItems="center">
+            <Avatar
+              variant="rounded"
+              sx={{
+                bgcolor: "primary.main",
+                color: "primary.contrastText",
+                width: 48,
+                height: 48,
+              }}
+            >
+              <FiDollarSign size={22} />
+            </Avatar>
+            <Box>
+              <Typography variant="body2" color="text.secondary" fontWeight={500}>
+                Total Expense
+              </Typography>
+              <Typography variant="h5" fontWeight={700}>
+                ₹ {Number(totalExpense || 0).toLocaleString("en-IN")}
+              </Typography>
+            </Box>
+          </Stack>
+        </CardContent>
+      </Card>
 
-      {/* Category Filter */}
-      <div className="flex flex-wrap gap-2 mb-5 items-center">
-        <button
-          className={`px-4 py-1.5 rounded-full font-medium text-sm cursor-pointer transition-all duration-200 ${
-            filterCategory === ""
-              ? "bg-[var(--color-primary)] text-white shadow-sm"
-              : "bg-[var(--color-primary-soft)] text-[var(--color-primary)] hover:bg-[var(--color-primary-soft)]"
-          }`}
+      {/* Category Filter Chips */}
+      <Stack
+        direction="row"
+        spacing={1}
+        flexWrap="wrap"
+        useFlexGap
+        alignItems="center"
+        sx={{ mb: 2.5 }}
+      >
+        <Chip
+          label="All"
           onClick={() => setFilterCategory("")}
-        >
-          All
-        </button>
-        {categories.map((cat) => (
-          <div key={cat.id} className="flex items-center gap-1">
-            <button
-              className={`px-4 py-1.5 rounded-full font-medium text-sm cursor-pointer transition-all duration-200 ${
-                filterCategory == cat.id
-                  ? "bg-[var(--color-primary)] text-white shadow-sm"
-                  : "bg-[var(--color-primary-soft)] text-[var(--color-primary)] hover:bg-[var(--color-primary-soft)]"
-              }`}
+          color={filterCategory === "" ? "primary" : "default"}
+          variant={filterCategory === "" ? "filled" : "outlined"}
+          sx={{ fontWeight: 600 }}
+        />
+        {categories.map((cat) => {
+          const isActive = String(filterCategory) === String(cat.id);
+          return (
+            <Chip
+              key={cat.id}
+              label={cat.name}
               onClick={() => setFilterCategory(cat.id)}
-            >
-              {cat.name}
-            </button>
-            <button
-              onClick={() => handleDeleteCategory(cat.id, cat.name)}
-              title="Delete Category"
-              className="p-1 text-gray-300 hover:text-red-500 hover:bg-red-50 rounded-full cursor-pointer transition-colors duration-200"
-            >
-              <FiTrash2 size={13} />
-            </button>
-          </div>
-        ))}
-      </div>
+              onDelete={() => handleDeleteCategory(cat.id, cat.name)}
+              deleteIcon={<FiTrash2 size={13} />}
+              color={isActive ? "primary" : "default"}
+              variant={isActive ? "filled" : "outlined"}
+              sx={{ fontWeight: 600 }}
+            />
+          );
+        })}
+      </Stack>
 
       {loading ? (
         <Loader message="Loading Expenses..." />
       ) : expenses.length === 0 ? (
-        <div className="flex flex-col items-center justify-center py-16 px-6 bg-[var(--color-primary-tint)] rounded-3xl border border-[var(--color-primary-border)]/30">
-          <IoIosWarning size={48} className="text-[var(--color-primary-light)] mb-3" />
-          <p className="text-lg font-bold text-[var(--color-primary-text)] text-center">
-            No Expenses Available
-          </p>
-          <p className="text-sm text-[var(--color-primary-text)]/60 mt-1 font-medium text-center">
-            Add your first expense to get started
-          </p>
-        </div>
-      ) : (
-        <div className="overflow-x-auto rounded-xl border border-[var(--color-primary-border)]">
-          <table className="w-full border-collapse">
-            <thead>
-              <tr className="bg-[var(--color-primary-soft)]">
-                <th className="p-3 text-left text-sm font-semibold text-[var(--color-primary)]">
-                  #
-                </th>
-                <th className="p-3 text-left text-sm font-semibold text-[var(--color-primary)]">
-                  Title
-                </th>
-                <th className="p-3 text-left text-sm font-semibold text-[var(--color-primary)]">
-                  Category
-                </th>
-                <th className="p-3 text-left text-sm font-semibold text-[var(--color-primary)]">
-                  Description
-                </th>
-                <th className="p-3 text-left text-sm font-semibold text-[var(--color-primary)]">
-                  Amount
-                </th>
-                <th className="p-3 text-left text-sm font-semibold text-[var(--color-primary)]">
-                  Payment Mode
-                </th>
-                <th className="p-3 text-center text-sm font-semibold text-[var(--color-primary)]">
+        <EmptyState
+          icon={<FiDollarSign size={24} />}
+          title="No Expenses Available"
+          message="Add your first expense to get started."
+        />
+      ) : isDesktop ? (
+        <TableContainer
+          component={Paper}
+          elevation={0}
+          sx={{ border: 1, borderColor: "divider", borderRadius: 2 }}
+        >
+          <Table>
+            <TableHead>
+              <TableRow sx={{ bgcolor: (t) => t.palette.primary.light + "1a" }}>
+                <TableCell sx={{ fontWeight: 700 }}>#</TableCell>
+                <TableCell sx={{ fontWeight: 700 }}>Title</TableCell>
+                <TableCell sx={{ fontWeight: 700 }}>Category</TableCell>
+                <TableCell sx={{ fontWeight: 700 }}>Description</TableCell>
+                <TableCell sx={{ fontWeight: 700 }}>Amount</TableCell>
+                <TableCell sx={{ fontWeight: 700 }}>Payment Mode</TableCell>
+                <TableCell sx={{ fontWeight: 700 }} align="center">
                   Actions
-                </th>
-              </tr>
-            </thead>
-            <tbody>
+                </TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
               {expenses.map((expense, index) => (
-                <tr
+                <TableRow
                   key={expense.id}
-                  className="border-b border-[var(--color-primary-border)] hover:bg-[var(--color-primary-tint)] transition-colors duration-200"
+                  hover
+                  sx={{ "&:last-child td": { borderBottom: 0 } }}
                 >
-                  <td className="p-3 text-sm text-gray-500">{index + 1}</td>
-                  <td className="p-3 text-sm font-medium text-gray-800">
-                    {expense.title}
-                  </td>
-                  <td className="p-3 text-sm text-gray-600">
+                  <TableCell>{index + 1}</TableCell>
+                  <TableCell sx={{ fontWeight: 500 }}>{expense.title}</TableCell>
+                  <TableCell sx={{ color: "text.secondary" }}>
                     {expense.category_name || expense.category}
-                  </td>
-                  <td className="p-3 text-sm text-gray-500">
+                  </TableCell>
+                  <TableCell sx={{ color: "text.secondary" }}>
                     {expense.description}
-                  </td>
-                  <td className="p-3 text-sm font-semibold text-gray-800">
-                    ₹ {parseFloat(expense.amount).toLocaleString("en-IN")}
-                  </td>
-                  <td className="p-3">
-                    <span
-                      className={`px-2.5 py-1 rounded-full text-xs font-medium ${
-                        expense.payment_mode === "CASH"
-                          ? "bg-[var(--color-primary-tint)] text-[var(--color-primary)]"
-                          : expense.payment_mode === "ONLINE"
-                            ? "bg-[var(--color-primary-tint)] text-[var(--color-primary)]"
-                            : "bg-[var(--color-primary-soft)] text-[var(--color-primary)]"
-                      }`}
-                    >
-                      {expense.payment_mode}
-                    </span>
-                  </td>
-                  <td className="p-3">
-                    <div className="flex flex-wrap items-center justify-center gap-1.5">
-                      <button
+                  </TableCell>
+                  <TableCell sx={{ fontWeight: 600 }}>
+                    ₹{" "}
+                    {parseFloat(expense.amount).toLocaleString("en-IN")}
+                  </TableCell>
+                  <TableCell>
+                    <Chip
+                      size="small"
+                      label={expense.payment_mode}
+                      color="primary"
+                      variant="outlined"
+                    />
+                  </TableCell>
+                  <TableCell>
+                    <Stack direction="row" spacing={0.5} justifyContent="center">
+                      <IconButton
+                        size="small"
                         onClick={() => handleEditExpense(expense)}
-                        className="p-2 rounded-lg text-gray-400 hover:text-[var(--color-primary)] hover:bg-[var(--color-primary-soft)] transition-colors duration-200 cursor-pointer"
                         title="Edit Expense"
                       >
                         <FiEdit2 size={15} />
-                      </button>
-                      <button
+                      </IconButton>
+                      <IconButton
+                        size="small"
+                        color="error"
                         onClick={() => handleDeleteExpense(expense.id)}
                         title="Delete Expense"
-                        className="p-2 rounded-lg text-gray-400 hover:text-red-500 hover:bg-red-50 transition-colors duration-200 cursor-pointer"
                       >
                         <FiTrash2 size={15} />
-                      </button>
-                    </div>
-                  </td>
-                </tr>
+                      </IconButton>
+                    </Stack>
+                  </TableCell>
+                </TableRow>
               ))}
-            </tbody>
-          </table>
-        </div>
+            </TableBody>
+          </Table>
+        </TableContainer>
+      ) : (
+        // Mobile card layout
+        <Grid container spacing={1.5}>
+          {expenses.map((expense, index) => (
+            <Grid key={expense.id} size={12}>
+              <Card>
+                <CardContent>
+                  <Stack
+                    direction="row"
+                    justifyContent="space-between"
+                    alignItems="flex-start"
+                    spacing={1}
+                    sx={{ mb: 1 }}
+                  >
+                    <Box minWidth={0}>
+                      <Typography
+                        variant="caption"
+                        color="text.secondary"
+                        sx={{ display: "block" }}
+                      >
+                        #{index + 1}
+                      </Typography>
+                      <Typography
+                        variant="subtitle1"
+                        fontWeight={600}
+                        noWrap
+                      >
+                        {expense.title}
+                      </Typography>
+                      <Typography variant="caption" color="text.secondary">
+                        {expense.category_name || expense.category}
+                      </Typography>
+                    </Box>
+                    <Typography
+                      variant="subtitle1"
+                      fontWeight={700}
+                      color="text.primary"
+                    >
+                      ₹ {parseFloat(expense.amount).toLocaleString("en-IN")}
+                    </Typography>
+                  </Stack>
+                  {expense.description && (
+                    <Typography
+                      variant="body2"
+                      color="text.secondary"
+                      sx={{ mb: 1 }}
+                    >
+                      {expense.description}
+                    </Typography>
+                  )}
+                  <Stack
+                    direction="row"
+                    justifyContent="space-between"
+                    alignItems="center"
+                  >
+                    <Chip
+                      size="small"
+                      label={expense.payment_mode}
+                      color="primary"
+                      variant="outlined"
+                    />
+                    <Stack direction="row" spacing={0.5}>
+                      <IconButton
+                        size="small"
+                        onClick={() => handleEditExpense(expense)}
+                      >
+                        <FiEdit2 size={15} />
+                      </IconButton>
+                      <IconButton
+                        size="small"
+                        color="error"
+                        onClick={() => handleDeleteExpense(expense.id)}
+                      >
+                        <FiTrash2 size={15} />
+                      </IconButton>
+                    </Stack>
+                  </Stack>
+                </CardContent>
+              </Card>
+            </Grid>
+          ))}
+        </Grid>
       )}
-    </div>
+    </Paper>
   );
 }
 

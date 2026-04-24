@@ -1,4 +1,24 @@
 /* eslint-disable react/prop-types */
+import {
+  Avatar,
+  Box,
+  Card,
+  CardContent,
+  Chip,
+  IconButton,
+  Paper,
+  Stack,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Typography,
+  useMediaQuery,
+} from "@mui/material";
+import { useTheme } from "@mui/material/styles";
+import Grid from "@mui/material/Grid";
 import { FaTrash, FaWallet } from "react-icons/fa";
 import { FiEdit2, FiUsers } from "react-icons/fi";
 import usePermissions from "../../hooks/usePermissions";
@@ -6,38 +26,57 @@ import EmptyState from "../common/EmptyState";
 
 function StatusBadge({ active }) {
   return (
-    <span
-      className={`inline-flex items-center px-3 py-1 rounded-full text-[11px] font-bold uppercase tracking-wide border shadow-sm ${active ? "bg-[var(--color-primary-tint)] text-[var(--color-primary-text)] border-green-200" : "bg-red-50 text-red-600 border-red-200"}`}
-    >
-      <span
-        className={`w-1.5 h-1.5 rounded-full mr-1.5 ${active ? "bg-emerald-500" : "bg-red-500"}`}
-      ></span>
-      {active ? "Active" : "Inactive"}
-    </span>
+    <Chip
+      size="small"
+      label={active ? "Active" : "Inactive"}
+      color={active ? "success" : "error"}
+      variant="outlined"
+      sx={{ fontWeight: 700, textTransform: "uppercase", letterSpacing: 0.5 }}
+    />
   );
 }
 
 function FinancialLine({ label, amount, suffix, tone = "neutral" }) {
-  const classes =
-    tone === "primary"
-      ? "bg-[var(--color-primary-tint)]/80 border-[var(--color-primary-border)]/30"
-      : "bg-gray-50/80 border-gray-100";
-  const labelClass =
-    tone === "primary" ? "text-[var(--color-primary)]" : "text-gray-500";
-  const amountClass =
-    tone === "primary" ? "text-[var(--color-primary-text)]" : "text-gray-800";
+  const isPrimary = tone === "primary";
   return (
-    <div
-      className={`flex items-center justify-between text-xs px-3 py-1.5 rounded-lg border shadow-sm ${classes}`}
+    <Stack
+      direction="row"
+      justifyContent="space-between"
+      alignItems="center"
+      sx={{
+        px: 1.5,
+        py: 0.75,
+        borderRadius: 1.5,
+        border: 1,
+        borderColor: isPrimary ? "primary.light" : "divider",
+        bgcolor: isPrimary
+          ? (t) => t.palette.primary.light + "1f"
+          : "action.hover",
+      }}
     >
-      <span className={`font-medium ${labelClass}`}>{label}</span>
-      <span className={`font-bold ${amountClass}`}>
+      <Typography
+        variant="caption"
+        fontWeight={500}
+        color={isPrimary ? "primary.main" : "text.secondary"}
+      >
+        {label}
+      </Typography>
+      <Typography
+        variant="caption"
+        fontWeight={700}
+        color={isPrimary ? "primary.dark" : "text.primary"}
+      >
         ₹{amount.toFixed(2)}
-        {suffix ? (
-          <span className="font-normal opacity-60 text-[10px]">{suffix}</span>
-        ) : null}
-      </span>
-    </div>
+        {suffix && (
+          <Box
+            component="span"
+            sx={{ fontWeight: 400, opacity: 0.6, fontSize: "0.65rem" }}
+          >
+            {suffix}
+          </Box>
+        )}
+      </Typography>
+    </Stack>
   );
 }
 
@@ -51,25 +90,61 @@ function Financials({ staff, compact = false }) {
 
   if (!hasAny) {
     return (
-      <span className="text-xs text-gray-400 italic font-medium">
+      <Typography
+        variant="caption"
+        color="text.disabled"
+        fontStyle="italic"
+        fontWeight={500}
+      >
         No financials
-      </span>
+      </Typography>
     );
   }
 
-  const widthClass = compact ? "w-full" : "w-36";
   return (
-    <div className={`flex flex-col gap-2 ${widthClass}`}>
-      {perPerson > 0 && (
-        <FinancialLine label="Per Day" amount={perPerson} />
-      )}
+    <Stack spacing={1} sx={{ width: compact ? "100%" : 150 }}>
+      {perPerson > 0 && <FinancialLine label="Per Day" amount={perPerson} />}
       {hasFixed && (
         <FinancialLine label="Fixed" amount={fixed} suffix="/mo" tone="primary" />
       )}
       {hasContract && (
         <FinancialLine label="Contract" amount={contract} tone="primary" />
       )}
-    </div>
+    </Stack>
+  );
+}
+
+function RoleAndTypeChips({ staff, waiterType }) {
+  return (
+    <Stack spacing={1} alignItems="flex-start">
+      <Typography
+        variant="body2"
+        fontWeight={700}
+        color="primary.main"
+        sx={{ wordBreak: "break-word" }}
+      >
+        {staff.role_name || staff.role || "N/A"}
+      </Typography>
+      {waiterType && (
+        <Chip
+          size="small"
+          label={`Waiter: ${waiterType}`}
+          variant="outlined"
+          sx={{ height: 20, fontSize: "0.65rem", textTransform: "uppercase" }}
+        />
+      )}
+      <Chip
+        size="small"
+        label={`${staff.staff_type}${staff.agency_name ? ` • ${staff.agency_name}` : ""}`}
+        color="primary"
+        variant="outlined"
+        sx={{
+          fontWeight: 700,
+          fontSize: "0.65rem",
+          textTransform: "uppercase",
+        }}
+      />
+    </Stack>
   );
 }
 
@@ -79,6 +154,8 @@ function StaffTable({
   onStaffDelete,
   onStaffPaymentSummary,
 }) {
+  const theme = useTheme();
+  const isDesktop = useMediaQuery(theme.breakpoints.up("md"));
   const { hasPermission } = usePermissions();
   const canEdit = hasPermission("eventstaff.update");
   const canDelete = hasPermission("eventstaff.delete");
@@ -93,213 +170,164 @@ function StaffTable({
     );
   }
 
-  return (
-    <div className="w-full">
-      {/* Mobile card layout */}
-      <div className="md:hidden flex flex-col gap-3">
+  const renderActions = (staff) => (
+    <Stack direction="row" spacing={0.5} justifyContent="center">
+      {staff.staff_type === "Fixed" && onStaffPaymentSummary && (
+        <IconButton
+          size="small"
+          onClick={() => onStaffPaymentSummary(staff.id)}
+          title="Salary Payments"
+          color="primary"
+        >
+          <FaWallet size={14} />
+        </IconButton>
+      )}
+      {canEdit && (
+        <IconButton
+          size="small"
+          onClick={() => onStaffEdit(staff)}
+          title="Edit Staff"
+        >
+          <FiEdit2 size={15} />
+        </IconButton>
+      )}
+      {canDelete && (
+        <IconButton
+          size="small"
+          color="error"
+          onClick={() => onStaffDelete(staff.id)}
+          title="Delete Staff"
+        >
+          <FaTrash size={14} />
+        </IconButton>
+      )}
+    </Stack>
+  );
+
+  if (!isDesktop) {
+    return (
+      <Grid container spacing={1.5}>
         {staffList.map((staff, index) => {
           const waiterType =
             staff.waiter_type_name ||
             (staff.waiter_type && staff.waiter_type.name);
           return (
-            <div
-              key={staff.id}
-              className="rounded-xl bg-white border border-gray-100 shadow-sm p-4 flex flex-col gap-3 hover:border-[var(--color-primary-border)] transition-colors"
-            >
-              <div className="flex items-start gap-3">
-                <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[var(--color-primary)] to-[var(--color-primary-border)] text-white flex items-center justify-center font-bold text-sm shadow-sm shrink-0">
-                  {staff.name?.charAt(0).toUpperCase() || "?"}
-                </div>
-                <div className="min-w-0 flex-1">
-                  <div className="flex items-center gap-2 flex-wrap">
-                    <span className="text-[10px] font-bold text-gray-400">
-                      #{(index + 1).toString().padStart(2, "0")}
-                    </span>
-                    <StatusBadge active={staff.is_active} />
-                  </div>
-                  <p className="font-bold text-gray-900 text-base truncate">
-                    {staff.name || "N/A"}
-                  </p>
-                  <p className="text-sm text-gray-500 truncate">
-                    {staff.phone || "-"}
-                  </p>
-                </div>
-                <div className="flex items-center gap-1 shrink-0">
-                  {staff.staff_type === "Fixed" && onStaffPaymentSummary && (
-                    <button
-                      onClick={() => onStaffPaymentSummary(staff.id)}
-                      title="Salary Payments"
-                      className="p-2 rounded-lg text-[var(--color-primary)] hover:bg-[var(--color-primary-soft)] transition-all cursor-pointer"
+            <Grid key={staff.id} size={12}>
+              <Card>
+                <CardContent>
+                  <Stack direction="row" spacing={1.5} alignItems="flex-start">
+                    <Avatar sx={{ bgcolor: "primary.main" }}>
+                      {staff.name?.charAt(0).toUpperCase() || "?"}
+                    </Avatar>
+                    <Box minWidth={0} flex={1}>
+                      <Stack direction="row" spacing={1} alignItems="center" flexWrap="wrap">
+                        <Typography variant="caption" color="text.disabled">
+                          #{(index + 1).toString().padStart(2, "0")}
+                        </Typography>
+                        <StatusBadge active={staff.is_active} />
+                      </Stack>
+                      <Typography variant="subtitle1" fontWeight={700} noWrap>
+                        {staff.name || "N/A"}
+                      </Typography>
+                      <Typography variant="body2" color="text.secondary" noWrap>
+                        {staff.phone || "-"}
+                      </Typography>
+                    </Box>
+                    {renderActions(staff)}
+                  </Stack>
+                  <Box sx={{ mt: 1.5 }}>
+                    <RoleAndTypeChips staff={staff} waiterType={waiterType} />
+                  </Box>
+                  <Box sx={{ mt: 1.5 }}>
+                    <Typography
+                      variant="caption"
+                      color="text.disabled"
+                      sx={{
+                        textTransform: "uppercase",
+                        letterSpacing: 0.5,
+                        fontWeight: 700,
+                      }}
                     >
-                      <FaWallet size={14} />
-                    </button>
-                  )}
-                  {canEdit && (
-                    <button
-                      onClick={() => onStaffEdit(staff)}
-                      title="Edit Staff"
-                      className="p-2 rounded-lg text-gray-500 hover:text-[var(--color-primary)] hover:bg-[var(--color-primary-soft)] transition-all cursor-pointer"
-                    >
-                      <FiEdit2 size={15} />
-                    </button>
-                  )}
-                  {canDelete && (
-                    <button
-                      onClick={() => onStaffDelete(staff.id)}
-                      title="Delete Staff"
-                      className="p-2 rounded-lg text-red-400 hover:text-red-600 hover:bg-red-50 transition-all cursor-pointer"
-                    >
-                      <FaTrash size={14} />
-                    </button>
-                  )}
-                </div>
-              </div>
-              <div className="flex flex-wrap gap-2 items-center">
-                <span className="font-bold text-[var(--color-primary)] text-sm">
-                  {staff.role_name || staff.role || "N/A"}
-                </span>
-                <span className="text-[10px] font-extrabold tracking-wider text-[var(--color-primary-text)] bg-[var(--color-primary-tint)] uppercase px-2.5 py-1 rounded-md border border-[var(--color-primary-border)]/30">
-                  {staff.staff_type}
-                  {staff.agency_name ? ` • ${staff.agency_name}` : ""}
-                </span>
-                {waiterType && (
-                  <span className="text-[10px] text-gray-500 uppercase px-2 py-1 rounded-md bg-gray-50 border border-gray-100">
-                    {waiterType}
-                  </span>
-                )}
-              </div>
-              <div>
-                <span className="text-[10px] font-bold tracking-wider text-gray-400 uppercase">
-                  Financials
-                </span>
-                <div className="mt-1.5">
-                  <Financials staff={staff} compact />
-                </div>
-              </div>
-            </div>
+                      Financials
+                    </Typography>
+                    <Box sx={{ mt: 0.75 }}>
+                      <Financials staff={staff} compact />
+                    </Box>
+                  </Box>
+                </CardContent>
+              </Card>
+            </Grid>
           );
         })}
-      </div>
+      </Grid>
+    );
+  }
 
-      {/* Desktop table */}
-      <div className="hidden md:block overflow-x-auto w-full pb-4">
-        <table
-          className="min-w-[900px] w-full border-separate"
-          style={{ borderSpacing: "0 8px" }}
-        >
-          <thead>
-            <tr className="bg-white">
-              <th className="px-6 py-4 text-left text-[11px] font-bold tracking-widest uppercase text-gray-400 border-b border-gray-100">
-                #
-              </th>
-              <th className="px-6 py-4 text-left text-[11px] font-bold tracking-widest uppercase text-gray-400 border-b border-gray-100">
-                Name
-              </th>
-              <th className="px-6 py-4 text-left text-[11px] font-bold tracking-widest uppercase text-gray-400 border-b border-gray-100">
-                Phone
-              </th>
-              <th className="px-6 py-4 text-left text-[11px] font-bold tracking-widest uppercase text-gray-400 border-b border-gray-100">
-                Role & Type
-              </th>
-              <th className="px-6 py-4 text-left text-[11px] font-bold tracking-widest uppercase text-gray-400 border-b border-gray-100">
-                Financials
-              </th>
-              <th className="px-6 py-4 text-center text-[11px] font-bold tracking-widest uppercase text-gray-400 border-b border-gray-100">
-                Status
-              </th>
-              <th className="px-6 py-4 text-center text-[11px] font-bold tracking-widest uppercase text-gray-400 border-b border-gray-100">
-                Actions
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            {staffList.map((staff, index) => {
-              const waiterType =
-                staff.waiter_type_name ||
-                (staff.waiter_type && staff.waiter_type.name);
-              return (
-                <tr
-                  key={staff.id}
-                  className="bg-white hover:bg-[var(--color-primary-tint)] transition-all duration-300 shadow-[0_2px_10px_rgba(0,0,0,0.02)] hover:shadow-[0_4px_15px_rgba(132,92,189,0.08)] group rounded-xl"
-                >
-                  <td className="px-6 py-4 first:rounded-l-xl last:rounded-r-xl border-y border-transparent group-hover:border-[var(--color-primary-border)] first:border-l last:border-r font-medium text-gray-500 w-12">
-                    {(index + 1).toString().padStart(2, "0")}
-                  </td>
-                  <td className="px-6 py-4 border-y border-transparent group-hover:border-[var(--color-primary-border)]">
-                    <div className="flex items-center gap-4">
-                      <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[var(--color-primary)] to-[var(--color-primary-border)] text-white flex items-center justify-center font-bold text-sm shadow-md ring-4 ring-[var(--color-primary-tint)] group-hover:ring-[var(--color-primary-soft)] transition-all flex-shrink-0">
-                        {staff.name ? staff.name.charAt(0).toUpperCase() : "?"}
-                      </div>
-                      <div className="flex flex-col">
-                        <span className="font-bold text-gray-800 text-[15px]">
-                          {staff.name || "N/A"}
-                        </span>
-                      </div>
-                    </div>
-                  </td>
-                  <td className="px-6 py-4 border-y border-transparent group-hover:border-[var(--color-primary-border)] font-medium text-gray-500">
-                    {staff.phone || "-"}
-                  </td>
-                  <td className="px-6 py-4 border-y border-transparent group-hover:border-[var(--color-primary-border)]">
-                    <div className="flex flex-col gap-2 items-start">
-                      <span className="font-bold text-[var(--color-primary)] text-sm break-words line-clamp-2">
-                        {staff.role_name || staff.role || "N/A"}
-                      </span>
-                      {waiterType ? (
-                        <span className="text-[10px] text-gray-500 uppercase px-2.5 py-1 rounded-md">
-                          Waiter Type: {waiterType}
-                        </span>
-                      ) : null}
-                      <span className="text-[10px] font-extrabold tracking-wider text-[var(--color-primary-text)] bg-[var(--color-primary-tint)] group-hover:bg-[var(--color-primary-soft)] transition-colors uppercase px-2.5 py-1 rounded-md shadow-sm border border-[var(--color-primary-border)]/30 w-fit">
-                        {staff.staff_type}{" "}
-                        {staff.agency_name ? `• ${staff.agency_name}` : ""}
-                      </span>
-                    </div>
-                  </td>
-                  <td className="px-6 py-4 border-y border-transparent group-hover:border-[var(--color-primary-border)]">
-                    <Financials staff={staff} />
-                  </td>
-                  <td className="px-6 py-4 border-y border-transparent group-hover:border-[var(--color-primary-border)] text-center">
-                    <StatusBadge active={staff.is_active} />
-                  </td>
-                  <td className="px-6 py-4 border-y border-transparent group-hover:border-[var(--color-primary-border)] text-center w-40 first:rounded-l-xl last:rounded-r-xl first:border-l last:border-r">
-                    <div className="flex items-center justify-center gap-2 opacity-60 group-hover:opacity-100 transition-opacity">
-                      {staff.staff_type === "Fixed" && onStaffPaymentSummary && (
-                        <button
-                          onClick={() => onStaffPaymentSummary(staff.id)}
-                          title="Salary Payments"
-                          className="p-2 rounded-lg text-[var(--color-primary)] hover:text-[var(--color-primary-text)] hover:bg-[var(--color-primary-tint)] transition-all cursor-pointer shadow-sm border border-transparent hover:border-[var(--color-primary-border)]/30"
-                        >
-                          <FaWallet size={16} />
-                        </button>
-                      )}
-                      {canEdit && (
-                        <button
-                          onClick={() => onStaffEdit(staff)}
-                          title="Edit Staff"
-                          className="p-2 rounded-lg text-gray-500 hover:text-[var(--color-primary)] hover:bg-[var(--color-primary-soft)] transition-all cursor-pointer shadow-sm border border-transparent hover:border-[var(--color-primary-border)]/30"
-                        >
-                          <FiEdit2 size={16} />
-                        </button>
-                      )}
-                      {canDelete && (
-                        <button
-                          onClick={() => onStaffDelete(staff.id)}
-                          title="Delete Staff"
-                          className="p-2 rounded-lg text-red-400 hover:text-red-600 hover:bg-red-50 transition-all cursor-pointer shadow-sm border border-transparent hover:border-red-100"
-                        >
-                          <FaTrash size={16} />
-                        </button>
-                      )}
-                    </div>
-                  </td>
-                </tr>
-              );
-            })}
-          </tbody>
-        </table>
-      </div>
-    </div>
+  return (
+    <TableContainer
+      component={Paper}
+      elevation={0}
+      sx={{ border: 1, borderColor: "divider", borderRadius: 2 }}
+    >
+      <Table>
+        <TableHead>
+          <TableRow sx={{ bgcolor: (t) => t.palette.primary.light + "1a" }}>
+            <TableCell sx={{ fontWeight: 700 }}>#</TableCell>
+            <TableCell sx={{ fontWeight: 700 }}>Name</TableCell>
+            <TableCell sx={{ fontWeight: 700 }}>Phone</TableCell>
+            <TableCell sx={{ fontWeight: 700 }}>Role &amp; Type</TableCell>
+            <TableCell sx={{ fontWeight: 700 }}>Financials</TableCell>
+            <TableCell sx={{ fontWeight: 700 }} align="center">
+              Status
+            </TableCell>
+            <TableCell sx={{ fontWeight: 700 }} align="center">
+              Actions
+            </TableCell>
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          {staffList.map((staff, index) => {
+            const waiterType =
+              staff.waiter_type_name ||
+              (staff.waiter_type && staff.waiter_type.name);
+            return (
+              <TableRow
+                key={staff.id}
+                hover
+                sx={{ "&:last-child td": { borderBottom: 0 } }}
+              >
+                <TableCell sx={{ color: "text.secondary", fontWeight: 500 }}>
+                  {(index + 1).toString().padStart(2, "0")}
+                </TableCell>
+                <TableCell>
+                  <Stack direction="row" spacing={1.5} alignItems="center">
+                    <Avatar sx={{ bgcolor: "primary.main" }}>
+                      {staff.name?.charAt(0).toUpperCase() || "?"}
+                    </Avatar>
+                    <Typography variant="body1" fontWeight={700}>
+                      {staff.name || "N/A"}
+                    </Typography>
+                  </Stack>
+                </TableCell>
+                <TableCell sx={{ color: "text.secondary" }}>
+                  {staff.phone || "-"}
+                </TableCell>
+                <TableCell>
+                  <RoleAndTypeChips staff={staff} waiterType={waiterType} />
+                </TableCell>
+                <TableCell>
+                  <Financials staff={staff} />
+                </TableCell>
+                <TableCell align="center">
+                  <StatusBadge active={staff.is_active} />
+                </TableCell>
+                <TableCell align="center">{renderActions(staff)}</TableCell>
+              </TableRow>
+            );
+          })}
+        </TableBody>
+      </Table>
+    </TableContainer>
   );
 }
 

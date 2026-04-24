@@ -1,10 +1,29 @@
 /* eslint-disable react/prop-types */
+import {
+  Avatar,
+  Box,
+  Button,
+  ButtonGroup,
+  Card,
+  CardActions,
+  CardContent,
+  Chip,
+  Divider,
+  IconButton,
+  InputAdornment,
+  Paper,
+  Stack,
+  TextField,
+  Typography,
+  useMediaQuery,
+} from "@mui/material";
+import { useTheme } from "@mui/material/styles";
+import Grid from "@mui/material/Grid";
 import Loader from "../../Components/common/Loader";
 import EmptyState from "../../Components/common/EmptyState";
 import {
   FiClipboard,
   FiPhone,
-  FiClock,
   FiUsers,
   FiCalendar,
   FiCheckCircle,
@@ -12,6 +31,8 @@ import {
   FiShare2,
   FiSearch,
   FiX,
+  FiChevronRight,
+  FiFileText,
 } from "react-icons/fi";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
@@ -19,10 +40,10 @@ import "react-datepicker/dist/react-datepicker.css";
 function AllOrderComponent({
   allOrder,
   loading,
-  handleViewOrder,
+  handleViewOrder: _handleViewOrder,
   handleShareOrder,
-  handleViewIngredient,
-  handleViewIngredientBySession,
+  handleViewIngredient: _handleViewIngredient,
+  handleViewIngredientBySession: _handleViewIngredientBySession,
   handleCompleteOrder,
   handleDeleteAllOrder,
   handleViewOrderDetails,
@@ -34,77 +55,143 @@ function AllOrderComponent({
   setDateRange,
   handleQuickFilter,
 }) {
+  const theme = useTheme();
+  const isTabletUp = useMediaQuery(theme.breakpoints.up("md"));
+  const hasFilters = Boolean(searchQuery || dateRange[0] || dateRange[1]);
+
   return (
-    <div className="p-4 sm:p-6 bg-white rounded-xl shadow-lg">
-      {/* Header */}
-      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 md:gap-0 mb-6 w-full">
-        <div className="flex items-center gap-3">
-          <div className="p-2.5 rounded-xl bg-[var(--color-primary-soft)]">
-            <FiClipboard className="text-[var(--color-primary-text)]" size={22} />
-          </div>
-          <div>
-            <h2 className="text-2xl font-bold text-gray-800">All Orders</h2>
-            <p className="text-sm text-gray-400">
-              {allOrder?.length || 0}
-              {totalCount !== allOrder?.length ? ` of ${totalCount}` : ""}{" "}
-              order{allOrder?.length !== 1 ? "s" : ""}
-            </p>
-          </div>
-        </div>
+    <Paper
+      elevation={0}
+      sx={{ p: { xs: 2, sm: 3 }, borderRadius: 3, bgcolor: "background.paper" }}
+    >
+      {/* Title */}
+      <Stack direction="row" spacing={1.5} alignItems="center" sx={{ mb: 2.5 }}>
+        <Avatar
+          variant="rounded"
+          sx={{
+            bgcolor: (t) => t.palette.primary.light + "33",
+            color: "primary.main",
+            width: 44,
+            height: 44,
+          }}
+        >
+          <FiClipboard size={20} />
+        </Avatar>
+        <Box>
+          <Typography variant="h5" fontWeight={700} color="text.primary">
+            All Orders
+          </Typography>
+          <Typography variant="body2" color="text.secondary">
+            {allOrder?.length || 0}
+            {totalCount !== allOrder?.length ? ` of ${totalCount}` : ""}{" "}
+            order{allOrder?.length !== 1 ? "s" : ""}
+          </Typography>
+        </Box>
+      </Stack>
 
-        {/* Search + Date Filter */}
-        <div className="flex flex-wrap items-center gap-2 w-full md:w-auto">
-          {/* Search */}
-          <div className="relative flex-1 min-w-[160px] md:flex-none">
-            <FiSearch
-              className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"
+      {/* Filter row: search on the left, quick filters + date range on the right */}
+      <Stack
+        direction={{ xs: "column", md: "row" }}
+        spacing={{ xs: 1.5, md: 2 }}
+        alignItems={{ xs: "stretch", md: "center" }}
+        justifyContent="space-between"
+        sx={{ mb: 3 }}
+      >
+        <TextField
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+          placeholder="Search name or mobile..."
+          sx={{
+            width: { xs: "100%", md: 280 },
+            flexShrink: 0,
+          }}
+          InputProps={{
+            startAdornment: (
+              <InputAdornment position="start">
+                <FiSearch size={14} />
+              </InputAdornment>
+            ),
+            endAdornment: searchQuery ? (
+              <InputAdornment position="end">
+                <IconButton
+                  size="small"
+                  onClick={() => setSearchQuery("")}
+                  edge="end"
+                >
+                  <FiX size={14} />
+                </IconButton>
+              </InputAdornment>
+            ) : null,
+          }}
+        />
+
+        <Stack
+          direction="row"
+          spacing={1}
+          flexWrap="wrap"
+          useFlexGap
+          alignItems="center"
+          justifyContent={{ xs: "flex-start", md: "flex-end" }}
+        >
+          <ButtonGroup size="small">
+            <Button onClick={() => handleQuickFilter("today")}>Today</Button>
+            <Button onClick={() => handleQuickFilter("thisWeek")}>Week</Button>
+            <Button onClick={() => handleQuickFilter("thisMonth")}>
+              Month
+            </Button>
+            <Button onClick={() => handleQuickFilter("upcoming")}>
+              Upcoming
+            </Button>
+          </ButtonGroup>
+
+          <Box
+            sx={{
+              width: { xs: "100%", md: 240 },
+              flexShrink: 0,
+              position: "relative",
+              "& .react-datepicker-wrapper": { width: "100%" },
+              "& input": {
+                width: "100%",
+                padding: "8.5px 12px 8.5px 34px",
+                borderRadius: theme.shape.borderRadius + "px",
+                border: "1px solid",
+                borderColor: theme.palette.divider,
+                backgroundColor: theme.palette.background.paper,
+                font: "inherit",
+                color: theme.palette.text.primary,
+                outline: "none",
+              },
+              "& input:focus": {
+                borderColor: theme.palette.primary.main,
+                boxShadow: `0 0 0 2px ${theme.palette.primary.main}33`,
+              },
+            }}
+          >
+            <Box
+              component={FiCalendar}
               size={14}
-            />
-            <input
-              type="text"
-              placeholder="Search name or mobile..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="pl-9 pr-8 py-2 border border-gray-200 rounded-lg text-sm font-medium bg-gray-50 focus:outline-none focus:border-[var(--color-primary)] focus:ring-2 focus:ring-[var(--color-primary)]/15 w-full md:w-56 transition-all"
-            />
-            {searchQuery && (
-              <button
-                onClick={() => setSearchQuery("")}
-                className="absolute right-2.5 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 cursor-pointer"
-              >
-                <FiX size={14} />
-              </button>
-            )}
-          </div>
-
-          {/* Quick Filters */}
-          <div className="order-3 md:order-none flex flex-wrap items-center gap-1.5 w-full md:w-auto">
-            <button onClick={() => handleQuickFilter("today")} className="px-2.5 py-1.5 text-[11px] font-bold text-gray-600 bg-gray-100 hover:bg-gray-200 rounded-md transition-colors cursor-pointer">Today</button>
-            <button onClick={() => handleQuickFilter("thisWeek")} className="px-2.5 py-1.5 text-[11px] font-bold text-gray-600 bg-gray-100 hover:bg-gray-200 rounded-md transition-colors cursor-pointer">This Week</button>
-            <button onClick={() => handleQuickFilter("thisMonth")} className="px-2.5 py-1.5 text-[11px] font-bold text-gray-600 bg-gray-100 hover:bg-gray-200 rounded-md transition-colors cursor-pointer">This Month</button>
-            <button onClick={() => handleQuickFilter("upcoming")} className="px-2.5 py-1.5 text-[11px] font-bold text-gray-600 bg-gray-100 hover:bg-gray-200 rounded-md transition-colors cursor-pointer">Upcoming</button>
-          </div>
-
-          {/* Date Range Filter */}
-          <div className="relative flex items-center flex-1 min-w-[200px] md:flex-none">
-            <FiCalendar
-              className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none z-10"
-              size={14}
+              sx={{
+                position: "absolute",
+                left: 12,
+                top: "50%",
+                transform: "translateY(-50%)",
+                pointerEvents: "none",
+                color: "text.secondary",
+                zIndex: 1,
+              }}
             />
             <DatePicker
-              selectsRange={true}
+              selectsRange
               startDate={dateRange[0]}
               endDate={dateRange[1]}
               onChange={(update) => setDateRange(update)}
               dateFormat="dd MMM yyyy"
               placeholderText="Select event date range"
               isClearable
-              wrapperClassName="w-full md:w-auto"
-              className="pl-9 pr-7 py-2 border border-gray-200 rounded-lg text-sm font-medium bg-gray-50 focus:outline-none focus:border-[var(--color-primary)] focus:ring-2 focus:ring-[var(--color-primary)]/15 w-full md:w-[220px] transition-all cursor-pointer"
             />
-          </div>
-        </div>
-      </div>
+          </Box>
+        </Stack>
+      </Stack>
 
       {loading ? (
         <Loader message="Loading Orders..." />
@@ -112,151 +199,242 @@ function AllOrderComponent({
         <EmptyState
           icon={<FiClipboard size={24} />}
           title={
-            searchQuery || dateRange[0] || dateRange[1]
-              ? "No Orders Match Your Filters"
-              : "No Orders Available"
+            hasFilters ? "No Orders Match Your Filters" : "No Orders Available"
           }
           message={
-            searchQuery || dateRange[0] || dateRange[1]
+            hasFilters
               ? "Try clearing the filters to see all orders."
               : "Orders will appear here once created."
           }
         />
       ) : (
-        <div className="grid grid-cols-1 xl:grid-cols-2 gap-4">
-          {allOrder.map((order) => (
-            <div
-              key={order.id}
-              className="flex flex-col h-full rounded-xl overflow-hidden transition-all duration-200 hover:shadow-lg bg-[var(--color-primary-tint)] border border-[var(--color-primary-border)]"
-            >
-              {/* Card Header */}
-              <div className="flex items-center justify-between px-5 py-4 bg-[var(--color-primary-soft)] border-b border-[var(--color-primary-border)]">
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-full bg-[var(--color-primary)] text-white flex items-center justify-center font-bold text-sm">
-                    {order.name?.charAt(0)?.toUpperCase() || "?"}
-                  </div>
-                  <div>
-                    <h3 className="text-base font-semibold text-gray-800">
-                      {order.name}
-                    </h3>
-                    {order.reference && (
-                      <p className="text-xs text-gray-400">
-                        Ref: {order.reference}
-                      </p>
-                    )}
-                  </div>
-                </div>
-                <div className="flex items-center gap-2">
-                  <span
-                    className="text-xs font-medium px-3 py-1.5 rounded-full bg-white text-[var(--color-primary)] border border-[var(--color-primary-border)] max-w-[200px] truncate"
-                    title={
-                      order.sessions?.length > 0
-                        ? Array.from(
-                            new Set(order.sessions.map((s) => s.event_date))
-                          ).join(", ")
-                        : order.event_date || "—"
-                    }
+        <Grid container spacing={2}>
+          {allOrder.map((order) => {
+            const totalPersons =
+              order.sessions?.reduce(
+                (total, s) => total + (Number(s.estimated_persons) || 0),
+                0
+              ) ||
+              order.estimated_persons ||
+              "—";
+            const dateLabel =
+              order.sessions?.length > 0
+                ? Array.from(
+                    new Set(order.sessions.map((s) => s.event_date))
+                  ).join(", ")
+                : order.event_date || "—";
+
+            return (
+              <Grid key={order.id} size={{ xs: 12, xl: 6 }}>
+                <Card
+                  sx={{
+                    height: "100%",
+                    display: "flex",
+                    flexDirection: "column",
+                    transition: "box-shadow 0.2s",
+                    "&:hover": { boxShadow: 4 },
+                  }}
+                >
+                  {/* Card Header */}
+                  <Stack
+                    direction="row"
+                    alignItems="center"
+                    justifyContent="space-between"
+                    spacing={2}
+                    sx={{
+                      px: 2.5,
+                      py: 2,
+                      bgcolor: (t) => t.palette.primary.light + "1f",
+                      borderBottom: 1,
+                      borderColor: "divider",
+                    }}
                   >
-                    <FiCalendar className="inline mr-1.5 -mt-0.5" size={12} />
-                    {order.sessions?.length > 0
-                      ? Array.from(
-                          new Set(order.sessions.map((s) => s.event_date))
-                        ).join(", ")
-                      : order.event_date || "—"}
-                  </span>
-                </div>
-              </div>
+                    <Stack direction="row" spacing={1.5} alignItems="center" minWidth={0}>
+                      <Avatar sx={{ bgcolor: "primary.main" }}>
+                        {order.name?.charAt(0)?.toUpperCase() || "?"}
+                      </Avatar>
+                      <Box minWidth={0}>
+                        <Typography
+                          variant="subtitle1"
+                          fontWeight={600}
+                          noWrap
+                        >
+                          {order.name}
+                        </Typography>
+                        {order.reference && (
+                          <Typography
+                            variant="caption"
+                            color="text.secondary"
+                            noWrap
+                          >
+                            Ref: {order.reference}
+                          </Typography>
+                        )}
+                      </Box>
+                    </Stack>
+                    <Chip
+                      icon={<FiCalendar size={12} />}
+                      label={dateLabel}
+                      size="small"
+                      title={dateLabel}
+                      sx={{
+                        bgcolor: "background.paper",
+                        color: "primary.main",
+                        maxWidth: 200,
+                        "& .MuiChip-label": {
+                          overflow: "hidden",
+                          textOverflow: "ellipsis",
+                        },
+                      }}
+                    />
+                  </Stack>
 
-              {/* Card Body */}
-              <div className="flex-1 px-5 py-4 flex flex-col gap-3">
-                {/* Phone */}
-                <div className="flex items-center gap-2.5 text-sm text-gray-600 bg-white rounded-lg px-3 py-2.5 border border-[var(--color-primary-border)] w-max">
-                  <FiPhone size={14} className="text-[var(--color-primary-text)]" />
-                  <span className="font-medium">{order.mobile_no || "—"}</span>
-                </div>
+                  {/* Card Body */}
+                  <CardContent sx={{ flex: 1, display: "flex", flexDirection: "column", gap: 1.5 }}>
+                    <Stack
+                      direction="row"
+                      spacing={1}
+                      alignItems="center"
+                      sx={{
+                        alignSelf: "flex-start",
+                        px: 1.5,
+                        py: 1,
+                        border: 1,
+                        borderColor: "divider",
+                        borderRadius: 2,
+                      }}
+                    >
+                      <FiPhone size={14} />
+                      <Typography variant="body2" fontWeight={500}>
+                        {order.mobile_no || "—"}
+                      </Typography>
+                    </Stack>
 
-                {/* Order Summary — clickable */}
-                <div
-                  className="flex flex-col gap-2 bg-[var(--color-primary-tint)]/40 border border-[var(--color-primary-border)] rounded-lg px-4 py-3 cursor-pointer hover:bg-[var(--color-primary-soft)] hover:border-[var(--color-primary)] transition-all duration-150 group"
-                  onClick={() => handleViewOrderDetails(order.id)}
-                  title="View Detailed Order"
-                >
-                  <div className="flex items-center justify-between text-sm text-gray-700">
-                    <div className="flex items-center gap-2">
-                      <FiClipboard size={14} className="text-[var(--color-primary-text)]" />
-                      <span className="font-semibold text-gray-800">
-                        Total Sessions: {order.sessions?.length || 1}
-                      </span>
-                    </div>
-                    <div className="flex items-center gap-2 text-sm text-[var(--color-primary)] font-semibold">
-                      View Details
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        className="h-4 w-4 transform group-hover:translate-x-1 transition-transform"
-                        viewBox="0 0 20 20"
-                        fill="currentColor"
+                    <Box
+                      onClick={() => handleViewOrderDetails(order.id)}
+                      title="View Detailed Order"
+                      sx={{
+                        display: "flex",
+                        flexDirection: "column",
+                        gap: 0.5,
+                        px: 2,
+                        py: 1.5,
+                        borderRadius: 2,
+                        border: 1,
+                        borderColor: "divider",
+                        bgcolor: (t) => t.palette.primary.light + "14",
+                        cursor: "pointer",
+                        transition: "all 0.15s",
+                        "&:hover": {
+                          bgcolor: (t) => t.palette.primary.light + "26",
+                          borderColor: "primary.main",
+                        },
+                      }}
+                    >
+                      <Stack
+                        direction="row"
+                        alignItems="center"
+                        justifyContent="space-between"
                       >
-                        <path
-                          fillRule="evenodd"
-                          d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
-                          clipRule="evenodd"
-                        />
-                      </svg>
-                    </div>
-                  </div>
-                  <div className="flex items-center gap-2 text-xs text-gray-500 mt-1 pl-6">
-                    <span className="font-medium text-gray-400">
-                      Total Estimated Persons:
-                    </span>
-                    <span>
-                      {order.sessions?.reduce(
-                        (total, session) =>
-                          total + (Number(session.estimated_persons) || 0),
-                        0
-                      ) ||
-                        order.estimated_persons ||
-                        "—"}
-                    </span>
-                  </div>
-                </div>
-              </div>
+                        <Stack direction="row" spacing={1} alignItems="center">
+                          <FiClipboard size={14} />
+                          <Typography variant="body2" fontWeight={600}>
+                            Total Sessions: {order.sessions?.length || 1}
+                          </Typography>
+                        </Stack>
+                        <Stack
+                          direction="row"
+                          spacing={0.5}
+                          alignItems="center"
+                          color="primary.main"
+                        >
+                          <Typography variant="body2" fontWeight={600}>
+                            View Details
+                          </Typography>
+                          <FiChevronRight size={14} />
+                        </Stack>
+                      </Stack>
+                      <Stack
+                        direction="row"
+                        spacing={1}
+                        alignItems="center"
+                        sx={{ pl: 3 }}
+                      >
+                        <FiUsers size={12} />
+                        <Typography variant="caption" color="text.secondary">
+                          Estimated Persons:
+                        </Typography>
+                        <Typography variant="caption" fontWeight={600}>
+                          {totalPersons}
+                        </Typography>
+                      </Stack>
+                    </Box>
+                  </CardContent>
 
-              {/* Card Footer - Actions */}
-              <div className="flex flex-col sm:flex-row gap-2 sm:gap-3 px-5 py-3 border-t border-[var(--color-primary-border)]">
-                <button
-                  className="flex-1 flex items-center justify-center gap-1.5 py-2.5 bg-[var(--color-primary-tint)] hover:bg-[var(--color-primary-soft)] text-[var(--color-primary)] text-sm font-semibold rounded-lg cursor-pointer transition-colors duration-200"
-                  onClick={() => handleCompleteOrder(order.id)}
-                >
-                  <FiCheckCircle size={14} />
-                  Complete
-                </button>
-                <button
-                  className="flex-1 flex items-center justify-center gap-1.5 py-2.5 bg-[var(--color-primary-tint)] hover:bg-[var(--color-primary-soft)] text-[var(--color-primary)] text-sm font-semibold rounded-lg cursor-pointer transition-colors duration-200"
-                  onClick={() => handleShareOrder(order.id)}
-                >
-                  <FiShare2 size={14} />
-                  Share
-                </button>
-                <button
-                  className="flex-1 flex items-center justify-center gap-1.5 py-2.5 bg-[var(--color-primary-tint)] hover:bg-[var(--color-primary-soft)] text-[var(--color-primary)] text-sm font-semibold rounded-lg cursor-pointer transition-colors duration-200"
-                  onClick={() => handleDownloadOrderPDF(order.id)}
-                >
-                  <FiClipboard size={14} />
-                  PDF
-                </button>
-                <button
-                  className="flex-1 flex items-center justify-center gap-1.5 py-2.5 bg-red-50 hover:bg-red-100 text-red-500 text-sm font-semibold rounded-lg cursor-pointer transition-colors duration-200"
-                  onClick={() => handleDeleteAllOrder(order.id)}
-                >
-                  <FiXCircle size={14} />
-                  Cancel
-                </button>
-              </div>
-            </div>
-          ))}
-        </div>
+                  <Divider />
+
+                  {/* Card Footer - Actions */}
+                  <CardActions
+                    sx={{
+                      px: 2.5,
+                      py: 1.5,
+                      flexDirection: { xs: "column", sm: "row" },
+                      alignItems: "stretch",
+                      gap: 1,
+                    }}
+                  >
+                    <Button
+                      size="small"
+                      fullWidth={!isTabletUp}
+                      variant="outlined"
+                      color="primary"
+                      startIcon={<FiCheckCircle size={14} />}
+                      onClick={() => handleCompleteOrder(order.id)}
+                      sx={{ flex: { sm: 1 } }}
+                    >
+                      Complete
+                    </Button>
+                    <Button
+                      size="small"
+                      fullWidth={!isTabletUp}
+                      variant="outlined"
+                      color="primary"
+                      startIcon={<FiShare2 size={14} />}
+                      onClick={() => handleShareOrder(order.id)}
+                      sx={{ flex: { sm: 1 } }}
+                    >
+                      Share
+                    </Button>
+                    <Button
+                      size="small"
+                      fullWidth={!isTabletUp}
+                      variant="outlined"
+                      color="primary"
+                      startIcon={<FiFileText size={14} />}
+                      onClick={() => handleDownloadOrderPDF(order.id)}
+                      sx={{ flex: { sm: 1 } }}
+                    >
+                      PDF
+                    </Button>
+                    <Button
+                      size="small"
+                      fullWidth={!isTabletUp}
+                      variant="outlined"
+                      color="error"
+                      startIcon={<FiXCircle size={14} />}
+                      onClick={() => handleDeleteAllOrder(order.id)}
+                      sx={{ flex: { sm: 1 } }}
+                    >
+                      Cancel
+                    </Button>
+                  </CardActions>
+                </Card>
+              </Grid>
+            );
+          })}
+        </Grid>
       )}
-    </div>
+    </Paper>
   );
 }
 

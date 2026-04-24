@@ -36,7 +36,7 @@ function ShareIngredientController() {
   // 'godown' or 'vendor' per item key "catIndex-itemIndex"
   const [itemSources, setItemSources] = useState({});
 
-  const ingridient_list_data = selectedCategoryPayload?.ingridient_list_data;
+  const ingredient_list_data = selectedCategoryPayload?.ingredient_list_data;
   const eventAddress = selectedCategoryPayload?.eventAddress;
   const preCheckedItemNames =
     selectedCategoryPayload?.preCheckedItemNames || [];
@@ -96,8 +96,8 @@ function ShareIngredientController() {
   }, []);
 
   useEffect(() => {
-    if (ingridient_list_data?.data) {
-      let allItems = ingridient_list_data.data;
+    if (ingredient_list_data?.data) {
+      let allItems = ingredient_list_data.data;
 
       // If a vendor was pre-selected, show only items assigned to that vendor
       if (chosenVendor) {
@@ -130,7 +130,7 @@ function ShareIngredientController() {
         allItems.length > 0
           ? [
               {
-                categoryName: ingridient_list_data.name,
+                categoryName: ingredient_list_data.name,
                 items: allItems.map((item) => {
                   let attachedVendor = null;
                   if (viewIngredient?.sessions) {
@@ -171,7 +171,7 @@ function ShareIngredientController() {
         initChecked[key] = shouldCheck;
         if (shouldCheck) {
           initModified.push({
-            category: ingridient_list_data.name,
+            category: ingredient_list_data.name,
             item: item.item,
           });
         }
@@ -247,14 +247,14 @@ function ShareIngredientController() {
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [ingridient_list_data]);
+  }, [ingredient_list_data]);
 
   const handleSourceChange = (key, source) => {
     setItemSources((prev) => ({ ...prev, [key]: source }));
   };
 
   const vendors = useMemo(() => {
-    const categoryName = (ingridient_list_data?.name || "").trim().toLowerCase();
+    const categoryName = (ingredient_list_data?.name || "").trim().toLowerCase();
 
     return allVendors.filter((vendor) => {
       if (vendor.vendor_categories && Array.isArray(vendor.vendor_categories)) {
@@ -268,7 +268,7 @@ function ShareIngredientController() {
         .toLowerCase();
       return vendorCategory === categoryName;
     });
-  }, [allVendors, ingridient_list_data]);
+  }, [allVendors, ingredient_list_data]);
 
   // Handle address selection (only one at a time)
   const handleAddressChange = (address) => {
