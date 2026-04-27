@@ -530,3 +530,143 @@ iframe.goog-te-banner-frame {
 .page-break {
   page-break-before: always;
 }
+
+/* =====================================================================
+ * Premium UI Enhancements (Dynamic & Aesthetic)
+ * No color changes applied as requested.
+ * ===================================================================== */
+
+/* 1. Smooth Scrolling App-wide */
+html {
+  scroll-behavior: smooth;
+}
+
+/* 2. Premium Sleek Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background-color: rgba(148, 163, 184, 0.25);
+  border-radius: 10px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(148, 163, 184, 0.5);
+}
+
+/* 3. Input Fields - Lift & Shadow on Focus */
+input, textarea, select {
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.3s cubic-bezier(0.4, 0, 0.2, 1), background-color 0.3s ease !important;
+}
+input:hover:not(:disabled), textarea:hover:not(:disabled), select:hover:not(:disabled) {
+  background-color: rgba(0, 0, 0, 0.01);
+}
+input:focus, textarea:focus, select:focus {
+  transform: translateY(-1px);
+  box-shadow: 0 8px 16px -4px rgba(0, 0, 0, 0.05), 0 4px 6px -2px rgba(0, 0, 0, 0.02) !important;
+}
+
+/* 4. Buttons - Micro-interactions (Bounce, Lift, Press) */
+button, .cursor-pointer {
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+button:hover:not(:disabled), .cursor-pointer:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 20px -10px rgba(0, 0, 0, 0.15) !important;
+}
+button:active:not(:disabled), .cursor-pointer:active {
+  transform: translateY(1px) scale(0.98);
+  box-shadow: 0 2px 5px -2px rgba(0, 0, 0, 0.1) !important;
+}
+/* Subtle glow for primary buttons */
+button[class*="bg-[var(--color-primary)]"]:hover,
+button[class*="text-white"]:hover {
+  box-shadow: 0 12px 24px -8px var(--color-primary-text) !important;
+}
+
+/* 5. Softer, Premium Shadows for Cards & Modals */
+.shadow-lg {
+  box-shadow: 0 15px 35px -10px rgba(0,0,0,0.06), 0 5px 15px -5px rgba(0,0,0,0.03) !important;
+}
+.shadow-xl {
+  box-shadow: 0 25px 50px -12px rgba(0,0,0,0.08), 0 10px 25px -5px rgba(0,0,0,0.04) !important;
+}
+.shadow-2xl {
+  box-shadow: 0 35px 60px -15px rgba(0,0,0,0.1), 0 15px 35px -5px rgba(0,0,0,0.05) !important;
+}
+
+/* 6. Modal Overlays - Premium Glassmorphism */
+/* Enhances the dark background behind modals */
+.fixed.inset-0.bg-gray-900\/50,
+.fixed.inset-0.bg-black\/50,
+[class*="bg-gray-900/50"] {
+  backdrop-filter: blur(8px) !important;
+  -webkit-backdrop-filter: blur(8px) !important;
+  background-color: rgba(15, 23, 42, 0.3) !important; /* Elegant slate tint */
+}
+
+/* 7. Premium Entrance Animation for Modals & Cards */
+@keyframes premiumEntrance {
+  0% {
+    opacity: 0;
+    transform: translateY(15px) scale(0.98);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+/* Apply animation to common modal wrappers and cards */
+.fixed.z-50 > div:not([class*="bg-gray-900/50"]):not(.backdrop-blur-sm), 
+.bg-white.rounded-2xl.shadow-sm,
+.bg-white.rounded-xl.shadow-sm,
+.bg-white.rounded-lg.shadow-sm {
+  animation: premiumEntrance 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* 8. Table Rows - Hover Lift */
+tbody tr {
+  transition: all 0.25s ease;
+}
+tbody tr:hover {
+  transform: scale(1.002);
+  box-shadow: 0 4px 15px rgba(0,0,0,0.04);
+  z-index: 10;
+  position: relative;
+  background-color: rgba(255, 255, 255, 0.5);
+}
+
+/* 9. Layout Animations (Page Transitions) */
+@keyframes slideUpFade {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideDownFade {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slowFadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}

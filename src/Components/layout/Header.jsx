@@ -444,12 +444,12 @@ const Header = ({ toggleSidebar }) => {
       color="inherit"
       elevation={0}
       sx={{
-        bgcolor: "rgba(255,255,255,0.82)",
-        backdropFilter: "blur(18px)",
-        color: "text.primary",
+        bgcolor: "var(--color-primary)",
+        color: "#ffffff",
         borderBottom: 1,
-        borderColor: "var(--app-border)",
+        borderColor: "var(--color-primary-dark)",
         boxShadow: "0 14px 34px -32px rgba(15, 23, 42, 0.5)",
+        animation: "slideDownFade 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards",
       }}
     >
       <Toolbar
@@ -470,8 +470,8 @@ const Header = ({ toggleSidebar }) => {
             edge="start"
             onClick={toggleSidebar}
             sx={{
-              color: "text.secondary",
-              "&:hover": { bgcolor: "action.hover" },
+              color: "inherit",
+              "&:hover": { bgcolor: "rgba(255,255,255,0.15)" },
             }}
             aria-label="toggle sidebar"
           >
@@ -546,12 +546,12 @@ const Header = ({ toggleSidebar }) => {
               sx={{
                 borderRadius: 999,
                 minWidth: 0,
-                color: lowStockCount > 0 ? undefined : "text.secondary",
-                bgcolor: lowStockCount > 0 ? undefined : "action.hover",
+                color: lowStockCount > 0 ? undefined : "inherit",
+                bgcolor: lowStockCount > 0 ? undefined : "rgba(255,255,255,0.15)",
                 border: lowStockCount > 0 ? 0 : "1px solid",
-                borderColor: "divider",
+                borderColor: lowStockCount > 0 ? "transparent" : "rgba(255,255,255,0.2)",
                 "&:hover": {
-                  bgcolor: lowStockCount > 0 ? undefined : "action.selected",
+                  bgcolor: lowStockCount > 0 ? undefined : "rgba(255,255,255,0.25)",
                 },
               }}
             >
@@ -727,11 +727,11 @@ const Header = ({ toggleSidebar }) => {
               sx={{
                 borderRadius: 999,
                 minWidth: 0,
-                color: "text.secondary",
-                bgcolor: "action.hover",
+                color: "inherit",
+                bgcolor: "rgba(255,255,255,0.15)",
                 border: "1px solid",
-                borderColor: "divider",
-                "&:hover": { bgcolor: "action.selected" },
+                borderColor: "rgba(255,255,255,0.2)",
+                "&:hover": { bgcolor: "rgba(255,255,255,0.25)" },
               }}
             >
               <Badge
@@ -922,7 +922,7 @@ const Header = ({ toggleSidebar }) => {
           <Divider
             orientation="vertical"
             flexItem
-            sx={{ my: 1, bgcolor: "divider" }}
+            sx={{ my: 1, bgcolor: "rgba(255,255,255,0.3)" }}
           />
 
           {canViewOrders && (
@@ -932,11 +932,11 @@ const Header = ({ toggleSidebar }) => {
               startIcon={<FiCalendar size={15} />}
               onClick={() => navigate("/calendar")}
               sx={{
-                color: "text.secondary",
-                bgcolor: "action.hover",
+                color: "inherit",
+                bgcolor: "rgba(255,255,255,0.15)",
                 border: "1px solid",
-                borderColor: "divider",
-                "&:hover": { bgcolor: "action.selected" },
+                borderColor: "rgba(255,255,255,0.2)",
+                "&:hover": { bgcolor: "rgba(255,255,255,0.25)" },
               }}
             >
               <Box
@@ -952,15 +952,15 @@ const Header = ({ toggleSidebar }) => {
           <Button
             onClick={(e) => setProfileAnchor(e.currentTarget)}
             sx={{
-              bgcolor: "var(--app-surface)",
-              color: "primary.main",
+              bgcolor: "rgba(255,255,255,0.15)",
+              color: "inherit",
               border: "1px solid",
-              borderColor: "var(--app-border)",
+              borderColor: "rgba(255,255,255,0.2)",
               pl: 1.5,
               pr: 1,
               py: 0.5,
               borderRadius: 999,
-              "&:hover": { bgcolor: "action.hover" },
+              "&:hover": { bgcolor: "rgba(255,255,255,0.25)" },
             }}
             endIcon={
               <FiChevronDown
@@ -984,8 +984,8 @@ const Header = ({ toggleSidebar }) => {
             </Typography>
             <Avatar
               sx={{
-                bgcolor: "primary.main",
-                color: "primary.contrastText",
+                bgcolor: "rgba(255,255,255,0.3)",
+                color: "#ffffff",
                 width: 32,
                 height: 32,
                 fontSize: "0.8rem",

@@ -1,14 +1,15 @@
 import Sidebar from "./Sidebar";
 import Header from "./Header";
-import { Outlet, useNavigate } from "react-router-dom";
+import { Outlet, useNavigate, useLocation } from "react-router-dom";
 import { useEffect, useContext } from "react";
 import { useDispatch } from "react-redux";
-import { Box } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import { UserContext } from "../../context/UserContext";
 import { toggleSidebar } from "../../redux/uiSlice";
 
 const Layout = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const dispatch = useDispatch();
   const { token, logout } = useContext(UserContext);
 
@@ -40,15 +41,21 @@ const Layout = () => {
       >
         <Header toggleSidebar={() => dispatch(toggleSidebar())} />
         <Box
+          key={location.pathname}
           sx={{
             flex: 1,
             overflowX: "hidden",
             overflowY: "auto",
             p: { xs: 1.5, sm: 2.5 },
             bgcolor: "transparent",
+            animation: "slideUpFade 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards",
+            display: "flex",
+            flexDirection: "column",
           }}
         >
-          <Outlet />
+          <Box sx={{ flex: 1 }}>
+            <Outlet />
+          </Box>
         </Box>
       </Box>
     </Box>

@@ -115,7 +115,7 @@ function AddEditUserController() {
       navigate={navigate}
       mode={mode}
       form={form}
-
+      errors={errors}
       onInputChange={onInputChange}
       onSubmit={handleSubmit}
     />

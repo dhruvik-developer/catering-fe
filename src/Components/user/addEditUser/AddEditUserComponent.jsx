@@ -95,18 +95,20 @@ function AddEditUserComponent({
             autoComplete="new-password"
             error={!!errors.password}
             helperText={errors.password || ""}
-            InputProps={{
-              endAdornment: (
-                <InputAdornment position="end">
-                  <IconButton
-                    size="small"
-                    edge="end"
-                    onClick={() => setShowPassword((s) => !s)}
-                  >
-                    {showPassword ? <FaEyeSlash /> : <FaEye />}
-                  </IconButton>
-                </InputAdornment>
-              ),
+            slotProps={{
+              input: {
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <IconButton
+                      size="small"
+                      edge="end"
+                      onClick={() => setShowPassword((s) => !s)}
+                    >
+                      {showPassword ? <FaEyeSlash /> : <FaEye />}
+                    </IconButton>
+                  </InputAdornment>
+                ),
+              },
             }}
           />
 
