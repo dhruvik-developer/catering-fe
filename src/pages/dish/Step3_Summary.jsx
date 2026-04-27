@@ -38,7 +38,7 @@ function SectionHeader({ icon: Icon, title, subtitle }) {
       <Avatar
         variant="rounded"
         sx={{
-          bgcolor: (t) => t.palette.primary.light + "33",
+          bgcolor: "var(--color-primary-border)",
           color: "primary.main",
           width: 40,
           height: 40,
@@ -418,7 +418,7 @@ function Step3_Summary({
                                     height: 20,
                                     bgcolor: isZeroPrice
                                       ? "error.light"
-                                      : (t) => t.palette.primary.light + "33",
+                                      : "var(--color-primary-border)",
                                     color: isZeroPrice
                                       ? "error.main"
                                       : "primary.main",

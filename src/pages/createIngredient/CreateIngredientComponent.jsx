@@ -45,7 +45,7 @@ function CreateIngredientComponent({
           <Avatar
             variant="rounded"
             sx={{
-              bgcolor: (t) => t.palette.primary.light + "33",
+              bgcolor: "var(--color-primary-border)",
               color: "primary.main",
               width: 44,
               height: 44,

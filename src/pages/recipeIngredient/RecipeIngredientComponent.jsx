@@ -55,7 +55,7 @@ function RecipeIngredientComponent({ loading, navigate, recipe }) {
           <Avatar
             variant="rounded"
             sx={{
-              bgcolor: (t) => t.palette.primary.light + "33",
+              bgcolor: "var(--color-primary-border)",
               color: "primary.main",
               width: 44,
               height: 44,
@@ -202,7 +202,7 @@ function RecipeIngredientComponent({ loading, navigate, recipe }) {
                                   height: 24,
                                   fontSize: "0.7rem",
                                   fontWeight: 700,
-                                  bgcolor: (t) => t.palette.primary.light + "33",
+                                  bgcolor: "var(--color-primary-border)",
                                   color: "primary.main",
                                 }}
                               >

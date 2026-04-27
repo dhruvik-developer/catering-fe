@@ -155,7 +155,7 @@ const EventGroundChecklist = () => {
           <Avatar
             variant="rounded"
             sx={{
-              bgcolor: (t) => t.palette.primary.light + "33",
+              bgcolor: "var(--color-primary-border)",
               color: "primary.main",
               width: 44,
               height: 44,
@@ -277,7 +277,7 @@ const EventGroundChecklist = () => {
                           height: 40,
                           fontWeight: 700,
                           fontSize: 14,
-                          bgcolor: isActive ? "primary.main" : "action.hover",
+                          bgcolor: isActive ? "primary.main" : "var(--color-primary-border)",
                           color: isActive
                             ? "primary.contrastText"
                             : "text.secondary",
@@ -422,7 +422,7 @@ const EventGroundChecklist = () => {
                               sx={{
                                 width: 32,
                                 height: 32,
-                                bgcolor: (t) => t.palette.primary.light + "33",
+                                bgcolor: "var(--color-primary-border)",
                                 color: "primary.main",
                               }}
                             >

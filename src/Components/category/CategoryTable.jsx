@@ -126,7 +126,7 @@ const CategoryTable = ({
                         height: 40,
                         fontWeight: 700,
                         fontSize: 14,
-                        bgcolor: isActive ? "primary.main" : "action.hover",
+                        bgcolor: isActive ? "primary.main" : "var(--color-primary-border)",
                         color: isActive
                           ? "primary.contrastText"
                           : "text.secondary",
@@ -300,7 +300,7 @@ const CategoryTable = ({
                               bgcolor:
                                 sub.has_recipe === false
                                   ? "error.light"
-                                  : (t) => t.palette.primary.light + "33",
+                                  : "var(--color-primary-border)",
                               color:
                                 sub.has_recipe === false
                                   ? "error.main"

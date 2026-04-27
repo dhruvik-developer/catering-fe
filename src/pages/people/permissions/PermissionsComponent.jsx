@@ -129,7 +129,7 @@ function PermissionsComponent({
                 >
                   <Avatar
                     sx={{
-                      bgcolor: isActive ? "primary.main" : "action.selected",
+                      bgcolor: isActive ? "primary.main" : "var(--color-primary-border)",
                       color: isActive ? "primary.contrastText" : "text.secondary",
                       width: 40,
                       height: 40,
@@ -187,7 +187,7 @@ function PermissionsComponent({
             <Avatar
               variant="rounded"
               sx={{
-                bgcolor: "action.hover",
+                bgcolor: "var(--color-primary-border)",
                 color: "text.disabled",
                 width: 72,
                 height: 72,

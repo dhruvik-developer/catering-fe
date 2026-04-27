@@ -43,6 +43,10 @@ const Button = forwardRef(function Button(
     type = "button",
     className = "",
     children,
+    alignItems,
+    justifyContent,
+    flexDirection,
+    gap,
     ...rest
   },
   ref

@@ -3,7 +3,7 @@
 import React, { useState } from "react";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 
-function Input(props) {
+function Input({ alignItems, justifyContent, flexDirection, gap, ...props }) {
   const [showPassword, setShowPassword] = useState(false);
   const isPassword = props.type === "password";
 

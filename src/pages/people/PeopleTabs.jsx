@@ -34,7 +34,7 @@ function PeopleTabs() {
   const { hasPermission } = usePermissions();
 
   return (
-    <div className="rounded-2xl border border-[var(--app-border)] bg-white/80 p-2 shadow-[0_16px_36px_-30px_rgba(15,23,42,0.55)] backdrop-blur">
+    <div className="mb-4 rounded-[24px] bg-[var(--color-primary-tint)] p-2 shadow-sm">
       <nav
         className="flex flex-col gap-2 md:flex-row"
         aria-label="People module sections"
@@ -53,23 +53,23 @@ function PeopleTabs() {
             <Link
               key={tab.path}
               to={tab.path}
-              className={`group flex flex-1 items-center gap-3 rounded-2xl border px-4 py-2.5 transition-all duration-200 ${
+              className={`group flex flex-1 items-center justify-center gap-3 rounded-[20px] px-4 py-3 transition-all duration-300 ${
                 isActive
-                  ? "border-[var(--color-primary)] bg-[var(--color-primary)] text-white shadow-sm"
-                  : "border-transparent bg-transparent text-gray-600 hover:border-[var(--app-border)] hover:bg-white/70"
+                  ? "bg-[var(--color-primary)] text-white shadow-md"
+                  : "bg-transparent text-[var(--color-primary-text)] hover:bg-white/50"
               }`}
             >
               <div
-                className={`flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-xl transition-colors ${
+                className={`flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-[14px] transition-colors ${
                   isActive
-                    ? "bg-white/15 text-white"
-                    : "bg-white/70 text-[var(--color-primary)] group-hover:bg-white"
+                    ? "bg-white/20 text-white"
+                    : "bg-white text-[var(--color-primary)] shadow-sm group-hover:shadow"
                 }`}
               >
-                <Icon size={18} />
+                <Icon size={20} />
               </div>
               <div className="min-w-0">
-                <p className="text-sm font-semibold sm:text-base">
+                <p className={`text-sm sm:text-base ${isActive ? "font-bold" : "font-semibold"}`}>
                   {tab.label}
                 </p>
               </div>

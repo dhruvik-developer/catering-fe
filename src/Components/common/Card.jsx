@@ -20,6 +20,10 @@ function Card({
   hoverable = false,
   className = "",
   children,
+  alignItems,
+  justifyContent,
+  flexDirection,
+  gap,
   ...rest
 }) {
   const padClass = PADDING_CLASSES[padding] ?? PADDING_CLASSES.md;

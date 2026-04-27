@@ -385,7 +385,7 @@ function StockComponent({
                                 height: 44,
                                 bgcolor: isLowStock
                                   ? "error.main"
-                                  : (t) => t.palette.primary.light + "33",
+                                  : "var(--color-primary-border)",
                                 color: isLowStock ? "#fff" : "primary.main",
                               }}
                             >

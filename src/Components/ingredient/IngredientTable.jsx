@@ -112,7 +112,7 @@ const IngredientTable = ({
                         height: 40,
                         fontWeight: 700,
                         fontSize: "0.85rem",
-                        bgcolor: isActive ? "primary.main" : "action.hover",
+                        bgcolor: isActive ? "primary.main" : "var(--color-primary-border)",
                         color: isActive
                           ? "primary.contrastText"
                           : "text.secondary",
@@ -242,7 +242,7 @@ const IngredientTable = ({
                         sx={{
                           width: 32,
                           height: 32,
-                          bgcolor: (t) => t.palette.primary.light + "33",
+                          bgcolor: "var(--color-primary-border)",
                           color: "primary.main",
                         }}
                       >

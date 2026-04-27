@@ -42,7 +42,7 @@ function SectionHeader({ icon: Icon, title, subtitle }) {
       <Avatar
         variant="rounded"
         sx={{
-          bgcolor: (t) => t.palette.primary.light + "33",
+          bgcolor: "var(--color-primary-border)",
           color: "primary.main",
           width: 40,
           height: 40,
@@ -353,7 +353,7 @@ function Step1_ClientEvent({
                         <Avatar
                           variant="rounded"
                           sx={{
-                            bgcolor: (t) => t.palette.primary.light + "33",
+                            bgcolor: "var(--color-primary-border)",
                             color: "primary.main",
                             width: 32,
                             height: 32,
