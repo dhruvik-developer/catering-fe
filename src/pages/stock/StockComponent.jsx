@@ -26,6 +26,7 @@ import {
   FiBox,
   FiTrendingUp,
 } from "react-icons/fi";
+import usePermissions from "../../hooks/usePermissions";
 
 const unitLabels = {
   KG: "Kilogram",
@@ -49,15 +50,31 @@ function StatHero({ gradient, icon, label, value, shadowColor }) {
         background: gradient,
         color: "#fff",
         borderRadius: 3,
-        border: 0,
+        border: "1px solid rgba(255,255,255,0.22)",
         position: "relative",
         overflow: "hidden",
+        minHeight: 118,
         boxShadow: shadowColor
-          ? `0 8px 24px -8px ${shadowColor}`
-          : 3,
+          ? `0 18px 36px -24px ${shadowColor}`
+          : "0 18px 36px -26px rgba(15, 23, 42, 0.55)",
+        transition: "transform 0.2s ease, box-shadow 0.2s ease",
+        "&:before": {
+          content: '""',
+          position: "absolute",
+          inset: 0,
+          background:
+            "radial-gradient(circle at 85% 12%, rgba(255,255,255,0.22), transparent 28%)",
+          pointerEvents: "none",
+        },
+        "&:hover": {
+          transform: "translateY(-2px)",
+          boxShadow: shadowColor
+            ? `0 22px 44px -26px ${shadowColor}`
+            : "0 22px 44px -28px rgba(15, 23, 42, 0.62)",
+        },
       }}
     >
-      <CardContent>
+      <CardContent sx={{ position: "relative", zIndex: 1 }}>
         <Stack
           direction="row"
           alignItems="center"
@@ -83,8 +100,8 @@ function StatHero({ gradient, icon, label, value, shadowColor }) {
             sx={{
               width: 48,
               height: 48,
-              borderRadius: 2,
-              bgcolor: "rgba(255,255,255,0.2)",
+              borderRadius: "50%",
+              bgcolor: "rgba(255,255,255,0.18)",
               border: "1px solid rgba(255,255,255,0.3)",
               display: "flex",
               alignItems: "center",
@@ -112,6 +129,10 @@ function StockComponent({
   handleIncreaseItem,
   handleDecreaseItem,
 }) {
+  const { hasPermission } = usePermissions();
+  const canCreateStock = hasPermission("stock.create");
+  const canUpdateStock = hasPermission("stock.update");
+  const canDeleteStock = hasPermission("stock.delete");
   const totalItems = items?.length || 0;
   const lowStockItems =
     items?.filter((i) => parseInt(i.quantity) <= parseInt(i.alert)).length || 0;
@@ -119,6 +140,7 @@ function StockComponent({
     items?.reduce((sum, i) => sum + Number(i.total_price || 0), 0) || 0;
 
   const canDeleteCategory =
+    canDeleteStock &&
     selectedCategory &&
     selectedCategory !== "low_stock" &&
     selectedCategory !== "all_items";
@@ -126,15 +148,26 @@ function StockComponent({
   return (
     <Paper
       elevation={0}
-      sx={{ p: { xs: 2, sm: 3 }, borderRadius: 3, bgcolor: "background.paper" }}
+      sx={{
+        p: { xs: 2, sm: 3 },
+        borderRadius: 3.5,
+        bgcolor: "var(--app-surface)",
+        background:
+          "linear-gradient(180deg, rgba(255,255,255,0.9), rgba(255,255,255,0.76))",
+        border: "1px solid var(--app-border)",
+        boxShadow: "var(--app-shadow)",
+        backdropFilter: "blur(18px)",
+      }}
     >
       {/* Title */}
       <Stack direction="row" spacing={1.5} alignItems="center" sx={{ mb: 2.5 }}>
         <Avatar
           variant="rounded"
           sx={{
-            bgcolor: (t) => t.palette.primary.light + "33",
+            background:
+              "linear-gradient(135deg, var(--color-primary-soft), rgba(255,255,255,0.75))",
             color: "primary.main",
+            border: "1px solid var(--color-primary-border)",
             width: 44,
             height: 44,
           }}
@@ -161,8 +194,10 @@ function StockComponent({
             sx={{
               p: 2,
               mb: 2.5,
-              bgcolor: (t) => t.palette.primary.light + "1a",
-              borderColor: (t) => t.palette.primary.light + "66",
+              borderRadius: 3,
+              bgcolor: "var(--app-surface-strong)",
+              borderColor: "var(--app-border)",
+              boxShadow: "0 14px 30px -30px rgba(15, 23, 42, 0.5)",
             }}
           >
             <Stack
@@ -197,27 +232,29 @@ function StockComponent({
                   )}
                 </Stack>
               )}
-              <Stack direction="row" spacing={1} flexWrap="wrap" useFlexGap>
-                <Button
-                  variant="contained"
-                  color="primary"
-                  startIcon={<FiPlus size={15} />}
-                  onClick={handleAddCategory}
-                >
-                  Add Category
-                </Button>
-                {selectedCategory !== "low_stock" &&
-                  selectedCategory !== "all_items" && (
-                    <Button
-                      variant="outlined"
-                      color="primary"
-                      startIcon={<FiPlus size={15} />}
-                      onClick={handleAddItem}
-                    >
-                      Add Item
-                    </Button>
-                  )}
-              </Stack>
+              {canCreateStock && (
+                <Stack direction="row" spacing={1} flexWrap="wrap" useFlexGap>
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    startIcon={<FiPlus size={15} />}
+                    onClick={handleAddCategory}
+                  >
+                    Add Category
+                  </Button>
+                  {selectedCategory !== "low_stock" &&
+                    selectedCategory !== "all_items" && (
+                      <Button
+                        variant="outlined"
+                        color="primary"
+                        startIcon={<FiPlus size={15} />}
+                        onClick={handleAddItem}
+                      >
+                        Add Item
+                      </Button>
+                    )}
+                </Stack>
+              )}
             </Stack>
           </Paper>
 
@@ -295,14 +332,22 @@ function StockComponent({
                         position: "relative",
                         overflow: "hidden",
                         height: "100%",
-                        border: 2,
-                        borderColor: isLowStock ? "error.light" : "divider",
-                        transition: "all 0.2s",
+                        bgcolor: "var(--app-surface-strong)",
+                        border: "1px solid",
+                        borderColor: isLowStock
+                          ? "error.light"
+                          : "var(--app-border)",
+                        boxShadow: "0 16px 34px -30px rgba(15, 23, 42, 0.55)",
+                        backdropFilter: "blur(14px)",
+                        transition:
+                          "transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease",
                         "&:hover": {
+                          transform: "translateY(-2px)",
                           borderColor: isLowStock
                             ? "error.main"
                             : "primary.light",
-                          boxShadow: 4,
+                          boxShadow:
+                            "0 22px 44px -30px rgba(15, 23, 42, 0.65)",
                         },
                       }}
                     >
@@ -387,14 +432,16 @@ function StockComponent({
                               )}
                             </Box>
                           </Stack>
-                          <IconButton
-                            size="small"
-                            color="error"
-                            onClick={() => onItemDelete(item.id)}
-                            title="Delete Item"
-                          >
-                            <FiTrash2 size={16} />
-                          </IconButton>
+                          {canDeleteStock && (
+                            <IconButton
+                              size="small"
+                              color="error"
+                              onClick={() => onItemDelete(item.id)}
+                              title="Delete Item"
+                            >
+                              <FiTrash2 size={16} />
+                            </IconButton>
+                          )}
                         </Stack>
 
                         {/* Quantity Display */}
@@ -462,9 +509,9 @@ function StockComponent({
                                 px: 1.5,
                                 py: 1,
                                 borderRadius: 2,
-                                bgcolor: "action.hover",
+                                bgcolor: "rgba(248,250,252,0.86)",
                                 border: 1,
-                                borderColor: "divider",
+                                borderColor: "var(--app-border)",
                               }}
                             >
                               <Typography
@@ -494,10 +541,10 @@ function StockComponent({
                                 px: 1.5,
                                 py: 1,
                                 borderRadius: 2,
-                                bgcolor: (t) => t.palette.primary.light + "14",
+                                background:
+                                  "linear-gradient(135deg, var(--color-primary-tint), rgba(255,255,255,0.82))",
                                 border: 1,
-                                borderColor: (t) =>
-                                  t.palette.primary.light + "66",
+                                borderColor: "var(--color-primary-border)",
                               }}
                             >
                               <Typography
@@ -525,28 +572,30 @@ function StockComponent({
                         </Grid>
 
                         {/* Controls */}
-                        <Stack direction="row" spacing={1}>
-                          <Button
-                            fullWidth
-                            color="primary"
-                            variant="contained"
-                            startIcon={<FiPlus size={14} />}
-                            onClick={() => handleIncreaseItem(item)}
-                            sx={{ fontWeight: 700, textTransform: "uppercase" }}
-                          >
-                            Stock In
-                          </Button>
-                          <Button
-                            fullWidth
-                            color="error"
-                            variant="outlined"
-                            startIcon={<FiMinus size={14} />}
-                            onClick={() => handleDecreaseItem(item)}
-                            sx={{ fontWeight: 700, textTransform: "uppercase" }}
-                          >
-                            Stock Out
-                          </Button>
-                        </Stack>
+                        {canUpdateStock && (
+                          <Stack direction="row" spacing={1}>
+                            <Button
+                              fullWidth
+                              color="primary"
+                              variant="contained"
+                              startIcon={<FiPlus size={14} />}
+                              onClick={() => handleIncreaseItem(item)}
+                              sx={{ fontWeight: 700, textTransform: "uppercase" }}
+                            >
+                              Stock In
+                            </Button>
+                            <Button
+                              fullWidth
+                              color="error"
+                              variant="outlined"
+                              startIcon={<FiMinus size={14} />}
+                              onClick={() => handleDecreaseItem(item)}
+                              sx={{ fontWeight: 700, textTransform: "uppercase" }}
+                            >
+                              Stock Out
+                            </Button>
+                          </Stack>
+                        )}
                       </CardContent>
                     </Card>
                   </Grid>

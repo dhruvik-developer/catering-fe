@@ -11,6 +11,7 @@ import {
 import toast from "react-hot-toast";
 import Swal from "sweetalert2";
 import DeleteConfirmation from "../../Components/common/DeleteConfirmation";
+import usePermissions from "../../hooks/usePermissions";
 
 const unitLabels = {
   KG: "Kilogram",
@@ -21,6 +22,7 @@ const unitLabels = {
 };
 
 function StockController() {
+  const { hasPermission } = usePermissions();
   const [categories, setCategories] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [items, setItems] = useState([]);
@@ -98,6 +100,11 @@ function StockController() {
   }, [selectedCategory, categories]);
 
   const handleAddCategory = async () => {
+    if (!hasPermission("stock.create")) {
+      toast.error("You do not have permission to create stock categories.");
+      return;
+    }
+
     const { value: name } = await Swal.fire({
       title: "Add Category",
       input: "text",
@@ -131,6 +138,11 @@ function StockController() {
   };
 
   const handleAddItem = async () => {
+    if (!hasPermission("stock.create")) {
+      toast.error("You do not have permission to create stock items.");
+      return;
+    }
+
     const { value: formValues } = await Swal.fire({
       title: "Add Item",
       html:
@@ -241,6 +253,11 @@ function StockController() {
 
   // Handle Delete Category
   const handleDeleteCategory = (id) => {
+    if (!hasPermission("stock.delete")) {
+      toast.error("You do not have permission to delete stock categories.");
+      return;
+    }
+
     DeleteConfirmation({
       id,
       apiEndpoint: "/stoke-categories",
@@ -255,6 +272,11 @@ function StockController() {
 
   // Handle Delete item
   const handleDeleteItem = (id) => {
+    if (!hasPermission("stock.delete")) {
+      toast.error("You do not have permission to delete stock items.");
+      return;
+    }
+
     DeleteConfirmation({
       id,
       apiEndpoint: "/stoke-items",
@@ -268,6 +290,11 @@ function StockController() {
   };
 
   const handleIncreaseItem = async (item) => {
+    if (!hasPermission("stock.update")) {
+      toast.error("You do not have permission to update stock.");
+      return;
+    }
+
     const { value: formValues } = await Swal.fire({
       title: `Add Stock For: ${item.name}`,
       html:
@@ -335,6 +362,11 @@ function StockController() {
   };
 
   const handleDecreaseItem = async (item) => {
+    if (!hasPermission("stock.update")) {
+      toast.error("You do not have permission to update stock.");
+      return;
+    }
+
     const { value: formValues } = await Swal.fire({
       title: `Remove Stock For: ${item.name}`,
       html:

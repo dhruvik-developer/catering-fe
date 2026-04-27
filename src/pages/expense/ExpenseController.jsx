@@ -10,8 +10,10 @@ import {
 import toast from "react-hot-toast";
 import Swal from "sweetalert2";
 import DeleteConfirmation from "../../Components/common/DeleteConfirmation";
+import usePermissions from "../../hooks/usePermissions";
 
 function ExpenseController() {
+  const { hasPermission } = usePermissions();
   const [expenses, setExpenses] = useState([]);
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -68,6 +70,11 @@ function ExpenseController() {
   };
 
   const handleAddExpense = async () => {
+    if (!hasPermission("expense_entries.create")) {
+      toast.error("You do not have permission to create expense entries.");
+      return;
+    }
+
     const { value: formValues } = await Swal.fire({
       title: "Add Expense",
       html:
@@ -137,6 +144,11 @@ function ExpenseController() {
   };
 
   const handleEditExpense = async (expense) => {
+    if (!hasPermission("expense_entries.update")) {
+      toast.error("You do not have permission to update expense entries.");
+      return;
+    }
+
     const { value: formValues } = await Swal.fire({
       title: "Edit Expense",
       html:
@@ -205,6 +217,11 @@ function ExpenseController() {
   };
 
   const handleDeleteExpense = (id) => {
+    if (!hasPermission("expense_entries.delete")) {
+      toast.error("You do not have permission to delete expense entries.");
+      return;
+    }
+
     DeleteConfirmation({
       id,
       apiEndpoint: "/expenses",
@@ -215,6 +232,11 @@ function ExpenseController() {
   };
 
   const handleAddCategory = async () => {
+    if (!hasPermission("expense_categories.create")) {
+      toast.error("You do not have permission to create expense categories.");
+      return;
+    }
+
     const { value: name } = await Swal.fire({
       title: "Add Expense Category",
       input: "text",
@@ -246,6 +268,11 @@ function ExpenseController() {
   };
 
   const handleDeleteCategory = async (id, catName) => {
+    if (!hasPermission("expense_categories.delete")) {
+      toast.error("You do not have permission to delete expense categories.");
+      return;
+    }
+
     // Check if any expenses exist under this category
     const categoryExpenses = expenses.filter((exp) => exp.category == id);
 

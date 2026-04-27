@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useCallback, useEffect, useState } from "react";
 import SettingsComponent from "./SettingsComponent";
 import { extractColorsFromImage } from "../../utils/colorUtils";
 import {
@@ -7,6 +7,7 @@ import {
   updateBusinessProfile,
 } from "../../api/BusinessProfile";
 import toast from "react-hot-toast";
+import usePermissions from "../../hooks/usePermissions";
 
 const ALLOWED_LOGO_MIME_TYPES = [
   "image/png",
@@ -37,6 +38,7 @@ const hardReloadPage = () => {
 };
 
 function SettingsController() {
+  const { hasPermission } = usePermissions();
   const [loading, setLoading] = useState(false);
   const [profileId, setProfileId] = useState(null);
   const [isEditing, setIsEditing] = useState(false);
@@ -57,11 +59,16 @@ function SettingsController() {
   // Keep a copy for cancel/revert
   const [originalData, setOriginalData] = useState({ ...formData });
 
-  useEffect(() => {
-    fetchProfile();
+  const handleExtractColors = useCallback(async (source) => {
+    try {
+      const colors = await extractColorsFromImage(source);
+      setExtractedColors(colors);
+    } catch (error) {
+      console.error("Failed to extract colors:", error);
+    }
   }, []);
 
-  const fetchProfile = async () => {
+  const fetchProfile = useCallback(async () => {
     try {
       const response = await getAllBusinessProfiles();
       const profileList = Array.isArray(response?.data)
@@ -93,16 +100,11 @@ function SettingsController() {
     } catch (error) {
       console.error("Failed to load business profile:", error);
     }
-  };
+  }, [handleExtractColors]);
 
-  const handleExtractColors = async (source) => {
-    try {
-      const colors = await extractColorsFromImage(source);
-      setExtractedColors(colors);
-    } catch (error) {
-      console.error("Failed to extract colors:", error);
-    }
-  };
+  useEffect(() => {
+    fetchProfile();
+  }, [fetchProfile]);
 
   const handleInputChange = (e) => {
     const { name, value, files } = e.target;
@@ -152,6 +154,14 @@ function SettingsController() {
   };
 
   const handleEdit = () => {
+    const requiredPermission = profileId
+      ? "business_profiles.update"
+      : "business_profiles.create";
+    if (!hasPermission(requiredPermission)) {
+      toast.error("You do not have permission to edit the business profile.");
+      return;
+    }
+
     setOriginalData({ ...formData });
     setIsEditing(true);
   };
@@ -164,6 +174,14 @@ function SettingsController() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (loading) return;
+
+    const requiredPermission = profileId
+      ? "business_profiles.update"
+      : "business_profiles.create";
+    if (!hasPermission(requiredPermission)) {
+      toast.error("You do not have permission to save the business profile.");
+      return;
+    }
 
     if (
       !formData.caters_name.trim() ||
@@ -249,6 +267,11 @@ function SettingsController() {
       handleEdit={handleEdit}
       handleCancel={handleCancel}
       extractedColors={extractedColors}
+      canModifyProfile={
+        profileId
+          ? hasPermission("business_profiles.update")
+          : hasPermission("business_profiles.create")
+      }
     />
   );
 }

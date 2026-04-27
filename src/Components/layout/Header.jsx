@@ -35,6 +35,8 @@ import toast from "react-hot-toast";
 import { UserContext } from "../../context/UserContext";
 import { getStockCategory } from "../../api/FetchStockCategory";
 import { getAllOrder } from "../../api/FetchAllOrder";
+import usePermissions from "../../hooks/usePermissions";
+import { getDefaultRouteForAccess } from "../../utils/accessControl";
 
 // Parse date string in dd-mm-yyyy OR yyyy-mm-dd format
 function parseDate(str) {
@@ -172,11 +174,19 @@ const parentRoutes = {
 };
 
 const Header = ({ toggleSidebar }) => {
-  const { username, logout } = useContext(UserContext);
+  const { username, logout, permissions, enabledModules } =
+    useContext(UserContext);
+  const { hasPermission } = usePermissions();
   const navigate = useNavigate();
   const location = useLocation();
   const displayName = username || "User";
   const initial = displayName.charAt(0).toUpperCase();
+  const homeRoute =
+    getDefaultRouteForAccess(permissions, enabledModules) || "/login";
+  const canViewStock = hasPermission("stock.view");
+  const canViewOrders = hasPermission("event_bookings.view");
+  const canViewSettings = hasPermission("business_profiles.view");
+  const canViewUsers = hasPermission("users.view");
 
   const [lowStockCount, setLowStockCount] = useState(0);
   const [lowStockItems, setLowStockItems] = useState([]);
@@ -323,11 +333,11 @@ const Header = ({ toggleSidebar }) => {
   useEffect(() => {
     const fetchHeaderData = async () => {
       const [stockResult, orderResult] = await Promise.allSettled([
-        getStockCategory(),
-        getAllOrder(),
+        canViewStock ? getStockCategory() : Promise.resolve(null),
+        canViewOrders ? getAllOrder() : Promise.resolve(null),
       ]);
 
-      if (stockResult.status === "fulfilled") {
+      if (canViewStock && stockResult.status === "fulfilled") {
         const stockData = stockResult.value?.data?.data;
         if (stockData && Array.isArray(stockData)) {
           let lowCount = 0;
@@ -356,9 +366,12 @@ const Header = ({ toggleSidebar }) => {
           setLowStockCount(lowCount);
           setLowStockItems(lowItems);
         }
+      } else {
+        setLowStockCount(0);
+        setLowStockItems([]);
       }
 
-      if (orderResult.status === "fulfilled") {
+      if (canViewOrders && orderResult.status === "fulfilled") {
         const orderData = orderResult.value?.data?.data;
         if (orderData) {
           const today = new Date();
@@ -397,6 +410,9 @@ const Header = ({ toggleSidebar }) => {
           setUpcomingOrders(upcoming);
           setUpcomingOrderCount(upcoming.length);
         }
+      } else {
+        setUpcomingOrders([]);
+        setUpcomingOrderCount(0);
       }
     };
     fetchHeaderData();
@@ -407,7 +423,7 @@ const Header = ({ toggleSidebar }) => {
       window.removeEventListener("orderStatusChanged", fetchHeaderData);
       window.removeEventListener("stockDataChanged", fetchHeaderData);
     };
-  }, []);
+  }, [canViewOrders, canViewStock]);
 
   const handleLogout = () => {
     setProfileAnchor(null);
@@ -425,9 +441,16 @@ const Header = ({ toggleSidebar }) => {
   return (
     <AppBar
       position="static"
-      color="primary"
-      elevation={2}
-      sx={{ color: "primary.contrastText" }}
+      color="inherit"
+      elevation={0}
+      sx={{
+        bgcolor: "rgba(255,255,255,0.82)",
+        backdropFilter: "blur(18px)",
+        color: "text.primary",
+        borderBottom: 1,
+        borderColor: "var(--app-border)",
+        boxShadow: "0 14px 34px -32px rgba(15, 23, 42, 0.5)",
+      }}
     >
       <Toolbar
         sx={{
@@ -438,11 +461,18 @@ const Header = ({ toggleSidebar }) => {
         }}
       >
         {/* Left: Hamburger + Breadcrumbs */}
-        <Stack direction="row" alignItems="center" spacing={1} minWidth={0}>
+        <Stack
+          direction="row"
+          spacing={1}
+          sx={{ alignItems: "center", minWidth: 0 }}
+        >
           <IconButton
             edge="start"
             onClick={toggleSidebar}
-            sx={{ color: "inherit" }}
+            sx={{
+              color: "text.secondary",
+              "&:hover": { bgcolor: "action.hover" },
+            }}
             aria-label="toggle sidebar"
           >
             <FiMenu />
@@ -460,7 +490,7 @@ const Header = ({ toggleSidebar }) => {
           >
             <MuiLink
               component="button"
-              onClick={() => navigate("/dish")}
+              onClick={() => navigate(homeRoute)}
               underline="hover"
               sx={{
                 color: "inherit",
@@ -505,59 +535,72 @@ const Header = ({ toggleSidebar }) => {
         </Stack>
 
         {/* Right: Low stock + Upcoming + Calendar + Profile */}
-        <Stack direction="row" alignItems="center" spacing={1}>
-          {/* Low Stock */}
-          <Button
-            size="small"
-            variant={lowStockCount > 0 ? "contained" : "text"}
-            color={lowStockCount > 0 ? "warning" : "inherit"}
-            startIcon={<FiAlertTriangle size={14} />}
-            onClick={(e) => setLowStockAnchor(e.currentTarget)}
-            sx={{
-              borderRadius: 999,
-              minWidth: 0,
-              color: lowStockCount > 0 ? undefined : "inherit",
-              bgcolor: lowStockCount > 0 ? undefined : "rgba(255,255,255,0.1)",
-              "&:hover": {
-                bgcolor:
-                  lowStockCount > 0 ? undefined : "rgba(255,255,255,0.2)",
-              },
-            }}
-          >
-            <Badge
-              badgeContent={lowStockCount > 0 ? lowStockCount : null}
-              color="error"
-              sx={{ "& .MuiBadge-badge": { right: -6, top: -2 } }}
+        <Stack direction="row" spacing={1} sx={{ alignItems: "center" }}>
+          {canViewStock && (
+            <Button
+              size="small"
+              variant={lowStockCount > 0 ? "contained" : "text"}
+              color={lowStockCount > 0 ? "warning" : "inherit"}
+              startIcon={<FiAlertTriangle size={14} />}
+              onClick={(e) => setLowStockAnchor(e.currentTarget)}
+              sx={{
+                borderRadius: 999,
+                minWidth: 0,
+                color: lowStockCount > 0 ? undefined : "text.secondary",
+                bgcolor: lowStockCount > 0 ? undefined : "action.hover",
+                border: lowStockCount > 0 ? 0 : "1px solid",
+                borderColor: "divider",
+                "&:hover": {
+                  bgcolor: lowStockCount > 0 ? undefined : "action.selected",
+                },
+              }}
             >
-              <Box
-                component="span"
-                sx={{ display: { xs: "none", sm: "inline" } }}
+              <Badge
+                badgeContent={lowStockCount > 0 ? lowStockCount : null}
+                color="error"
+                sx={{ "& .MuiBadge-badge": { right: -6, top: -2 } }}
               >
-                Low Stock
-              </Box>
-              <Box
-                component="span"
-                sx={{ display: { xs: "inline", sm: "none" } }}
-              >
-                {lowStockCount}
-              </Box>
-            </Badge>
-          </Button>
+                <Box
+                  component="span"
+                  sx={{ display: { xs: "none", sm: "inline" } }}
+                >
+                  Low Stock
+                </Box>
+                <Box
+                  component="span"
+                  sx={{ display: { xs: "inline", sm: "none" } }}
+                >
+                  {lowStockCount}
+                </Box>
+              </Badge>
+            </Button>
+          )}
           <Menu
             anchorEl={lowStockAnchor}
             open={Boolean(lowStockAnchor)}
             onClose={closeLowStock}
-            PaperProps={{ sx: { width: 340, maxHeight: 420, mt: 1 } }}
+            PaperProps={{
+              sx: {
+                width: 340,
+                maxHeight: 420,
+                mt: 1,
+                bgcolor: "var(--app-surface-strong)",
+                border: "1px solid var(--app-border)",
+                boxShadow: "var(--app-shadow)",
+              },
+            }}
             anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
             transformOrigin={{ vertical: "top", horizontal: "right" }}
           >
             <Box sx={{ px: 2, py: 1.5, bgcolor: "action.hover" }}>
               <Stack
                 direction="row"
-                alignItems="center"
-                justifyContent="space-between"
+                sx={{
+                  alignItems: "center",
+                  justifyContent: "space-between",
+                }}
               >
-                <Stack direction="row" spacing={1} alignItems="center">
+                <Stack direction="row" spacing={1} sx={{ alignItems: "center" }}>
                   <FiAlertTriangle size={14} />
                   <Typography variant="subtitle2" fontWeight={700}>
                     Low Stock Items
@@ -567,7 +610,12 @@ const Header = ({ toggleSidebar }) => {
                   variant="caption"
                   fontWeight={700}
                   color="primary.main"
-                  sx={{ bgcolor: "background.paper", px: 1, py: 0.25, borderRadius: 99 }}
+                  sx={{
+                    bgcolor: "background.paper",
+                    px: 1,
+                    py: 0.25,
+                    borderRadius: 99,
+                  }}
                 >
                   {lowStockCount} Alert{lowStockCount !== 1 ? "s" : ""}
                 </Typography>
@@ -614,7 +662,7 @@ const Header = ({ toggleSidebar }) => {
                         <FiBox size={16} />
                       </Avatar>
                     </ListItemIcon>
-                    <Box flex={1} minWidth={0}>
+                    <Box sx={{ flex: 1, minWidth: 0 }}>
                       <Typography
                         variant="body2"
                         fontWeight={600}
@@ -631,7 +679,7 @@ const Header = ({ toggleSidebar }) => {
                         {item.categoryName}
                       </Typography>
                     </Box>
-                    <Stack alignItems="flex-end">
+                    <Stack sx={{ alignItems: "flex-end" }}>
                       <Typography
                         variant="caption"
                         fontWeight={700}
@@ -670,54 +718,68 @@ const Header = ({ toggleSidebar }) => {
             )}
           </Menu>
 
-          {/* Upcoming Orders */}
-          <Button
-            size="small"
-            variant="text"
-            startIcon={<FiClipboard size={14} />}
-            onClick={(e) => setUpcomingAnchor(e.currentTarget)}
-            sx={{
-              borderRadius: 999,
-              minWidth: 0,
-              color: "inherit",
-              bgcolor: "rgba(255,255,255,0.1)",
-              "&:hover": { bgcolor: "rgba(255,255,255,0.2)" },
-            }}
-          >
-            <Badge
-              badgeContent={upcomingOrderCount > 0 ? upcomingOrderCount : null}
-              color="secondary"
-              sx={{ "& .MuiBadge-badge": { right: -6, top: -2 } }}
+          {canViewOrders && (
+            <Button
+              size="small"
+              variant="text"
+              startIcon={<FiClipboard size={14} />}
+              onClick={(e) => setUpcomingAnchor(e.currentTarget)}
+              sx={{
+                borderRadius: 999,
+                minWidth: 0,
+                color: "text.secondary",
+                bgcolor: "action.hover",
+                border: "1px solid",
+                borderColor: "divider",
+                "&:hover": { bgcolor: "action.selected" },
+              }}
             >
-              <Box
-                component="span"
-                sx={{ display: { xs: "none", sm: "inline" } }}
+              <Badge
+                badgeContent={upcomingOrderCount > 0 ? upcomingOrderCount : null}
+                color="secondary"
+                sx={{ "& .MuiBadge-badge": { right: -6, top: -2 } }}
               >
-                Upcoming
-              </Box>
-              <Box
-                component="span"
-                sx={{ display: { xs: "inline", sm: "none" } }}
-              >
-                {upcomingOrderCount}
-              </Box>
-            </Badge>
-          </Button>
+                <Box
+                  component="span"
+                  sx={{ display: { xs: "none", sm: "inline" } }}
+                >
+                  Upcoming
+                </Box>
+                <Box
+                  component="span"
+                  sx={{ display: { xs: "inline", sm: "none" } }}
+                >
+                  {upcomingOrderCount}
+                </Box>
+              </Badge>
+            </Button>
+          )}
           <Menu
             anchorEl={upcomingAnchor}
             open={Boolean(upcomingAnchor)}
             onClose={closeUpcoming}
-            PaperProps={{ sx: { width: 340, maxHeight: 420, mt: 1 } }}
+            PaperProps={{
+              sx: {
+                width: 340,
+                maxHeight: 420,
+                mt: 1,
+                bgcolor: "var(--app-surface-strong)",
+                border: "1px solid var(--app-border)",
+                boxShadow: "var(--app-shadow)",
+              },
+            }}
             anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
             transformOrigin={{ vertical: "top", horizontal: "right" }}
           >
             <Box sx={{ px: 2, py: 1.5, bgcolor: "action.hover" }}>
               <Stack
                 direction="row"
-                alignItems="center"
-                justifyContent="space-between"
+                sx={{
+                  alignItems: "center",
+                  justifyContent: "space-between",
+                }}
               >
-                <Stack direction="row" spacing={1} alignItems="center">
+                <Stack direction="row" spacing={1} sx={{ alignItems: "center" }}>
                   <FiClipboard size={14} />
                   <Typography variant="subtitle2" fontWeight={700}>
                     Upcoming Orders
@@ -727,7 +789,12 @@ const Header = ({ toggleSidebar }) => {
                   variant="caption"
                   fontWeight={700}
                   color="primary.main"
-                  sx={{ bgcolor: "background.paper", px: 1, py: 0.25, borderRadius: 99 }}
+                  sx={{
+                    bgcolor: "background.paper",
+                    px: 1,
+                    py: 0.25,
+                    borderRadius: 99,
+                  }}
                 >
                   Next 7 Days
                 </Typography>
@@ -786,7 +853,7 @@ const Header = ({ toggleSidebar }) => {
                         {order.name?.charAt(0)?.toUpperCase() || "?"}
                       </Avatar>
                     </ListItemIcon>
-                    <Box flex={1} minWidth={0}>
+                    <Box sx={{ flex: 1, minWidth: 0 }}>
                       <Typography
                         variant="body2"
                         fontWeight={600}
@@ -798,8 +865,7 @@ const Header = ({ toggleSidebar }) => {
                       <Stack
                         direction="row"
                         spacing={1}
-                        alignItems="center"
-                        sx={{ mt: 0.25 }}
+                        sx={{ mt: 0.25, alignItems: "center" }}
                       >
                         <FiCalendar size={10} />
                         <Typography
@@ -819,7 +885,10 @@ const Header = ({ toggleSidebar }) => {
                         px: 1,
                         py: 0.25,
                         borderRadius: 99,
-                        bgcolor: diffDays === 0 ? "error.light" : (t) => t.palette.primary.light + "33",
+                        bgcolor:
+                          diffDays === 0
+                            ? "error.light"
+                            : (t) => t.palette.primary.light + "33",
                         color: diffDays === 0 ? "error.dark" : "primary.main",
                       }}
                     >
@@ -853,40 +922,45 @@ const Header = ({ toggleSidebar }) => {
           <Divider
             orientation="vertical"
             flexItem
-            sx={{ my: 1, bgcolor: "rgba(255,255,255,0.2)" }}
+            sx={{ my: 1, bgcolor: "divider" }}
           />
 
-          {/* Calendar */}
-          <Button
-            size="small"
-            variant="text"
-            startIcon={<FiCalendar size={15} />}
-            onClick={() => navigate("/calendar")}
-            sx={{
-              color: "inherit",
-              bgcolor: "rgba(255,255,255,0.15)",
-              "&:hover": { bgcolor: "rgba(255,255,255,0.25)" },
-            }}
-          >
-            <Box
-              component="span"
-              sx={{ display: { xs: "none", md: "inline" } }}
+          {canViewOrders && (
+            <Button
+              size="small"
+              variant="text"
+              startIcon={<FiCalendar size={15} />}
+              onClick={() => navigate("/calendar")}
+              sx={{
+                color: "text.secondary",
+                bgcolor: "action.hover",
+                border: "1px solid",
+                borderColor: "divider",
+                "&:hover": { bgcolor: "action.selected" },
+              }}
             >
-              Calendar
-            </Box>
-          </Button>
+              <Box
+                component="span"
+                sx={{ display: { xs: "none", md: "inline" } }}
+              >
+                Calendar
+              </Box>
+            </Button>
+          )}
 
           {/* Profile */}
           <Button
             onClick={(e) => setProfileAnchor(e.currentTarget)}
             sx={{
-              bgcolor: "background.paper",
+              bgcolor: "var(--app-surface)",
               color: "primary.main",
+              border: "1px solid",
+              borderColor: "var(--app-border)",
               pl: 1.5,
               pr: 1,
               py: 0.5,
               borderRadius: 999,
-              "&:hover": { bgcolor: "background.paper", opacity: 0.9 },
+              "&:hover": { bgcolor: "action.hover" },
             }}
             endIcon={
               <FiChevronDown
@@ -925,36 +999,48 @@ const Header = ({ toggleSidebar }) => {
             anchorEl={profileAnchor}
             open={Boolean(profileAnchor)}
             onClose={closeProfile}
-            PaperProps={{ sx: { width: 180, mt: 1 } }}
+            PaperProps={{
+              sx: {
+                width: 180,
+                mt: 1,
+                bgcolor: "var(--app-surface-strong)",
+                border: "1px solid var(--app-border)",
+                boxShadow: "var(--app-shadow)",
+              },
+            }}
             anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
             transformOrigin={{ vertical: "top", horizontal: "right" }}
           >
-            <MenuItem
-              onClick={() => {
-                closeProfile();
-                navigate("/user");
-              }}
-            >
-              <ListItemIcon>
-                <FiUsers size={16} />
-              </ListItemIcon>
-              <Typography variant="body2" fontWeight={500}>
-                Users
-              </Typography>
-            </MenuItem>
-            <MenuItem
-              onClick={() => {
-                closeProfile();
-                navigate("/settings");
-              }}
-            >
-              <ListItemIcon>
-                <FiSettings size={16} />
-              </ListItemIcon>
-              <Typography variant="body2" fontWeight={500}>
-                Settings
-              </Typography>
-            </MenuItem>
+            {canViewUsers && (
+              <MenuItem
+                onClick={() => {
+                  closeProfile();
+                  navigate("/user");
+                }}
+              >
+                <ListItemIcon>
+                  <FiUsers size={16} />
+                </ListItemIcon>
+                <Typography variant="body2" fontWeight={500}>
+                  Users
+                </Typography>
+              </MenuItem>
+            )}
+            {canViewSettings && (
+              <MenuItem
+                onClick={() => {
+                  closeProfile();
+                  navigate("/settings");
+                }}
+              >
+                <ListItemIcon>
+                  <FiSettings size={16} />
+                </ListItemIcon>
+                <Typography variant="body2" fontWeight={500}>
+                  Settings
+                </Typography>
+              </MenuItem>
+            )}
             <Divider />
             <MenuItem onClick={handleLogout} sx={{ color: "error.main" }}>
               <ListItemIcon sx={{ color: "inherit" }}>

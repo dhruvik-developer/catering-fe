@@ -34,7 +34,8 @@ function LoginComponent({
           alignItems: "center",
           justifyContent: "center",
           minHeight: "100vh",
-          bgcolor: "grey.100",
+          bgcolor: "background.default",
+          background: "var(--app-shell-background)",
         }}
       >
         <Loader message="Signing in..." />
@@ -49,15 +50,21 @@ function LoginComponent({
         alignItems: "center",
         justifyContent: "center",
         minHeight: "100vh",
-        bgcolor: "grey.100",
+        bgcolor: "background.default",
+        background: "var(--app-shell-background)",
         p: 2,
       }}
     >
       <Paper
-        elevation={6}
+        elevation={0}
         sx={{
           p: { xs: 3, sm: 5 },
           borderRadius: 3,
+          border: 1,
+          borderColor: "var(--app-border)",
+          bgcolor: "var(--app-surface-strong)",
+          boxShadow: "var(--app-shadow)",
+          backdropFilter: "blur(18px)",
           width: "100%",
           maxWidth: 400,
           minHeight: 500,
@@ -66,7 +73,7 @@ function LoginComponent({
           justifyContent: "center",
         }}
       >
-        <Stack alignItems="center" sx={{ mb: 2 }}>
+        <Stack sx={{ mb: 2, alignItems: "center" }}>
           {isLogoLoading ? (
             <Skeleton variant="rounded" width={180} height={80} />
           ) : businessLogo ? (
@@ -84,8 +91,7 @@ function LoginComponent({
         <Typography
           variant="h5"
           fontWeight={600}
-          textAlign="center"
-          sx={{ mb: 3 }}
+          sx={{ mb: 3, textAlign: "center" }}
         >
           Sign In
         </Typography>
@@ -110,12 +116,14 @@ function LoginComponent({
                 onChange={handleInputChange}
                 autoComplete="username"
                 error={!!errors.username}
-                InputProps={{
-                  endAdornment: (
-                    <InputAdornment position="end">
-                      <RiUser3Fill color="currentColor" />
-                    </InputAdornment>
-                  ),
+                slotProps={{
+                  input: {
+                    endAdornment: (
+                      <InputAdornment position="end">
+                        <RiUser3Fill color="currentColor" />
+                      </InputAdornment>
+                    ),
+                  },
                 }}
               />
             </Box>
@@ -138,19 +146,21 @@ function LoginComponent({
                 onChange={handleInputChange}
                 autoComplete="current-password"
                 error={!!errors.password}
-                InputProps={{
-                  endAdornment: (
-                    <InputAdornment position="end">
-                      <IconButton
-                        type="button"
-                        onClick={onShowPassword}
-                        edge="end"
-                        size="small"
-                      >
-                        {showPassword ? <FaEyeSlash /> : <FaEye />}
-                      </IconButton>
-                    </InputAdornment>
-                  ),
+                slotProps={{
+                  input: {
+                    endAdornment: (
+                      <InputAdornment position="end">
+                        <IconButton
+                          type="button"
+                          onClick={onShowPassword}
+                          edge="end"
+                          size="small"
+                        >
+                          {showPassword ? <FaEyeSlash /> : <FaEye />}
+                        </IconButton>
+                      </InputAdornment>
+                    ),
+                  },
                 }}
               />
             </Box>

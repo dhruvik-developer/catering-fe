@@ -185,8 +185,11 @@ function Step2_MenuSelection({
                 <Stack
                   direction="row"
                   spacing={1}
-                  alignItems="center"
-                  sx={{ textTransform: "uppercase", letterSpacing: 0.5 }}
+                  sx={{
+                    alignItems: "center",
+                    textTransform: "uppercase",
+                    letterSpacing: 0.5,
+                  }}
                 >
                   <span>{tab.label}</span>
                   <Typography
@@ -253,12 +256,14 @@ function Step2_MenuSelection({
               placeholder="Search category..."
               value={categorySearchQuery}
               onChange={(e) => setCategorySearchQuery(e.target.value)}
-              InputProps={{
-                startAdornment: (
-                  <InputAdornment position="start">
-                    <FiSearch size={14} />
-                  </InputAdornment>
-                ),
+              slotProps={{
+                input: {
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <FiSearch size={14} />
+                    </InputAdornment>
+                  ),
+                },
               }}
             />
           </Box>
@@ -325,14 +330,14 @@ function Step2_MenuSelection({
         <Box sx={{ flex: 1, display: "flex", flexDirection: "column" }}>
           <Stack
             direction={{ xs: "column", sm: "row" }}
-            alignItems={{ xs: "stretch", sm: "center" }}
-            justifyContent="space-between"
             spacing={2}
             sx={{
               p: 2,
               borderBottom: 1,
               borderColor: "divider",
               bgcolor: "action.hover",
+              alignItems: { xs: "stretch", sm: "center" },
+              justifyContent: "space-between",
             }}
           >
             <TextField
@@ -341,16 +346,18 @@ function Step2_MenuSelection({
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               sx={{ flex: 1, maxWidth: 360 }}
-              InputProps={{
-                startAdornment: (
-                  <InputAdornment position="start">
-                    <FiSearch size={14} />
-                  </InputAdornment>
-                ),
+              slotProps={{
+                input: {
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <FiSearch size={14} />
+                    </InputAdornment>
+                  ),
+                },
               }}
             />
-            <Stack direction="row" spacing={2} alignItems="center">
-              <Box textAlign="right">
+            <Stack direction="row" spacing={2} sx={{ alignItems: "center" }}>
+              <Box sx={{ textAlign: "right" }}>
                 <Typography
                   variant="caption"
                   color="text.disabled"
@@ -363,7 +370,7 @@ function Step2_MenuSelection({
                 </Typography>
               </Box>
               <Divider orientation="vertical" flexItem />
-              <Box textAlign="right">
+              <Box sx={{ textAlign: "right" }}>
                 <Typography
                   variant="caption"
                   color="text.disabled"
@@ -469,9 +476,14 @@ function Step2_MenuSelection({
       <Stack
         direction={{ xs: "column", md: "row" }}
         spacing={2}
-        alignItems={{ xs: "stretch", md: "center" }}
-        justifyContent="space-between"
-        sx={{ pt: 2.5, mt: 2.5, borderTop: 1, borderColor: "divider" }}
+        sx={{
+          pt: 2.5,
+          mt: 2.5,
+          borderTop: 1,
+          borderColor: "divider",
+          alignItems: { xs: "stretch", md: "center" },
+          justifyContent: "space-between",
+        }}
       >
         <Button
           variant="outlined"
@@ -485,15 +497,17 @@ function Step2_MenuSelection({
         <Stack
           direction={{ xs: "column", md: "row" }}
           spacing={2}
-          alignItems={{ xs: "stretch", md: "center" }}
+          sx={{ alignItems: { xs: "stretch", md: "center" } }}
         >
           <Stack
             direction="row"
             spacing={1}
-            flexWrap="wrap"
             useFlexGap
-            alignItems="center"
-            sx={{ display: { xs: "none", md: "flex" } }}
+            sx={{
+              display: { xs: "none", md: "flex" },
+              flexWrap: "wrap",
+              alignItems: "center",
+            }}
           >
             {tabs.map((tab, idx) => (
               <Chip

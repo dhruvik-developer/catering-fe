@@ -1,11 +1,21 @@
 import axios from "axios";
 import tokenService from "./tokenService";
+import { BASE_PATH } from "../utils/Config";
 
 const ApiInstance = axios.create({
   baseURL: import.meta.env.VITE_API_BASE_URL,
 });
 
 const inFlightGetRequests = new Map();
+
+const buildAppPath = (path) => {
+  const base = BASE_PATH.replace(/\/$/, "");
+  const suffix = path.startsWith("/") ? path : `/${path}`;
+  return `${base}${suffix}`;
+};
+
+const normalizeApiPath = (path = "") =>
+  String(path).split("?")[0].replace(/\/+$/, "") || "/";
 
 const stableSerialize = (value) => {
   if (value === null || value === undefined) return String(value);
@@ -40,7 +50,16 @@ ApiInstance.interceptors.response.use(
     if (error.response && error.response.status === 401) {
       console.error("Unauthorized access, please login again.");
       tokenService.clearAuth();
-      window.location.replace("/login");
+
+      const loginPath = buildAppPath("/login");
+      const requestPath = normalizeApiPath(error.config?.url);
+      const currentPath = window.location.pathname.replace(/\/+$/, "");
+      const isLoginRequest = requestPath === "/login";
+      const alreadyOnLogin = currentPath === loginPath;
+
+      if (!isLoginRequest && !alreadyOnLogin) {
+        window.location.replace(loginPath);
+      }
     }
     return Promise.reject(error);
   }

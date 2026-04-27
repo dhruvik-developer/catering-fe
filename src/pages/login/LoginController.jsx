@@ -5,7 +5,7 @@ import { postLogin } from "../../api/AuthApis";
 import toast from "react-hot-toast";
 import LoginComponent from "./LoginComponent";
 import { getAllBusinessProfiles } from "../../api/BusinessProfile";
-import { USER_ROLE_ADMIN } from "../../services/tokenService";
+import { getDefaultRouteForAccess } from "../../utils/accessControl";
 
 function LoginController() {
   const [credentials, setCredentials] = useState({
@@ -79,19 +79,16 @@ function LoginController() {
       const username = loginData?.username;
       const userType = loginData?.user_type;
       const permissions = loginData?.permissions || [];
+      const tenant = loginData?.tenant || null;
+      const enabledModules = tenant?.enabled_modules || [];
 
       if (!access || !username || !userType) {
         throw new Error("Invalid login response");
       }
 
-      if (String(userType).toLowerCase() !== USER_ROLE_ADMIN) {
-        toast.error("Only admin can access this functionality.");
-        return;
-      }
-
-      login(access, username, userType, permissions);
+      login(access, username, userType, permissions, enabledModules, tenant);
       toast.success(response?.data?.message || "Login successfully");
-      navigate("/dish");
+      navigate(getDefaultRouteForAccess(permissions, enabledModules) || "/login");
     } catch (error) {
       toast.error(error?.message || "Login failed. Please check your credentials.");
     } finally {

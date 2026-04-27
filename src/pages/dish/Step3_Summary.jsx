@@ -34,7 +34,7 @@ import {
 
 function SectionHeader({ icon: Icon, title, subtitle }) {
   return (
-    <Stack direction="row" spacing={1.5} alignItems="center">
+    <Stack direction="row" spacing={1.5} sx={{ alignItems: "center" }}>
       <Avatar
         variant="rounded"
         sx={{
@@ -124,8 +124,10 @@ function Step3_Summary({
       <Stack
         direction={{ xs: "column", md: "row" }}
         spacing={2}
-        alignItems={{ xs: "stretch", md: "center" }}
-        justifyContent="space-between"
+        sx={{
+          alignItems: { xs: "stretch", md: "center" },
+          justifyContent: "space-between",
+        }}
       >
         <SectionHeader
           icon={FiClipboard}
@@ -203,17 +205,17 @@ function Step3_Summary({
             {/* Header */}
             <Stack
               direction="row"
-              alignItems="center"
-              justifyContent="space-between"
               sx={{
                 px: 2.5,
                 py: 1.75,
                 background: (t) =>
                   `linear-gradient(90deg, ${t.palette.primary.main}, ${t.palette.primary.dark})`,
                 color: "primary.contrastText",
+                alignItems: "center",
+                justifyContent: "space-between",
               }}
             >
-              <Stack direction="row" spacing={2} alignItems="center">
+              <Stack direction="row" spacing={2} sx={{ alignItems: "center" }}>
                 <Avatar
                   variant="rounded"
                   sx={{
@@ -239,7 +241,7 @@ function Step3_Summary({
                   </Typography>
                 </Box>
               </Stack>
-              <Box textAlign="right">
+              <Box sx={{ textAlign: "right" }}>
                 <Typography
                   variant="caption"
                   sx={{
@@ -265,13 +267,13 @@ function Step3_Summary({
                     <Stack
                       direction="row"
                       spacing={1.5}
-                      alignItems="center"
                       sx={{
                         p: 1.5,
                         border: 1,
                         borderColor: "divider",
                         borderRadius: 1.5,
                         bgcolor: "action.hover",
+                        alignItems: "center",
                       }}
                     >
                       <FiUsers size={18} />
@@ -337,13 +339,15 @@ function Step3_Summary({
                         errors[`event_address_${event.dIdx}_${event.sIdx}`] ||
                         " "
                       }
-                      InputProps={{
-                        startAdornment: (
-                          <FiMapPin
-                            size={14}
-                            style={{ marginRight: 6, opacity: 0.5 }}
-                          />
-                        ),
+                      slotProps={{
+                        input: {
+                          startAdornment: (
+                            <FiMapPin
+                              size={14}
+                              style={{ marginRight: 6, opacity: 0.5 }}
+                            />
+                          ),
+                        },
                       }}
                     />
                   </Grid>
@@ -361,9 +365,8 @@ function Step3_Summary({
                 >
                   <Stack
                     direction="row"
-                    alignItems="center"
                     spacing={1}
-                    sx={{ mb: 1.5 }}
+                    sx={{ mb: 1.5, alignItems: "center" }}
                   >
                     <FiFileText size={15} />
                     <Typography
@@ -395,7 +398,6 @@ function Step3_Summary({
                               <Stack
                                 direction="row"
                                 spacing={1}
-                                alignItems="center"
                                 sx={{
                                   p: 1,
                                   borderRadius: 1.5,
@@ -406,6 +408,7 @@ function Step3_Summary({
                                   bgcolor: isZeroPrice
                                     ? (t) => t.palette.error.light + "33"
                                     : "background.paper",
+                                  alignItems: "center",
                                 }}
                               >
                                 <Avatar
@@ -490,11 +493,13 @@ function Step3_Summary({
                 >
                   <Stack
                     direction="row"
-                    alignItems="center"
-                    justifyContent="space-between"
-                    sx={{ mb: 1.5 }}
+                    sx={{
+                      mb: 1.5,
+                      alignItems: "center",
+                      justifyContent: "space-between",
+                    }}
                   >
-                    <Stack direction="row" alignItems="center" spacing={1}>
+                    <Stack direction="row" spacing={1} sx={{ alignItems: "center" }}>
                       <FiUsers size={15} />
                       <Typography
                         variant="body2"
@@ -541,7 +546,12 @@ function Step3_Summary({
                               <Stack
                                 direction={{ xs: "column", md: "row" }}
                                 spacing={1}
-                                alignItems={{ xs: "stretch", md: "center" }}
+                                sx={{
+                                  alignItems: {
+                                    xs: "stretch",
+                                    md: "center",
+                                  },
+                                }}
                               >
                                 <FormControl size="small" sx={{ flex: 1 }}>
                                   <InputLabel>Waiter type</InputLabel>
@@ -611,7 +621,11 @@ function Step3_Summary({
                                   }
                                   autoComplete="off"
                                   sx={{ width: { xs: "100%", md: 100 } }}
-                                  inputProps={{ style: { textAlign: "center" } }}
+                                  slotProps={{
+                                    htmlInput: {
+                                      style: { textAlign: "center" },
+                                    },
+                                  }}
                                 />
                                 <Typography
                                   variant="body2"
@@ -660,7 +674,7 @@ function Step3_Summary({
                       })}
 
                       {event.waiterServices.length > 1 && (
-                        <Stack direction="row" justifyContent="flex-end">
+                        <Stack direction="row" sx={{ justifyContent: "flex-end" }}>
                           <Chip
                             color="primary"
                             variant="outlined"
@@ -701,11 +715,13 @@ function Step3_Summary({
                 >
                   <Stack
                     direction="row"
-                    alignItems="center"
-                    justifyContent="space-between"
-                    sx={{ mb: 1.5 }}
+                    sx={{
+                      mb: 1.5,
+                      alignItems: "center",
+                      justifyContent: "space-between",
+                    }}
                   >
-                    <Stack direction="row" alignItems="center" spacing={1}>
+                    <Stack direction="row" spacing={1} sx={{ alignItems: "center" }}>
                       <FiPlus size={15} />
                       <Typography
                         variant="body2"
@@ -743,13 +759,13 @@ function Step3_Summary({
                           key={eIdx}
                           direction={{ xs: "column", md: "row" }}
                           spacing={1}
-                          alignItems={{ xs: "stretch", md: "center" }}
                           sx={{
                             p: 1.25,
                             borderRadius: 1.5,
                             border: 1,
                             borderColor: "divider",
                             bgcolor: "background.paper",
+                            alignItems: { xs: "stretch", md: "center" },
                           }}
                         >
                           <TextField
@@ -783,7 +799,9 @@ function Step3_Summary({
                             }
                             autoComplete="off"
                             sx={{ width: { xs: "100%", md: 110 } }}
-                            inputProps={{ style: { textAlign: "center" } }}
+                            slotProps={{
+                              htmlInput: { style: { textAlign: "center" } },
+                            }}
                           />
                           <TextField
                             size="small"
@@ -800,7 +818,9 @@ function Step3_Summary({
                             }
                             autoComplete="off"
                             sx={{ width: { xs: "100%", md: 80 } }}
-                            inputProps={{ style: { textAlign: "center" } }}
+                            slotProps={{
+                              htmlInput: { style: { textAlign: "center" } },
+                            }}
                           />
                           <Typography
                             variant="body2"
@@ -892,7 +912,12 @@ function Step3_Summary({
 
       {/* Rules + Suggestions + Navigation */}
       <Box sx={{ pt: 2.5, borderTop: 1, borderColor: "divider" }}>
-        <Stack direction="row" spacing={1.5} flexWrap="wrap" useFlexGap sx={{ mb: 2.5 }}>
+        <Stack
+          direction="row"
+          spacing={1.5}
+          useFlexGap
+          sx={{ mb: 2.5, flexWrap: "wrap" }}
+        >
           <Button
             variant={showRules ? "contained" : "outlined"}
             color="primary"
@@ -931,8 +956,7 @@ function Step3_Summary({
             <Stack
               direction="row"
               spacing={1}
-              alignItems="center"
-              sx={{ mb: 1.5 }}
+              sx={{ mb: 1.5, alignItems: "center" }}
             >
               <FiBookOpen size={15} />
               <Typography
@@ -978,8 +1002,7 @@ function Step3_Summary({
             <Stack
               direction="row"
               spacing={1}
-              alignItems="center"
-              sx={{ mb: 1.5 }}
+              sx={{ mb: 1.5, alignItems: "center" }}
             >
               <FiFileText size={15} />
               <Typography variant="body2" fontWeight={700} color="info.dark">
@@ -1008,8 +1031,10 @@ function Step3_Summary({
         <Stack
           direction={{ xs: "column", md: "row" }}
           spacing={2}
-          justifyContent="space-between"
-          alignItems={{ xs: "stretch", md: "center" }}
+          sx={{
+            justifyContent: "space-between",
+            alignItems: { xs: "stretch", md: "center" },
+          }}
         >
           <Button
             variant="outlined"

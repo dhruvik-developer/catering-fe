@@ -1,11 +1,10 @@
 import { useMemo } from "react";
 import toast from "react-hot-toast";
-import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 import CategoryComponent from "./CategoryComponent";
 import DeleteConfirmation from "../../Components/common/DeleteConfirmation";
+import usePermissions from "../../hooks/usePermissions";
 import {
-  useCreateCategoryMutation,
   useSwapCategoriesMutation,
   useUpdateCategoryMutation,
 } from "../../hooks/useCategoryMutations";
@@ -14,7 +13,7 @@ import { useCategories } from "../../hooks/useCategories";
 import { useRecipes } from "../../hooks/useRecipes";
 
 function CategoryController() {
-  const navigate = useNavigate();
+  const { hasPermission } = usePermissions();
   const {
     data: categoriesData = [],
     isLoading: isCategoriesLoading,
@@ -25,7 +24,6 @@ function CategoryController() {
     isLoading: isRecipesLoading,
     refetch: refetchRecipes,
   } = useRecipes();
-  const createCategoryMutation = useCreateCategoryMutation();
   const updateCategoryMutation = useUpdateCategoryMutation();
   const swapCategoriesMutation = useSwapCategoriesMutation();
   const deleteCategoryMutation = useConfirmationMutation({
@@ -110,54 +108,12 @@ function CategoryController() {
     await Promise.all([refetchCategories(), refetchRecipes()]);
   };
 
-  const handleAddCategory = async () => {
-    const { value: name } = await Swal.fire({
-      title: "Create Category",
-      input: "text",
-      inputLabel: "Category Name",
-      inputPlaceholder: "Please Enter Category Name",
-      showCancelButton: true,
-      confirmButtonText: "Submit",
-      confirmButtonColor: "var(--color-primary)",
-      cancelButtonText: "Cancel",
-      customClass: {
-        inputLabel: "custom-stock-input-label",
-        input: "custom-stock-swal-input",
-      },
-      preConfirm: async (value) => {
-        if (!value) {
-          Swal.showValidationMessage("Category name is required");
-        }
-        return value;
-      },
-    });
-
-    if (name) {
-      const formattedName = name
-        .trim()
-        .split(" ")
-        .map((word) =>
-          word ? word.charAt(0).toUpperCase() + word.slice(1).toLowerCase() : ""
-        )
-        .join(" ");
-
-      const isDuplicate = categories.some(
-        (cat) => cat.name?.toLowerCase() === formattedName.toLowerCase()
-      );
-      if (isDuplicate) {
-        toast.error("Category name already exists");
-        return;
-      }
-
-      const response = await createCategoryMutation.mutateAsync(formattedName);
-      if (response) {
-        refreshData();
-        Swal.close();
-      }
-    }
-  };
-
   const handleEditCategory = async (categoryId, oldName) => {
+    if (!hasPermission("categories.update")) {
+      toast.error("You do not have permission to update categories.");
+      return;
+    }
+
     const { value: name } = await Swal.fire({
       title: "Edit Category Name",
       input: "text",
@@ -211,6 +167,11 @@ function CategoryController() {
   };
 
   const handleDeleteSubCategory = (id) => {
+    if (!hasPermission("categories.delete")) {
+      toast.error("You do not have permission to delete items.");
+      return;
+    }
+
     DeleteConfirmation({
       id,
       apiEndpoint: "/items",
@@ -222,6 +183,11 @@ function CategoryController() {
   };
 
   const handleDeleteItem = (id) => {
+    if (!hasPermission("categories.delete")) {
+      toast.error("You do not have permission to delete categories.");
+      return;
+    }
+
     DeleteConfirmation({
       id,
       apiEndpoint: "/categories",
@@ -233,6 +199,11 @@ function CategoryController() {
   };
 
   const handleSwappingCategory = async (categoryId, categoryName) => {
+    if (!hasPermission("categories.update")) {
+      toast.error("You do not have permission to update category positions.");
+      return;
+    }
+
     const { value: position } = await Swal.fire({
       title: `<p class="text-left">Change Number Of Category</p>`,
       input: "number",
@@ -283,13 +254,11 @@ function CategoryController() {
     <CategoryComponent
       categories={categories}
       items={[]}
-      onAddCategory={handleAddCategory}
       onEditCategory={handleEditCategory}
       onSubCategoryDelete={handleDeleteSubCategory}
       onItemDelete={handleDeleteItem}
       onSwappingCategory={handleSwappingCategory}
       loading={isCategoriesLoading || isRecipesLoading}
-      navigate={navigate}
       onRefresh={refreshData}
     />
   );

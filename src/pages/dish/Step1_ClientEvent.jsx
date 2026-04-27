@@ -38,7 +38,7 @@ const TIME_OPTIONS = [
 
 function SectionHeader({ icon: Icon, title, subtitle }) {
   return (
-    <Stack direction="row" spacing={1.5} alignItems="center" sx={{ mb: 2.5 }}>
+    <Stack direction="row" spacing={1.5} sx={{ mb: 2.5, alignItems: "center" }}>
       <Avatar
         variant="rounded"
         sx={{
@@ -63,7 +63,7 @@ function SectionHeader({ icon: Icon, title, subtitle }) {
 }
 
 const DatePickerTextField = forwardRef(function DatePickerTextField(
-  { helperText = " ", sx, InputProps, ...props },
+  { helperText = " ", sx, InputProps, inputProps, ...props },
   ref
 ) {
   return (
@@ -72,7 +72,10 @@ const DatePickerTextField = forwardRef(function DatePickerTextField(
       fullWidth
       inputRef={ref}
       helperText={helperText}
-      InputProps={{ ...InputProps, readOnly: true }}
+      slotProps={{
+        input: { ...InputProps, readOnly: true },
+        htmlInput: inputProps,
+      }}
       sx={{
         "& .MuiOutlinedInput-root": {
           bgcolor: props.disabled ? "action.hover" : "background.paper",
@@ -130,7 +133,7 @@ function Step1_ClientEvent({
           container
           columnSpacing={2.5}
           rowSpacing={1.5}
-          alignItems="flex-start"
+          sx={{ alignItems: "flex-start" }}
         >
           <Grid size={{ xs: 12, md: 6 }}>
             <TextField
@@ -152,7 +155,7 @@ function Step1_ClientEvent({
               value={formData.mobile_no || ""}
               onChange={handleChange}
               placeholder={errors.mobile_no || "Mobile Number"}
-              inputProps={{ maxLength: 10 }}
+              slotProps={{ htmlInput: { maxLength: 10 } }}
               error={Boolean(errors.mobile_no)}
               helperText={errors.mobile_no || " "}
             />
@@ -248,11 +251,13 @@ function Step1_ClientEvent({
               <Stack
                 direction={{ xs: "column", md: "row" }}
                 spacing={2}
-                alignItems={{ xs: "stretch", md: "center" }}
-                justifyContent="space-between"
-                sx={{ mb: 2.5 }}
+                sx={{
+                  mb: 2.5,
+                  alignItems: { xs: "stretch", md: "center" },
+                  justifyContent: "space-between",
+                }}
               >
-                <Stack direction="row" spacing={1.5} alignItems="center">
+                <Stack direction="row" spacing={1.5} sx={{ alignItems: "center" }}>
                   <Avatar
                     variant="rounded"
                     sx={{
@@ -269,7 +274,7 @@ function Step1_ClientEvent({
                   <Stack
                     direction={{ xs: "column", sm: "row" }}
                     spacing={1.5}
-                    alignItems={{ xs: "stretch", sm: "center" }}
+                    sx={{ alignItems: { xs: "stretch", sm: "center" } }}
                   >
                     <Typography
                       variant="body2"
@@ -338,13 +343,12 @@ function Step1_ClientEvent({
                     <Stack
                       direction={{ xs: "column", md: "row" }}
                       spacing={2}
-                      alignItems={{ xs: "stretch", md: "center" }}
+                      sx={{ alignItems: { xs: "stretch", md: "center" } }}
                     >
                       <Stack
                         direction="row"
                         spacing={1}
-                        alignItems="center"
-                        flexShrink={0}
+                        sx={{ alignItems: "center", flexShrink: 0 }}
                       >
                         <Avatar
                           variant="rounded"
@@ -486,9 +490,13 @@ function Step1_ClientEvent({
       <Stack
         direction={{ xs: "column", sm: "row" }}
         spacing={2}
-        justifyContent="space-between"
-        alignItems={{ xs: "stretch", sm: "center" }}
-        sx={{ pt: 2, borderTop: 1, borderColor: "divider" }}
+        sx={{
+          pt: 2,
+          borderTop: 1,
+          borderColor: "divider",
+          justifyContent: "space-between",
+          alignItems: { xs: "stretch", sm: "center" },
+        }}
       >
         <Button
           variant="outlined"

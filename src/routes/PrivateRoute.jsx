@@ -1,16 +1,31 @@
 import { useContext } from "react";
-import { Navigate, Outlet } from "react-router-dom";
+import { Navigate, Outlet, useLocation } from "react-router-dom";
 import { UserContext } from "../context/UserContext";
-import { USER_ROLE_ADMIN } from "../services/tokenService";
+import AccessDenied from "./AccessDenied";
+import {
+  canAccessRoute,
+  getDefaultRouteForAccess,
+} from "../utils/accessControl";
 
 const PrivateRoute = () => {
-  const { token, userType } = useContext(UserContext);
+  const { token, permissions, enabledModules } = useContext(UserContext);
+  const location = useLocation();
 
-  return token && userType === USER_ROLE_ADMIN ? (
-    <Outlet />
-  ) : (
-    <Navigate to="/login" replace />
-  );
+  if (!token) {
+    return <Navigate to="/login" replace />;
+  }
+
+  if (!canAccessRoute(location.pathname, permissions, enabledModules)) {
+    const fallbackRoute = getDefaultRouteForAccess(permissions, enabledModules);
+
+    if (fallbackRoute && fallbackRoute !== location.pathname) {
+      return <Navigate to={fallbackRoute} replace />;
+    }
+
+    return <AccessDenied />;
+  }
+
+  return <Outlet />;
 };
 
 export default PrivateRoute;

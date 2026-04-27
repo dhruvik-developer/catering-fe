@@ -34,10 +34,9 @@ function SettingsComponent({
   handleEdit,
   handleCancel,
   extractedColors,
+  canModifyProfile,
 }) {
   const normalizedColorCode = normalizeHexColor(formData.color_code);
-  const shouldUseDarkText =
-    parseInt(normalizedColorCode.replace("#", ""), 16) > 0xffffff / 1.5;
 
   return (
     <div className="min-h-[calc(100vh-60px)] bg-gradient-to-br from-gray-50 via-[var(--color-primary-soft)]/30 to-gray-50 p-4 sm:p-6 lg:p-8">
@@ -58,7 +57,7 @@ function SettingsComponent({
             </div>
           </div>
 
-          {!isEditing ? (
+          {!isEditing && canModifyProfile ? (
             <button
               type="button"
               onClick={handleEdit}
@@ -67,7 +66,7 @@ function SettingsComponent({
               <FiEdit3 size={16} />
               <span>Edit Profile</span>
             </button>
-          ) : (
+          ) : isEditing ? (
             <div className="flex items-center gap-2">
               <button
                 type="button"
@@ -89,7 +88,7 @@ function SettingsComponent({
                 <span>{loading ? "Saving..." : "Save Changes"}</span>
               </button>
             </div>
-          )}
+          ) : null}
         </div>
 
         {/* ====== Profile Card ====== */}

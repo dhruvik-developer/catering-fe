@@ -1,4 +1,3 @@
-/* eslint-disable react/prop-types */
 import { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
@@ -9,7 +8,6 @@ import {
   List,
   ListItem,
   ListItemButton,
-  ListItemIcon,
   ListItemText,
   Skeleton,
   Stack,
@@ -25,7 +23,7 @@ import {
   TaskAdd01Icon,
   TransactionHistoryIcon,
 } from "@hugeicons/core-free-icons";
-import { FiUsers } from "react-icons/fi";
+import { FiSettings, FiUsers } from "react-icons/fi";
 import usePermissions from "../../hooks/usePermissions";
 import { getAllBusinessProfiles } from "../../api/BusinessProfile";
 import { setSidebarOpen } from "../../redux/uiSlice";
@@ -41,7 +39,7 @@ const menuItems = [
     name: "Create Dish",
     path: "/dish",
     icon: hugeIcon(Dish01Icon),
-    requiredPermission: "dishes.view",
+    requiredPermission: ["event_session.view", "dishes.view"],
   },
   {
     name: "Category",
@@ -76,13 +74,18 @@ const menuItems = [
     name: "Expense",
     path: "/expense",
     icon: hugeIcon(MoneyReceiveSquareIcon),
-    requiredPermission: "expenses.view",
+    requiredPermission: [
+      "expense_entries.view",
+      "expenses.view",
+      "expense_categories.view",
+      "expense_entity.view",
+    ],
   },
   {
     name: "Create Ingredient",
     path: "/create-recipe-ingredient",
     icon: hugeIcon(TaskAdd01Icon),
-    requiredPermission: "ingredients.view",
+    requiredPermission: "categories.view",
   },
   {
     name: "People",
@@ -197,13 +200,29 @@ function Sidebar() {
       PaperProps={{
         sx: {
           width: SIDEBAR_WIDTH,
-          bgcolor: (t) => t.palette.primary.light + "1f",
+          bgcolor: "rgba(255,255,255,0.9)",
+          backgroundImage:
+            "linear-gradient(180deg, rgba(255,255,255,0.96), rgba(248,250,252,0.9))",
+          backdropFilter: "blur(18px)",
           border: 0,
+          borderRight: 1,
+          borderColor: "var(--app-border)",
+          boxShadow: "10px 0 36px -34px rgba(15, 23, 42, 0.55)",
         },
       }}
     >
       {/* Logo area */}
-      <Stack alignItems="center" sx={{ p: 2.5, gap: 1 }}>
+      <Stack
+        alignItems="center"
+        sx={{
+          p: 2.5,
+          gap: 1,
+          borderBottom: 1,
+          borderColor: "var(--app-border)",
+          background:
+            "linear-gradient(135deg, color-mix(in srgb, var(--color-primary), white 92%), rgba(255,255,255,0.3))",
+        }}
+      >
         {isLogoLoading ? (
           <Skeleton variant="rounded" width={180} height={80} />
         ) : businessLogo ? (
@@ -224,26 +243,36 @@ function Sidebar() {
             >
               Set your business profile logo in Settings tab.
             </Typography>
-            <Link
-              to="/settings"
-              onClick={close}
-              style={{ textDecoration: "none" }}
-            >
-              <Typography
-                variant="caption"
-                fontWeight={600}
-                color="primary.main"
-                sx={{ "&:hover": { textDecoration: "underline" } }}
+            {hasPermission("business_profiles.view") && (
+              <Link
+                to="/settings"
+                onClick={close}
+                style={{ textDecoration: "none" }}
               >
-                Go to Settings
-              </Typography>
-            </Link>
+                <Typography
+                  variant="caption"
+                  fontWeight={600}
+                  color="primary.main"
+                  sx={{ "&:hover": { textDecoration: "underline" } }}
+                >
+                  Go to Settings
+                </Typography>
+              </Link>
+            )}
           </Stack>
         )}
       </Stack>
 
       {/* Menu list */}
-      <List sx={{ px: 1.5, py: 1, gap: 1, display: "flex", flexDirection: "column" }}>
+      <List
+        sx={{
+          px: 1.5,
+          py: 1,
+          gap: 1,
+          display: "flex",
+          flexDirection: "column",
+        }}
+      >
         {menuItems.map((item) => {
           if (
             item.requiredPermission &&
@@ -265,8 +294,10 @@ function Sidebar() {
                   px: 1.5,
                   gap: 1.5,
                   color: active ? "primary.contrastText" : "text.secondary",
-                  bgcolor: active ? "primary.main" : "transparent",
-                  boxShadow: active ? 2 : 0,
+                  bgcolor: active ? "primary.main" : "rgba(255,255,255,0.42)",
+                  boxShadow: active
+                    ? "0 10px 22px -18px rgba(15, 23, 42, 0.55)"
+                    : "none",
                   "&.Mui-selected": {
                     bgcolor: "primary.main",
                     color: "primary.contrastText",
@@ -275,7 +306,7 @@ function Sidebar() {
                     },
                   },
                   "&:hover": {
-                    bgcolor: active ? "primary.dark" : "action.hover",
+                    bgcolor: active ? "primary.dark" : "rgba(255,255,255,0.75)",
                   },
                 }}
               >
@@ -284,9 +315,9 @@ function Sidebar() {
                   sx={{
                     width: 36,
                     height: 36,
-                    bgcolor: "background.paper",
-                    color: "primary.main",
-                    boxShadow: 1,
+                    bgcolor: active ? "rgba(255,255,255,0.16)" : "action.hover",
+                    color: active ? "primary.contrastText" : "primary.main",
+                    boxShadow: "none",
                   }}
                 >
                   {item.icon}

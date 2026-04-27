@@ -83,8 +83,8 @@ function InvoiceComponent({
           </Typography>
           <Typography variant="body2" color="text.secondary">
             {invoice?.length || 0}
-            {totalCount !== invoice?.length ? ` of ${totalCount}` : ""}{" "}
-            invoice{invoice?.length !== 1 ? "s" : ""}
+            {totalCount !== invoice?.length ? ` of ${totalCount}` : ""} invoice
+            {invoice?.length !== 1 ? "s" : ""}
           </Typography>
         </Box>
       </Stack>
@@ -209,9 +209,7 @@ function InvoiceComponent({
         <EmptyState
           icon={<FiFileText size={24} />}
           title={
-            hasFilters
-              ? "No Invoices Match Your Filters"
-              : "No Invoices Yet"
+            hasFilters ? "No Invoices Match Your Filters" : "No Invoices Yet"
           }
           message={
             hasFilters
@@ -367,17 +365,16 @@ function InvoiceComponent({
                         <Grid size={12}>
                           <Stack
                             direction="row"
-                            justifyContent="space-between"
                             alignItems="center"
                             sx={{
                               px: 2,
-                              py: 1.25,
-                              borderRadius: 2,
-                              border: 1,
-                              borderColor: "error.light",
-                              bgcolor: "error.light",
-                              color: "error.dark",
-                              opacity: 0.9,
+                              py: 1.1,
+                              minHeight: 42,
+                              borderRadius: 2.5,
+                              border: "1px solid",
+                              borderColor: "error.main",
+                              bgcolor: "background.paper",
+                              color: "error.main",
                             }}
                           >
                             <Stack
@@ -391,15 +388,14 @@ function InvoiceComponent({
                                   height: 6,
                                   borderRadius: "50%",
                                   bgcolor: "error.main",
+                                  flexShrink: 0,
                                 }}
                               />
-                              <Typography variant="body2" fontWeight={600}>
-                                Pending Amount
+                              <Typography variant="body2" fontWeight={500}>
+                                Pending Amount₹{" "}
+                                {Math.max(0, calculatedPending).toFixed(2)}
                               </Typography>
                             </Stack>
-                            <Typography variant="body2" fontWeight={700}>
-                              ₹ {Math.max(0, calculatedPending).toFixed(2)}
-                            </Typography>
                           </Stack>
                         </Grid>
                       )}

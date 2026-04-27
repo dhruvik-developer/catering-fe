@@ -23,6 +23,7 @@ import Grid from "@mui/material/Grid";
 import Loader from "../../Components/common/Loader";
 import EmptyState from "../../Components/common/EmptyState";
 import { FiDollarSign, FiPlus, FiTag, FiTrash2, FiEdit2 } from "react-icons/fi";
+import usePermissions from "../../hooks/usePermissions";
 
 function ExpenseComponent({
   expenses,
@@ -39,6 +40,13 @@ function ExpenseComponent({
 }) {
   const theme = useTheme();
   const isDesktop = useMediaQuery(theme.breakpoints.up("md"));
+  const { hasPermission } = usePermissions();
+  const canCreateExpense = hasPermission("expense_entries.create");
+  const canUpdateExpense = hasPermission("expense_entries.update");
+  const canDeleteExpense = hasPermission("expense_entries.delete");
+  const canCreateCategory = hasPermission("expense_categories.create");
+  const canDeleteCategory = hasPermission("expense_categories.delete");
+  const canUseExpenseActions = canUpdateExpense || canDeleteExpense;
 
   return (
     <Paper
@@ -75,24 +83,30 @@ function ExpenseComponent({
             </Typography>
           </Box>
         </Stack>
-        <Stack direction="row" spacing={1} flexWrap="wrap" useFlexGap>
-          <Button
-            variant="contained"
-            color="primary"
-            startIcon={<FiPlus size={15} />}
-            onClick={handleAddExpense}
-          >
-            Add Expense
-          </Button>
-          <Button
-            variant="outlined"
-            color="primary"
-            startIcon={<FiTag size={15} />}
-            onClick={handleAddCategory}
-          >
-            Add Category
-          </Button>
-        </Stack>
+        {(canCreateExpense || canCreateCategory) && (
+          <Stack direction="row" spacing={1} flexWrap="wrap" useFlexGap>
+            {canCreateExpense && (
+              <Button
+                variant="contained"
+                color="primary"
+                startIcon={<FiPlus size={15} />}
+                onClick={handleAddExpense}
+              >
+                Add Expense
+              </Button>
+            )}
+            {canCreateCategory && (
+              <Button
+                variant="outlined"
+                color="primary"
+                startIcon={<FiTag size={15} />}
+                onClick={handleAddCategory}
+              >
+                Add Category
+              </Button>
+            )}
+          </Stack>
+        )}
       </Stack>
 
       {/* Total Expense Card */}
@@ -152,8 +166,14 @@ function ExpenseComponent({
               key={cat.id}
               label={cat.name}
               onClick={() => setFilterCategory(cat.id)}
-              onDelete={() => handleDeleteCategory(cat.id, cat.name)}
-              deleteIcon={<FiTrash2 size={13} />}
+              onDelete={
+                canDeleteCategory
+                  ? () => handleDeleteCategory(cat.id, cat.name)
+                  : undefined
+              }
+              deleteIcon={
+                canDeleteCategory ? <FiTrash2 size={13} /> : undefined
+              }
               color={isActive ? "primary" : "default"}
               variant={isActive ? "filled" : "outlined"}
               sx={{ fontWeight: 600 }}
@@ -185,9 +205,11 @@ function ExpenseComponent({
                 <TableCell sx={{ fontWeight: 700 }}>Description</TableCell>
                 <TableCell sx={{ fontWeight: 700 }}>Amount</TableCell>
                 <TableCell sx={{ fontWeight: 700 }}>Payment Mode</TableCell>
-                <TableCell sx={{ fontWeight: 700 }} align="center">
-                  Actions
-                </TableCell>
+                {canUseExpenseActions && (
+                  <TableCell sx={{ fontWeight: 700 }} align="center">
+                    Actions
+                  </TableCell>
+                )}
               </TableRow>
             </TableHead>
             <TableBody>
@@ -217,25 +239,31 @@ function ExpenseComponent({
                       variant="outlined"
                     />
                   </TableCell>
-                  <TableCell>
-                    <Stack direction="row" spacing={0.5} justifyContent="center">
-                      <IconButton
-                        size="small"
-                        onClick={() => handleEditExpense(expense)}
-                        title="Edit Expense"
-                      >
-                        <FiEdit2 size={15} />
-                      </IconButton>
-                      <IconButton
-                        size="small"
-                        color="error"
-                        onClick={() => handleDeleteExpense(expense.id)}
-                        title="Delete Expense"
-                      >
-                        <FiTrash2 size={15} />
-                      </IconButton>
-                    </Stack>
-                  </TableCell>
+                  {canUseExpenseActions && (
+                    <TableCell>
+                      <Stack direction="row" spacing={0.5} justifyContent="center">
+                        {canUpdateExpense && (
+                          <IconButton
+                            size="small"
+                            onClick={() => handleEditExpense(expense)}
+                            title="Edit Expense"
+                          >
+                            <FiEdit2 size={15} />
+                          </IconButton>
+                        )}
+                        {canDeleteExpense && (
+                          <IconButton
+                            size="small"
+                            color="error"
+                            onClick={() => handleDeleteExpense(expense.id)}
+                            title="Delete Expense"
+                          >
+                            <FiTrash2 size={15} />
+                          </IconButton>
+                        )}
+                      </Stack>
+                    </TableCell>
+                  )}
                 </TableRow>
               ))}
             </TableBody>
@@ -302,21 +330,27 @@ function ExpenseComponent({
                       color="primary"
                       variant="outlined"
                     />
-                    <Stack direction="row" spacing={0.5}>
-                      <IconButton
-                        size="small"
-                        onClick={() => handleEditExpense(expense)}
-                      >
-                        <FiEdit2 size={15} />
-                      </IconButton>
-                      <IconButton
-                        size="small"
-                        color="error"
-                        onClick={() => handleDeleteExpense(expense.id)}
-                      >
-                        <FiTrash2 size={15} />
-                      </IconButton>
-                    </Stack>
+                    {canUseExpenseActions && (
+                      <Stack direction="row" spacing={0.5}>
+                        {canUpdateExpense && (
+                          <IconButton
+                            size="small"
+                            onClick={() => handleEditExpense(expense)}
+                          >
+                            <FiEdit2 size={15} />
+                          </IconButton>
+                        )}
+                        {canDeleteExpense && (
+                          <IconButton
+                            size="small"
+                            color="error"
+                            onClick={() => handleDeleteExpense(expense.id)}
+                          >
+                            <FiTrash2 size={15} />
+                          </IconButton>
+                        )}
+                      </Stack>
+                    )}
                   </Stack>
                 </CardContent>
               </Card>

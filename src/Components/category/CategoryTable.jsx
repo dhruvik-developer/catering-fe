@@ -14,7 +14,6 @@ import Grid from "@mui/material/Grid";
 import { FaTrash } from "react-icons/fa";
 import { LuArrowDownUp } from "react-icons/lu";
 import { FiFolder, FiTag, FiSearch, FiEdit2 } from "react-icons/fi";
-import { useNavigate } from "react-router-dom";
 import ViewItemRecipeController from "../../pages/itemRecipe/ViewItemRecipeController";
 import EmptyState from "../common/EmptyState";
 
@@ -27,8 +26,9 @@ const CategoryTable = ({
   onSwappingCategory,
   onEditCategory,
   onRefresh,
+  canUpdateCategory = false,
+  canDeleteCategory = false,
 }) => {
-  const navigate = useNavigate();
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedItemForRecipe, setSelectedItemForRecipe] = useState(null);
 
@@ -117,8 +117,7 @@ const CategoryTable = ({
                     direction="row"
                     spacing={1.5}
                     alignItems="center"
-                    minWidth={0}
-                    flex={1}
+                    sx={{ minWidth: 0, flex: 1 }}
                   >
                     <Avatar
                       variant="rounded"
@@ -135,7 +134,7 @@ const CategoryTable = ({
                     >
                       {category.positions || "—"}
                     </Avatar>
-                    <Box minWidth={0}>
+                    <Box sx={{ minWidth: 0 }}>
                       <Typography
                         variant="subtitle2"
                         fontWeight={700}
@@ -154,44 +153,52 @@ const CategoryTable = ({
                       </Typography>
                     </Box>
                   </Stack>
-                  <Stack
-                    direction="row"
-                    spacing={0}
-                    alignItems="center"
-                    flexShrink={0}
-                  >
-                    <IconButton
-                      size="small"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        onEditCategory(category.id, category.name);
-                      }}
-                      title="Edit Name"
+                  {(canUpdateCategory || canDeleteCategory) && (
+                    <Stack
+                      direction="row"
+                      spacing={0}
+                      alignItems="center"
+                      sx={{ flexShrink: 0 }}
                     >
-                      <FiEdit2 size={14} />
-                    </IconButton>
-                    <IconButton
-                      size="small"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        onSwappingCategory(category.id, category.name);
-                      }}
-                      title="Change Position"
-                    >
-                      <LuArrowDownUp size={14} />
-                    </IconButton>
-                    <IconButton
-                      size="small"
-                      color="error"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        onItemDelete(category.id);
-                      }}
-                      title="Delete Category"
-                    >
-                      <FaTrash size={12} />
-                    </IconButton>
-                  </Stack>
+                      {canUpdateCategory && (
+                        <>
+                          <IconButton
+                            size="small"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              onEditCategory(category.id, category.name);
+                            }}
+                            title="Edit Name"
+                          >
+                            <FiEdit2 size={14} />
+                          </IconButton>
+                          <IconButton
+                            size="small"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              onSwappingCategory(category.id, category.name);
+                            }}
+                            title="Change Position"
+                          >
+                            <LuArrowDownUp size={14} />
+                          </IconButton>
+                        </>
+                      )}
+                      {canDeleteCategory && (
+                        <IconButton
+                          size="small"
+                          color="error"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            onItemDelete(category.id);
+                          }}
+                          title="Delete Category"
+                        >
+                          <FaTrash size={12} />
+                        </IconButton>
+                      )}
+                    </Stack>
+                  )}
                 </Paper>
               );
             })}
@@ -245,12 +252,14 @@ const CategoryTable = ({
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 sx={{ width: { xs: "100%", sm: 260 } }}
-                InputProps={{
-                  startAdornment: (
-                    <InputAdornment position="start">
-                      <FiSearch size={14} />
-                    </InputAdornment>
-                  ),
+                slotProps={{
+                  input: {
+                    startAdornment: (
+                      <InputAdornment position="start">
+                        <FiSearch size={14} />
+                      </InputAdornment>
+                    ),
+                  },
                 }}
               />
             </Stack>
@@ -282,8 +291,7 @@ const CategoryTable = ({
                           direction="row"
                           spacing={1.5}
                           alignItems="center"
-                          minWidth={0}
-                          flex={1}
+                          sx={{ minWidth: 0, flex: 1 }}
                         >
                           <Avatar
                             sx={{
@@ -314,22 +322,24 @@ const CategoryTable = ({
                             {sub.name}
                           </Typography>
                         </Stack>
-                        <IconButton
-                          size="small"
-                          color="error"
-                          className="delete-btn"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            onSubCategoryDelete(sub.id);
-                          }}
-                          title="Delete Item"
-                          sx={{
-                            opacity: { xs: 1, sm: 0 },
-                            transition: "opacity 0.2s",
-                          }}
-                        >
-                          <FaTrash size={12} />
-                        </IconButton>
+                        {canDeleteCategory && (
+                          <IconButton
+                            size="small"
+                            color="error"
+                            className="delete-btn"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              onSubCategoryDelete(sub.id);
+                            }}
+                            title="Delete Item"
+                            sx={{
+                              opacity: { xs: 1, sm: 0 },
+                              transition: "opacity 0.2s",
+                            }}
+                          >
+                            <FaTrash size={12} />
+                          </IconButton>
+                        )}
                       </Paper>
                     </Grid>
                   ))}

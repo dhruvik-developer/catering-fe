@@ -7,6 +7,7 @@ import {
 import { Suspense, useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { Toaster } from "react-hot-toast";
+import PropTypes from "prop-types";
 import "./index.css";
 import PrivateRoute from "./routes/PrivateRoute";
 import Layout from "./Components/layout/Layout";
@@ -14,6 +15,7 @@ import { UserProvider } from "./context/UserContext";
 import { BASE_PATH } from "./utils/Config";
 import { getAllBusinessProfiles } from "./api/BusinessProfile";
 import { setPrimaryColor, DEFAULT_PRIMARY_COLOR as DEFAULT_PRIMARY_FROM_STORE } from "./redux/themeSlice";
+import usePermissions from "./hooks/usePermissions";
 import {
   Login,
   Dish,
@@ -76,6 +78,28 @@ import {
 
 const DEFAULT_PRIMARY_COLOR = "#845cbd";
 
+const PermissionRedirect = ({ options, fallback = "/login" }) => {
+  const { hasPermission } = usePermissions();
+  const target = options.find((option) =>
+    hasPermission(option.permission)
+  )?.to;
+
+  return <Navigate to={target || fallback} replace />;
+};
+
+PermissionRedirect.propTypes = {
+  options: PropTypes.arrayOf(
+    PropTypes.shape({
+      to: PropTypes.string.isRequired,
+      permission: PropTypes.oneOfType([
+        PropTypes.string,
+        PropTypes.arrayOf(PropTypes.string),
+      ]).isRequired,
+    })
+  ).isRequired,
+  fallback: PropTypes.string,
+};
+
 const resolvePrimaryColor = (value) => {
   if (typeof value !== "string") return DEFAULT_PRIMARY_COLOR;
 
@@ -86,19 +110,6 @@ const resolvePrimaryColor = (value) => {
   if (/^[0-9A-Fa-f]{6}$/.test(trimmed)) return `#${trimmed}`;
 
   return DEFAULT_PRIMARY_COLOR;
-};
-
-const getContrastColor = (hexColor) => {
-  let hex = hexColor.replace('#', '');
-  if (hex.length === 3) {
-    hex = hex[0] + hex[0] + hex[1] + hex[1] + hex[2] + hex[2];
-  }
-  const r = parseInt(hex.substring(0, 2), 16) || 0;
-  const g = parseInt(hex.substring(2, 4), 16) || 0;
-  const b = parseInt(hex.substring(4, 6), 16) || 0;
-
-  const yiq = ((r * 299) + (g * 587) + (b * 114)) / 1000;
-  return yiq >= 128 ? '#000000' : '#ffffff';
 };
 
 const App = () => {
@@ -139,13 +150,13 @@ const App = () => {
             duration: 3000,
             style: {
               borderRadius: '16px',
-              background: '#fff',
+              background: 'var(--app-surface-strong)',
               color: '#1f2937',
               fontSize: '14px',
               fontWeight: '600',
               padding: '12px 20px',
               boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)',
-              border: '1px solid rgba(0, 0, 0, 0.05)',
+              border: '1px solid var(--app-border)',
             },
             success: {
               iconTheme: {
@@ -171,7 +182,22 @@ const App = () => {
                 <Route path="/dish" element={<Dish />} />
                 <Route path="/category" element={<Category />} />
                 <Route path="/order-management" element={<OrderManagementPage />}>
-                  <Route index element={<Navigate to="all-order" replace />} />
+                  <Route
+                    index
+                    element={
+                      <PermissionRedirect
+                        options={[
+                          { to: "quotation", permission: "quotations.view" },
+                          { to: "all-order", permission: "event_bookings.view" },
+                          { to: "invoice", permission: "invoices.view" },
+                          {
+                            to: "event-summary",
+                            permission: "event_summary.view",
+                          },
+                        ]}
+                      />
+                    }
+                  />
                   <Route path="quotation" element={<Quotation />} />
                   <Route path="all-order" element={<AllOrder />} />
                   <Route path="invoice" element={<Invoice />} />
@@ -200,7 +226,19 @@ const App = () => {
                 <Route path="/calendar" element={<Calendar />} />
                 <Route path="/item-recipe/:itemId" element={<ViewItemRecipe />} />
                 <Route path="/people" element={<PeoplePage />}>
-                  <Route index element={<Navigate to="event-staff" replace />} />
+                  <Route
+                    index
+                    element={
+                      <PermissionRedirect
+                        options={[
+                          { to: "event-staff", permission: "eventstaff.view" },
+                          { to: "vendor", permission: "vendors.view" },
+                          { to: "waiter-types", permission: "eventstaff.view" },
+                          { to: "permissions", permission: "*" },
+                        ]}
+                      />
+                    }
+                  />
                   <Route path="event-staff" element={<StaffController />} />
                   <Route path="vendor" element={<Vendor />} />
                   <Route

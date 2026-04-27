@@ -34,13 +34,16 @@ function OrderManagementTabs() {
   const { hasPermission } = usePermissions();
 
   return (
-    <div className="rounded-2xl border border-[var(--color-primary-border)] bg-white p-2 shadow-sm">
+    <div className="rounded-2xl border border-[var(--app-border)] bg-white/80 p-2 shadow-[0_16px_36px_-30px_rgba(15,23,42,0.55)] backdrop-blur">
       <nav
         className="flex flex-col gap-2 md:flex-row"
         aria-label="Order management sections"
       >
         {tabs.map((tab) => {
-          if (tab.requiredPermission && !hasPermission(tab.requiredPermission)) {
+          if (
+            tab.requiredPermission &&
+            !hasPermission(tab.requiredPermission)
+          ) {
             return null;
           }
           const isActive = location.pathname.startsWith(tab.path);
@@ -52,21 +55,23 @@ function OrderManagementTabs() {
               to={tab.path}
               className={`group flex flex-1 items-center gap-3 rounded-2xl border px-4 py-2 transition-all duration-200 ${
                 isActive
-                  ? "border-[var(--color-primary)] bg-gradient-to-r from-[var(--color-primary)] to-[var(--color-primary-dark)] text-white shadow-lg shadow-[var(--color-primary)]/15"
-                  : "border-transparent bg-transparent text-gray-600 hover:border-[var(--color-primary-border)] hover:bg-[var(--color-primary-tint)]"
+                  ? "border-[var(--color-primary)] bg-[var(--color-primary)] text-white shadow-sm"
+                  : "border-transparent bg-transparent text-gray-600 hover:border-[var(--app-border)] hover:bg-white/70"
               }`}
             >
               <div
                 className={`flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-xl transition-colors ${
                   isActive
                     ? "bg-white/15 text-white"
-                    : "bg-[var(--color-primary-soft)] text-[var(--color-primary)] group-hover:bg-white"
+                    : "bg-white/70 text-[var(--color-primary)] group-hover:bg-white"
                 }`}
               >
                 <Icon size={18} />
               </div>
               <div className="min-w-0">
-                <p className="text-sm font-semibold sm:text-base">{tab.label}</p>
+                <p className="text-sm font-semibold sm:text-base">
+                  {tab.label}
+                </p>
               </div>
             </Link>
           );

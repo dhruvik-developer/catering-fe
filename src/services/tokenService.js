@@ -2,6 +2,8 @@ const TOKEN_STORAGE_KEY = "accessToken";
 const USERNAME_STORAGE_KEY = "username";
 const USER_TYPE_STORAGE_KEY = "userType";
 const PERMISSIONS_STORAGE_KEY = "permissions";
+const ENABLED_MODULES_STORAGE_KEY = "enabledModules";
+const TENANT_STORAGE_KEY = "tenant";
 export const USER_ROLE_ADMIN = "admin";
 
 let accessToken =
@@ -27,6 +29,28 @@ const tokenService = {
     } catch (e) {
       console.error("Error parsing permissions from localStorage", e);
       return [];
+    }
+  },
+  getEnabledModules: () => {
+    if (typeof window === "undefined") return [];
+    const enabledModules = window.localStorage.getItem(
+      ENABLED_MODULES_STORAGE_KEY
+    );
+    try {
+      return enabledModules ? JSON.parse(enabledModules) : [];
+    } catch (e) {
+      console.error("Error parsing enabled modules from localStorage", e);
+      return [];
+    }
+  },
+  getTenant: () => {
+    if (typeof window === "undefined") return null;
+    const tenant = window.localStorage.getItem(TENANT_STORAGE_KEY);
+    try {
+      return tenant ? JSON.parse(tenant) : null;
+    } catch (e) {
+      console.error("Error parsing tenant from localStorage", e);
+      return null;
     }
   },
   setToken: (token) => {
@@ -74,6 +98,29 @@ const tokenService = {
 
     window.localStorage.removeItem(PERMISSIONS_STORAGE_KEY);
   },
+  setEnabledModules: (enabledModules) => {
+    if (typeof window === "undefined") return;
+
+    if (enabledModules && Array.isArray(enabledModules)) {
+      window.localStorage.setItem(
+        ENABLED_MODULES_STORAGE_KEY,
+        JSON.stringify(enabledModules)
+      );
+      return;
+    }
+
+    window.localStorage.removeItem(ENABLED_MODULES_STORAGE_KEY);
+  },
+  setTenant: (tenant) => {
+    if (typeof window === "undefined") return;
+
+    if (tenant && typeof tenant === "object") {
+      window.localStorage.setItem(TENANT_STORAGE_KEY, JSON.stringify(tenant));
+      return;
+    }
+
+    window.localStorage.removeItem(TENANT_STORAGE_KEY);
+  },
   clearAuth: () => {
     accessToken = null;
 
@@ -83,6 +130,8 @@ const tokenService = {
     window.localStorage.removeItem(USERNAME_STORAGE_KEY);
     window.localStorage.removeItem(USER_TYPE_STORAGE_KEY);
     window.localStorage.removeItem(PERMISSIONS_STORAGE_KEY);
+    window.localStorage.removeItem(ENABLED_MODULES_STORAGE_KEY);
+    window.localStorage.removeItem(TENANT_STORAGE_KEY);
   },
 };
 

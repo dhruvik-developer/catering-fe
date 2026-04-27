@@ -25,9 +25,37 @@
   --color-primary-border: color-mix(in srgb, var(--color-primary), white 70%);
   --color-primary-text: color-mix(in srgb, var(--color-primary), black 40%);
   --color-primary-contrast: #ffffff;
-  
-  --pdf-unicode-font-stack: "Noto Sans Gujarati PDF", "Noto Sans Devanagari PDF",
-    sans-serif;
+
+  --app-bg-base: #f6f8fb;
+  --app-surface: rgba(255, 255, 255, 0.88);
+  --app-surface-strong: rgba(255, 255, 255, 0.96);
+  --app-border: rgba(148, 163, 184, 0.24);
+  --app-shadow: 0 18px 40px -28px rgba(15, 23, 42, 0.45);
+  --app-shell-background:
+    linear-gradient(
+      135deg,
+      color-mix(in srgb, var(--color-primary), white 90%) 0%,
+      rgba(246, 248, 251, 0) 32%
+    ),
+    linear-gradient(
+      225deg,
+      rgba(20, 184, 166, 0.1) 0%,
+      rgba(20, 184, 166, 0) 36%
+    ),
+    repeating-linear-gradient(
+      0deg,
+      rgba(148, 163, 184, 0.07) 0 1px,
+      transparent 1px 28px
+    ),
+    repeating-linear-gradient(
+      90deg,
+      rgba(148, 163, 184, 0.045) 0 1px,
+      transparent 1px 28px
+    ),
+    var(--app-bg-base);
+
+  --pdf-unicode-font-stack:
+    "Noto Sans Gujarati PDF", "Noto Sans Devanagari PDF", sans-serif;
 }
 
 @theme {
@@ -96,12 +124,13 @@ body {
   padding: 0;
   height: 100%;
   overflow: hidden;
-  background-color: #f5f5f5;
+  background: var(--app-shell-background);
 }
 
 #root {
   height: 100vh;
   overflow: hidden;
+  background: var(--app-shell-background);
 }
 
 #pdf-content,

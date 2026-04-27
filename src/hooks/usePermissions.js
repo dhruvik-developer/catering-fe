@@ -1,17 +1,21 @@
 import { useContext, useMemo } from "react";
 import { UserContext } from "../context/UserContext";
+import {
+    hasEnabledModule,
+    hasPermissionForCodes,
+    normalizeAccessList,
+} from "../utils/accessControl";
 
 /**
  * Custom hook to check if the current user has specific permissions.
  * Supports checking for a single permission or multiple permissions (any or all).
  */
 export const usePermissions = () => {
-    const { permissions, userType } = useContext(UserContext);
+    const { permissions, enabledModules } = useContext(UserContext);
 
     const isSuperUser = useMemo(() => {
-        // Admin or superuser usually has all permissions (*)
-        return userType === 'admin' || permissions.includes('*');
-    }, [userType, permissions]);
+        return normalizeAccessList(permissions).includes('*');
+    }, [permissions]);
 
     /**
      * Check if user has a specific permission code.
@@ -20,22 +24,19 @@ export const usePermissions = () => {
      * @returns {boolean}
      */
     const hasPermission = (codes, mode = 'any') => {
-        if (isSuperUser) return true;
-        if (!permissions || !Array.isArray(permissions)) return false;
+        return hasPermissionForCodes(permissions, enabledModules, codes, mode);
+    };
 
-        const checkCodes = Array.isArray(codes) ? codes : [codes];
-
-        if (mode === 'all') {
-            return checkCodes.every(code => permissions.includes(code));
-        }
-
-        return checkCodes.some(code => permissions.includes(code));
+    const isModuleEnabled = (moduleName) => {
+        return hasEnabledModule(enabledModules, moduleName);
     };
 
     return {
         permissions,
+        enabledModules,
         isSuperUser,
-        hasPermission
+        hasPermission,
+        isModuleEnabled
     };
 };
 

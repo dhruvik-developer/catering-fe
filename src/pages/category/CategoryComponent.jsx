@@ -16,23 +16,26 @@ import {
   AddItemModal,
   AddIngredientModal,
 } from "../../Components/category/CategoryModals";
+import usePermissions from "../../hooks/usePermissions";
 
 function CategoryComponent({
   categories,
   items,
-  onAddCategory,
   onEditCategory,
   onSubCategoryDelete,
   onItemDelete,
   onSwappingCategory,
   loading,
-  navigate,
   onRefresh,
 }) {
   const [showAddCategory, setShowAddCategory] = useState(false);
   const [showAddItem, setShowAddItem] = useState(false);
   const [showAddIngredient, setShowAddIngredient] = useState(false);
   const [activeCategoryId, setActiveCategoryId] = useState(null);
+  const { hasPermission } = usePermissions();
+  const canCreateCategory = hasPermission("categories.create");
+  const canUpdateCategory = hasPermission("categories.update");
+  const canDeleteCategory = hasPermission("categories.delete");
 
   const subcategoryCount =
     categories?.reduce((sum, c) => sum + (c.items?.length || 0), 0) || 0;
@@ -71,29 +74,31 @@ function CategoryComponent({
             </Typography>
           </Box>
         </Stack>
-        <Stack direction="row" spacing={1} flexWrap="wrap" useFlexGap>
-          <Button
-            variant="contained"
-            color="primary"
-            onClick={() => setShowAddCategory(true)}
-          >
-            + Add Category
-          </Button>
-          <Button
-            variant="outlined"
-            color="primary"
-            onClick={() => setShowAddIngredient(true)}
-          >
-            + Add Ingredient
-          </Button>
-          <Button
-            variant="outlined"
-            color="primary"
-            onClick={() => setShowAddItem(true)}
-          >
-            + Add Item
-          </Button>
-        </Stack>
+        {canCreateCategory && (
+          <Stack direction="row" spacing={1} flexWrap="wrap" useFlexGap>
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={() => setShowAddCategory(true)}
+            >
+              + Add Category
+            </Button>
+            <Button
+              variant="outlined"
+              color="primary"
+              onClick={() => setShowAddIngredient(true)}
+            >
+              + Add Ingredient
+            </Button>
+            <Button
+              variant="outlined"
+              color="primary"
+              onClick={() => setShowAddItem(true)}
+            >
+              + Add Item
+            </Button>
+          </Stack>
+        )}
       </Stack>
 
       {loading ? (
@@ -109,6 +114,8 @@ function CategoryComponent({
           onItemDelete={onItemDelete}
           onSwappingCategory={onSwappingCategory}
           onRefresh={onRefresh}
+          canUpdateCategory={canUpdateCategory}
+          canDeleteCategory={canDeleteCategory}
         />
       )}
 

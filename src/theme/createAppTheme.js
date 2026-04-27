@@ -8,7 +8,10 @@ import { createTheme } from "@mui/material/styles";
  * - Border radius, shadows and spacing stay consistent across the app by
  *   defining them here once.
  */
-export function createAppTheme({ primaryColor = "#845cbd", mode = "light" } = {}) {
+export function createAppTheme({
+  primaryColor = "#845cbd",
+  mode = "light",
+} = {}) {
   const isLight = mode === "light";
 
   return createTheme({
@@ -18,8 +21,13 @@ export function createAppTheme({ primaryColor = "#845cbd", mode = "light" } = {}
         main: primaryColor,
       },
       background: {
-        default: isLight ? "#f5f5f5" : "#0f172a",
-        paper: isLight ? "#ffffff" : "#1e293b",
+        default: isLight ? "#f6f8fb" : "#0f172a",
+        paper: isLight ? "rgba(255,255,255,0.92)" : "#1e293b",
+      },
+      divider: isLight ? "rgba(148, 163, 184, 0.24)" : "#334155",
+      action: {
+        hover: isLight ? "rgba(248,250,252,0.86)" : "rgba(255,255,255,0.08)",
+        selected: isLight ? "rgba(241,245,249,0.92)" : "rgba(255,255,255,0.12)",
       },
     },
     shape: {
@@ -72,13 +80,24 @@ export function createAppTheme({ primaryColor = "#845cbd", mode = "light" } = {}
         styleOverrides: {
           root: {
             borderRadius: 14,
-            border: `1px solid ${isLight ? "#f1f5f9" : "#334155"}`,
+            border: `1px solid ${
+              isLight ? "rgba(148, 163, 184, 0.24)" : "#334155"
+            }`,
+            boxShadow: isLight
+              ? "0 16px 36px -30px rgba(15, 23, 42, 0.55)"
+              : "0 10px 24px -8px rgba(0,0,0,0.35)",
           },
         },
       },
       MuiPaper: {
         defaultProps: {
           elevation: 1,
+        },
+        styleOverrides: {
+          root: {
+            backgroundImage: "none",
+            backdropFilter: isLight ? "blur(14px)" : undefined,
+          },
         },
       },
       MuiTextField: {

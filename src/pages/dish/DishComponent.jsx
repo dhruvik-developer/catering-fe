@@ -146,6 +146,14 @@ function DishComponent({
         >
           {STEPS.map((step, index) => {
             const isCompleted = currentStep > step.id;
+            const CustomStepIcon = (iconProps) => (
+              <StepIcon
+                icon={step.icon}
+                active={iconProps.active}
+                completed={iconProps.completed}
+              />
+            );
+
             return (
               <Step key={step.id} completed={isCompleted}>
                 <StepButton
@@ -155,15 +163,7 @@ function DishComponent({
                   disabled={!isCompleted}
                   sx={{ "&.Mui-disabled": { cursor: "default" } }}
                 >
-                  <StepLabel
-                    StepIconComponent={(iconProps) => (
-                      <StepIcon
-                        icon={step.icon}
-                        active={iconProps.active}
-                        completed={iconProps.completed}
-                      />
-                    )}
-                  >
+                  <StepLabel slots={{ stepIcon: CustomStepIcon }}>
                     {step.label}
                   </StepLabel>
                 </StepButton>

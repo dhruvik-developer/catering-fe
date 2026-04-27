@@ -29,7 +29,7 @@ function Card({
 
   return (
     <Tag
-      className={`bg-white rounded-xl border border-gray-100 shadow-sm ${padClass} ${hoverClass} ${className}`}
+      className={`bg-white/90 backdrop-blur rounded-xl border border-slate-200/80 shadow-[0_16px_36px_-30px_rgba(15,23,42,0.55)] ${padClass} ${hoverClass} ${className}`}
       {...rest}
     >
       {children}
