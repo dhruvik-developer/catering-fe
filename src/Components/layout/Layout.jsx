@@ -3,7 +3,7 @@ import Header from "./Header";
 import { Outlet, useNavigate, useLocation } from "react-router-dom";
 import { useEffect, useContext } from "react";
 import { useDispatch } from "react-redux";
-import { Box, Typography } from "@mui/material";
+import { Box } from "@mui/material";
 import { UserContext } from "../../context/UserContext";
 import { toggleSidebar } from "../../redux/uiSlice";
 
@@ -47,7 +47,7 @@ const Layout = () => {
             overflowX: "hidden",
             overflowY: "auto",
             p: { xs: 1.5, sm: 2.5 },
-            bgcolor: "transparent",
+            bgcolor: "var(--color-primary-soft)",
             animation: "slideUpFade 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards",
             display: "flex",
             flexDirection: "column",

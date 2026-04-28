@@ -4,7 +4,6 @@ import {
   Avatar,
   Box,
   Button,
-  Divider,
   FormControl,
   FormHelperText,
   IconButton,
@@ -63,15 +62,20 @@ function SectionHeader({ icon: Icon, title, subtitle }) {
 }
 
 const DatePickerTextField = forwardRef(function DatePickerTextField(
-  { helperText = " ", sx, InputProps, inputProps, ...props },
+  { helperText, sx, InputProps, inputProps, ...props },
   ref
 ) {
+  const textFieldHelperText =
+    typeof helperText === "string" && helperText.trim() === ""
+      ? undefined
+      : helperText;
+
   return (
     <TextField
       {...props}
       fullWidth
       inputRef={ref}
-      helperText={helperText}
+      helperText={textFieldHelperText}
       slotProps={{
         input: { ...InputProps, readOnly: true },
         htmlInput: inputProps,
@@ -79,6 +83,13 @@ const DatePickerTextField = forwardRef(function DatePickerTextField(
       sx={{
         "& .MuiOutlinedInput-root": {
           bgcolor: props.disabled ? "action.hover" : "background.paper",
+        },
+        "& .MuiInputBase-input.Mui-disabled": {
+          WebkitTextFillColor: "#000000",
+          color: "#000000",
+        },
+        "& .MuiInputLabel-root.Mui-disabled": {
+          color: "rgba(0, 0, 0, 0.87)",
         },
         ...sx,
       }}
@@ -122,7 +133,13 @@ function Step1_ClientEvent({
   return (
     <Stack spacing={4}>
       {/* Section 1: Client Information */}
-      <Box>
+      <Box
+        sx={{
+          bgcolor: "var(--color-primary-soft)",
+          p: { xs: 2, sm: 3 },
+          borderRadius: "24px",
+        }}
+      >
         <SectionHeader
           icon={FiUser}
           title="Client Information"
@@ -144,7 +161,7 @@ function Step1_ClientEvent({
               onChange={handleChange}
               placeholder={errors.name || "Enter client name"}
               error={Boolean(errors.name)}
-              helperText={errors.name || " "}
+              helperText={errors.name || undefined}
             />
           </Grid>
           <Grid size={{ xs: 12, md: 6 }}>
@@ -157,7 +174,7 @@ function Step1_ClientEvent({
               placeholder={errors.mobile_no || "Mobile Number"}
               slotProps={{ htmlInput: { maxLength: 10 } }}
               error={Boolean(errors.mobile_no)}
-              helperText={errors.mobile_no || " "}
+              helperText={errors.mobile_no || undefined}
             />
           </Grid>
           <Grid size={{ xs: 12, md: 6 }}>
@@ -167,7 +184,6 @@ function Step1_ClientEvent({
               disabled
               textFieldProps={{
                 label: "Order Date",
-                helperText: " ",
               }}
             />
           </Grid>
@@ -180,16 +196,20 @@ function Step1_ClientEvent({
               onChange={handleChange}
               placeholder="Reference Name"
               error={Boolean(errors.reference)}
-              helperText={errors.reference || " "}
+              helperText={errors.reference || undefined}
             />
           </Grid>
         </Grid>
       </Box>
 
-      <Divider />
-
       {/* Section 2: Event Schedule */}
-      <Box>
+      <Box
+        sx={{
+          bgcolor: "var(--color-primary-soft)",
+          p: { xs: 2, sm: 3 },
+          borderRadius: "24px",
+        }}
+      >
         <SectionHeader
           icon={FiCalendar}
           title="Event Schedule"
@@ -420,9 +440,11 @@ function Step1_ClientEvent({
                                 );
                               })}
                             </Select>
-                            <FormHelperText>
-                              {errors[`timeLabel_${dIdx}_${sIdx}`] || " "}
-                            </FormHelperText>
+                            {errors[`timeLabel_${dIdx}_${sIdx}`] && (
+                              <FormHelperText>
+                                {errors[`timeLabel_${dIdx}_${sIdx}`]}
+                              </FormHelperText>
+                            )}
                           </FormControl>
                         </Grid>
                         <Grid size={{ xs: 12, sm: 6 }}>
@@ -441,7 +463,9 @@ function Step1_ClientEvent({
                               )
                             }
                             error={Boolean(errors[`persons_${dIdx}_${sIdx}`])}
-                            helperText={errors[`persons_${dIdx}_${sIdx}`] || " "}
+                            helperText={
+                              errors[`persons_${dIdx}_${sIdx}`] || undefined
+                            }
                           />
                         </Grid>
                       </Grid>

@@ -113,6 +113,25 @@ export function createAppTheme({
           },
         },
       },
+      MuiInputBase: {
+        styleOverrides: {
+          input: {
+            "&.Mui-disabled": {
+              WebkitTextFillColor: isLight ? "#000000" : "#ffffff",
+              color: isLight ? "#000000" : "#ffffff",
+            },
+          },
+        },
+      },
+      MuiInputLabel: {
+        styleOverrides: {
+          root: {
+            "&.Mui-disabled": {
+              color: isLight ? "rgba(0, 0, 0, 0.87)" : "rgba(255, 255, 255, 0.87)",
+            },
+          },
+        },
+      },
     },
   });
 }

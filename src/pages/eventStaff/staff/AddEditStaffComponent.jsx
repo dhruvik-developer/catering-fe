@@ -308,7 +308,7 @@ function AddEditStaffComponent({
                         key={type}
                         className={`flex-1 sm:flex-none relative flex items-center justify-center gap-2 px-6 py-3 rounded-xl border-2 cursor-pointer transition-all ${
                           formData.staff_type === type
-                            ? "border-[var(--color-primary)] bg-[var(--color-primary)]/5 text-[var(--color-primary)]"
+                            ? "border-[var(--color-primary-border)] bg-[var(--color-primary-border)] text-[var(--color-primary-text)]"
                             : "border-gray-200 hover:border-gray-300 text-gray-600"
                         }`}
                       >

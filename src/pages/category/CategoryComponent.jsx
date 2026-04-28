@@ -43,7 +43,11 @@ function CategoryComponent({
   return (
     <Paper
       elevation={0}
-      sx={{ p: { xs: 2, sm: 3 }, borderRadius: 3, bgcolor: "background.paper" }}
+      sx={{
+        p: { xs: 2, sm: 3 },
+        borderRadius: 3,
+        bgcolor: "var(--color-primary-soft)",
+      }}
     >
       <Stack
         direction={{ xs: "column", md: "row" }}
