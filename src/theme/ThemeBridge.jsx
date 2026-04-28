@@ -4,6 +4,7 @@ import { useSelector } from "react-redux";
 import { ThemeProvider } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
 import { createAppTheme } from "./createAppTheme";
+import { BASE_PATH } from "../utils/Config";
 
 /**
  * Reads primary color + mode from Redux, builds an MUI theme, and exposes it
@@ -56,7 +57,8 @@ function ThemeBridge({ children }) {
       document.head.appendChild(newLink);
     };
 
-    img.src = "/food.png"; // Load the base icon
+    // Use absolute URL to be safe, including BASE_PATH if it exists
+    img.src = window.location.origin + BASE_PATH + "/food.png";
   }, [primaryColor, theme]);
 
   return (
