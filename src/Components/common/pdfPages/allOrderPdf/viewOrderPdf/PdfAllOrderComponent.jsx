@@ -53,7 +53,8 @@ function PdfAllOrderComponent({
               width: "100%",
               maxWidth: "900px",
               display: "flex",
-              justifyContent: "flex-end",
+              justifyContent: "space-between",
+              alignItems: "center",
               gap: "12px",
               marginBottom: "20px",
             }}

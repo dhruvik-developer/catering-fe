@@ -169,7 +169,7 @@ function CategoryController() {
     }
   };
 
-  const handleDeleteSubCategory = (id) => {
+  const handleDeleteItem = (id) => {
     if (!hasPermission("categories.delete")) {
       toast.error("You do not have permission to delete items.");
       return;
@@ -185,7 +185,7 @@ function CategoryController() {
     });
   };
 
-  const handleDeleteItem = (id) => {
+  const handleDeleteCategory = (id) => {
     if (!hasPermission("categories.delete")) {
       toast.error("You do not have permission to delete categories.");
       return;
@@ -258,7 +258,7 @@ function CategoryController() {
       categories={categories}
       items={[]}
       onEditCategory={handleEditCategory}
-      onSubCategoryDelete={handleDeleteSubCategory}
+      onCategoryDelete={handleDeleteCategory}
       onItemDelete={handleDeleteItem}
       onSwappingCategory={handleSwappingCategory}
       loading={isCategoriesLoading || isRecipesLoading}

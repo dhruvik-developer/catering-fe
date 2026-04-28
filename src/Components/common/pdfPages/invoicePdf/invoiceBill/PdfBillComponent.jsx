@@ -81,13 +81,13 @@ function PdfBillComponent({
     uniqueDates.length > 0 ? uniqueDates.join(", ") : pdfInvoice?.event_date;
 
   return (
-    <div className="flex flex-col justify-center items-center min-h-screen p-4 font-sans text-gray-800 bg-gradient-to-br from-[var(--color-primary-tint)] via-[var(--color-primary-tint)] to-[var(--color-primary-tint)]">
+    <div className="flex flex-col items-center min-h-screen p-4 font-sans text-gray-800 bg-gradient-to-br from-[var(--color-primary-tint)] via-[var(--color-primary-tint)] to-[var(--color-primary-tint)]">
       {loading ? (
         <Loader message="Loading PDF View..." />
       ) : (
         <>
           {/* Action Bar (Top) */}
-          <div className="flex justify-end gap-3 mb-6 w-full max-w-4xl no-print-button">
+          <div className="flex justify-between items-center gap-3 mb-6 w-full max-w-4xl no-print-button">
             <button
               className="flex items-center gap-2 px-6 py-3 bg-white text-gray-700 border border-gray-200 rounded-xl shadow-md hover:bg-gray-50 hover:text-[var(--color-primary)] hover:border-[var(--color-primary)]/30 focus:ring-4 focus:ring-[var(--color-primary-soft)] transition-all cursor-pointer group font-semibold text-sm"
               onClick={() => navigate(-1)}
@@ -137,7 +137,7 @@ function PdfBillComponent({
             {/* Watermark Logo Container */}
             <div className="absolute inset-0 z-0 flex items-center justify-center opacity-[0.03] pointer-events-none">
               <BaseImage
-                src="/logo1.png"
+                src={businessProfile?.logo || "/logo1.png"}
                 alt="Watermark"
                 className="w-[80%] max-w-[500px] h-auto object-contain"
               />
@@ -146,29 +146,35 @@ function PdfBillComponent({
             <div className="absolute top-0 right-0 -mr-20 -mt-20 w-64 h-64 rounded-full bg-gradient-to-br from-[var(--color-primary)]/10 to-transparent blur-3xl pointer-events-none"></div>
             <div className="absolute bottom-0 left-0 -ml-20 -mb-20 w-80 h-80 rounded-full bg-gradient-to-tr from-[var(--color-primary-tint)]/5 to-transparent blur-3xl pointer-events-none"></div>
             {/* Top Accent Bar */}
-            <div className="relative h-2 w-full bg-gradient-to-r from-[var(--color-primary)] via-[var(--color-primary-soft)] to-[var(--color-primary)] z-10"></div>
+    
             <div className="relative z-10">
               {/* Header Section */}
-              <div className="px-10 pt-10 pb-6 flex flex-row items-center justify-between border-b 0 border-gray-100/80">
+              <div 
+                className="px-10 pt-10 pb-6 flex flex-row items-start justify-between border-b border-white/10"
+                style={{ backgroundColor: 'var(--color-primary)' }}
+              >
                 {/* Company Info */}
                 <div className="flex flex-col items-start w-2/3">
-                  <h2 className="text-3xl font-extrabold bg-clip-text text-transparent bg-gradient-to-r from-[var(--color-primary)] to-[var(--color-primary)] tracking-wide uppercase mb-1 drop-shadow-sm">
-                    {businessProfile?.caters_name || "radha Sweet & Caterers"}
+                  <h2 
+                    className="text-3xl font-extrabold tracking-wide uppercase mb-1 drop-shadow-sm"
+                    style={{ color: 'white' }}
+                  >
+                    {businessProfile?.caters_name || "Radha Caterers"}
                   </h2>
-                  <p className="text-sm text-gray-600 font-medium whitespace-nowrap">
+                  <p className="text-sm text-white/90 font-medium whitespace-nowrap">
                     {businessProfile?.godown_address ||
-                      "C1 1201 Pragati IT Park, Near AR Mall, Mota Varaccha, Surat"}
+                      "Radha Caterers, second floor, Krishna Row House, Parvati Nagar, Nana Varachha, Surat, Gujarat 395006."}
                   </p>
-                  <p className="text-sm text-gray-600 font-medium">
+                  <p className="text-sm text-white/90 font-medium">
                     Contact:{" "}
-                    <span className="font-semibold text-gray-800">
-                      {businessProfile?.phone_number || "99988 67024"}
+                    <span className="font-semibold text-white">
+                      {businessProfile?.phone_number || "9913244456"}
                     </span>
                     {businessProfile?.whatsapp_number ? (
                       <>
                         {" "}
                         / WhatsApp:{" "}
-                        <span className="font-semibold text-gray-800">
+                        <span className="font-semibold text-white">
                           {businessProfile.whatsapp_number}
                         </span>
                       </>
@@ -188,15 +194,18 @@ function PdfBillComponent({
                   </div>
                 </div>
 
-                {/* Logo */}
+                {/* Logo Section */}
                 <div className="flex flex-col items-end w-1/3">
-                  <div className="bg-white p-2 rounded-2xl shadow-sm border border-gray-50 mb-3">
-                    <BaseImage
-                      src="/logo1.png"
-                      alt="radha Logo"
-                      className="w-28 h-auto object-contain drop-shadow-sm"
-                    />
-                  </div>
+                  {/* Space for absolute logo */}
+                </div>
+
+                {/* Absolute Logo */}
+                <div className="absolute top-0 right-0 p-4">
+                  <BaseImage
+                    src={businessProfile?.logo || "/logo1.png"}
+                    alt="radha Logo"
+                    className="w-28 h-auto object-contain drop-shadow-sm"
+                  />
                 </div>
               </div>
 

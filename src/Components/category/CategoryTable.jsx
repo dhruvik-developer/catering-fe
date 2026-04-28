@@ -21,7 +21,7 @@ const CategoryTable = ({
   categories = [],
   activeCategoryId,
   setActiveCategoryId,
-  onSubCategoryDelete,
+  onCategoryDelete,
   onItemDelete,
   onSwappingCategory,
   onEditCategory,
@@ -51,19 +51,29 @@ const CategoryTable = ({
   const subcategories = activeCategory?.subcategories || [];
   const itemsOfActiveCategory = activeCategory?.items || [];
 
-  const currentViewingSubCategory = viewingSubCategoryId 
-    ? subcategories.find(s => s.id === viewingSubCategoryId)
+  const getTotalItems = (category) => {
+    let count = category?.items?.length || 0;
+    if (category?.subcategories) {
+      category.subcategories.forEach((sub) => {
+        count += getTotalItems(sub);
+      });
+    }
+    return count;
+  };
+
+  const currentViewingSubCategory = viewingSubCategoryId
+    ? activeCategory?.subcategories?.find((s) => s.id === viewingSubCategoryId)
     : null;
 
-  const displayData = viewingSubCategoryId 
-    ? (currentViewingSubCategory?.items || [])
-    : (subcategories.length > 0 ? subcategories : itemsOfActiveCategory);
+  const displayData = viewingSubCategoryId
+    ? currentViewingSubCategory?.items || []
+    : [...subcategories, ...itemsOfActiveCategory];
 
   const filteredData = displayData.filter((item) =>
     item.name.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
-  const isViewingItems = viewingSubCategoryId || (subcategories.length === 0);
+  const isViewingItems = !!viewingSubCategoryId;
 
   return (
     <>
@@ -94,7 +104,6 @@ const CategoryTable = ({
           >
             {sortedCategories.map((category) => {
               const isActive = category.id === activeCategory?.id;
-              const qty = category.items ? category.items.length : 0;
               return (
                 <Paper
                   key={category.id}
@@ -157,7 +166,7 @@ const CategoryTable = ({
                         color="text.secondary"
                         fontWeight={500}
                       >
-                        {qty} item{qty !== 1 ? "s" : ""}
+                        {getTotalItems(category)} item{getTotalItems(category) !== 1 ? "s" : ""}
                       </Typography>
                     </Box>
                   </Stack>
@@ -197,7 +206,7 @@ const CategoryTable = ({
                           color="error"
                           onClick={(e) => {
                             e.stopPropagation();
-                            onItemDelete(category.id);
+                            onCategoryDelete(category.id);
                           }}
                           title="Delete Category"
                         >
@@ -265,7 +274,7 @@ const CategoryTable = ({
                   )}
                 </Typography>
                 <Typography variant="body2" color="text.secondary">
-                  {displayData.length} {isViewingItems ? 'items' : 'subcategories'} in this {viewingSubCategoryId ? 'subcategory' : 'category'}
+                  {filteredData.length} {isViewingItems ? 'items' : 'subcategories'} in this {viewingSubCategoryId ? 'subcategory' : 'category'}
                 </Typography>
               </Box>
               <TextField
@@ -288,100 +297,110 @@ const CategoryTable = ({
             <Box sx={{ p: 3, overflowY: "auto", flex: 1 }}>
               {filteredData.length > 0 ? (
                 <Grid container spacing={1.5}>
-                  {filteredData.map((item) => (
-                    <Grid key={item.id} size={{ xs: 12, sm: 6, xl: 4 }}>
-                      <Paper
-                        variant="outlined"
-                        onClick={() => {
-                          if (!isViewingItems) {
-                            setViewingSubCategoryId(item.id);
-                          } else {
-                            setSelectedItemForRecipe(item);
-                          }
-                        }}
-                        sx={{
-                          p: 1.75,
-                          display: "flex",
-                          alignItems: "center",
-                          justifyContent: "space-between",
-                          gap: 1,
-                          cursor: "pointer",
-                          transition: "all 0.2s",
-                          "&:hover": {
-                            borderColor: "primary.light",
-                            boxShadow: 1,
-                          },
-                          "&:hover .delete-btn": { opacity: 1 },
-                        }}
-                      >
-                        <Stack
-                          direction="row"
-                          spacing={1.5}
-                          sx={{ alignItems: "center", minWidth: 0, flex: 1 }}
-                        >
-                          <Avatar
-                            sx={{
-                              width: 32,
-                              height: 32,
-                              bgcolor:
-                                isViewingItems && item.has_recipe === false
-                                  ? "error.light"
-                                  : "var(--color-primary-border)",
-                              color:
-                                isViewingItems && item.has_recipe === false
-                                  ? "error.main"
-                                  : "primary.main",
-                            }}
-                          >
-                            {isViewingItems ? <FiTag size={14} /> : <FiFolder size={14} />}
-                          </Avatar>
-                          <Typography
-                            variant="body2"
-                            fontWeight={700}
-                            noWrap
-                            color={
-                              isViewingItems && item.has_recipe === false
-                                ? "error.main"
-                                : "text.primary"
+                  {filteredData.map((item) => {
+                    const isItem = item.hasOwnProperty("category");
+                    return (
+                      <Grid key={item.id} size={{ xs: 12, sm: 6, xl: 4 }}>
+                        <Paper
+                          variant="outlined"
+                          onClick={() => {
+                            if (!isItem) {
+                              setViewingSubCategoryId(item.id);
+                            } else {
+                              setSelectedItemForRecipe(item);
                             }
+                          }}
+                          sx={{
+                            p: 1.75,
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "space-between",
+                            gap: 1,
+                            cursor: "pointer",
+                            transition: "all 0.2s",
+                            "&:hover": {
+                              borderColor: "primary.light",
+                              boxShadow: 1,
+                            },
+                            "&:hover .delete-btn": { opacity: 1 },
+                          }}
+                        >
+                          <Stack
+                            direction="row"
+                            spacing={1.5}
+                            sx={{ alignItems: "center", minWidth: 0, flex: 1 }}
                           >
-                            {item.name}
-                          </Typography>
-                        </Stack>
-                        <Stack direction="row" spacing={0.5} className="delete-btn" sx={{ opacity: { xs: 1, sm: 0 }, transition: "opacity 0.2s" }}>
-                          {!isViewingItems && canUpdateCategory && (
-                            <IconButton
-                              size="small"
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                onEditCategory(item.id, item.name);
+                            <Avatar
+                              sx={{
+                                width: 32,
+                                height: 32,
+                                bgcolor:
+                                  isItem && item.has_recipe === false
+                                    ? "error.light"
+                                    : "var(--color-primary-border)",
+                                color:
+                                  isItem && item.has_recipe === false
+                                    ? "error.main"
+                                    : "primary.main",
                               }}
-                              title="Edit Subcategory"
                             >
-                              <FiEdit2 size={12} />
-                            </IconButton>
-                          )}
-                          {canDeleteCategory && (
-                            <IconButton
-                              size="small"
-                              color="error"
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                if (isViewingItems) {
-                                  onSubCategoryDelete(item.id);
-                                } else {
-                                  onItemDelete(item.id); // This actually deletes a category if not viewing items
+                              {isItem ? <FiTag size={14} /> : <FiFolder size={14} />}
+                            </Avatar>
+                            <Box sx={{ minWidth: 0 }}>
+                              <Typography
+                                variant="body2"
+                                fontWeight={700}
+                                noWrap
+                                color={
+                                  isItem && item.has_recipe === false
+                                    ? "error.main"
+                                    : "text.primary"
                                 }
-                              }}
-                              title={isViewingItems ? "Delete Item" : "Delete Subcategory"}
-                            >
-                              <FaTrash size={12} />
-                            </IconButton>
-                          )}
-                        </Stack>
-                      </Paper>
-                    </Grid>
-                  ))}
+                              >
+                                {item.name}
+                              </Typography>
+                              {!isItem && (
+                                <Typography variant="caption" color="text.secondary">
+                                  {getTotalItems(item)} items
+                                </Typography>
+                              )}
+                            </Box>
+                          </Stack>
+                          <Stack direction="row" spacing={0.5} className="delete-btn" sx={{ opacity: { xs: 1, sm: 0 }, transition: "opacity 0.2s" }}>
+                            {!isItem && canUpdateCategory && (
+                              <IconButton
+                                size="small"
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  onEditCategory(item.id, item.name);
+                                }}
+                                title="Edit Subcategory"
+                              >
+                                <FiEdit2 size={12} />
+                              </IconButton>
+                            )}
+                            {canDeleteCategory && (
+                              <IconButton
+                                size="small"
+                                color="error"
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  if (isItem) {
+                                    onItemDelete(item.id);
+                                  } else {
+                                    onCategoryDelete(item.id);
+                                  }
+                                }}
+                                title={isItem ? "Delete Item" : "Delete Subcategory"}
+                              >
+                                <FaTrash size={12} />
+                              </IconButton>
+                            )}
+                          </Stack>
+                        </Paper>
+                      </Grid>
+                    );
+                  })}
                 </Grid>
               ) : (
                 <EmptyState

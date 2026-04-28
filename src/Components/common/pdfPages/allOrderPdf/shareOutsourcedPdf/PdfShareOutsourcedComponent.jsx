@@ -10,9 +10,9 @@ function PdfShareOutsourcedComponent({
   businessProfile,
 }) {
   return (
-    <div className="flex flex-col justify-center items-center min-h-screen p-4 font-sans text-gray-800 bg-gradient-to-br from-[var(--color-primary-tint)] via-[var(--color-primary-tint)] to-[var(--color-primary-tint)]">
+    <div className="flex flex-col items-center min-h-screen p-4 font-sans text-gray-800 bg-gradient-to-br from-[var(--color-primary-tint)] via-[var(--color-primary-tint)] to-[var(--color-primary-tint)]">
       {/* Action Bar (Top) */}
-      <div className="flex justify-end gap-3 mb-6 w-full max-w-3xl xl:w-[50%] no-print-button">
+      <div className="flex justify-between items-center gap-3 mb-6 w-full max-w-3xl no-print-button">
         <button
           className="flex items-center gap-2 px-6 py-3 bg-white text-gray-700 border border-gray-200 rounded-xl shadow-md hover:bg-gray-50 hover:text-[var(--color-primary)] hover:border-[var(--color-primary)]/30 focus:ring-4 focus:ring-[var(--color-primary-soft)] transition-all cursor-pointer group font-semibold text-sm"
           onClick={() => navigate("/all-order")}
@@ -42,19 +42,25 @@ function PdfShareOutsourcedComponent({
       >
         {/* Watermark */}
         <div className="absolute inset-0 z-0 flex items-center justify-center opacity-[0.03] pointer-events-none">
-          <img src="/logo1.png" alt="Watermark" className="w-[80%] max-w-[500px] h-auto object-contain" />
+          <img src={businessProfile?.logo || "/logo1.png"} alt="Watermark" className="w-[80%] max-w-[500px] h-auto object-contain" />
         </div>
         {/* Decorative orbs */}
         <div className="absolute top-0 right-0 -mr-20 -mt-20 w-64 h-64 rounded-full bg-gradient-to-br from-[var(--color-primary)]/10 to-transparent blur-3xl pointer-events-none" />
         <div className="absolute bottom-0 left-0 -ml-20 -mb-20 w-80 h-80 rounded-full bg-gradient-to-tr from-[var(--color-primary-tint)]/5 to-transparent blur-3xl pointer-events-none" />
         {/* Top Bar */}
-        <div className="relative h-2 w-full bg-gradient-to-r from-[var(--color-primary)] via-[var(--color-primary-soft)] to-[var(--color-primary)] z-10" />
+
 
         <div className="relative z-10 p-10">
           {/* Header */}
-          <div className="text-center mb-8">
-            <h2 className="text-3xl font-extrabold bg-clip-text text-transparent bg-gradient-to-r from-[var(--color-primary)] to-[var(--color-primary)] tracking-wide uppercase mb-2 drop-shadow-sm">
-              {businessProfile?.caters_name || "radha Sweet & Caterers"}
+          <div 
+            className="text-center mb-8 p-10 -m-10 border-b border-gray-100"
+            style={{ backgroundColor: 'var(--color-primary-border)' }}
+          >
+            <h2 
+              className="text-3xl font-extrabold tracking-wide uppercase mb-2 drop-shadow-sm"
+              style={{ color: businessProfile?.color_code || 'var(--color-primary)' }}
+            >
+              {businessProfile?.caters_name || "Radha Caterers"}
             </h2>
             <div className="inline-flex items-center justify-center gap-3 bg-white/80 backdrop-blur-md px-6 py-2 rounded-full border border-[var(--color-primary-border)]/30 shadow-sm mt-2">
               <span className="text-sm font-bold text-[var(--color-primary)] tracking-widest uppercase">

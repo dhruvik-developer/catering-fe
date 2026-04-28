@@ -22,7 +22,7 @@ function CategoryComponent({
   categories,
   items,
   onEditCategory,
-  onSubCategoryDelete,
+  onCategoryDelete,
   onItemDelete,
   onSwappingCategory,
   loading,
@@ -37,8 +37,16 @@ function CategoryComponent({
   const canUpdateCategory = hasPermission("categories.update");
   const canDeleteCategory = hasPermission("categories.delete");
 
+  const countSubcategories = (category) => {
+    let count = category.subcategories?.length || 0;
+    category.subcategories?.forEach((sub) => {
+      count += countSubcategories(sub);
+    });
+    return count;
+  };
+
   const subcategoryCount =
-    categories?.reduce((sum, c) => sum + (c.items?.length || 0), 0) || 0;
+    categories?.reduce((sum, c) => sum + countSubcategories(c), 0) || 0;
 
   return (
     <Paper
@@ -121,7 +129,7 @@ function CategoryComponent({
           activeCategoryId={activeCategoryId}
           setActiveCategoryId={setActiveCategoryId}
           onEditCategory={onEditCategory}
-          onSubCategoryDelete={onSubCategoryDelete}
+          onCategoryDelete={onCategoryDelete}
           onItemDelete={onItemDelete}
           onSwappingCategory={onSwappingCategory}
           onRefresh={onRefresh}

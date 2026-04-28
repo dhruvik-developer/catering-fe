@@ -85,8 +85,20 @@ function Step2_MenuSelection({
   }, [categoriesList, categorySearchQuery]);
 
   const activeCategory = categoriesList.find((c) => c.id === activeCategoryId);
+
+  const getAllItems = (category) => {
+    if (!category) return [];
+    let items = [...(category.items || [])];
+    if (category.subcategories) {
+      category.subcategories.forEach((sub) => {
+        items = [...items, ...getAllItems(sub)];
+      });
+    }
+    return items;
+  };
+
   const categoryItems = useMemo(() => {
-    const items = activeCategory?.items || [];
+    const items = getAllItems(activeCategory);
     if (!searchQuery.trim()) return items;
     return items.filter((item) =>
       item.name.toLowerCase().includes(searchQuery.toLowerCase())
@@ -131,7 +143,8 @@ function Step2_MenuSelection({
   const getSelectedCountForCategory = (catId) => {
     const cat = categoriesList.find((c) => c.id === catId);
     if (!cat) return 0;
-    return (cat.items || []).filter((item) => isDishSelected(item.id)).length;
+    const allItems = getAllItems(cat);
+    return allItems.filter((item) => isDishSelected(item.id)).length;
   };
 
   if (!activeTab) {
