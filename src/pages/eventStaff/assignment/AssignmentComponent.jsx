@@ -10,6 +10,7 @@ import {
 import { FiBriefcase, FiPlus } from "react-icons/fi";
 import Loader from "../../../Components/common/Loader";
 import AssignmentTable from "../../../Components/eventStaff/AssignmentTable";
+import usePermissions from "../../../hooks/usePermissions";
 
 function AssignmentComponent({
   loading,
@@ -18,6 +19,11 @@ function AssignmentComponent({
   onAssignmentEdit,
   onAssignmentDelete,
 }) {
+  const { hasPermission } = usePermissions();
+  const canCreate = hasPermission("eventstaff.create");
+  const canUpdate = hasPermission("eventstaff.update");
+  const canDelete = hasPermission("eventstaff.delete");
+
   return (
     <Paper
       elevation={0}
@@ -52,14 +58,16 @@ function AssignmentComponent({
             </Typography>
           </Box>
         </Stack>
-        <Button
-          variant="contained"
-          color="primary"
-          startIcon={<FiPlus size={16} />}
-          onClick={onAssignmentAdd}
-        >
-          Assign Staff
-        </Button>
+        {canCreate && (
+          <Button
+            variant="contained"
+            color="primary"
+            startIcon={<FiPlus size={16} />}
+            onClick={onAssignmentAdd}
+          >
+            Assign Staff
+          </Button>
+        )}
       </Stack>
 
       {loading ? (
@@ -69,6 +77,8 @@ function AssignmentComponent({
           assignments={assignments}
           onAssignmentEdit={onAssignmentEdit}
           onAssignmentDelete={onAssignmentDelete}
+          canEdit={canUpdate}
+          canDelete={canDelete}
         />
       )}
     </Paper>

@@ -23,7 +23,7 @@ import {
   TaskAdd01Icon,
   TransactionHistoryIcon,
 } from "@hugeicons/core-free-icons";
-import { FiSettings, FiUsers } from "react-icons/fi";
+import { FiUsers } from "react-icons/fi";
 import usePermissions from "../../hooks/usePermissions";
 import { getAllBusinessProfiles } from "../../api/BusinessProfile";
 import { setSidebarOpen } from "../../redux/uiSlice";
@@ -142,6 +142,9 @@ const activePaths = {
     "/waiter-types",
     "/add-staff",
     "/edit-staff",
+    "/event-assignments",
+    "/add-assignment",
+    "/edit-assignment",
     "/add-vendor",
     "/edit-vendor",
     "/staff-detail",

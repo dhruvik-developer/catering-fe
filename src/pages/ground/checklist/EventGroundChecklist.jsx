@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useCallback, useState, useEffect } from "react";
 import {
   Avatar,
   Box,
@@ -30,8 +30,10 @@ import {
 } from "../../../api/GroundApis";
 import AddGroundCategory from "../categories/AddGroundCategory";
 import AddGroundItem from "../items/AddGroundItem";
+import usePermissions from "../../../hooks/usePermissions";
 
 const EventGroundChecklist = () => {
+  const { hasPermission } = usePermissions();
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
   const [activeCategoryId, setActiveCategoryId] = useState(null);
@@ -41,20 +43,18 @@ const EventGroundChecklist = () => {
   const [editCategoryData, setEditCategoryData] = useState(null);
   const [editItemData, setEditItemData] = useState(null);
 
-  useEffect(() => {
-    fetchCategories();
-  }, []);
-
-  const fetchCategories = async () => {
+  const fetchCategories = useCallback(async () => {
     try {
       setLoading(true);
       const res = await getGroundCategories();
       if (res?.data?.status) {
         const data = res.data.data || [];
         setCategories(data);
-        if (data.length > 0 && !activeCategoryId) {
-          setActiveCategoryId(data[0].id);
-        }
+        setActiveCategoryId((currentActiveCategoryId) =>
+          data.length > 0 && !currentActiveCategoryId
+            ? data[0].id
+            : currentActiveCategoryId
+        );
       }
     } catch (error) {
       console.error(error);
@@ -62,7 +62,11 @@ const EventGroundChecklist = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
+
+  useEffect(() => {
+    fetchCategories();
+  }, [fetchCategories]);
 
   const activeCategory =
     categories.find((c) => c.id === activeCategoryId) || categories[0] || null;
@@ -74,13 +78,24 @@ const EventGroundChecklist = () => {
     (sum, c) => sum + (c.ground_items?.length || 0),
     0
   );
+  const canCreateGround = hasPermission("ground.create");
+  const canUpdateGround = hasPermission("ground.update");
+  const canDeleteGround = hasPermission("ground.delete");
 
   const handleEditCategory = (category) => {
+    if (!canUpdateGround) {
+      toast.error("You do not have permission to update ground categories.");
+      return;
+    }
     setEditCategoryData(category);
     setShowAddCategory(true);
   };
 
   const handleDeleteCategory = (category) => {
+    if (!canDeleteGround) {
+      toast.error("You do not have permission to delete ground categories.");
+      return;
+    }
     import("sweetalert2").then(({ default: Swal }) => {
       Swal.fire({
         title: "Delete Category?",
@@ -108,6 +123,10 @@ const EventGroundChecklist = () => {
   };
 
   const handleEditItem = (item) => {
+    if (!canUpdateGround) {
+      toast.error("You do not have permission to update ground items.");
+      return;
+    }
     setEditItemData({
       ...item,
       category: activeCategory?.id || item.category,
@@ -116,6 +135,10 @@ const EventGroundChecklist = () => {
   };
 
   const handleDeleteItem = (item) => {
+    if (!canDeleteGround) {
+      toast.error("You do not have permission to delete ground items.");
+      return;
+    }
     import("sweetalert2").then(({ default: Swal }) => {
       Swal.fire({
         title: "Delete Item?",
@@ -172,28 +195,30 @@ const EventGroundChecklist = () => {
             </Typography>
           </Box>
         </Stack>
-        <Stack direction="row" spacing={1} flexWrap="wrap" useFlexGap>
-          <Button
-            variant="contained"
-            color="primary"
-            onClick={() => {
-              setEditCategoryData(null);
-              setShowAddCategory(true);
-            }}
-          >
-            + Add Category
-          </Button>
-          <Button
-            variant="outlined"
-            color="primary"
-            onClick={() => {
-              setEditItemData(null);
-              setShowAddItem(true);
-            }}
-          >
-            + Add Item
-          </Button>
-        </Stack>
+        {canCreateGround && (
+          <Stack direction="row" spacing={1} flexWrap="wrap" useFlexGap>
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={() => {
+                setEditCategoryData(null);
+                setShowAddCategory(true);
+              }}
+            >
+              + Add Category
+            </Button>
+            <Button
+              variant="outlined"
+              color="primary"
+              onClick={() => {
+                setEditItemData(null);
+                setShowAddItem(true);
+              }}
+            >
+              + Add Item
+            </Button>
+          </Stack>
+        )}
       </Stack>
 
       {loading ? (
@@ -299,38 +324,44 @@ const EventGroundChecklist = () => {
                         </Typography>
                       </Box>
                     </Stack>
-                    <Stack
-                      className="actions"
-                      direction="row"
-                      spacing={0}
-                      flexShrink={0}
-                      sx={{
-                        opacity: { xs: 1, sm: 0 },
-                        transition: "opacity 0.2s",
-                      }}
-                    >
-                      <IconButton
-                        size="small"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          handleEditCategory(category);
+                    {(canUpdateGround || canDeleteGround) && (
+                      <Stack
+                        className="actions"
+                        direction="row"
+                        spacing={0}
+                        flexShrink={0}
+                        sx={{
+                          opacity: { xs: 1, sm: 0 },
+                          transition: "opacity 0.2s",
                         }}
-                        title="Edit Category"
                       >
-                        <FiEdit2 size={14} />
-                      </IconButton>
-                      <IconButton
-                        size="small"
-                        color="error"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          handleDeleteCategory(category);
-                        }}
-                        title="Delete Category"
-                      >
-                        <FiTrash2 size={14} />
-                      </IconButton>
-                    </Stack>
+                        {canUpdateGround && (
+                          <IconButton
+                            size="small"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleEditCategory(category);
+                            }}
+                            title="Edit Category"
+                          >
+                            <FiEdit2 size={14} />
+                          </IconButton>
+                        )}
+                        {canDeleteGround && (
+                          <IconButton
+                            size="small"
+                            color="error"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleDeleteCategory(category);
+                            }}
+                            title="Delete Category"
+                          >
+                            <FiTrash2 size={14} />
+                          </IconButton>
+                        )}
+                      </Stack>
+                    )}
                   </Paper>
                 );
               })}
@@ -446,32 +477,38 @@ const EventGroundChecklist = () => {
                               )}
                             </Box>
                           </Stack>
-                          <Stack
-                            className="item-actions"
-                            direction="row"
-                            spacing={0}
-                            flexShrink={0}
-                            sx={{
-                              opacity: { xs: 1, sm: 0 },
-                              transition: "opacity 0.2s",
-                            }}
-                          >
-                            <IconButton
-                              size="small"
-                              onClick={() => handleEditItem(item)}
-                              title="Edit Item"
+                          {(canUpdateGround || canDeleteGround) && (
+                            <Stack
+                              className="item-actions"
+                              direction="row"
+                              spacing={0}
+                              flexShrink={0}
+                              sx={{
+                                opacity: { xs: 1, sm: 0 },
+                                transition: "opacity 0.2s",
+                              }}
                             >
-                              <FiEdit2 size={14} />
-                            </IconButton>
-                            <IconButton
-                              size="small"
-                              color="error"
-                              onClick={() => handleDeleteItem(item)}
-                              title="Delete Item"
-                            >
-                              <FiTrash2 size={14} />
-                            </IconButton>
-                          </Stack>
+                              {canUpdateGround && (
+                                <IconButton
+                                  size="small"
+                                  onClick={() => handleEditItem(item)}
+                                  title="Edit Item"
+                                >
+                                  <FiEdit2 size={14} />
+                                </IconButton>
+                              )}
+                              {canDeleteGround && (
+                                <IconButton
+                                  size="small"
+                                  color="error"
+                                  onClick={() => handleDeleteItem(item)}
+                                  title="Delete Item"
+                                >
+                                  <FiTrash2 size={14} />
+                                </IconButton>
+                              )}
+                            </Stack>
+                          )}
                         </Paper>
                       </Grid>
                     ))}

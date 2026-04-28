@@ -28,6 +28,35 @@ function ThemeBridge({ children }) {
       "--color-primary-contrast",
       theme.palette.primary.contrastText
     );
+
+    // Dynamically update favicon color
+    const canvas = document.createElement("canvas");
+    const ctx = canvas.getContext("2d");
+    const img = new Image();
+    
+    img.onload = () => {
+      canvas.width = img.width;
+      canvas.height = img.height;
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.drawImage(img, 0, 0);
+
+      // Tint the image
+      ctx.globalCompositeOperation = "source-in";
+      ctx.fillStyle = primaryColor;
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      // Force favicon refresh by removing the old link and adding a new one
+      const oldLinks = document.querySelectorAll("link[rel~='icon']");
+      oldLinks.forEach((link) => document.head.removeChild(link));
+
+      const newLink = document.createElement("link");
+      newLink.rel = "icon";
+      newLink.type = "image/png";
+      newLink.href = canvas.toDataURL("image/png");
+      document.head.appendChild(newLink);
+    };
+
+    img.src = "/food.png"; // Load the base icon
   }, [primaryColor, theme]);
 
   return (

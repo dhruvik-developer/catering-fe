@@ -7,6 +7,8 @@ function AssignmentTable({
   assignments,
   onAssignmentEdit,
   onAssignmentDelete,
+  canEdit = true,
+  canDelete = true,
 }) {
   return (
     <div className="overflow-x-auto">
@@ -115,20 +117,24 @@ function AssignmentTable({
                 </td>
                 <td className="border border-gray-300 px-4 py-2 text-center min-w-[120px]">
                   <div className="flex flex-wrap items-center justify-center gap-3">
-                    <button
-                      onClick={() => onAssignmentEdit(assignment)}
-                      title="Edit Assignment"
-                      className="p-1.5 rounded-md text-gray-500 hover:text-[var(--color-primary)] hover:bg-[var(--color-primary-soft)] transition-colors cursor-pointer"
-                    >
-                      <FiEdit2 size={18} />
-                    </button>
-                    <button
-                      onClick={() => onAssignmentDelete(assignment.id)}
-                      title="Delete Assignment"
-                      className="text-[#d33] hover:text-red-700 cursor-pointer"
-                    >
-                      <FaTrash size={18} />
-                    </button>
+                    {canEdit && (
+                      <button
+                        onClick={() => onAssignmentEdit(assignment)}
+                        title="Edit Assignment"
+                        className="p-1.5 rounded-md text-gray-500 hover:text-[var(--color-primary)] hover:bg-[var(--color-primary-soft)] transition-colors cursor-pointer"
+                      >
+                        <FiEdit2 size={18} />
+                      </button>
+                    )}
+                    {canDelete && (
+                      <button
+                        onClick={() => onAssignmentDelete(assignment.id)}
+                        title="Delete Assignment"
+                        className="text-[#d33] hover:text-red-700 cursor-pointer"
+                      >
+                        <FaTrash size={18} />
+                      </button>
+                    )}
                   </div>
                 </td>
               </tr>

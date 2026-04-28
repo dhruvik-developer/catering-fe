@@ -7,6 +7,7 @@ import {
     updateUserPermissions
 } from "../../../api/AccessControlApis";
 import { getCollectionResponse } from "../../../utils/apiResponse";
+import { mergePermissionModules } from "../../../config/permissionModules";
 import PermissionsComponent from "./PermissionsComponent";
 
 const normalizePermissionsFromResponse = (payload = {}) => {
@@ -67,20 +68,28 @@ function PermissionsController() {
 
     const fetchInitialData = async () => {
         setLoading(true);
-        try {
-            const [modulesRes, staffRes] = await Promise.all([
-                getPermissionModules(),
-                getPermissionUsers("staff")
-            ]);
+        const [modulesResult, staffResult] = await Promise.allSettled([
+            getPermissionModules(),
+            getPermissionUsers("staff")
+        ]);
 
-            setModules(getCollectionResponse(modulesRes));
-            setUsers(getCollectionResponse(staffRes));
-        } catch (error) {
-            console.error("Error fetching permission data:", error);
-            toast.error("Failed to load permission management data");
-        } finally {
-            setLoading(false);
+        if (modulesResult.status === "fulfilled") {
+            setModules(mergePermissionModules(getCollectionResponse(modulesResult.value)));
+        } else {
+            console.error("Error fetching permission modules:", modulesResult.reason);
+            setModules(mergePermissionModules());
+            toast.error("Using local permission modules");
         }
+
+        if (staffResult.status === "fulfilled") {
+            setUsers(getCollectionResponse(staffResult.value));
+        } else {
+            console.error("Error fetching permission users:", staffResult.reason);
+            setUsers([]);
+            toast.error("Failed to load staff list");
+        }
+
+        setLoading(false);
     };
 
     const handleTypeChange = async (type) => {
@@ -93,6 +102,7 @@ function PermissionsController() {
             const res = await getPermissionUsers(type);
             setUsers(getCollectionResponse(res));
         } catch (error) {
+            console.error(`Error fetching ${type} permission users:`, error);
             toast.error(`Failed to load ${type} list`);
         } finally {
             setLoading(false);
@@ -109,6 +119,7 @@ function PermissionsController() {
             );
             setCurrentPermissions(normalizedPermissions);
         } catch (error) {
+            console.error("Error fetching selected user permissions:", error);
             toast.error("Failed to fetch permissions for selection");
         } finally {
             setLoading(false);
@@ -133,6 +144,7 @@ function PermissionsController() {
             });
             toast.success("Permissions updated successfully");
         } catch (error) {
+            console.error("Error updating permissions:", error);
             toast.error("Failed to update permissions");
         } finally {
             setIsSaving(false);

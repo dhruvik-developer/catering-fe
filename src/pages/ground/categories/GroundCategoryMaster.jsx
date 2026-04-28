@@ -24,8 +24,10 @@ import Loader from "../../../Components/common/Loader";
 import EmptyState from "../../../Components/common/EmptyState";
 import { getGroundCategories } from "../../../api/GroundApis";
 import AddGroundCategory from "./AddGroundCategory";
+import usePermissions from "../../../hooks/usePermissions";
 
 const GroundCategoryMaster = () => {
+  const { hasPermission } = usePermissions();
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
@@ -59,6 +61,7 @@ const GroundCategoryMaster = () => {
     setIsAddModalOpen(false);
     fetchCategories();
   };
+  const canCreateGround = hasPermission("ground.create");
 
   return (
     <Paper
@@ -93,13 +96,15 @@ const GroundCategoryMaster = () => {
             </Typography>
           </Box>
         </Stack>
-        <Button
-          variant="contained"
-          color="primary"
-          onClick={() => setIsAddModalOpen(true)}
-        >
-          + Add Category
-        </Button>
+        {canCreateGround && (
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={() => setIsAddModalOpen(true)}
+          >
+            + Add Category
+          </Button>
+        )}
       </Stack>
 
       <Paper variant="outlined" sx={{ borderRadius: 2, overflow: "hidden" }}>

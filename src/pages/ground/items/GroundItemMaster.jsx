@@ -26,8 +26,10 @@ import Loader from "../../../Components/common/Loader";
 import EmptyState from "../../../Components/common/EmptyState";
 import { getGroundItems, getGroundCategories } from "../../../api/GroundApis";
 import AddGroundItem from "./AddGroundItem";
+import usePermissions from "../../../hooks/usePermissions";
 
 const GroundItemMaster = () => {
+  const { hasPermission } = usePermissions();
   const [items, setItems] = useState([]);
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -93,6 +95,7 @@ const GroundItemMaster = () => {
     setIsAddModalOpen(false);
     fetchItems();
   };
+  const canCreateGround = hasPermission("ground.create");
 
   return (
     <Paper
@@ -127,13 +130,15 @@ const GroundItemMaster = () => {
             </Typography>
           </Box>
         </Stack>
-        <Button
-          variant="contained"
-          color="primary"
-          onClick={() => setIsAddModalOpen(true)}
-        >
-          + Add Item
-        </Button>
+        {canCreateGround && (
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={() => setIsAddModalOpen(true)}
+          >
+            + Add Item
+          </Button>
+        )}
       </Stack>
 
       <Paper variant="outlined" sx={{ borderRadius: 2, overflow: "hidden" }}>
