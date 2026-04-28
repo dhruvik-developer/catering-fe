@@ -106,8 +106,7 @@ const AddGroundItem = ({ isOpen, onClose, onSuccess, categories = [], editData =
                 value={formData.name}
                 onChange={handleChange}
                 placeholder="e.g. Gas Cylinder"
-                className="w-full px-4 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)] focus:border-transparent transition-all"
-                required
+                className="w-full px-4 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)] focus:border-transparent transition-all" required
               />
             </div>
 
@@ -120,8 +119,7 @@ const AddGroundItem = ({ isOpen, onClose, onSuccess, categories = [], editData =
                   name="category"
                   value={formData.category}
                   onChange={handleChange}
-                  className="w-full px-4 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)] focus:border-transparent transition-all bg-white"
-                  required
+                  className="w-full px-4 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)] focus:border-transparent transition-all bg-white" required
                 >
                   <option value="" disabled>Select Category</option>
                   {categories.map((cat) => (
@@ -142,8 +140,7 @@ const AddGroundItem = ({ isOpen, onClose, onSuccess, categories = [], editData =
                   value={formData.unit}
                   onChange={handleChange}
                   placeholder="e.g. Nos, Kg, Set"
-                  className="w-full px-4 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)] focus:border-transparent transition-all"
-                  required
+                  className="w-full px-4 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)] focus:border-transparent transition-all" required
                 />
               </div>
             </div>

@@ -52,8 +52,8 @@ const IngredientTable = ({
         <Typography
           variant="overline"
           color="text.secondary"
-          fontWeight={700}
-          sx={{ display: "block", mb: 1, ml: 0.5, letterSpacing: 1 }}
+
+          sx={{ fontWeight: 700, display: "block", mb: 1, ml: 0.5, letterSpacing: 1 }}
         >
           Ingredient Categories
         </Typography>
@@ -121,11 +121,10 @@ const IngredientTable = ({
                     <Box sx={{ minWidth: 0 }}>
                       <Typography
                         variant="subtitle2"
-                        fontWeight={700}
-                        color={isActive ? "primary.main" : "text.primary"}
-                        noWrap
+
+                        color={isActive ? "primary.main" : "text.primary"} noWrap
                         title={category.name}
-                      >
+                       sx={{ fontWeight: 700 }}>
                         {category.name}
                       </Typography>
                       <Typography variant="caption" color="text.secondary">
@@ -183,7 +182,7 @@ const IngredientTable = ({
           <Box>
             <Stack direction="row" spacing={1} sx={{ alignItems: "center" }}>
               <FiGrid color="currentColor" />
-              <Typography variant="h6" fontWeight={700}>
+              <Typography variant="h6" sx={{ fontWeight: 700 }}>
                 {activeCategory?.name}
               </Typography>
             </Stack>
@@ -246,10 +245,8 @@ const IngredientTable = ({
                         <FiTag size={14} />
                       </Avatar>
                       <Typography
-                        variant="body2"
-                        fontWeight={700}
-                        noWrap
-                      >
+                        variant="body2" noWrap
+                       sx={{ fontWeight: 700 }}>
                         {sub.name}
                       </Typography>
                     </Stack>

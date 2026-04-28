@@ -41,9 +41,9 @@ function FinancialLine({ label, amount, suffix, tone = "neutral" }) {
   return (
     <Stack
       direction="row"
-      justifyContent="space-between"
-      alignItems="center"
-      sx={{
+
+
+      sx={{ justifyContent: "space-between", alignItems: "center",
         px: 1.5,
         py: 0.75,
         borderRadius: 1.5,
@@ -56,16 +56,16 @@ function FinancialLine({ label, amount, suffix, tone = "neutral" }) {
     >
       <Typography
         variant="caption"
-        fontWeight={500}
+
         color={isPrimary ? "primary.main" : "text.secondary"}
-      >
+       sx={{ fontWeight: 500 }}>
         {label}
       </Typography>
       <Typography
         variant="caption"
-        fontWeight={700}
+
         color={isPrimary ? "primary.dark" : "text.primary"}
-      >
+       sx={{ fontWeight: 700 }}>
         ₹{amount.toFixed(2)}
         {suffix && (
           <Box
@@ -94,8 +94,8 @@ function Financials({ staff, compact = false }) {
         variant="caption"
         color="text.disabled"
         fontStyle="italic"
-        fontWeight={500}
-      >
+
+       sx={{ fontWeight: 500 }}>
         No financials
       </Typography>
     );
@@ -116,12 +116,12 @@ function Financials({ staff, compact = false }) {
 
 function RoleAndTypeChips({ staff, waiterType }) {
   return (
-    <Stack spacing={1} alignItems="flex-start">
+    <Stack spacing={1} sx={{ alignItems: "flex-start" }}>
       <Typography
         variant="body2"
-        fontWeight={700}
+
         color="primary.main"
-        sx={{ wordBreak: "break-word" }}
+        sx={{ fontWeight: 700, wordBreak: "break-word" }}
       >
         {staff.role_name || staff.role || "N/A"}
       </Typography>
@@ -171,7 +171,7 @@ function StaffTable({
   }
 
   const renderActions = (staff) => (
-    <Stack direction="row" spacing={0.5} justifyContent="center">
+    <Stack direction="row" spacing={0.5} sx={{ justifyContent: "center" }}>
       {staff.staff_type === "Fixed" && onStaffPaymentSummary && (
         <IconButton
           size="small"
@@ -215,18 +215,18 @@ function StaffTable({
             <Grid key={staff.id} size={12}>
               <Card>
                 <CardContent>
-                  <Stack direction="row" spacing={1.5} alignItems="flex-start">
+                  <Stack direction="row" spacing={1.5} sx={{ alignItems: "flex-start" }}>
                     <Avatar sx={{ bgcolor: "primary.main" }}>
                       {staff.name?.charAt(0).toUpperCase() || "?"}
                     </Avatar>
-                    <Box minWidth={0} flex={1}>
-                      <Stack direction="row" spacing={1} alignItems="center" flexWrap="wrap">
+                    <Box sx={{ minWidth: 0, flex: 1 }}>
+                      <Stack direction="row" spacing={1} sx={{ alignItems: "center", flexWrap: "wrap" }}>
                         <Typography variant="caption" color="text.disabled">
                           #{(index + 1).toString().padStart(2, "0")}
                         </Typography>
                         <StatusBadge active={staff.is_active} />
                       </Stack>
-                      <Typography variant="subtitle1" fontWeight={700} noWrap>
+                      <Typography variant="subtitle1" noWrap sx={{ fontWeight: 700 }}>
                         {staff.name || "N/A"}
                       </Typography>
                       <Typography variant="body2" color="text.secondary" noWrap>
@@ -300,11 +300,11 @@ function StaffTable({
                   {(index + 1).toString().padStart(2, "0")}
                 </TableCell>
                 <TableCell>
-                  <Stack direction="row" spacing={1.5} alignItems="center">
+                  <Stack direction="row" spacing={1.5} sx={{ alignItems: "center" }}>
                     <Avatar sx={{ bgcolor: "primary.main" }}>
                       {staff.name?.charAt(0).toUpperCase() || "?"}
                     </Avatar>
-                    <Typography variant="body1" fontWeight={700}>
+                    <Typography variant="body1" sx={{ fontWeight: 700 }}>
                       {staff.name || "N/A"}
                     </Typography>
                   </Stack>

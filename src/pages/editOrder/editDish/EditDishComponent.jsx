@@ -52,11 +52,15 @@ function SectionHeading({ title, action }) {
   return (
     <Stack
       direction="row"
-      alignItems="center"
-      justifyContent="space-between"
-      sx={{ mb: 1.5 }}
+      sx={{
+        alignItems: "center",
+        justifyContent: "space-between",
+        gap: 1.5,
+        mb: 1.5,
+        width: "100%",
+      }}
     >
-      <Stack direction="row" spacing={1.25} alignItems="center">
+      <Stack direction="row" spacing={1.25} sx={{ alignItems: "center", minWidth: 0 }}>
         <Box
           sx={{
             width: 4,
@@ -67,14 +71,14 @@ function SectionHeading({ title, action }) {
         />
         <Typography
           variant="overline"
-          fontWeight={700}
+
           color="text.secondary"
-          sx={{ letterSpacing: 1.5 }}
+          sx={{ fontWeight: 700, letterSpacing: 1.5 }}
         >
           {title}
         </Typography>
       </Stack>
-      {action}
+      {action && <Box sx={{ flexShrink: 0 }}>{action}</Box>}
     </Stack>
   );
 }
@@ -83,9 +87,9 @@ function FieldLabel({ icon, children, color = "text.secondary" }) {
   return (
     <Typography
       variant="caption"
-      fontWeight={700}
+
       color={color}
-      sx={{
+      sx={{ fontWeight: 700,
         display: "inline-flex",
         alignItems: "center",
         gap: 0.5,
@@ -234,10 +238,10 @@ function EditDishComponent({
       {/* Header Bar */}
       <Stack
         direction={{ xs: "column", sm: "row" }}
-        alignItems={{ xs: "flex-start", sm: "center" }}
-        justifyContent="space-between"
         spacing={1.5}
         sx={{
+          alignItems: { xs: "flex-start", sm: "center" },
+          justifyContent: "space-between",
           px: { xs: 2, sm: 3 },
           py: 2,
           background: (t) =>
@@ -246,7 +250,7 @@ function EditDishComponent({
         }}
       >
         <Box>
-          <Typography variant="subtitle1" fontWeight={700}>
+          <Typography variant="subtitle1" sx={{ fontWeight: 700 }}>
             {isSessionMode ? "Edit Session Details" : "Edit Booking Details"}
           </Typography>
           <Typography variant="caption" sx={{ opacity: 0.75 }}>
@@ -276,7 +280,7 @@ function EditDishComponent({
           >
             Grand Total
           </Typography>
-          <Typography component="span" variant="h6" fontWeight={800}>
+          <Typography component="span" variant="h6" sx={{ fontWeight: 800 }}>
             ₹
             {Number(formData.grandTotalAmount || 0).toLocaleString("en-IN", {
               minimumFractionDigits: 2,
@@ -326,8 +330,7 @@ function EditDishComponent({
                 <DatePickerShell theme={theme} disabled>
                   <DatePicker
                     selected={formData.date || new Date()}
-                    dateFormat="dd/MM/yyyy"
-                    disabled
+                    dateFormat="dd/MM/yyyy" disabled
                   />
                 </DatePickerShell>
               </Grid>
@@ -416,10 +419,10 @@ function EditDishComponent({
                   {/* Day Header */}
                   <Stack
                     direction={{ xs: "column", md: "row" }}
-                    alignItems={{ xs: "stretch", md: "center" }}
-                    justifyContent="space-between"
                     spacing={1.5}
                     sx={{
+                      alignItems: { xs: "stretch", md: "center" },
+                      justifyContent: "space-between",
                       px: 2,
                       py: 1.5,
                       bgcolor: (t) => t.palette.primary.light + "1a",
@@ -427,7 +430,7 @@ function EditDishComponent({
                       borderColor: "divider",
                     }}
                   >
-                    <Stack direction="row" spacing={1.5} alignItems="center">
+                    <Stack direction="row" spacing={1.5} sx={{ alignItems: "center" }}>
                       <Box
                         sx={{
                           width: 36,
@@ -449,15 +452,21 @@ function EditDishComponent({
                         <DatePicker
                           placeholderText="Pick date"
                           minDate={tomorrow}
-                          dateFormat="dd/MM/yyyy"
-                          selected={day.event_date}
+                          dateFormat="dd/MM/yyyy" selected={day.event_date}
                           onChange={(date) =>
                             handleScheduleDateChange(dIdx, date)
                           }
                         />
                       </DatePickerShell>
                     </Stack>
-                    <Stack direction="row" spacing={1.5} alignItems="center">
+                    <Stack
+                      direction="row"
+                      spacing={1.5}
+                      sx={{
+                        alignItems: "center",
+                        justifyContent: { xs: "flex-start", md: "flex-end" },
+                      }}
+                    >
                       <Box
                         sx={{
                           textAlign: "right",
@@ -472,9 +481,9 @@ function EditDishComponent({
                         <Typography
                           component="span"
                           variant="caption"
-                          fontWeight={700}
+
                           color="primary.main"
-                          sx={{
+                          sx={{ fontWeight: 700,
                             textTransform: "uppercase",
                             letterSpacing: 0.5,
                             display: "block",
@@ -484,7 +493,7 @@ function EditDishComponent({
                         >
                           Day Total
                         </Typography>
-                        <Typography variant="h6" fontWeight={800} color="primary.dark">
+                        <Typography variant="h6" color="primary.dark" sx={{ fontWeight: 800 }}>
                           ₹
                           {Number(day.dayTotalAmount || 0).toLocaleString(
                             "en-IN",
@@ -518,9 +527,9 @@ function EditDishComponent({
                           <Stack
                             direction={{ xs: "column", md: "row" }}
                             spacing={1.5}
-                            alignItems={{ xs: "stretch", md: "flex-end" }}
+                            sx={{ alignItems: { xs: "stretch", md: "flex-end" } }}
                           >
-                            <Box flex={1} minWidth={140}>
+                            <Box sx={{ flex: 1, minWidth: 140 }}>
                               <FieldLabel icon={<FiClock size={10} />}>
                                 Time Slot
                               </FieldLabel>
@@ -552,8 +561,8 @@ function EditDishComponent({
                                 <Typography
                                   variant="caption"
                                   color="error.main"
-                                  fontWeight={500}
-                                >
+
+                                 sx={{ fontWeight: 500 }}>
                                   {errors[`timeLabel_${dIdx}_${sIdx}`]}
                                 </Typography>
                               )}
@@ -621,15 +630,14 @@ function EditDishComponent({
                             <Stack
                               direction="row"
                               spacing={1}
-                              alignItems="flex-end"
-                              sx={{ ml: { md: "auto" } }}
+                              sx={{ alignItems: "flex-end", ml: { md: "auto" } }}
                             >
                               <Box sx={{ textAlign: "right" }}>
                                 <Typography
                                   variant="caption"
                                   color="text.disabled"
-                                  fontWeight={700}
-                                  sx={{
+
+                                  sx={{ fontWeight: 700,
                                     textTransform: "uppercase",
                                     letterSpacing: 0.5,
                                     display: "block",
@@ -640,9 +648,9 @@ function EditDishComponent({
                                 </Typography>
                                 <Typography
                                   variant="h6"
-                                  fontWeight={800}
+
                                   color="primary.main"
-                                >
+                                 sx={{ fontWeight: 800 }}>
                                   ₹
                                   {Number(
                                     slot.subtotalAmount || 0
@@ -703,15 +711,18 @@ function EditDishComponent({
                               >
                                 <Stack
                                   direction="row"
-                                  justifyContent="space-between"
-                                  alignItems="center"
-                                  sx={{ mb: 1 }}
+                                  sx={{
+                                    alignItems: "center",
+                                    justifyContent: "space-between",
+                                    gap: 1.5,
+                                    mb: 1,
+                                  }}
                                 >
                                   <Typography
                                     variant="caption"
-                                    fontWeight={700}
+
                                     color="primary.main"
-                                    sx={{
+                                    sx={{ fontWeight: 700,
                                       display: "inline-flex",
                                       alignItems: "center",
                                       gap: 0.5,
@@ -734,9 +745,9 @@ function EditDishComponent({
                                   <Typography
                                     variant="caption"
                                     color="error.main"
-                                    fontWeight={500}
-                                    display="block"
-                                    sx={{ mb: 1 }}
+
+
+                                    sx={{ fontWeight: 500, display: "block", mb: 1 }}
                                   >
                                     {errors[`dishes_${dIdx}_${sIdx}`]}
                                   </Typography>
@@ -745,9 +756,8 @@ function EditDishComponent({
                                   <>
                                     <Stack
                                       direction="row"
-                                      spacing={0.5}
-                                      flexWrap="wrap"
-                                      useFlexGap
+                                      spacing={0.5} useFlexGap
+                                      sx={{ flexWrap: "wrap" }}
                                     >
                                       {slot.dishes.map((dish) => {
                                         const isNewZeroPrice =
@@ -829,15 +839,18 @@ function EditDishComponent({
                               >
                                 <Stack
                                   direction="row"
-                                  justifyContent="space-between"
-                                  alignItems="center"
-                                  sx={{ mb: 1 }}
+                                  sx={{
+                                    alignItems: "center",
+                                    justifyContent: "space-between",
+                                    gap: 1.5,
+                                    mb: 1,
+                                  }}
                                 >
                                   <Typography
                                     variant="caption"
-                                    fontWeight={700}
+
                                     color="primary.main"
-                                    sx={{
+                                    sx={{ fontWeight: 700,
                                       display: "inline-flex",
                                       alignItems: "center",
                                       gap: 0.5,
@@ -864,7 +877,7 @@ function EditDishComponent({
                                         key={eIdx}
                                         direction="row"
                                         spacing={0.75}
-                                        alignItems="center"
+                                        sx={{ alignItems: "center" }}
                                       >
                                         <TextField
                                           size="small"
@@ -927,9 +940,9 @@ function EditDishComponent({
                                         />
                                         <Typography
                                           variant="caption"
-                                          fontWeight={800}
+
                                           color="text.secondary"
-                                          sx={{
+                                          sx={{ fontWeight: 800,
                                             minWidth: 48,
                                             textAlign: "right",
                                           }}
@@ -974,15 +987,18 @@ function EditDishComponent({
                           >
                             <Stack
                               direction="row"
-                              justifyContent="space-between"
-                              alignItems="center"
-                              sx={{ mb: 1 }}
+                              sx={{
+                                alignItems: "center",
+                                justifyContent: "space-between",
+                                gap: 1.5,
+                                mb: 1,
+                              }}
                             >
                               <Typography
                                 variant="caption"
-                                fontWeight={700}
+
                                 color="primary.main"
-                                sx={{
+                                sx={{ fontWeight: 700,
                                   display: "inline-flex",
                                   alignItems: "center",
                                   gap: 0.5,
@@ -1009,10 +1025,11 @@ function EditDishComponent({
                                   <Stack
                                     key={wIdx}
                                     direction={{ xs: "column", md: "row" }}
-                                    spacing={0.75}
-                                    alignItems="center"
-                                    flexWrap="wrap"
-                                    useFlexGap
+                                    spacing={0.75} useFlexGap
+                                    sx={{
+                                      alignItems: { xs: "stretch", md: "center" },
+                                      flexWrap: "wrap",
+                                    }}
                                   >
                                     <Select
                                       size="small"
@@ -1104,9 +1121,9 @@ function EditDishComponent({
                                     />
                                     <Typography
                                       variant="caption"
-                                      fontWeight={800}
+
                                       color="text.secondary"
-                                      sx={{
+                                      sx={{ fontWeight: 800,
                                         minWidth: 56,
                                         textAlign: "right",
                                       }}
@@ -1185,8 +1202,7 @@ function EditDishComponent({
             <Grid size={{ xs: 12, md: 4 }}>
               <Stack
                 spacing={1.5}
-                justifyContent="space-between"
-                sx={{ height: "100%" }}
+                sx={{ height: "100%", justifyContent: "space-between" }}
               >
                 <Paper
                   variant="outlined"
@@ -1209,15 +1225,14 @@ function EditDishComponent({
                       />
                     }
                     label={
-                      <Typography variant="body2" fontWeight={500}>
+                      <Typography variant="body2" sx={{ fontWeight: 500 }}>
                         Include Rules on PDF
                       </Typography>
                     }
                   />
                 </Paper>
                 <Button
-                  type="submit"
-                  fullWidth
+                  type="submit" fullWidth
                   size="large"
                   variant="contained"
                   color="primary"
@@ -1239,15 +1254,21 @@ function EditDishComponent({
       {/* Dish Selection Modal */}
       <Dialog
         open={!!activeDishModal}
-        onClose={closeDishModal}
-        fullWidth
+        onClose={closeDishModal} fullWidth
         maxWidth="md"
         PaperProps={{ sx: { maxHeight: "85vh" } }}
       >
         <DialogTitle sx={{ pb: 1 }}>
-          <Stack direction="row" justifyContent="space-between" alignItems="center">
+          <Stack
+            direction="row"
+            sx={{
+              alignItems: "center",
+              justifyContent: "space-between",
+              gap: 2,
+            }}
+          >
             <Box>
-              <Typography variant="h6" fontWeight={700}>
+              <Typography variant="h6" sx={{ fontWeight: 700 }}>
                 Select Dishes
               </Typography>
               {activeDishModal && (
@@ -1286,10 +1307,11 @@ function EditDishComponent({
                   >
                     <Stack
                       direction="row"
-                      alignItems="center"
-                      justifyContent="space-between"
                       onClick={() => toggleCategoryCollapse(category.id)}
                       sx={{
+                        alignItems: "center",
+                        justifyContent: "space-between",
+                        gap: 2,
                         px: 2,
                         py: 1.25,
                         bgcolor: "action.hover",
@@ -1298,7 +1320,7 @@ function EditDishComponent({
                         "&:hover": { bgcolor: "action.selected" },
                       }}
                     >
-                      <Stack direction="row" spacing={1} alignItems="center">
+                      <Stack direction="row" spacing={1} sx={{ alignItems: "center", minWidth: 0 }}>
                         <Box
                           sx={{
                             width: 24,
@@ -1315,7 +1337,7 @@ function EditDishComponent({
                         >
                           {category.positions || "—"}
                         </Box>
-                        <Typography variant="body2" fontWeight={600}>
+                        <Typography variant="body2" sx={{ fontWeight: 600 }}>
                           {category.name}
                         </Typography>
                         <Chip
@@ -1406,11 +1428,10 @@ function EditDishComponent({
                                   <Stack
                                     direction="row"
                                     spacing={1}
-                                    alignItems="center"
+                                    sx={{ alignItems: "center", minWidth: 0 }}
                                   >
                                     <Checkbox
-                                      checked={isSelected}
-                                      readOnly
+                                      checked={isSelected} readOnly
                                       size="small"
                                       sx={{ p: 0 }}
                                       color={
@@ -1418,8 +1439,7 @@ function EditDishComponent({
                                       }
                                     />
                                     <Typography
-                                      variant="body2"
-                                      noWrap
+                                      variant="body2" noWrap
                                       sx={{ flex: 1 }}
                                     >
                                       {dish.name}
@@ -1440,7 +1460,7 @@ function EditDishComponent({
         </DialogContent>
         <DialogActions sx={{ px: 3, py: 1.5, justifyContent: "space-between" }}>
           <Typography variant="body2" color="text.secondary">
-            <Box component="strong" color="text.primary">
+            <Box component="strong" sx={{ color: "text.primary" }}>
               {tempDishes.length}
             </Box>{" "}
             selected

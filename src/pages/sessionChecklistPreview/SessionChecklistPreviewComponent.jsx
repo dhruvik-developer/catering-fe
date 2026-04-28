@@ -46,10 +46,9 @@ function SessionChecklistPreviewComponent({
     >
       <Stack
         direction="row"
-        justifyContent="flex-end"
         spacing={1.5}
         className="no-print-button"
-        sx={{ width: "100%", maxWidth: 860, mb: 2.5 }}
+        sx={{ justifyContent: "space-between", width: "100%", maxWidth: 860, mb: 2.5 }}
       >
         <Button
           variant="outlined"
@@ -60,9 +59,9 @@ function SessionChecklistPreviewComponent({
         </Button>
         <Button
           variant="contained"
-          color="primary"
           startIcon={<FiDownload size={14} />}
-          onClick={onDownloadPDF}
+          sx={{ opacity: 0.8, cursor: "default" }}
+          title="Download Disabled"
         >
           Download PDF
         </Button>

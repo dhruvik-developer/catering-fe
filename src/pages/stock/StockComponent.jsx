@@ -77,9 +77,9 @@ function StatHero({ gradient, icon, label, value, shadowColor }) {
       <CardContent sx={{ position: "relative", zIndex: 1 }}>
         <Stack
           direction="row"
-          alignItems="center"
-          justifyContent="space-between"
-        >
+
+
+         sx={{ alignItems: "center", justifyContent: "space-between" }}>
           <Box>
             <Typography
               variant="caption"
@@ -92,7 +92,7 @@ function StatHero({ gradient, icon, label, value, shadowColor }) {
             >
               {label}
             </Typography>
-            <Typography variant="h4" fontWeight={800} sx={{ mt: 0.5 }}>
+            <Typography variant="h4" sx={{ fontWeight: 800, mt: 0.5 }}>
               {value}
             </Typography>
           </Box>
@@ -160,7 +160,7 @@ function StockComponent({
       }}
     >
       {/* Title */}
-      <Stack direction="row" spacing={1.5} alignItems="center" sx={{ mb: 2.5 }}>
+      <Stack direction="row" spacing={1.5} sx={{ alignItems: "center", mb: 2.5 }}>
         <Avatar
           variant="rounded"
           sx={{
@@ -175,7 +175,7 @@ function StockComponent({
           <FiPackage size={20} />
         </Avatar>
         <Box>
-          <Typography variant="h5" fontWeight={700} color="text.primary">
+          <Typography variant="h5" color="text.primary" sx={{ fontWeight: 700 }}>
             Stocks
           </Typography>
           <Typography variant="body2" color="text.secondary">
@@ -203,20 +203,19 @@ function StockComponent({
             <Stack
               direction={{ xs: "column", sm: "row" }}
               spacing={2}
-              alignItems={{ xs: "stretch", sm: "center" }}
-              justifyContent="space-between"
-            >
+
+
+             sx={{ alignItems: { xs: "stretch", sm: "center" }, justifyContent: "space-between" }}>
               {categories.length > 0 && (
                 <Stack
                   direction="row"
                   spacing={1}
-                  alignItems="center"
-                  flex={1}
-                  minWidth={0}
-                >
+
+
+
+                 sx={{ alignItems: "center", flex: 1, minWidth: 0 }}>
                   <Dropdown
-                    options={categories}
-                    selectedValue={selectedCategory}
+                    options={categories} selectedValue={selectedCategory}
                     onChange={(value) => setSelectedCategory(value)}
                     placeholder="Select Category"
                   />
@@ -233,7 +232,7 @@ function StockComponent({
                 </Stack>
               )}
               {canCreateStock && (
-                <Stack direction="row" spacing={1} flexWrap="wrap" useFlexGap>
+                <Stack direction="row" spacing={1} useFlexGap sx={{ flexWrap: "wrap" }}>
                   <Button
                     variant="contained"
                     color="primary"
@@ -366,18 +365,18 @@ function StockComponent({
                       <CardContent>
                         <Stack
                           direction="row"
-                          justifyContent="space-between"
-                          alignItems="flex-start"
+
+
                           spacing={1}
-                          sx={{ mb: 2 }}
+                          sx={{ justifyContent: "space-between", alignItems: "flex-start", mb: 2 }}
                         >
                           <Stack
                             direction="row"
                             spacing={1.5}
-                            alignItems="center"
-                            minWidth={0}
-                            flex={1}
-                          >
+
+
+
+                           sx={{ alignItems: "center", minWidth: 0, flex: 1 }}>
                             <Avatar
                               variant="rounded"
                               sx={{
@@ -391,17 +390,15 @@ function StockComponent({
                             >
                               <FiBox size={22} />
                             </Avatar>
-                            <Box minWidth={0}>
+                            <Box sx={{ minWidth: 0 }}>
                               <Stack
                                 direction="row"
                                 spacing={1}
-                                alignItems="center"
-                              >
+
+                               sx={{ alignItems: "center" }}>
                                 <Typography
-                                  variant="subtitle1"
-                                  fontWeight={700}
-                                  noWrap
-                                >
+                                  variant="subtitle1" noWrap
+                                 sx={{ fontWeight: 700 }}>
                                   {item.name}
                                 </Typography>
                                 {isLowStock && (
@@ -447,16 +444,16 @@ function StockComponent({
                         {/* Quantity Display */}
                         <Stack
                           direction="row"
-                          justifyContent="space-between"
-                          alignItems="flex-end"
-                          sx={{ mb: 2 }}
+
+
+                          sx={{ justifyContent: "space-between", alignItems: "flex-end", mb: 2 }}
                         >
                           <Box>
                             <Typography
                               variant="h4"
-                              fontWeight={800}
+
                               color={isLowStock ? "error.main" : "primary.main"}
-                            >
+                             sx={{ fontWeight: 800 }}>
                               {item.quantity}
                             </Typography>
                             <Typography
@@ -470,8 +467,8 @@ function StockComponent({
                               Current {unitLabels[item.type] || item.type}
                             </Typography>
                           </Box>
-                          <Box textAlign="right">
-                            <Typography variant="body2" fontWeight={700}>
+                          <Box sx={{ textAlign: "right" }}>
+                            <Typography variant="body2" sx={{ fontWeight: 700 }}>
                               {item.alert}{" "}
                               {unitShort[item.type] || item.type}
                             </Typography>
@@ -528,9 +525,9 @@ function StockComponent({
                               </Typography>
                               <Typography
                                 variant="body2"
-                                fontWeight={800}
+
                                 color="text.primary"
-                              >
+                               sx={{ fontWeight: 800 }}>
                                 ₹{Number(item.nte_price || 0).toFixed(2)}
                               </Typography>
                             </Box>
@@ -562,9 +559,9 @@ function StockComponent({
                               </Typography>
                               <Typography
                                 variant="body2"
-                                fontWeight={800}
+
                                 color="primary.main"
-                              >
+                               sx={{ fontWeight: 800 }}>
                                 ₹{Number(item.total_price || 0).toFixed(2)}
                               </Typography>
                             </Box>

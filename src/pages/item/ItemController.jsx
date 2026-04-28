@@ -58,8 +58,7 @@ function ItemController() {
 
   return (
     <ItemComponent
-      categories={categories}
-      selectedItemsState={selectedItemsState}
+      categories={categories} selectedItemsState={selectedItemsState}
       loading={loading}
       navigate={navigate}
       pdfPreview={pdfPreview}

@@ -26,8 +26,8 @@ const AccessDenied = () => {
           textAlign: "center",
         }}
       >
-        <Stack spacing={2} alignItems="center">
-          <Typography variant="h5" fontWeight={800}>
+        <Stack spacing={2} sx={{ alignItems: "center" }}>
+          <Typography variant="h5" sx={{ fontWeight: 800 }}>
             Access not available
           </Typography>
           <Typography color="text.secondary">

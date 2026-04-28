@@ -135,8 +135,7 @@ export const AddCategoryModal = ({ isOpen, onClose, onSuccess }) => {
               Parent Category (Optional)
             </label>
             <Dropdown
-              options={categories}
-              selectedValue={parentId}
+              options={categories} selectedValue={parentId}
               onChange={(value) => setParentId(value)}
               placeholder="Select a parent category"
               isSearchable={true}
@@ -298,8 +297,7 @@ export const AddItemModal = ({ isOpen, onClose, onSuccess, initialCategory }) =>
               Category *
             </label>
             <Dropdown
-              options={categories}
-              selectedValue={category}
+              options={categories} selectedValue={category}
               onChange={(value) => setCategory(value)}
               placeholder="Select a category"
               isSearchable={true}
@@ -526,8 +524,7 @@ export const AddIngredientModal = ({ isOpen, onClose, onSuccess }) => {
             </label>
             <Dropdown
               options={items}
-              placeholder="Select an item"
-              selectedValue={selectedItem}
+              placeholder="Select an item" selectedValue={selectedItem}
               onChange={(value) => setSelectedItem(value)}
               isSearchable={true}
             />
@@ -573,8 +570,7 @@ export const AddIngredientModal = ({ isOpen, onClose, onSuccess }) => {
                       <div>
                         <Dropdown
                           options={ingredientItems}
-                          placeholder="Select ingredient"
-                          selectedValue={ingredient.ingredient}
+                          placeholder="Select ingredient" selectedValue={ingredient.ingredient}
                           onChange={(value) =>
                             handleIngredientChange(index, "ingredient", value)
                           }

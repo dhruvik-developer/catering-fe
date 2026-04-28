@@ -50,12 +50,12 @@ function EditItemComponent({
       {/* Header */}
       <Stack
         direction={{ xs: "column", sm: "row" }}
-        justifyContent="space-between"
-        alignItems={{ xs: "stretch", sm: "center" }}
+
+
         spacing={2}
-        sx={{ mb: 3 }}
+        sx={{ justifyContent: "space-between", alignItems: { xs: "stretch", sm: "center" }, mb: 3 }}
       >
-        <Stack direction="row" spacing={1.5} alignItems="center">
+        <Stack direction="row" spacing={1.5} sx={{ alignItems: "center" }}>
           <Avatar
             variant="rounded"
             sx={{
@@ -68,14 +68,14 @@ function EditItemComponent({
             <FiList size={20} />
           </Avatar>
           <Box>
-            <Typography variant="h5" fontWeight={700} color="text.primary">
+            <Typography variant="h5" color="text.primary" sx={{ fontWeight: 700 }}>
               Items
             </Typography>
             <Typography
               variant="body2"
               color={totalSelected > 0 ? "primary.main" : "text.secondary"}
-              fontWeight={totalSelected > 0 ? 600 : 400}
-            >
+
+             sx={{ fontWeight: totalSelected > 0 ? 600 : 400 }}>
               {totalSelected > 0
                 ? `${totalSelected} item${totalSelected !== 1 ? "s" : ""} selected`
                 : "Select items for your order"}
@@ -124,11 +124,11 @@ function EditItemComponent({
                     {/* Category Header */}
                     <Stack
                       direction="row"
-                      alignItems="center"
-                      justifyContent="space-between"
+
+
                       spacing={1}
                       onClick={() => toggleCollapse(category.id)}
-                      sx={{
+                      sx={{ alignItems: "center", justifyContent: "space-between",
                         px: 2.5,
                         py: 1.75,
                         cursor: "pointer",
@@ -139,11 +139,8 @@ function EditItemComponent({
                     >
                       <Stack
                         direction="row"
-                        spacing={1.5}
-                        alignItems="center"
-                        flexWrap="wrap"
-                        useFlexGap
-                      >
+                        spacing={1.5} useFlexGap
+                       sx={{ alignItems: "center", flexWrap: "wrap" }}>
                         <Avatar
                           variant="rounded"
                           sx={{
@@ -157,7 +154,7 @@ function EditItemComponent({
                         >
                           {category.positions || "—"}
                         </Avatar>
-                        <Typography variant="subtitle1" fontWeight={600}>
+                        <Typography variant="subtitle1" sx={{ fontWeight: 600 }}>
                           {category.name}
                         </Typography>
                         <Chip
@@ -275,13 +272,13 @@ function EditItemComponent({
                                     </Box>
                                     <Typography
                                       variant="body2"
-                                      fontWeight={isSelected ? 600 : 400}
+
                                       color={
                                         isSelected
                                           ? "primary.main"
                                           : "text.secondary"
                                       }
-                                    >
+                                     sx={{ fontWeight: isSelected ? 600 : 400 }}>
                                       {item.name}
                                     </Typography>
                                   </Box>
@@ -293,9 +290,9 @@ function EditItemComponent({
                           <Stack
                             direction="row"
                             spacing={1}
-                            alignItems="center"
-                            justifyContent="center"
-                            sx={{
+
+
+                            sx={{ alignItems: "center", justifyContent: "center",
                               py: 3,
                               bgcolor: (t) =>
                                 t.palette.primary.light + "14",
@@ -303,7 +300,7 @@ function EditItemComponent({
                               color: "primary.main",
                             }}
                           >
-                            <Typography variant="body2" fontWeight={600}>
+                            <Typography variant="body2" sx={{ fontWeight: 600 }}>
                               No items available in this category
                             </Typography>
                           </Stack>
@@ -318,9 +315,9 @@ function EditItemComponent({
           {/* Bottom actions */}
           <Stack
             direction="row"
-            justifyContent="space-between"
-            alignItems="center"
-            sx={{
+
+
+            sx={{ justifyContent: "space-between", alignItems: "center",
               mt: 3,
               pt: 2.5,
               borderTop: 1,

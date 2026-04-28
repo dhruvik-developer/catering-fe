@@ -28,7 +28,7 @@ function StatCard({ icon, iconBg, iconColor, label, amount, footnote }) {
   return (
     <Card sx={{ height: "100%" }}>
       <CardContent>
-        <Stack direction="row" spacing={1.5} alignItems="center" sx={{ mb: 1 }}>
+        <Stack direction="row" spacing={1.5} sx={{ alignItems: "center", mb: 1 }}>
           <Avatar
             variant="rounded"
             sx={{
@@ -40,11 +40,11 @@ function StatCard({ icon, iconBg, iconColor, label, amount, footnote }) {
           >
             {icon}
           </Avatar>
-          <Typography variant="body2" color="text.secondary" fontWeight={500}>
+          <Typography variant="body2" color="text.secondary" sx={{ fontWeight: 500 }}>
             {label}
           </Typography>
         </Stack>
-        <Typography variant="h5" fontWeight={700} color="text.primary">
+        <Typography variant="h5" color="text.primary" sx={{ fontWeight: 700 }}>
           ₹ {formatted}
         </Typography>
         {footnote && (
@@ -69,9 +69,9 @@ function PaymentHistoryComponent({ paymentData, loading }) {
     >
       <Typography
         variant="h5"
-        fontWeight={700}
+
         color="text.primary"
-        sx={{ mb: 3 }}
+        sx={{ fontWeight: 700, mb: 3 }}
       >
         Payment History
       </Typography>
@@ -98,7 +98,7 @@ function PaymentHistoryComponent({ paymentData, loading }) {
             }}
           >
             <CardContent>
-              <Stack direction="row" spacing={1.5} alignItems="center" sx={{ mb: 1 }}>
+              <Stack direction="row" spacing={1.5} sx={{ alignItems: "center", mb: 1 }}>
                 <Box
                   sx={{
                     bgcolor: "rgba(255,255,255,0.2)",
@@ -113,7 +113,7 @@ function PaymentHistoryComponent({ paymentData, loading }) {
                   Total Balance
                 </Typography>
               </Stack>
-              <Typography variant="h4" fontWeight={700}>
+              <Typography variant="h4" sx={{ fontWeight: 700 }}>
                 ₹ {paymentData?.net_amount?.toLocaleString("en-IN") ?? 0}
               </Typography>
             </CardContent>

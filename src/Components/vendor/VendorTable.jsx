@@ -48,7 +48,7 @@ function CategoryChips({ categories }) {
     );
   }
   return (
-    <Stack direction="row" spacing={0.75} flexWrap="wrap" useFlexGap>
+    <Stack direction="row" spacing={0.75} useFlexGap sx={{ flexWrap: "wrap" }}>
       {categories.map((vc) => (
         <Chip
           key={vc.id}
@@ -111,22 +111,20 @@ function VendorTable({ vendors, onVendorEdit, onVendorDelete }) {
               <CardContent>
                 <Stack
                   direction="row"
-                  justifyContent="space-between"
-                  alignItems="flex-start"
+
+
                   spacing={1}
-                >
-                  <Box minWidth={0} flex={1}>
-                    <Stack direction="row" spacing={1} alignItems="center">
+                 sx={{ justifyContent: "space-between", alignItems: "flex-start" }}>
+                  <Box sx={{ minWidth: 0, flex: 1 }}>
+                    <Stack direction="row" spacing={1} sx={{ alignItems: "center" }}>
                       <Typography variant="caption" color="text.disabled">
                         #{(index + 1).toString().padStart(2, "0")}
                       </Typography>
                       <StatusBadge active={vendor.is_active} />
                     </Stack>
                     <Typography
-                      variant="subtitle1"
-                      fontWeight={700}
-                      noWrap
-                      sx={{ mt: 0.5 }}
+                      variant="subtitle1" noWrap
+                      sx={{ fontWeight: 700, mt: 0.5 }}
                     >
                       {vendor.name || "N/A"}
                     </Typography>
@@ -134,7 +132,7 @@ function VendorTable({ vendors, onVendorEdit, onVendorDelete }) {
                       {vendor.mobile_no || "-"}
                     </Typography>
                   </Box>
-                  <Stack direction="row" spacing={0.5} flexShrink={0}>
+                  <Stack direction="row" spacing={0.5} sx={{ flexShrink: 0 }}>
                     {canEdit && (
                       <IconButton
                         size="small"
@@ -239,7 +237,7 @@ function VendorTable({ vendors, onVendorEdit, onVendorDelete }) {
                 <StatusBadge active={vendor.is_active} />
               </TableCell>
               <TableCell align="center">
-                <Stack direction="row" spacing={0.5} justifyContent="center">
+                <Stack direction="row" spacing={0.5} sx={{ justifyContent: "center" }}>
                   {canEdit && (
                     <IconButton
                       size="small"

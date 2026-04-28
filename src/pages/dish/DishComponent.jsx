@@ -177,8 +177,7 @@ function DishComponent({
       <Box sx={{ p: { xs: 2, sm: 3 } }}>
         {currentStep === 1 && (
           <Step1_ClientEvent
-            formData={formData}
-            errors={errors}
+            formData={formData} errors={errors}
             handleChange={handleChange}
             handleAddSchedule={handleAddSchedule}
             handleRemoveSchedule={handleRemoveSchedule}
@@ -192,8 +191,7 @@ function DishComponent({
 
         {currentStep === 2 && (
           <Step2_MenuSelection
-            formData={formData}
-            errors={errors}
+            formData={formData} errors={errors}
             dishesList={dishesList}
             isDishesLoading={isDishesLoading}
             handleSlotDishesUpdate={handleSlotDishesUpdate}
@@ -204,8 +202,7 @@ function DishComponent({
 
         {currentStep === 3 && (
           <Step3_Summary
-            formData={formData}
-            errors={errors}
+            formData={formData} errors={errors}
             waiterTypes={waiterTypes}
             isLoadingWaiterTypes={isLoadingWaiterTypes}
             refreshWaiterTypes={refreshWaiterTypes}

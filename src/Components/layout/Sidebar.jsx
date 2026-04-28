@@ -216,8 +216,7 @@ function Sidebar() {
     >
       {/* Logo area */}
       <Stack
-        alignItems="center"
-        sx={{
+        sx={{ alignItems: "center",
           p: 2.5,
           gap: 1,
           borderBottom: 1,
@@ -237,12 +236,11 @@ function Sidebar() {
             sx={{ height: 80, maxWidth: 180, objectFit: "contain" }}
           />
         ) : (
-          <Stack alignItems="center" spacing={0.5}>
+          <Stack spacing={0.5} sx={{ alignItems: "center" }}>
             <Typography
               variant="caption"
               color="text.secondary"
-              textAlign="center"
-              sx={{ lineHeight: 1.35 }}
+              sx={{ textAlign: "center", lineHeight: 1.35 }}
             >
               Set your business profile logo in Settings tab.
             </Typography>
@@ -254,9 +252,8 @@ function Sidebar() {
               >
                 <Typography
                   variant="caption"
-                  fontWeight={600}
                   color="primary.main"
-                  sx={{ "&:hover": { textDecoration: "underline" } }}
+                  sx={{ fontWeight: 600, "&:hover": { textDecoration: "underline" } }}
                 >
                   Go to Settings
                 </Typography>
@@ -289,8 +286,7 @@ function Sidebar() {
               <ListItemButton
                 component={Link}
                 to={item.path}
-                onClick={close}
-                selected={active}
+                onClick={close} selected={active}
                 sx={{
                   borderRadius: 2,
                   py: 1.25,

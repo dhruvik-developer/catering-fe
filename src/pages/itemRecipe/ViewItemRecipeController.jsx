@@ -396,8 +396,7 @@ function ViewItemRecipeController({
       navigate={navigate}
       recipeData={recipeData}
       itemName={itemName}
-      baseCost={currentBaseCost}
-      selectionRate={currentSelectionRate}
+      baseCost={currentBaseCost} selectionRate={currentSelectionRate}
       handleEditCosts={handleEditCosts}
       onClose={onClose}
       // Edit mode props

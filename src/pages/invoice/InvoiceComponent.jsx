@@ -65,7 +65,7 @@ function InvoiceComponent({
       sx={{ p: { xs: 2, sm: 3 }, borderRadius: 3, bgcolor: "background.paper" }}
     >
       {/* Title */}
-      <Stack direction="row" spacing={1.5} alignItems="center" sx={{ mb: 2.5 }}>
+      <Stack direction="row" spacing={1.5} sx={{ alignItems: "center", mb: 2.5 }}>
         <Avatar
           variant="rounded"
           sx={{
@@ -78,7 +78,7 @@ function InvoiceComponent({
           <FiFileText size={20} />
         </Avatar>
         <Box>
-          <Typography variant="h5" fontWeight={700} color="text.primary">
+          <Typography variant="h5" color="text.primary" sx={{ fontWeight: 700 }}>
             Invoice List
           </Typography>
           <Typography variant="body2" color="text.secondary">
@@ -93,9 +93,9 @@ function InvoiceComponent({
       <Stack
         direction={{ xs: "column", md: "row" }}
         spacing={{ xs: 1.5, md: 2 }}
-        alignItems={{ xs: "stretch", md: "center" }}
-        justifyContent="space-between"
-        sx={{ mb: 3 }}
+
+
+        sx={{ alignItems: { xs: "stretch", md: "center" }, justifyContent: "space-between", mb: 3 }}
       >
         <TextField
           value={searchQuery}
@@ -128,12 +128,10 @@ function InvoiceComponent({
 
         <Stack
           direction="row"
-          spacing={1}
-          flexWrap="wrap"
-          useFlexGap
-          alignItems="center"
-          justifyContent={{ xs: "flex-start", md: "flex-end" }}
-        >
+          spacing={1} useFlexGap
+
+
+         sx={{ flexWrap: "wrap", alignItems: "center", justifyContent: { xs: "flex-start", md: "flex-end" } }}>
           <ButtonGroup size="small">
             <Button onClick={() => handleQuickFilter("today")}>Today</Button>
             <Button onClick={() => handleQuickFilter("thisWeek")}>Week</Button>
@@ -248,10 +246,10 @@ function InvoiceComponent({
                   {/* Card Header */}
                   <Stack
                     direction="row"
-                    alignItems="center"
-                    justifyContent="space-between"
+
+
                     spacing={2}
-                    sx={{
+                    sx={{ alignItems: "center", justifyContent: "space-between",
                       px: 2.5,
                       py: 2,
                       bgcolor: (t) => t.palette.primary.light + "1f",
@@ -262,20 +260,19 @@ function InvoiceComponent({
                     <Stack
                       direction="row"
                       spacing={1.5}
-                      alignItems="center"
-                      minWidth={0}
-                    >
+
+
+                     sx={{ alignItems: "center", minWidth: 0 }}>
                       <Avatar sx={{ bgcolor: "primary.main" }}>
                         {invo.name?.charAt(0)?.toUpperCase() || "?"}
                       </Avatar>
-                      <Box minWidth={0}>
-                        <Typography variant="subtitle1" fontWeight={600} noWrap>
+                      <Box sx={{ minWidth: 0 }}>
+                        <Typography variant="subtitle1" noWrap sx={{ fontWeight: 600 }}>
                           {invo.name}
                         </Typography>
                         <Typography
                           variant="caption"
-                          color="text.secondary"
-                          noWrap
+                          color="text.secondary" noWrap
                           sx={{
                             display: "inline-flex",
                             alignItems: "center",
@@ -302,8 +299,8 @@ function InvoiceComponent({
                         <Stack
                           direction="row"
                           spacing={1}
-                          alignItems="center"
-                          sx={{
+
+                          sx={{ alignItems: "center",
                             px: 1.5,
                             py: 1,
                             border: 1,
@@ -312,7 +309,7 @@ function InvoiceComponent({
                           }}
                         >
                           <FiCreditCard size={14} />
-                          <Typography variant="body2" fontWeight={500} noWrap>
+                          <Typography variant="body2" noWrap sx={{ fontWeight: 500 }}>
                             {invo.payment_mode || "—"}
                           </Typography>
                         </Stack>
@@ -321,8 +318,8 @@ function InvoiceComponent({
                         <Stack
                           direction="row"
                           spacing={1}
-                          alignItems="center"
-                          sx={{
+
+                          sx={{ alignItems: "center",
                             px: 1.5,
                             py: 1,
                             border: 1,
@@ -331,7 +328,7 @@ function InvoiceComponent({
                           }}
                         >
                           <FiDollarSign size={14} />
-                          <Typography variant="body2" fontWeight={500}>
+                          <Typography variant="body2" sx={{ fontWeight: 500 }}>
                             {invo.payment_status === "PAID"
                               ? `Paid: ₹${Number(invo.total_amount || 0).toFixed(2)}`
                               : `Adv: ₹${Number(invo.advance_amount || 0).toFixed(2)}`}
@@ -342,8 +339,8 @@ function InvoiceComponent({
                         <Stack
                           direction="row"
                           spacing={1}
-                          alignItems="center"
-                          sx={{
+
+                          sx={{ alignItems: "center",
                             px: 1.5,
                             py: 1,
                             border: 1,
@@ -354,9 +351,9 @@ function InvoiceComponent({
                           <FiDollarSign size={14} />
                           <Typography
                             variant="body2"
-                            fontWeight={600}
+
                             color="text.primary"
-                          >
+                           sx={{ fontWeight: 600 }}>
                             Total: ₹{Number(invo.total_amount || 0).toFixed(2)}
                           </Typography>
                         </Stack>
@@ -365,8 +362,8 @@ function InvoiceComponent({
                         <Grid size={12}>
                           <Stack
                             direction="row"
-                            alignItems="center"
-                            sx={{
+
+                            sx={{ alignItems: "center",
                               px: 2,
                               py: 1.1,
                               minHeight: 42,
@@ -380,8 +377,8 @@ function InvoiceComponent({
                             <Stack
                               direction="row"
                               spacing={1}
-                              alignItems="center"
-                            >
+
+                             sx={{ alignItems: "center" }}>
                               <Box
                                 sx={{
                                   width: 6,
@@ -391,7 +388,7 @@ function InvoiceComponent({
                                   flexShrink: 0,
                                 }}
                               />
-                              <Typography variant="body2" fontWeight={500}>
+                              <Typography variant="body2" sx={{ fontWeight: 500 }}>
                                 Pending Amount₹{" "}
                                 {Math.max(0, calculatedPending).toFixed(2)}
                               </Typography>

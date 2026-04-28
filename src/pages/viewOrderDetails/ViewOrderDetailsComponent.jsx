@@ -25,6 +25,8 @@ import {
   FiEdit2,
   FiBriefcase,
   FiUser,
+  FiFileText,
+  FiTag,
 } from "react-icons/fi";
 import Loader from "../../Components/common/Loader";
 import { format } from "date-fns";
@@ -46,12 +48,12 @@ function InfoBlock({ icon, label, value, valueVariant = "body1" }) {
       <Typography
         variant="caption"
         color="primary.main"
-        fontWeight={700}
-        sx={{ textTransform: "uppercase", letterSpacing: 0.5, display: "inline-flex", alignItems: "center", gap: 0.75 }}
+
+        sx={{ fontWeight: 700, textTransform: "uppercase", letterSpacing: 0.5, display: "inline-flex", alignItems: "center", gap: 0.75 }}
       >
         {icon} {label}
       </Typography>
-      <Typography variant={valueVariant} fontWeight={600} color="text.primary">
+      <Typography variant={valueVariant} color="text.primary" sx={{ fontWeight: 600 }}>
         {value || "—"}
       </Typography>
     </Stack>
@@ -85,11 +87,11 @@ function StaffCard({ staff, onClick, tone = "primary" }) {
     >
       <Stack
         direction="row"
-        justifyContent="space-between"
-        alignItems="center"
+
+
         spacing={1}
-      >
-        <Typography variant="body2" fontWeight={700} color={`${tone}.main`}>
+       sx={{ justifyContent: "space-between", alignItems: "center" }}>
+        <Typography variant="body2" color={`${tone}.main`} sx={{ fontWeight: 700 }}>
           {staff.name || staff}
         </Typography>
         {staff.staff_type && (
@@ -105,10 +107,10 @@ function StaffCard({ staff, onClick, tone = "primary" }) {
         <Stack
           direction="row"
           spacing={1}
-          alignItems="center"
-          sx={{ mt: 0.5, color: "text.secondary" }}
+
+          sx={{ alignItems: "center", mt: 0.5, color: "text.secondary" }}
         >
-          <Typography variant="caption" fontWeight={500}>
+          <Typography variant="caption" sx={{ fontWeight: 500 }}>
             {staff.role}
           </Typography>
           {staff.people_summoned && (
@@ -168,9 +170,9 @@ function ViewOrderDetailsComponent({
   if (!orderDetails) {
     return (
       <Stack
-        alignItems="center"
-        justifyContent="center"
-        sx={{ height: "50vh", color: "text.secondary" }}
+
+
+        sx={{ alignItems: "center", justifyContent: "center", height: "50vh", color: "text.secondary" }}
         spacing={2}
       >
         <FiBox size={48} style={{ opacity: 0.4 }} />
@@ -221,12 +223,12 @@ function ViewOrderDetailsComponent({
       {/* Page Header */}
       <Stack
         direction={{ xs: "column", sm: "row" }}
-        justifyContent="space-between"
-        alignItems={{ xs: "stretch", sm: "center" }}
+
+
         spacing={2}
-        sx={{ mb: 3 }}
+        sx={{ justifyContent: "space-between", alignItems: { xs: "stretch", sm: "center" }, mb: 3 }}
       >
-        <Stack direction="row" spacing={2} alignItems="center">
+        <Stack direction="row" spacing={2} sx={{ alignItems: "center" }}>
           <IconButton
             onClick={handleBack}
             sx={{
@@ -239,8 +241,8 @@ function ViewOrderDetailsComponent({
             <FiArrowLeft size={20} />
           </IconButton>
           <Box>
-            <Stack direction="row" spacing={1} alignItems="center">
-              <Typography variant="h5" fontWeight={700}>
+            <Stack direction="row" spacing={1} sx={{ alignItems: "center" }}>
+              <Typography variant="h5" sx={{ fontWeight: 700 }}>
                 Order Details
               </Typography>
               <Chip
@@ -254,8 +256,8 @@ function ViewOrderDetailsComponent({
             <Stack
               direction="row"
               spacing={0.75}
-              alignItems="center"
-              sx={{ mt: 0.5, color: "text.secondary" }}
+
+              sx={{ alignItems: "center", mt: 0.5, color: "text.secondary" }}
             >
               <FiClipboard size={14} />
               <Typography variant="body2">ID: #{id}</Typography>
@@ -303,7 +305,7 @@ function ViewOrderDetailsComponent({
                 label="Customer"
                 value={
                   <Box>
-                    <Typography variant="body1" fontWeight={700}>
+                    <Typography variant="body1" sx={{ fontWeight: 700 }}>
                       {name || "—"}
                     </Typography>
                     {reference && (
@@ -353,7 +355,7 @@ function ViewOrderDetailsComponent({
       </Paper>
 
       {/* Sessions heading */}
-      <Stack direction="row" spacing={1} alignItems="center" sx={{ mb: 2 }}>
+      <Stack direction="row" spacing={1} sx={{ alignItems: "center", mb: 2 }}>
         <Avatar
           variant="rounded"
           sx={{
@@ -365,7 +367,7 @@ function ViewOrderDetailsComponent({
         >
           <FiClock size={16} />
         </Avatar>
-        <Typography variant="h6" fontWeight={700}>
+        <Typography variant="h6" sx={{ fontWeight: 700 }}>
           Session Breakdown ({orderSessions.length})
         </Typography>
       </Stack>
@@ -413,10 +415,10 @@ function ViewOrderDetailsComponent({
                 {/* Session Header */}
                 <Stack
                   direction={{ xs: "column", md: "row" }}
-                  justifyContent="space-between"
-                  alignItems={{ xs: "stretch", md: "center" }}
+
+
                   spacing={1.5}
-                  sx={{
+                  sx={{ justifyContent: "space-between", alignItems: { xs: "stretch", md: "center" },
                     px: 2.5,
                     py: 1.75,
                     bgcolor: (t) => t.palette.primary.light + "1f",
@@ -424,7 +426,7 @@ function ViewOrderDetailsComponent({
                     borderColor: "divider",
                   }}
                 >
-                  <Stack direction="row" spacing={1.5} alignItems="center">
+                  <Stack direction="row" spacing={1.5} sx={{ alignItems: "center" }}>
                     <Avatar
                       sx={{
                         bgcolor: "primary.main",
@@ -437,16 +439,16 @@ function ViewOrderDetailsComponent({
                       S{index + 1}
                     </Avatar>
                     <Box>
-                      <Typography variant="subtitle1" fontWeight={700}>
+                      <Typography variant="subtitle1" sx={{ fontWeight: 700 }}>
                         {session.event_time || `Session ${index + 1}`}
                       </Typography>
-                      <Typography variant="caption" color="text.secondary" fontWeight={600}>
+                      <Typography variant="caption" color="text.secondary" sx={{ fontWeight: 600 }}>
                         {displayDate || "—"}
                       </Typography>
                     </Box>
                   </Stack>
 
-                  <Stack direction="row" spacing={1} flexWrap="wrap" useFlexGap>
+                  <Stack direction="row" spacing={1} useFlexGap sx={{ flexWrap: "wrap" }}>
                     <Button
                       size="small"
                       variant="outlined"
@@ -533,7 +535,7 @@ function ViewOrderDetailsComponent({
 
                   {/* Session action chips */}
                   <Divider sx={{ my: 2 }} />
-                  <Stack direction="row" spacing={1} flexWrap="wrap" useFlexGap>
+                  <Stack direction="row" spacing={1} useFlexGap sx={{ flexWrap: "wrap" }}>
                     {session.selected_items &&
                       Object.keys(session.selected_items).length > 0 && (
                         <>
@@ -551,38 +553,26 @@ function ViewOrderDetailsComponent({
                             title="View category-wise selected dishes and assign vendors"
                           />
                           <Chip
-                            label="🏷️ Dish Tags"
-                            onClick={() => handleOpenTags(session)}
+                            icon={<FiFileText size={14} />}
+                            label="Checklist PDF"
+                            onClick={() => navigate(`/view-session-checklist/${session.id}`)}
                             variant="outlined"
-                            sx={{
-                              fontWeight: 600,
-                              cursor: "pointer",
-                              color: "secondary.main",
-                              borderColor: "secondary.light",
-                              bgcolor: (t) => t.palette.secondary.light + "1a",
-                            }}
-                            title={`Print Dish Tags for ${session.event_time || `Session ${index + 1}`}`}
+                            sx={{ fontWeight: 600, cursor: "pointer" }}
+                          />
+                          <Chip
+                            icon={<FiTag size={14} />}
+                            label="Dish Tags"
+                            onClick={() => navigate(`/dish-tag-engine/${session.id}`)}
+                            variant="outlined"
+                            sx={{ fontWeight: 600, cursor: "pointer" }}
                           />
                         </>
                       )}
-                    <Chip
-                      icon={<FiClipboard size={14} />}
-                      label="Checklist PDF"
-                      onClick={() =>
-                        handleOpenSessionChecklistPreview(id, session.id ?? index)
-                      }
-                      variant="outlined"
-                      sx={{
-                        fontWeight: 600,
-                        cursor: "pointer",
-                        bgcolor: (t) => t.palette.primary.light + "1f",
-                        color: "primary.main",
-                      }}
-                    />
+
                     <Chip
                       icon={<FiBox size={14} />}
                       label={
-                        <Stack direction="row" spacing={0.75} alignItems="center">
+                        <Stack direction="row" spacing={0.75} sx={{ alignItems: "center" }}>
                           <span>Ground Mgmt</span>
                           {groundItemCount > 0 && (
                             <Box
@@ -620,8 +610,8 @@ function ViewOrderDetailsComponent({
                         <Typography
                           variant="caption"
                           color="text.secondary"
-                          fontWeight={700}
-                          sx={{
+
+                          sx={{ fontWeight: 700,
                             display: "inline-flex",
                             alignItems: "center",
                             gap: 0.5,
@@ -632,7 +622,7 @@ function ViewOrderDetailsComponent({
                         >
                           <FiUser size={12} /> Assigned Managers
                         </Typography>
-                        <Stack direction="row" spacing={1.5} flexWrap="wrap" useFlexGap>
+                        <Stack direction="row" spacing={1.5} useFlexGap sx={{ flexWrap: "wrap" }}>
                           {session.managers_assigned.map((staff, mIdx) => (
                             <StaffCard
                               key={`mgr-${mIdx}`}
@@ -652,8 +642,8 @@ function ViewOrderDetailsComponent({
                         <Typography
                           variant="caption"
                           color="text.secondary"
-                          fontWeight={700}
-                          sx={{
+
+                          sx={{ fontWeight: 700,
                             display: "inline-flex",
                             alignItems: "center",
                             gap: 0.5,
@@ -664,7 +654,7 @@ function ViewOrderDetailsComponent({
                         >
                           <FiBriefcase size={12} /> Assigned Staff
                         </Typography>
-                        <Stack direction="row" spacing={1.5} flexWrap="wrap" useFlexGap>
+                        <Stack direction="row" spacing={1.5} useFlexGap sx={{ flexWrap: "wrap" }}>
                           {session.summoned_staff_details.map((staff, sIdx) => (
                             <StaffCard
                               key={sIdx}

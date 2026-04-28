@@ -71,11 +71,11 @@ const GroundCategoryMaster = () => {
       <Stack
         direction={{ xs: "column", md: "row" }}
         spacing={2}
-        alignItems={{ xs: "stretch", md: "center" }}
-        justifyContent="space-between"
-        sx={{ mb: 3 }}
+
+
+        sx={{ alignItems: { xs: "stretch", md: "center" }, justifyContent: "space-between", mb: 3 }}
       >
-        <Stack direction="row" spacing={1.5} alignItems="center">
+        <Stack direction="row" spacing={1.5} sx={{ alignItems: "center" }}>
           <Avatar
             variant="rounded"
             sx={{
@@ -88,7 +88,7 @@ const GroundCategoryMaster = () => {
             <HugeiconsIcon icon={MenuRestaurantIcon} size={22} />
           </Avatar>
           <Box>
-            <Typography variant="h5" fontWeight={700} color="text.primary">
+            <Typography variant="h5" color="text.primary" sx={{ fontWeight: 700 }}>
               Ground Categories
             </Typography>
             <Typography variant="body2" color="text.secondary">

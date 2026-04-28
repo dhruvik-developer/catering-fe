@@ -83,8 +83,7 @@ function StaffWithdrawalModal({
               </label>
               <input
                 type="number"
-                name="amount"
-                required
+                name="amount" required
                 min="1"
                 step="0.01"
                 value={formData.amount}
@@ -100,8 +99,7 @@ function StaffWithdrawalModal({
               </label>
               <input
                 type="date"
-                name="payment_date"
-                required
+                name="payment_date" required
                 value={formData.payment_date}
                 onChange={handleChange}
                 className="w-full px-4 py-2 bg-gray-50 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-400/50 transition-all text-gray-800"

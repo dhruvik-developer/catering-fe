@@ -99,13 +99,13 @@ function InfoBlock({ label, value }) {
       <Typography
         variant="caption"
         color="primary.main"
-        fontWeight={700}
-        sx={{ textTransform: "uppercase", letterSpacing: 0.5 }}
+
+        sx={{ fontWeight: 700, textTransform: "uppercase", letterSpacing: 0.5 }}
       >
         {label}
       </Typography>
       {typeof value === "string" || typeof value === "number" ? (
-        <Typography variant="body1" fontWeight={600} color="text.primary">
+        <Typography variant="body1" color="text.primary" sx={{ fontWeight: 600 }}>
           {value}
         </Typography>
       ) : (
@@ -272,9 +272,8 @@ function ViewIngredientComponent({
           </Button>
           <Typography
             variant="h6"
-            fontWeight={700}
-            sx={{ flex: 1, textAlign: "center" }}
-            noWrap
+
+            sx={{ fontWeight: 700, flex: 1, textAlign: "center" }} noWrap
           >
             Ingredient Details
           </Typography>
@@ -336,12 +335,12 @@ function ViewIngredientComponent({
                         p: 3,
                       }}
                     >
-                      <Stack direction="row" spacing={4} flexWrap="wrap" useFlexGap>
+                      <Stack direction="row" spacing={4} useFlexGap sx={{ flexWrap: "wrap" }}>
                         {viewIngredient?.name && (
                           <InfoBlock
                             label="Customer"
                             value={
-                              <Typography variant="body1" fontWeight={700}>
+                              <Typography variant="body1" sx={{ fontWeight: 700 }}>
                                 {viewIngredient.name}
                               </Typography>
                             }
@@ -362,7 +361,7 @@ function ViewIngredientComponent({
                         <InfoBlock
                           label="Estimated Persons"
                           value={
-                            <Typography variant="h5" fontWeight={700}>
+                            <Typography variant="h5" sx={{ fontWeight: 700 }}>
                               {persons}
                             </Typography>
                           }
@@ -386,8 +385,8 @@ function ViewIngredientComponent({
                       <Stack
                         direction={{ xs: "column", sm: "row" }}
                         spacing={1.5}
-                        alignItems={{ xs: "flex-start", sm: "center" }}
-                      >
+
+                       sx={{ alignItems: { xs: "flex-start", sm: "center" } }}>
                         <FiCalendar size={20} />
                         <Box>
                           <Typography
@@ -401,8 +400,8 @@ function ViewIngredientComponent({
                           >
                             Viewing Session
                           </Typography>
-                          <Stack direction="row" spacing={1} alignItems="baseline">
-                            <Typography variant="h6" fontWeight={700}>
+                          <Stack direction="row" spacing={1} sx={{ alignItems: "baseline" }}>
+                            <Typography variant="h6" sx={{ fontWeight: 700 }}>
                               {sessionFilter}
                             </Typography>
                             {displayDate && (
@@ -443,7 +442,7 @@ function ViewIngredientComponent({
                   p: 3,
                 }}
               >
-                <Stack direction="row" spacing={4} flexWrap="wrap" useFlexGap>
+                <Stack direction="row" spacing={4} useFlexGap sx={{ flexWrap: "wrap" }}>
                   {(() => {
                     const uniqueDates = Array.from(
                       new Set(
@@ -465,7 +464,7 @@ function ViewIngredientComponent({
                           <InfoBlock
                             label="Customer"
                             value={
-                              <Typography variant="body1" fontWeight={700}>
+                              <Typography variant="body1" sx={{ fontWeight: 700 }}>
                                 {viewIngredient.name}
                               </Typography>
                             }
@@ -489,7 +488,7 @@ function ViewIngredientComponent({
                   <InfoBlock
                     label="Estimated Persons"
                     value={
-                      <Typography variant="h5" fontWeight={700}>
+                      <Typography variant="h5" sx={{ fontWeight: 700 }}>
                         {viewIngredient.estimated_persons}
                       </Typography>
                     }
@@ -515,9 +514,9 @@ function ViewIngredientComponent({
               >
                 <Stack
                   direction="row"
-                  justifyContent="space-between"
-                  alignItems="center"
-                  sx={{
+
+
+                  sx={{ justifyContent: "space-between", alignItems: "center",
                     px: 3,
                     py: 1.5,
                     bgcolor: (t) => t.palette.primary.light + "1f",
@@ -525,7 +524,7 @@ function ViewIngredientComponent({
                     borderColor: "divider",
                   }}
                 >
-                  <Typography variant="subtitle1" fontWeight={700}>
+                  <Typography variant="subtitle1" sx={{ fontWeight: 700 }}>
                     🍱 Vendor Supplied Items
                   </Typography>
                   <Chip
@@ -552,14 +551,14 @@ function ViewIngredientComponent({
                           <CardContent sx={{ flex: 1 }}>
                             <Stack
                               direction="row"
-                              justifyContent="space-between"
-                              alignItems="flex-start"
+
+
                               spacing={1}
-                            >
+                             sx={{ justifyContent: "space-between", alignItems: "flex-start" }}>
                               <Typography
                                 variant="body2"
-                                fontWeight={700}
-                                sx={{ flex: 1 }}
+
+                                sx={{ fontWeight: 700, flex: 1 }}
                               >
                                 {oi.item_name}
                               </Typography>
@@ -594,8 +593,8 @@ function ViewIngredientComponent({
                                 <Stack
                                   direction="row"
                                   spacing={1}
-                                  alignItems="center"
-                                  sx={{
+
+                                  sx={{ alignItems: "center",
                                     bgcolor: "action.hover",
                                     px: 1.5,
                                     py: 1,
@@ -603,7 +602,7 @@ function ViewIngredientComponent({
                                   }}
                                 >
                                   <span>🏢</span>
-                                  <Typography variant="caption" fontWeight={600}>
+                                  <Typography variant="caption" sx={{ fontWeight: 600 }}>
                                     Supplier:
                                   </Typography>
                                   <Typography variant="caption" noWrap>
@@ -614,8 +613,8 @@ function ViewIngredientComponent({
                                 <Stack
                                   direction="row"
                                   spacing={1}
-                                  alignItems="center"
-                                  sx={{
+
+                                  sx={{ alignItems: "center",
                                     bgcolor: (t) =>
                                       t.palette.primary.light + "1f",
                                     color: "primary.main",
@@ -625,7 +624,7 @@ function ViewIngredientComponent({
                                   }}
                                 >
                                   <FiAlertTriangle size={14} />
-                                  <Typography variant="caption" fontWeight={600}>
+                                  <Typography variant="caption" sx={{ fontWeight: 600 }}>
                                     No Vendor Assigned
                                   </Typography>
                                 </Stack>
@@ -635,8 +634,8 @@ function ViewIngredientComponent({
                               <Typography
                                 variant="caption"
                                 color="text.disabled"
-                                fontWeight={700}
-                                sx={{
+
+                                sx={{ fontWeight: 700,
                                   display: "block",
                                   textTransform: "uppercase",
                                   letterSpacing: 0.5,
@@ -652,14 +651,12 @@ function ViewIngredientComponent({
                               variant="outlined"
                               color="primary"
                               startIcon={<FiShare2 size={14} />}
-                              onClick={() => handleShareOutsourced(oi)}
-                              sx={{ mt: 1.5 }}
-                              title={`Share ${oi.item_name} with ${
-                                oi.vendor?.name || "vendor"
-                              }`}
+                              sx={{ mt: 1.5, opacity: 0.8, cursor: "default" }}
+                              title="Sharing Disabled"
                             >
                               Share with Vendor
                             </Button>
+
                           </CardContent>
                         </Card>
                       </Grid>
@@ -697,8 +694,8 @@ function ViewIngredientComponent({
                   <Stack
                     direction="row"
                     spacing={1.5}
-                    alignItems="flex-start"
-                    sx={{
+
+                    sx={{ alignItems: "flex-start",
                       px: { xs: 2, sm: 3 },
                       py: 2,
                       borderBottom: 1,
@@ -707,8 +704,8 @@ function ViewIngredientComponent({
                     }}
                   >
                     <FiAlertTriangle color="#b45309" size={20} />
-                    <Box minWidth={0} flex={1}>
-                      <Typography variant="subtitle1" fontWeight={700} color="warning.dark">
+                    <Box sx={{ minWidth: 0, flex: 1 }}>
+                      <Typography variant="subtitle1" color="warning.dark" sx={{ fontWeight: 700 }}>
                         Some dishes need ingredients for this order
                       </Typography>
                       <Typography variant="caption" color="warning.dark" sx={{ opacity: 0.8 }}>
@@ -746,14 +743,12 @@ function ViewIngredientComponent({
                         >
                           <Stack
                             direction="row"
-                            justifyContent="space-between"
-                            alignItems="flex-start"
-                            spacing={1.5}
-                            flexWrap="wrap"
-                            useFlexGap
-                          >
-                            <Box minWidth={0}>
-                              <Typography variant="body1" fontWeight={700}>
+
+
+                            spacing={1.5} useFlexGap
+                           sx={{ justifyContent: "space-between", alignItems: "flex-start", flexWrap: "wrap" }}>
+                            <Box sx={{ minWidth: 0 }}>
+                              <Typography variant="body1" sx={{ fontWeight: 700 }}>
                                 {dish}
                               </Typography>
                               <Typography
@@ -763,7 +758,7 @@ function ViewIngredientComponent({
                                 No recipe defined globally
                               </Typography>
                             </Box>
-                            <Stack direction="row" spacing={1} flexWrap="wrap" useFlexGap>
+                            <Stack direction="row" spacing={1} useFlexGap sx={{ flexWrap: "wrap" }}>
                               {existing.length > 0 ? (
                                 <>
                                   <Button
@@ -828,10 +823,8 @@ function ViewIngredientComponent({
                           {existing.length > 0 && (
                             <Stack
                               direction="row"
-                              spacing={1}
-                              flexWrap="wrap"
-                              useFlexGap
-                              sx={{ mt: 1.5 }}
+                              spacing={1} useFlexGap
+                              sx={{ flexWrap: "wrap", mt: 1.5 }}
                             >
                               {existing.map((e) => (
                                 <Chip
@@ -839,7 +832,7 @@ function ViewIngredientComponent({
                                   size="small"
                                   label={
                                     <Box component="span">
-                                      <Box component="span" fontWeight={700}>
+                                      <Box component="span" sx={{ fontWeight: 700 }}>
                                         {e.ingredient}
                                       </Box>
                                       <Box
@@ -983,10 +976,10 @@ function ViewIngredientComponent({
                   {/* Category bar */}
                   <Stack
                     direction={{ xs: "column", sm: "row" }}
-                    justifyContent="space-between"
-                    alignItems={{ xs: "stretch", sm: "center" }}
+
+
                     spacing={1.5}
-                    sx={{
+                    sx={{ justifyContent: "space-between", alignItems: { xs: "stretch", sm: "center" },
                       px: 3,
                       py: 1.5,
                       bgcolor: (t) => t.palette.primary.light + "1f",
@@ -994,10 +987,10 @@ function ViewIngredientComponent({
                       borderColor: "divider",
                     }}
                   >
-                    <Typography variant="subtitle1" fontWeight={700}>
+                    <Typography variant="subtitle1" sx={{ fontWeight: 700 }}>
                       {category.name}
                     </Typography>
-                    <Stack direction="row" spacing={1} flexWrap="wrap" useFlexGap>
+                    <Stack direction="row" spacing={1} useFlexGap sx={{ flexWrap: "wrap" }}>
                       <Button
                         size="small"
                         variant="outlined"
@@ -1026,22 +1019,12 @@ function ViewIngredientComponent({
                         color="primary"
                         startIcon={<FiShare2 size={14} />}
                         disabled={!anyItemAssigned}
-                        onClick={() =>
-                          anyItemAssigned &&
-                          handleShareIngredients(
-                            category.name,
-                            sessionFilter || undefined,
-                            "share"
-                          )
-                        }
-                        title={
-                          anyItemAssigned
-                            ? "Share ingredient list"
-                            : "Assign a vendor first to enable sharing"
-                        }
+                        sx={{ opacity: 0.8, cursor: "default" }}
+                        title="Sharing Disabled"
                       >
                         Share {category.name}
                       </Button>
+
                     </Stack>
                   </Stack>
 
@@ -1149,16 +1132,16 @@ function ViewIngredientComponent({
                                 <Stack
                                   direction="row"
                                   spacing={1}
-                                  alignItems="center"
-                                  justifyContent="space-between"
-                                  sx={{ mb: 1.5 }}
+
+
+                                  sx={{ alignItems: "center", justifyContent: "space-between", mb: 1.5 }}
                                 >
                                   <Stack
                                     direction="row"
                                     spacing={1}
-                                    alignItems="center"
-                                    minWidth={0}
-                                  >
+
+
+                                   sx={{ alignItems: "center", minWidth: 0 }}>
                                     <Box
                                       sx={{
                                         width: 8,
@@ -1169,10 +1152,8 @@ function ViewIngredientComponent({
                                       }}
                                     />
                                     <Typography
-                                      variant="body2"
-                                      fontWeight={700}
-                                      noWrap
-                                    >
+                                      variant="body2" noWrap
+                                     sx={{ fontWeight: 700 }}>
                                       {item.item}
                                     </Typography>
                                   </Stack>
@@ -1211,9 +1192,9 @@ function ViewIngredientComponent({
                                       <Stack
                                         key={j}
                                         direction="row"
-                                        alignItems="center"
-                                        justifyContent="space-between"
-                                        sx={{
+
+
+                                        sx={{ alignItems: "center", justifyContent: "space-between",
                                           bgcolor: (t) =>
                                             t.palette.primary.light + "1a",
                                           border: 1,
@@ -1225,11 +1206,8 @@ function ViewIngredientComponent({
                                       >
                                         <Stack
                                           direction="row"
-                                          spacing={0.75}
-                                          alignItems="center"
-                                          flexWrap="wrap"
-                                          useFlexGap
-                                        >
+                                          spacing={0.75} useFlexGap
+                                         sx={{ alignItems: "center", flexWrap: "wrap" }}>
                                           <Chip
                                             size="small"
                                             label={sessionLabel}
@@ -1258,14 +1236,13 @@ function ViewIngredientComponent({
                                           <Stack
                                             direction="row"
                                             spacing={0.5}
-                                            alignItems="center"
-                                          >
+
+                                           sx={{ alignItems: "center" }}>
                                             <TextField
                                               value={editValue}
                                               onChange={(e) =>
                                                 setEditValue(e.target.value)
-                                              }
-                                              autoFocus
+                                              } autoFocus
                                               disabled={savingEdit}
                                               onKeyDown={(e) => {
                                                 if (e.key === "Enter")
@@ -1313,12 +1290,12 @@ function ViewIngredientComponent({
                                           <Stack
                                             direction="row"
                                             spacing={0.5}
-                                            alignItems="center"
-                                          >
+
+                                           sx={{ alignItems: "center" }}>
                                             <Typography
                                               variant="body2"
-                                              fontWeight={700}
-                                            >
+
+                                             sx={{ fontWeight: 700 }}>
                                               {qty}
                                             </Typography>
                                             <IconButton
@@ -1355,8 +1332,8 @@ function ViewIngredientComponent({
                                     <Typography
                                       variant="caption"
                                       color="primary.main"
-                                      fontWeight={700}
-                                      sx={{
+
+                                      sx={{ fontWeight: 700,
                                         textTransform: "uppercase",
                                         letterSpacing: 0.5,
                                       }}
@@ -1399,8 +1376,8 @@ function ViewIngredientComponent({
                                     ) ? (
                                       <Typography
                                         variant="caption"
-                                        fontWeight={700}
-                                      >
+
+                                       sx={{ fontWeight: 700 }}>
                                         🏭 Ordered from Godown
                                       </Typography>
                                     ) : (
@@ -1409,13 +1386,13 @@ function ViewIngredientComponent({
                                           <Stack
                                             key={v.id || v.name}
                                             direction="row"
-                                            justifyContent="space-between"
-                                            alignItems="center"
-                                          >
+
+
+                                           sx={{ justifyContent: "space-between", alignItems: "center" }}>
                                             <Typography
                                               variant="caption"
-                                              fontWeight={700}
-                                            >
+
+                                             sx={{ fontWeight: 700 }}>
                                               ★ Assigned to: {v.name}
                                             </Typography>
                                             {v.source_type === "item" ? (
@@ -1459,10 +1436,8 @@ function ViewIngredientComponent({
                                 >
                                   <Stack
                                     direction="row"
-                                    spacing={0.75}
-                                    flexWrap="wrap"
-                                    useFlexGap
-                                    sx={{ mb: 0.75 }}
+                                    spacing={0.75} useFlexGap
+                                    sx={{ flexWrap: "wrap", mb: 0.75 }}
                                   >
                                     {isFromGodown ? (
                                       <Chip
@@ -1525,29 +1500,25 @@ function ViewIngredientComponent({
                                   </Stack>
                                   <Divider sx={{ my: 0.75 }} />
                                   <Stack
-                                    direction="row"
-                                    justifyContent="space-between"
-                                    alignItems="center"
-                                    flexWrap="wrap"
-                                    useFlexGap
-                                    gap={1}
-                                  >
+                                    direction="row" useFlexGap
+
+                                   sx={{ justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: 1 }}>
                                     <Stack
                                       direction="row"
                                       spacing={0.5}
-                                      alignItems="baseline"
-                                    >
+
+                                     sx={{ alignItems: "baseline" }}>
                                       <Typography
                                         variant="caption"
                                         color="text.secondary"
-                                        fontWeight={600}
-                                      >
+
+                                       sx={{ fontWeight: 600 }}>
                                         Total:
                                       </Typography>
                                       <Typography
                                         variant="body2"
-                                        fontWeight={700}
-                                      >
+
+                                       sx={{ fontWeight: 700 }}>
                                         {totalRequiredValue}{" "}
                                         <Box
                                           component="span"
@@ -1566,20 +1537,20 @@ function ViewIngredientComponent({
                                     <Stack
                                       direction="row"
                                       spacing={0.5}
-                                      alignItems="baseline"
-                                    >
+
+                                     sx={{ alignItems: "baseline" }}>
                                       <Typography
                                         variant="caption"
                                         color="primary.main"
-                                        fontWeight={600}
-                                      >
+
+                                       sx={{ fontWeight: 600 }}>
                                         {totalQuantity === 0 ? "✅" : "⚠️"} Remaining:
                                       </Typography>
                                       <Typography
                                         variant="body1"
-                                        fontWeight={700}
+
                                         color="primary.main"
-                                      >
+                                       sx={{ fontWeight: 700 }}>
                                         {totalQuantity}{" "}
                                         <Box
                                           component="span"

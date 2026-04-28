@@ -56,7 +56,7 @@ function CreateIngredientComponent({
             <FiGrid size={20} />
           </Avatar>
           <Box>
-            <Typography variant="h5" fontWeight={700}>
+            <Typography variant="h5" sx={{ fontWeight: 700 }}>
               Create Ingredient Item
             </Typography>
             <Typography variant="body2" color="text.secondary">

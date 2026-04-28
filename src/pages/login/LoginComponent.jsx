@@ -90,8 +90,7 @@ function LoginComponent({
         </Stack>
         <Typography
           variant="h5"
-          fontWeight={600}
-          sx={{ mb: 3, textAlign: "center" }}
+          sx={{ fontWeight: 600, mb: 3, textAlign: "center" }}
         >
           Sign In
         </Typography>
@@ -101,9 +100,8 @@ function LoginComponent({
             <Box>
               <Typography
                 variant="body2"
-                fontWeight={700}
                 color="text.primary"
-                sx={{ mb: 0.75 }}
+                sx={{ fontWeight: 700, mb: 0.75 }}
               >
                 Username
               </Typography>
@@ -131,9 +129,8 @@ function LoginComponent({
             <Box>
               <Typography
                 variant="body2"
-                fontWeight={700}
                 color="text.primary"
-                sx={{ mb: 0.75 }}
+                sx={{ fontWeight: 700, mb: 0.75 }}
               >
                 Password
               </Typography>
@@ -166,8 +163,7 @@ function LoginComponent({
             </Box>
 
             <Button
-              type="submit"
-              fullWidth
+              type="submit" fullWidth
               size="large"
               variant="contained"
               color="primary"

@@ -46,7 +46,7 @@ function AddIngredientComponent({
       >
         Back
       </Button>
-      <Typography variant="h5" fontWeight={700} sx={{ mb: 3 }}>
+      <Typography variant="h5" sx={{ fontWeight: 700, mb: 3 }}>
         Add Recipe Ingredient
       </Typography>
 
@@ -59,30 +59,27 @@ function AddIngredientComponent({
             placeholder="Enter Person Count (e.g., 100)"
             value={personCount}
             onChange={(e) => setPersonCount(parseInt(e.target.value) || 0)}
-            inputProps={{ min: 1 }}
-            required
+            inputProps={{ min: 1 }} required
           />
 
           <Box>
             <Typography
               variant="body2"
-              fontWeight={500}
               color="text.secondary"
-              sx={{ mb: 1 }}
+              sx={{ fontWeight: 500, mb: 1 }}
             >
               Select Item
             </Typography>
             <Dropdown
               options={items}
-              placeholder="Select an item"
-              selectedValue={selectedItem}
+              placeholder="Select an item" selectedValue={selectedItem}
               onChange={(value) => setSelectedItem(value)}
               isSearchable
             />
           </Box>
 
           {selectedItem && (
-            <Typography variant="subtitle2" fontWeight={700} color="text.primary">
+            <Typography variant="subtitle2" color="text.primary" sx={{ fontWeight: 700 }}>
               {selectedItemName} ingredients
             </Typography>
           )}
@@ -100,12 +97,11 @@ function AddIngredientComponent({
                       animate={{ opacity: 1, y: 0 }}
                       exit={{ opacity: 0, y: -10 }}
                     >
-                      <Stack direction="row" spacing={1} alignItems="center">
+                      <Stack direction="row" spacing={1} sx={{ alignItems: "center" }}>
                         <Box sx={{ flex: 1 }}>
                           <Dropdown
                             options={ingredientItems}
-                            placeholder="Select ingredient"
-                            selectedValue={ingredient.ingredient}
+                            placeholder="Select ingredient" selectedValue={ingredient.ingredient}
                             onChange={(value) =>
                               handleIngredientChange(
                                 index,
@@ -163,7 +159,7 @@ function AddIngredientComponent({
             </Stack>
           )}
 
-          <Stack direction="row" justifyContent="center">
+          <Stack direction="row" sx={{ justifyContent: "center" }}>
             <Button type="submit" variant="contained" color="primary">
               Save Ingredient
             </Button>

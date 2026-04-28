@@ -76,8 +76,7 @@ function PdfShareIngredientController() {
     <PdfShareIngredientComponent
       eventAddress={eventAddress}
       formattedDate={formattedDate}
-      deliveryTime={deliveryTime}
-      selectedItems={selectedItems}
+      deliveryTime={deliveryTime} selectedItems={selectedItems}
       downloadPDF={downloadPDF}
       shareOnWhatsApp={shareOnWhatsApp}
       navigate={navigate}

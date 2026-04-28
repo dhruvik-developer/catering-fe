@@ -99,8 +99,7 @@ function LoginController() {
     <LoginComponent
       credentials={credentials}
       loading={loading}
-      showPassword={showPassword}
-      errors={errors}
+      showPassword={showPassword} errors={errors}
       businessLogo={businessLogo}
       isLogoLoading={isLogoLoading}
       onShowPassword={togglePassword}

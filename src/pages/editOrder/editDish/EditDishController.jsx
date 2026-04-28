@@ -823,8 +823,7 @@ function EditDishContoller() {
 
   return (
     <EditDishComponent
-      formData={formData}
-      errors={errors}
+      formData={formData} errors={errors}
       dishesList={dishesList}
       isDishesLoading={isDishesLoading}
       loading={loading}

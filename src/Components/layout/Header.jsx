@@ -507,10 +507,9 @@ const Header = ({ toggleSidebar }) => {
                 <Typography
                   key={i}
                   variant="body2"
-                  fontWeight={600}
-                  color="inherit"
-                  noWrap
-                >
+
+                  color="inherit" noWrap
+                 sx={{ fontWeight: 600 }}>
                   {crumb.label}
                 </Typography>
               ) : (
@@ -602,15 +601,15 @@ const Header = ({ toggleSidebar }) => {
               >
                 <Stack direction="row" spacing={1} sx={{ alignItems: "center" }}>
                   <FiAlertTriangle size={14} />
-                  <Typography variant="subtitle2" fontWeight={700}>
+                  <Typography variant="subtitle2" sx={{ fontWeight: 700 }}>
                     Low Stock Items
                   </Typography>
                 </Stack>
                 <Typography
                   variant="caption"
-                  fontWeight={700}
+
                   color="primary.main"
-                  sx={{
+                  sx={{ fontWeight: 700,
                     bgcolor: "background.paper",
                     px: 1,
                     py: 0.25,
@@ -665,16 +664,14 @@ const Header = ({ toggleSidebar }) => {
                     <Box sx={{ flex: 1, minWidth: 0 }}>
                       <Typography
                         variant="body2"
-                        fontWeight={600}
-                        color="text.primary"
-                        noWrap
-                      >
+
+                        color="text.primary" noWrap
+                       sx={{ fontWeight: 600 }}>
                         {item.name}
                       </Typography>
                       <Typography
                         variant="caption"
-                        color="text.disabled"
-                        noWrap
+                        color="text.disabled" noWrap
                       >
                         {item.categoryName}
                       </Typography>
@@ -682,9 +679,9 @@ const Header = ({ toggleSidebar }) => {
                     <Stack sx={{ alignItems: "flex-end" }}>
                       <Typography
                         variant="caption"
-                        fontWeight={700}
+
                         color="primary.main"
-                      >
+                       sx={{ fontWeight: 700 }}>
                         {item.quantity} {unit}
                       </Typography>
                       <Typography variant="caption" color="text.disabled">
@@ -781,15 +778,15 @@ const Header = ({ toggleSidebar }) => {
               >
                 <Stack direction="row" spacing={1} sx={{ alignItems: "center" }}>
                   <FiClipboard size={14} />
-                  <Typography variant="subtitle2" fontWeight={700}>
+                  <Typography variant="subtitle2" sx={{ fontWeight: 700 }}>
                     Upcoming Orders
                   </Typography>
                 </Stack>
                 <Typography
                   variant="caption"
-                  fontWeight={700}
+
                   color="primary.main"
-                  sx={{
+                  sx={{ fontWeight: 700,
                     bgcolor: "background.paper",
                     px: 1,
                     py: 0.25,
@@ -856,10 +853,9 @@ const Header = ({ toggleSidebar }) => {
                     <Box sx={{ flex: 1, minWidth: 0 }}>
                       <Typography
                         variant="body2"
-                        fontWeight={600}
-                        color="text.primary"
-                        noWrap
-                      >
+
+                        color="text.primary" noWrap
+                       sx={{ fontWeight: 600 }}>
                         {order.name}
                       </Typography>
                       <Stack
@@ -870,8 +866,7 @@ const Header = ({ toggleSidebar }) => {
                         <FiCalendar size={10} />
                         <Typography
                           variant="caption"
-                          color="text.disabled"
-                          noWrap
+                          color="text.disabled" noWrap
                         >
                           {order.event_date}
                           {order.event_time ? ` • ${order.event_time}` : ""}
@@ -880,8 +875,8 @@ const Header = ({ toggleSidebar }) => {
                     </Box>
                     <Typography
                       variant="caption"
-                      fontWeight={700}
-                      sx={{
+
+                      sx={{ fontWeight: 700,
                         px: 1,
                         py: 0.25,
                         borderRadius: 99,
@@ -974,8 +969,8 @@ const Header = ({ toggleSidebar }) => {
           >
             <Typography
               variant="body2"
-              fontWeight={700}
-              sx={{
+
+              sx={{ fontWeight: 700,
                 display: { xs: "none", sm: "inline" },
                 mr: 1,
               }}
@@ -1021,7 +1016,7 @@ const Header = ({ toggleSidebar }) => {
                 <ListItemIcon>
                   <FiUsers size={16} />
                 </ListItemIcon>
-                <Typography variant="body2" fontWeight={500}>
+                <Typography variant="body2" sx={{ fontWeight: 500 }}>
                   Users
                 </Typography>
               </MenuItem>
@@ -1036,7 +1031,7 @@ const Header = ({ toggleSidebar }) => {
                 <ListItemIcon>
                   <FiSettings size={16} />
                 </ListItemIcon>
-                <Typography variant="body2" fontWeight={500}>
+                <Typography variant="body2" sx={{ fontWeight: 500 }}>
                   Settings
                 </Typography>
               </MenuItem>
@@ -1046,7 +1041,7 @@ const Header = ({ toggleSidebar }) => {
               <ListItemIcon sx={{ color: "inherit" }}>
                 <TbLogout2 size={16} />
               </ListItemIcon>
-              <Typography variant="body2" fontWeight={500}>
+              <Typography variant="body2" sx={{ fontWeight: 500 }}>
                 Logout
               </Typography>
             </MenuItem>

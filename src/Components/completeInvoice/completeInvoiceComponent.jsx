@@ -266,8 +266,7 @@ function CompleteInvoiceComponent({
                 type="text"
                 name="pending_amount"
                 value={formatAmount(total_remain_amount)}
-                className={`w-full p-2 border border-gray-300 rounded-md font-semibold focus:outline-none focus:ring-[var(--color-primary)] focus:border-[var(--color-primary)]`}
-                readOnly
+                className={`w-full p-2 border border-gray-300 rounded-md font-semibold focus:outline-none focus:ring-[var(--color-primary)] focus:border-[var(--color-primary)]`} readOnly
               />
             </div>
 
@@ -276,8 +275,7 @@ function CompleteInvoiceComponent({
                 Payment Mode
               </label>
               <Dropdown
-                options={paymentOptions}
-                selectedValue={formData.payment_mode}
+                options={paymentOptions} selectedValue={formData.payment_mode}
                 onChange={(value) =>
                   handleChange({ target: { name: "payment_mode", value } })
                 }

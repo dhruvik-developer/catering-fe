@@ -48,18 +48,18 @@ function UsersTable({ users, onUserEdit, onUserDelete }) {
                 <Avatar sx={{ bgcolor: "primary.main" }}>
                   {user.username?.charAt(0).toUpperCase() || "?"}
                 </Avatar>
-                <Box minWidth={0} flex={1}>
+                <Box sx={{ minWidth: 0, flex: 1 }}>
                   <Typography variant="caption" color="text.disabled">
                     #{(index + 1).toString().padStart(2, "0")}
                   </Typography>
-                  <Typography variant="subtitle2" fontWeight={700} noWrap>
+                  <Typography variant="subtitle2" noWrap sx={{ fontWeight: 700 }}>
                     {user.username || "N/A"}
                   </Typography>
                   <Typography variant="caption" color="text.secondary" noWrap>
                     {user.email || "-"}
                   </Typography>
                 </Box>
-                <Stack direction="row" spacing={0.5} flexShrink={0}>
+                <Stack direction="row" spacing={0.5} sx={{ flexShrink: 0 }}>
                   <IconButton
                     size="small"
                     onClick={() => onUserEdit(user.id)}
@@ -112,11 +112,11 @@ function UsersTable({ users, onUserEdit, onUserDelete }) {
                 {(index + 1).toString().padStart(2, "0")}
               </TableCell>
               <TableCell>
-                <Stack direction="row" spacing={1.5} alignItems="center">
+                <Stack direction="row" spacing={1.5} sx={{ alignItems: "center" }}>
                   <Avatar sx={{ bgcolor: "primary.main", width: 36, height: 36 }}>
                     {user.username?.charAt(0).toUpperCase() || "?"}
                   </Avatar>
-                  <Typography variant="body1" fontWeight={700}>
+                  <Typography variant="body1" sx={{ fontWeight: 700 }}>
                     {user.username || "N/A"}
                   </Typography>
                 </Stack>
@@ -125,7 +125,7 @@ function UsersTable({ users, onUserEdit, onUserDelete }) {
                 {user.email || "-"}
               </TableCell>
               <TableCell align="center">
-                <Stack direction="row" spacing={0.5} justifyContent="center">
+                <Stack direction="row" spacing={0.5} sx={{ justifyContent: "center" }}>
                   <IconButton
                     size="small"
                     onClick={() => onUserEdit(user.id)}

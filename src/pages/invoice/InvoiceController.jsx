@@ -173,8 +173,7 @@ function InvoiceController() {
       loading={loading}
       invoice={applySearchDateFilter(getFilteredInvoices())}
       totalCount={invoice.length}
-      navigate={navigate}
-      selectedFilter={selectedFilter}
+      navigate={navigate} selectedFilter={selectedFilter}
       setSelectedFilter={setSelectedFilter}
       searchQuery={searchQuery}
       setSearchQuery={setSearchQuery}

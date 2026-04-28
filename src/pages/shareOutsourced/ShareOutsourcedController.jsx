@@ -224,14 +224,11 @@ function ShareOutsourcedController() {
     <ShareOutsourcedComponent
       eventAddress={eventAddress}
       vendorGroups={vendorGroups}
-      navigate={navigate}
-      selectedAddress={selectedAddress}
-      handleAddressChange={handleAddressChange}
-      selectedDate={selectedDate}
+      navigate={navigate} selectedAddress={selectedAddress}
+      handleAddressChange={handleAddressChange} selectedDate={selectedDate}
       setSelectedDate={setSelectedDate}
       deliveryTime={deliveryTime}
-      setDeliveryTime={setDeliveryTime}
-      checkedItems={checkedItems}
+      setDeliveryTime={setDeliveryTime} checkedItems={checkedItems}
       handleCheckboxChange={handleCheckboxChange}
       handleSubmit={handleSubmit}
       customAddress={customAddress}

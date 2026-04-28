@@ -153,19 +153,16 @@ const CategoryTable = ({
                     </Avatar>
                     <Box sx={{ minWidth: 0 }}>
                       <Typography
-                        variant="subtitle2"
-                        fontWeight={700}
-                        noWrap
+                        variant="subtitle2" noWrap
                         color={isActive ? "primary.main" : "text.primary"}
                         title={category.name}
-                      >
+                       sx={{ fontWeight: 700 }}>
                         {category.name}
                       </Typography>
                       <Typography
                         variant="caption"
                         color="text.secondary"
-                        fontWeight={500}
-                      >
+                       sx={{ fontWeight: 500 }}>
                         {getTotalItems(category)} item{getTotalItems(category) !== 1 ? "s" : ""}
                       </Typography>
                     </Box>
@@ -253,8 +250,7 @@ const CategoryTable = ({
               <Box>
                 <Typography
                   variant="h6"
-                  fontWeight={700}
-                  sx={{ display: "flex", alignItems: "center", gap: 1 }}
+                  sx={{ fontWeight: 700, display: "flex", alignItems: "center", gap: 1 }}
                 >
                   {viewingSubCategoryId && (
                     <IconButton 
@@ -348,15 +344,13 @@ const CategoryTable = ({
                             </Avatar>
                             <Box sx={{ minWidth: 0 }}>
                               <Typography
-                                variant="body2"
-                                fontWeight={700}
-                                noWrap
+                                variant="body2" noWrap
                                 color={
                                   isItem && item.has_recipe === false
                                     ? "error.main"
                                     : "text.primary"
                                 }
-                              >
+                               sx={{ fontWeight: 700 }}>
                                 {item.name}
                               </Typography>
                               {!isItem && (
@@ -426,8 +420,7 @@ const CategoryTable = ({
         <ViewItemRecipeController
           itemId={selectedItemForRecipe.id}
           itemName={selectedItemForRecipe.name}
-          baseCost={selectedItemForRecipe.base_cost}
-          selectionRate={selectedItemForRecipe.selection_rate}
+          baseCost={selectedItemForRecipe.base_cost} selectionRate={selectedItemForRecipe.selection_rate}
           disableItemDetailsFetch={true}
           onClose={() => {
             setSelectedItemForRecipe(null);

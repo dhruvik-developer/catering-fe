@@ -160,8 +160,7 @@ function ViewItemRecipeComponent({
                 >
                   <Dropdown
                     options={ingredientOptions || []}
-                    placeholder="Select ingredient"
-                    selectedValue={ingredient.ingredientId}
+                    placeholder="Select ingredient" selectedValue={ingredient.ingredientId}
                     onChange={(value) =>
                       onEditIngredientChange(index, "ingredientId", value)
                     }
@@ -524,8 +523,7 @@ function ViewItemRecipeComponent({
                 >
                   <Dropdown
                     options={ingredientOptions || []}
-                    placeholder="Select ingredient"
-                    selectedValue={ingredient.ingredientId}
+                    placeholder="Select ingredient" selectedValue={ingredient.ingredientId}
                     onChange={(value) =>
                       onAddIngredientChange(index, "ingredientId", value)
                     }

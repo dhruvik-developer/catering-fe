@@ -647,8 +647,7 @@ function DishContoller() {
 
   return (
     <DishComponent
-      formData={formData}
-      errors={errors}
+      formData={formData} errors={errors}
       dishesList={dishesList}
       isDishesLoading={isDishesLoading}
       handleChange={handleChange}

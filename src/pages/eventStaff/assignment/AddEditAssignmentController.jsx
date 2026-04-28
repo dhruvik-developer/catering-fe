@@ -454,8 +454,7 @@ function AddEditAssignmentController() {
       mode={mode}
       formData={formData}
       loading={loading}
-      saving={saving}
-      errors={errors}
+      saving={saving} errors={errors}
       staffList={staffList}
       filteredStaffList={filteredStaffList}
       rolesList={rolesList}

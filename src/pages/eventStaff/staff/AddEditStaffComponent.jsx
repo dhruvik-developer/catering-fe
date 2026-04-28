@@ -440,8 +440,7 @@ function AddEditStaffComponent({
 
       <AddRoleModal
         isOpen={isAddRoleModalOpen}
-        formData={roleModalForm}
-        errors={roleModalErrors}
+        formData={roleModalForm} errors={roleModalErrors}
         isSaving={isAddingRole}
         onChange={handleRoleModalChange}
         onClose={handleCloseAddRoleModal}

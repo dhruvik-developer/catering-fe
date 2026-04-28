@@ -37,7 +37,7 @@ function AddIngredientItemComponent({
       >
         Back
       </Button>
-      <Typography variant="h5" fontWeight={700} sx={{ mb: 3 }}>
+      <Typography variant="h5" sx={{ fontWeight: 700, mb: 3 }}>
         Add Ingredient Item
       </Typography>
       <Box component="form" onSubmit={handleSubmit}>
@@ -53,21 +53,19 @@ function AddIngredientItemComponent({
           <Box>
             <Typography
               variant="body2"
-              fontWeight={500}
               color="text.secondary"
-              sx={{ mb: 1 }}
+              sx={{ fontWeight: 500, mb: 1 }}
             >
               Category
             </Typography>
             <Dropdown
-              options={categories}
-              selectedValue={category}
+              options={categories} selectedValue={category}
               onChange={(value) => setCategory(value)}
               placeholder="Select a category"
               isSearchable
             />
           </Box>
-          <Stack direction="row" justifyContent="center">
+          <Stack direction="row" sx={{ justifyContent: "center" }}>
             <Button type="submit" variant="contained" color="primary">
               Add Item
             </Button>

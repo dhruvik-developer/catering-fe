@@ -84,7 +84,7 @@ export const AddIngredientItemModal = ({
       widthClass="max-w-md"
       closeDisabled={saving}
       footer={
-        <Stack direction="row" justifyContent="flex-end" spacing={1}>
+        <Stack direction="row" spacing={1} sx={{ justifyContent: "flex-end" }}>
           <Button
             variant="outlined"
             onClick={onClose}
@@ -116,15 +116,13 @@ export const AddIngredientItemModal = ({
           <Box>
             <Typography
               variant="body2"
-              fontWeight={500}
               color="text.secondary"
-              sx={{ mb: 1 }}
+              sx={{ fontWeight: 500, mb: 1 }}
             >
               Category *
             </Typography>
             <Dropdown
-              options={categories}
-              selectedValue={category}
+              options={categories} selectedValue={category}
               onChange={(value) => setCategory(value)}
               placeholder="Select a category"
               isSearchable

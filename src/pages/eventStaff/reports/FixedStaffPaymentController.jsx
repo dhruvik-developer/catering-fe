@@ -154,8 +154,7 @@ function FixedStaffPaymentController() {
       onAddPayment={handleOpenAddModal}
       onEditPayment={handleOpenEditModal}
       isModalOpen={isModalOpen}
-      modalMode={modalMode}
-      selectedPayment={selectedPayment}
+      modalMode={modalMode} selectedPayment={selectedPayment}
       onCloseModal={handleCloseModal}
       onSavePayment={handleSaveSalaryPayment}
       onEventPayClick={handleEventPayClick}

@@ -50,7 +50,7 @@ function SectionHeader({ icon: Icon, title, subtitle }) {
         <Icon size={20} />
       </Avatar>
       <Box>
-        <Typography variant="h6" fontWeight={700} color="text.primary">
+        <Typography variant="h6" color="text.primary" sx={{ fontWeight: 700 }}>
           {title}
         </Typography>
         <Typography variant="body2" color="text.secondary">
@@ -72,8 +72,7 @@ const DatePickerTextField = forwardRef(function DatePickerTextField(
 
   return (
     <TextField
-      {...props}
-      fullWidth
+      {...props} fullWidth
       inputRef={ref}
       helperText={textFieldHelperText}
       slotProps={{
@@ -180,8 +179,7 @@ function Step1_ClientEvent({
           <Grid size={{ xs: 12, md: 6 }}>
             <DatePickerInput
               selected={formData.date}
-              dateFormat="dd/MM/yyyy"
-              disabled
+              dateFormat="dd/MM/yyyy" disabled
               textFieldProps={{
                 label: "Order Date",
               }}
@@ -220,8 +218,8 @@ function Step1_ClientEvent({
           <Typography
             variant="body2"
             color="error.main"
-            fontWeight={500}
-            sx={{
+
+            sx={{ fontWeight: 500,
               mb: 1.5,
               px: 1.5,
               py: 1,
@@ -239,8 +237,8 @@ function Step1_ClientEvent({
           <Typography
             variant="body2"
             color="error.main"
-            fontWeight={500}
-            sx={{
+
+            sx={{ fontWeight: 500,
               mb: 1.5,
               px: 1.5,
               py: 1,
@@ -298,9 +296,9 @@ function Step1_ClientEvent({
                   >
                     <Typography
                       variant="body2"
-                      fontWeight={700}
+
                       color="text.primary"
-                      sx={{ flexShrink: 0 }}
+                      sx={{ fontWeight: 700, flexShrink: 0 }}
                     >
                       Event Date:
                     </Typography>
@@ -308,8 +306,7 @@ function Step1_ClientEvent({
                       sx={{ width: { xs: "100%", sm: 160 } }}
                       placeholderText="Choose Date"
                       minDate={tomorrow}
-                      dateFormat="dd/MM/yyyy"
-                      selected={day.event_date}
+                      dateFormat="dd/MM/yyyy" selected={day.event_date}
                       onChange={(date) => handleScheduleDateChange(dIdx, date)}
                       textFieldProps={{
                         placeholder: "Choose Date",
@@ -383,9 +380,9 @@ function Step1_ClientEvent({
                         </Avatar>
                         <Typography
                           variant="caption"
-                          fontWeight={700}
+
                           color="primary.main"
-                          sx={{ textTransform: "uppercase", letterSpacing: 0.5 }}
+                          sx={{ fontWeight: 700, textTransform: "uppercase", letterSpacing: 0.5 }}
                         >
                           Slot {sIdx + 1}
                         </Typography>
@@ -485,8 +482,7 @@ function Step1_ClientEvent({
                 ))}
 
                 <Button
-                  variant="outlined"
-                  fullWidth
+                  variant="outlined" fullWidth
                   startIcon={<FiPlus size={14} />}
                   onClick={() => handleAddTimeSlot(dIdx)}
                   sx={{

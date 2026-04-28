@@ -31,12 +31,12 @@ function AssignmentComponent({
     >
       <Stack
         direction={{ xs: "column", sm: "row" }}
-        justifyContent="space-between"
-        alignItems={{ xs: "stretch", sm: "center" }}
+
+
         spacing={2}
-        sx={{ mb: 3 }}
+        sx={{ justifyContent: "space-between", alignItems: { xs: "stretch", sm: "center" }, mb: 3 }}
       >
-        <Stack direction="row" spacing={1.5} alignItems="center">
+        <Stack direction="row" spacing={1.5} sx={{ alignItems: "center" }}>
           <Avatar
             variant="rounded"
             sx={{
@@ -49,7 +49,7 @@ function AssignmentComponent({
             <FiBriefcase size={20} />
           </Avatar>
           <Box>
-            <Typography variant="h5" fontWeight={700}>
+            <Typography variant="h5" sx={{ fontWeight: 700 }}>
               Event Assignments
             </Typography>
             <Typography variant="body2" color="text.secondary">

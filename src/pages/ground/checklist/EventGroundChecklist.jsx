@@ -170,11 +170,11 @@ const EventGroundChecklist = () => {
       <Stack
         direction={{ xs: "column", md: "row" }}
         spacing={2}
-        alignItems={{ xs: "stretch", md: "center" }}
-        justifyContent="space-between"
-        sx={{ mb: 3 }}
+
+
+        sx={{ alignItems: { xs: "stretch", md: "center" }, justifyContent: "space-between", mb: 3 }}
       >
-        <Stack direction="row" spacing={1.5} alignItems="center">
+        <Stack direction="row" spacing={1.5} sx={{ alignItems: "center" }}>
           <Avatar
             variant="rounded"
             sx={{
@@ -187,7 +187,7 @@ const EventGroundChecklist = () => {
             <HugeiconsIcon icon={TaskAdd01Icon} size={22} />
           </Avatar>
           <Box>
-            <Typography variant="h5" fontWeight={700} color="text.primary">
+            <Typography variant="h5" color="text.primary" sx={{ fontWeight: 700 }}>
               Ground Checklist
             </Typography>
             <Typography variant="body2" color="text.secondary">
@@ -196,7 +196,7 @@ const EventGroundChecklist = () => {
           </Box>
         </Stack>
         {canCreateGround && (
-          <Stack direction="row" spacing={1} flexWrap="wrap" useFlexGap>
+          <Stack direction="row" spacing={1} useFlexGap sx={{ flexWrap: "wrap" }}>
             <Button
               variant="contained"
               color="primary"
@@ -230,7 +230,7 @@ const EventGroundChecklist = () => {
           message="Add a ground category to get started."
         />
       ) : (
-        <Grid container spacing={2} alignItems="flex-start">
+        <Grid container spacing={2} sx={{ alignItems: "flex-start" }}>
           {/* Left: Category list */}
           <Grid size={{ xs: 12, lg: 4 }}>
             <Typography
@@ -287,14 +287,14 @@ const EventGroundChecklist = () => {
                     <Stack
                       direction="row"
                       spacing={1.5}
-                      alignItems="center"
-                      minWidth={0}
-                      flex={1}
+
+
+
                       onClick={() => {
                         setActiveCategoryId(category.id);
                         setSearchQuery("");
                       }}
-                    >
+                     sx={{ alignItems: "center", minWidth: 0, flex: 1 }}>
                       <Avatar
                         variant="rounded"
                         sx={{
@@ -310,13 +310,11 @@ const EventGroundChecklist = () => {
                       >
                         {index + 1}
                       </Avatar>
-                      <Box minWidth={0}>
+                      <Box sx={{ minWidth: 0 }}>
                         <Typography
-                          variant="subtitle2"
-                          fontWeight={700}
-                          noWrap
+                          variant="subtitle2" noWrap
                           color={isActive ? "primary.main" : "text.primary"}
-                        >
+                         sx={{ fontWeight: 700 }}>
                           {category.name}
                         </Typography>
                         <Typography variant="caption" color="text.secondary">
@@ -329,8 +327,7 @@ const EventGroundChecklist = () => {
                         className="actions"
                         direction="row"
                         spacing={0}
-                        flexShrink={0}
-                        sx={{
+                        sx={{ flexShrink: 0,
                           opacity: { xs: 1, sm: 0 },
                           transition: "opacity 0.2s",
                         }}
@@ -384,9 +381,9 @@ const EventGroundChecklist = () => {
               <Stack
                 direction={{ xs: "column", sm: "row" }}
                 spacing={2}
-                alignItems={{ xs: "stretch", sm: "center" }}
-                justifyContent="space-between"
-                sx={{
+
+
+                sx={{ alignItems: { xs: "stretch", sm: "center" }, justifyContent: "space-between",
                   px: 3,
                   py: 2.5,
                   borderBottom: 1,
@@ -397,8 +394,8 @@ const EventGroundChecklist = () => {
                 <Box>
                   <Typography
                     variant="h6"
-                    fontWeight={700}
-                    sx={{ display: "flex", alignItems: "center", gap: 1 }}
+
+                    sx={{ fontWeight: 700, display: "flex", alignItems: "center", gap: 1 }}
                   >
                     <FiFolder />
                     {activeCategory?.name}
@@ -445,10 +442,10 @@ const EventGroundChecklist = () => {
                           <Stack
                             direction="row"
                             spacing={1.5}
-                            alignItems="center"
-                            minWidth={0}
-                            flex={1}
-                          >
+
+
+
+                           sx={{ alignItems: "center", minWidth: 0, flex: 1 }}>
                             <Avatar
                               sx={{
                                 width: 32,
@@ -459,12 +456,10 @@ const EventGroundChecklist = () => {
                             >
                               <FiTag size={14} />
                             </Avatar>
-                            <Box minWidth={0}>
+                            <Box sx={{ minWidth: 0 }}>
                               <Typography
-                                variant="body2"
-                                fontWeight={700}
-                                noWrap
-                              >
+                                variant="body2" noWrap
+                               sx={{ fontWeight: 700 }}>
                                 {item.name}
                               </Typography>
                               {item.unit && (
@@ -482,8 +477,7 @@ const EventGroundChecklist = () => {
                               className="item-actions"
                               direction="row"
                               spacing={0}
-                              flexShrink={0}
-                              sx={{
+                              sx={{ flexShrink: 0,
                                 opacity: { xs: 1, sm: 0 },
                                 transition: "opacity 0.2s",
                               }}

@@ -262,8 +262,7 @@ function AddEditVendorController() {
       navigate={navigate}
       mode={mode}
       loading={loading}
-      form={form}
-      errors={errors}
+      form={form} errors={errors}
       vendorCategories={vendorCategories}
       availableCategories={availableCategories}
       hasExistingLogin={hasExistingLogin}

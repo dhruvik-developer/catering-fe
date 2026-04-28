@@ -128,8 +128,7 @@ function ShareOutsourcedComponent({
       <div className="mb-4">
         <p className="pb-1 font-bold">Delivery Date</p>
         <DatePicker
-          placeholderText="Select Date"
-          selected={selectedDate}
+          placeholderText="Select Date" selected={selectedDate}
           minDate={new Date()}
           dateFormat="dd/MM/yyyy"
           onChange={(date) => setSelectedDate(date)}

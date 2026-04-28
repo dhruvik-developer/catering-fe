@@ -56,12 +56,12 @@ function ExpenseComponent({
       {/* Header */}
       <Stack
         direction={{ xs: "column", sm: "row" }}
-        justifyContent="space-between"
-        alignItems={{ xs: "stretch", sm: "center" }}
+
+
         spacing={2}
-        sx={{ mb: 3 }}
+        sx={{ justifyContent: "space-between", alignItems: { xs: "stretch", sm: "center" }, mb: 3 }}
       >
-        <Stack direction="row" spacing={1.5} alignItems="center">
+        <Stack direction="row" spacing={1.5} sx={{ alignItems: "center" }}>
           <Avatar
             variant="rounded"
             sx={{
@@ -74,7 +74,7 @@ function ExpenseComponent({
             <FiDollarSign size={20} />
           </Avatar>
           <Box>
-            <Typography variant="h5" fontWeight={700} color="text.primary">
+            <Typography variant="h5" color="text.primary" sx={{ fontWeight: 700 }}>
               Expenses
             </Typography>
             <Typography variant="body2" color="text.secondary">
@@ -84,7 +84,7 @@ function ExpenseComponent({
           </Box>
         </Stack>
         {(canCreateExpense || canCreateCategory) && (
-          <Stack direction="row" spacing={1} flexWrap="wrap" useFlexGap>
+          <Stack direction="row" spacing={1} useFlexGap sx={{ flexWrap: "wrap" }}>
             {canCreateExpense && (
               <Button
                 variant="contained"
@@ -119,7 +119,7 @@ function ExpenseComponent({
         }}
       >
         <CardContent>
-          <Stack direction="row" spacing={1.5} alignItems="center">
+          <Stack direction="row" spacing={1.5} sx={{ alignItems: "center" }}>
             <Avatar
               variant="rounded"
               sx={{
@@ -132,10 +132,10 @@ function ExpenseComponent({
               <FiDollarSign size={22} />
             </Avatar>
             <Box>
-              <Typography variant="body2" color="text.secondary" fontWeight={500}>
+              <Typography variant="body2" color="text.secondary" sx={{ fontWeight: 500 }}>
                 Total Expense
               </Typography>
-              <Typography variant="h5" fontWeight={700}>
+              <Typography variant="h5" sx={{ fontWeight: 700 }}>
                 ₹ {Number(totalExpense || 0).toLocaleString("en-IN")}
               </Typography>
             </Box>
@@ -146,11 +146,9 @@ function ExpenseComponent({
       {/* Category Filter Chips */}
       <Stack
         direction="row"
-        spacing={1}
-        flexWrap="wrap"
-        useFlexGap
-        alignItems="center"
-        sx={{ mb: 2.5 }}
+        spacing={1} useFlexGap
+
+        sx={{ flexWrap: "wrap", alignItems: "center", mb: 2.5 }}
       >
         <Chip
           label="All"
@@ -241,7 +239,7 @@ function ExpenseComponent({
                   </TableCell>
                   {canUseExpenseActions && (
                     <TableCell>
-                      <Stack direction="row" spacing={0.5} justifyContent="center">
+                      <Stack direction="row" spacing={0.5} sx={{ justifyContent: "center" }}>
                         {canUpdateExpense && (
                           <IconButton
                             size="small"
@@ -278,12 +276,12 @@ function ExpenseComponent({
                 <CardContent>
                   <Stack
                     direction="row"
-                    justifyContent="space-between"
-                    alignItems="flex-start"
+
+
                     spacing={1}
-                    sx={{ mb: 1 }}
+                    sx={{ justifyContent: "space-between", alignItems: "flex-start", mb: 1 }}
                   >
-                    <Box minWidth={0}>
+                    <Box sx={{ minWidth: 0 }}>
                       <Typography
                         variant="caption"
                         color="text.secondary"
@@ -292,10 +290,8 @@ function ExpenseComponent({
                         #{index + 1}
                       </Typography>
                       <Typography
-                        variant="subtitle1"
-                        fontWeight={600}
-                        noWrap
-                      >
+                        variant="subtitle1" noWrap
+                       sx={{ fontWeight: 600 }}>
                         {expense.title}
                       </Typography>
                       <Typography variant="caption" color="text.secondary">
@@ -304,9 +300,9 @@ function ExpenseComponent({
                     </Box>
                     <Typography
                       variant="subtitle1"
-                      fontWeight={700}
+
                       color="text.primary"
-                    >
+                     sx={{ fontWeight: 700 }}>
                       ₹ {parseFloat(expense.amount).toLocaleString("en-IN")}
                     </Typography>
                   </Stack>
@@ -321,9 +317,9 @@ function ExpenseComponent({
                   )}
                   <Stack
                     direction="row"
-                    justifyContent="space-between"
-                    alignItems="center"
-                  >
+
+
+                   sx={{ justifyContent: "space-between", alignItems: "center" }}>
                     <Chip
                       size="small"
                       label={expense.payment_mode}

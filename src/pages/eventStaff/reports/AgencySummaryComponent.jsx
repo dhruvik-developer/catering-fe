@@ -24,7 +24,7 @@ function AgencySummaryComponent({ loading, summaryData }) {
       elevation={0}
       sx={{ p: { xs: 2, sm: 3 }, borderRadius: 3, bgcolor: "background.paper" }}
     >
-      <Stack direction="row" spacing={1.5} alignItems="center" sx={{ mb: 3 }}>
+      <Stack direction="row" spacing={1.5} sx={{ alignItems: "center", mb: 3 }}>
         <Avatar
           variant="rounded"
           sx={{
@@ -37,7 +37,7 @@ function AgencySummaryComponent({ loading, summaryData }) {
           <FiPieChart size={20} />
         </Avatar>
         <Box>
-          <Typography variant="h5" fontWeight={700}>
+          <Typography variant="h5" sx={{ fontWeight: 700 }}>
             Agency Summary Report
           </Typography>
           <Typography variant="body2" color="text.secondary">
@@ -80,9 +80,9 @@ function AgencySummaryComponent({ loading, summaryData }) {
                   sx={{ "&:last-child td": { borderBottom: 0 } }}
                 >
                   <TableCell>
-                    <Stack direction="row" spacing={1} alignItems="center">
+                    <Stack direction="row" spacing={1} sx={{ alignItems: "center" }}>
                       <FaBuilding color="currentColor" />
-                      <Typography variant="body1" fontWeight={700}>
+                      <Typography variant="body1" sx={{ fontWeight: 700 }}>
                         {row.agency_name || "Independent / N/A"}
                       </Typography>
                     </Stack>
@@ -98,9 +98,9 @@ function AgencySummaryComponent({ loading, summaryData }) {
                   <TableCell align="right">
                     <Typography
                       variant="h6"
-                      fontWeight={800}
+
                       color="primary.main"
-                    >
+                     sx={{ fontWeight: 800 }}>
                       ₹{parseFloat(row.total_amount_payable || 0).toFixed(2)}
                     </Typography>
                   </TableCell>

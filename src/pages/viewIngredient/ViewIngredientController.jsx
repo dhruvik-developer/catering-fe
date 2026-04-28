@@ -625,8 +625,7 @@ function ViewIngredientController() {
       <ViewIngredientComponent
         viewIngredient={viewIngredient}
         eventIngredientsList={eventIngredientsList}
-        formValues={formValues}
-        checkedItems={checkedItems}
+        formValues={formValues} checkedItems={checkedItems}
         handleCheckboxChange={handleCheckboxChange}
         handleShareIngredients={handleShareIngredients}
         handleFullShareIngredients={handleFullShareIngredients}

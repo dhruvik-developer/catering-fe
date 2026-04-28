@@ -35,7 +35,7 @@ function AddCategoryComponent({
         Back
       </Button>
 
-      <Stack direction="row" spacing={1.5} alignItems="center" sx={{ mb: 3 }}>
+      <Stack direction="row" spacing={1.5} sx={{ alignItems: "center", mb: 3 }}>
         <Avatar
           variant="rounded"
           sx={{
@@ -48,7 +48,7 @@ function AddCategoryComponent({
           <FiFolder size={20} />
         </Avatar>
         <Box>
-          <Typography variant="h5" fontWeight={700}>
+          <Typography variant="h5" sx={{ fontWeight: 700 }}>
             Create Category
           </Typography>
           <Typography variant="body2" color="text.secondary">
@@ -67,7 +67,7 @@ function AddCategoryComponent({
             value={categoryName}
             onChange={(e) => setCategoryName(e.target.value)}
           />
-          <Stack direction="row" justifyContent="center">
+          <Stack direction="row" sx={{ justifyContent: "center" }}>
             <Button
               type="submit"
               variant="contained"

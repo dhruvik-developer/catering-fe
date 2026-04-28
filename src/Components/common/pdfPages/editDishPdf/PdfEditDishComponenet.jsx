@@ -54,26 +54,7 @@ function PdfEditDishComponenet({
           Cancel
         </button>
 
-        <button
-          onClick={downloadPDF}
-          className="flex items-center gap-2 py-3 px-6 bg-[var(--color-primary)] text-white rounded-xl shadow-md hover:bg-[var(--color-primary-text)] focus:ring-4 focus:ring-[var(--color-primary-soft)] transition-all cursor-pointer font-bold text-sm tracking-wide uppercase group"
-          title="Download PDF"
-        >
-          <svg
-            className="w-4 h-4 group-hover:scale-110 transition-transform"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth="2"
-              d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"
-            ></path>
-          </svg>
-          Print Preview
-        </button>
+
         <button
           onClick={handleUpdateBooking}
           className="flex items-center gap-2 py-3 px-6 bg-gradient-to-r from-green-500 to-[var(--color-primary)] text-white rounded-xl shadow-md hover:from-green-600 hover:to-[var(--color-primary-text)] focus:ring-4 focus:ring-green-200 transition-all cursor-pointer font-bold text-sm tracking-wide uppercase group"

@@ -76,7 +76,7 @@ function AddEditVendorComponent({
         Back
       </Button>
 
-      <Stack direction="row" spacing={1.5} alignItems="center" sx={{ mb: 3 }}>
+      <Stack direction="row" spacing={1.5} sx={{ alignItems: "center", mb: 3 }}>
         <Avatar
           variant="rounded"
           sx={{
@@ -89,7 +89,7 @@ function AddEditVendorComponent({
           <FiTruck size={20} />
         </Avatar>
         <Box>
-          <Typography variant="h5" fontWeight={700}>
+          <Typography variant="h5" sx={{ fontWeight: 700 }}>
             {isEdit ? "Edit Vendor" : "Add Vendor"}
           </Typography>
           <Typography variant="body2" color="text.secondary">
@@ -137,12 +137,12 @@ function AddEditVendorComponent({
           <Box>
             <Stack
               direction="row"
-              justifyContent="space-between"
-              alignItems="flex-start"
+
+
               spacing={2}
-            >
+             sx={{ justifyContent: "space-between", alignItems: "flex-start" }}>
               <Box>
-                <Typography variant="subtitle1" fontWeight={600}>
+                <Typography variant="subtitle1" sx={{ fontWeight: 600 }}>
                   Vendor Login
                 </Typography>
                 <Typography variant="caption" color="text.secondary">
@@ -236,9 +236,9 @@ function AddEditVendorComponent({
               />
             }
             label={
-              <Typography variant="body2" fontWeight={500}>
+              <Typography variant="body2" sx={{ fontWeight: 500 }}>
                 Active Status —{" "}
-                <Box component="span" color="text.secondary">
+                <Box component="span" sx={{ color: "text.secondary" }}>
                   {form.is_active ? "Active" : "Inactive"}
                 </Box>
               </Typography>
@@ -251,12 +251,12 @@ function AddEditVendorComponent({
           <Box>
             <Stack
               direction="row"
-              justifyContent="space-between"
-              alignItems="center"
-              sx={{ mb: 1.5 }}
+
+
+              sx={{ justifyContent: "space-between", alignItems: "center", mb: 1.5 }}
             >
-              <Stack direction="row" spacing={1} alignItems="baseline">
-                <Typography variant="subtitle1" fontWeight={600}>
+              <Stack direction="row" spacing={1} sx={{ alignItems: "baseline" }}>
+                <Typography variant="subtitle1" sx={{ fontWeight: 600 }}>
                   Vendor Categories
                 </Typography>
                 <Typography variant="caption" color="text.disabled">
@@ -289,7 +289,7 @@ function AddEditVendorComponent({
                       exit={{ opacity: 0, y: -10 }}
                       transition={{ duration: 0.3 }}
                     >
-                      <Stack direction="row" spacing={1} alignItems="center">
+                      <Stack direction="row" spacing={1} sx={{ alignItems: "center" }}>
                         <Select
                           fullWidth
                           size="small"
@@ -340,7 +340,7 @@ function AddEditVendorComponent({
             </Stack>
           </Box>
 
-          <Stack direction="row" justifyContent="center">
+          <Stack direction="row" sx={{ justifyContent: "center" }}>
             <Button
               type="submit"
               variant="contained"

@@ -113,8 +113,7 @@ function EditItemController() {
 
   return (
     <EditItemComponent
-      categories={categories}
-      selectedItemsState={selectedItemsState}
+      categories={categories} selectedItemsState={selectedItemsState}
       loading={loading}
       navigate={navigate}
       pdfPreview={pdfPreview}

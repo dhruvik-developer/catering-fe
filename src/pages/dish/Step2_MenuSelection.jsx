@@ -318,10 +318,8 @@ function Step2_MenuSelection({
                   }}
                 >
                   <Typography
-                    variant="body2"
-                    fontWeight="inherit"
-                    noWrap
-                    sx={{ color: "inherit" }}
+                    variant="body2" noWrap
+                    sx={{ fontWeight: "inherit", color: "inherit" }}
                   >
                     {cat.name}
                   </Typography>
@@ -378,7 +376,7 @@ function Step2_MenuSelection({
                 >
                   This Event
                 </Typography>
-                <Typography variant="body2" fontWeight={700} color="primary.main">
+                <Typography variant="body2" color="primary.main" sx={{ fontWeight: 700 }}>
                   {currentDishes.length} dishes
                 </Typography>
               </Box>
@@ -391,7 +389,7 @@ function Step2_MenuSelection({
                 >
                   All Events
                 </Typography>
-                <Typography variant="body2" fontWeight={700}>
+                <Typography variant="body2" sx={{ fontWeight: 700 }}>
                   {totalSelectedAll} dishes
                 </Typography>
               </Box>
@@ -469,9 +467,9 @@ function Step2_MenuSelection({
                         )}
                         <Typography
                           variant="body2"
-                          fontWeight={600}
+
                           color={selected ? "primary.main" : "text.primary"}
-                          sx={{ lineHeight: 1.4 }}
+                          sx={{ fontWeight: 600, lineHeight: 1.4 }}
                         >
                           {dish.name}
                         </Typography>
@@ -514,8 +512,7 @@ function Step2_MenuSelection({
         >
           <Stack
             direction="row"
-            spacing={1}
-            useFlexGap
+            spacing={1} useFlexGap
             sx={{
               display: { xs: "none", md: "flex" },
               flexWrap: "wrap",

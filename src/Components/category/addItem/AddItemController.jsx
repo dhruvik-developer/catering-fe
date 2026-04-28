@@ -76,8 +76,7 @@ function AddItemController() {
       itemName={itemName}
       setItemName={setItemName}
       baseCost={baseCost}
-      setBaseCost={setBaseCost}
-      selectionRate={selectionRate}
+      setBaseCost={setBaseCost} selectionRate={selectionRate}
       setSelectionRate={setSelectionRate}
       navigate={navigate}
       handleSubmit={handleSubmit}

@@ -94,7 +94,7 @@ const PDFViewPage = () => {
     return (
       <div className="flex flex-col items-center min-h-screen p-4 font-sans text-gray-800 bg-gradient-to-br from-[var(--color-primary-tint)] via-[var(--color-primary-tint)] to-[var(--color-primary-tint)]">
         {/* Action Bar (Top) */}
-        <div className="flex justify-between items-center gap-3 w-full mb-6 max-w-4xl no-print-button">
+        <div className="flex justify-start mb-6 w-full max-w-4xl no-print-button">
           <button
             className="flex items-center gap-2 px-6 py-3 bg-white text-gray-700 border border-gray-200 rounded-xl shadow-md hover:bg-gray-50 hover:text-[var(--color-primary)] hover:border-[var(--color-primary)]/30 focus:ring-4 focus:ring-[var(--color-primary-soft)] transition-all cursor-pointer font-semibold text-sm group"
             onClick={handleConfirm}
@@ -114,27 +114,6 @@ const PDFViewPage = () => {
               ></path>
             </svg>
             Back to Quotations
-          </button>
-
-          <button
-            className="flex items-center gap-2 px-6 py-3 bg-[var(--color-primary)] text-white rounded-xl shadow-md hover:bg-[var(--color-primary-text)] focus:ring-4 focus:ring-[var(--color-primary-soft)] transition-all cursor-pointer font-semibold text-sm group"
-            onClick={downloadPDF}
-            title="Download PDF"
-          >
-            <svg
-              className="w-4 h-4 group-hover:scale-110 transition-transform"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="2"
-                d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"
-              ></path>
-            </svg>
-            Download PDF
           </button>
         </div>
 
@@ -510,9 +489,9 @@ const PDFViewPage = () => {
   return (
     <div className="flex flex-col items-center min-h-screen p-4 font-sans text-gray-800 bg-gradient-to-br from-[var(--color-primary-tint)] via-[var(--color-primary-tint)] to-[var(--color-primary-tint)]">
       {/* Action Bar (Top) */}
-      <div className="flex justify-between items-center gap-3 w-full mb-6 max-w-4xl no-print-button">
+      <div className="flex justify-between mb-6 w-full max-w-4xl no-print-button">
         <button
-          className="flex items-center gap-2 px-6 py-3 bg-white text-gray-700 border border-gray-200 rounded-xl shadow-md hover:bg-gray-50 hover:text-[var(--color-primary)] hover:border-[var(--color-primary)]/30 focus:ring-4 focus:ring-[var(--color-primary-soft)] transition-all cursor-pointer font-semibold text-sm group"
+          className="flex items-center gap-2 px-6 py-3 bg-white text-gray-700 border border-gray-200 rounded-xl shadow-md hover:bg-gray-50 hover:text-[var(--color-primary)] hover:border-[var(--color-primary)]/30 focus:ring-4 focus:ring-[var(--color-primary-soft)] transition-all cursor-pointer group font-semibold text-sm"
           onClick={handleConfirm}
           title="Back to Quotations"
         >
@@ -533,12 +512,11 @@ const PDFViewPage = () => {
         </button>
 
         <button
-          className="flex items-center gap-2 px-6 py-3 bg-[var(--color-primary)] text-white rounded-xl shadow-md hover:bg-[var(--color-primary-text)] focus:ring-4 focus:ring-[var(--color-primary-soft)] transition-all cursor-pointer font-semibold text-sm group"
-          onClick={downloadPDF}
-          title="Download PDF"
+          className="flex items-center gap-2 px-6 py-3 bg-[var(--color-primary)] text-white rounded-xl shadow-md opacity-80 cursor-default font-semibold text-sm"
+          title="Download Disabled"
         >
           <svg
-            className="w-4 h-4 group-hover:scale-110 transition-transform"
+            className="w-4 h-4"
             fill="none"
             stroke="currentColor"
             viewBox="0 0 24 24"

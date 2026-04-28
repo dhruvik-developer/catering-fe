@@ -558,8 +558,7 @@ function AddEditStaffController() {
       mode={mode}
       formData={formData}
       loading={loading}
-      saving={saving}
-      errors={errors}
+      saving={saving} errors={errors}
       rolesList={rolesList}
       waiterTypes={waiterTypes}
       waiterTypesLoading={waiterTypesLoading}

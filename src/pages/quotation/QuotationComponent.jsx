@@ -66,7 +66,7 @@ function QuotationComponent({
       sx={{ p: { xs: 2, sm: 3 }, borderRadius: 3, bgcolor: "background.paper" }}
     >
       {/* Title */}
-      <Stack direction="row" spacing={1.5} alignItems="center" sx={{ mb: 2.5 }}>
+      <Stack direction="row" spacing={1.5} sx={{ alignItems: "center", mb: 2.5 }}>
         <Avatar
           variant="rounded"
           sx={{
@@ -79,7 +79,7 @@ function QuotationComponent({
           <FiFileText size={20} />
         </Avatar>
         <Box>
-          <Typography variant="h5" fontWeight={700} color="text.primary">
+          <Typography variant="h5" color="text.primary" sx={{ fontWeight: 700 }}>
             Quotation List
           </Typography>
           <Typography variant="body2" color="text.secondary">
@@ -94,9 +94,9 @@ function QuotationComponent({
       <Stack
         direction={{ xs: "column", md: "row" }}
         spacing={{ xs: 1.5, md: 2 }}
-        alignItems={{ xs: "stretch", md: "center" }}
-        justifyContent="space-between"
-        sx={{ mb: 3 }}
+
+
+        sx={{ alignItems: { xs: "stretch", md: "center" }, justifyContent: "space-between", mb: 3 }}
       >
         <TextField
           value={searchQuery}
@@ -129,12 +129,10 @@ function QuotationComponent({
 
         <Stack
           direction="row"
-          spacing={1}
-          flexWrap="wrap"
-          useFlexGap
-          alignItems="center"
-          justifyContent={{ xs: "flex-start", md: "flex-end" }}
-        >
+          spacing={1} useFlexGap
+
+
+         sx={{ flexWrap: "wrap", alignItems: "center", justifyContent: { xs: "flex-start", md: "flex-end" } }}>
           <ButtonGroup size="small">
             <Button onClick={() => handleQuickFilter("today")}>Today</Button>
             <Button onClick={() => handleQuickFilter("next7Days")}>
@@ -248,10 +246,10 @@ function QuotationComponent({
                   {/* Card Header */}
                   <Stack
                     direction="row"
-                    alignItems="center"
-                    justifyContent="space-between"
+
+
                     spacing={2}
-                    sx={{
+                    sx={{ alignItems: "center", justifyContent: "space-between",
                       px: 2.5,
                       py: 2,
                       bgcolor: (t) => t.palette.primary.light + "1f",
@@ -262,21 +260,20 @@ function QuotationComponent({
                     <Stack
                       direction="row"
                       spacing={1.5}
-                      alignItems="center"
-                      minWidth={0}
-                    >
+
+
+                     sx={{ alignItems: "center", minWidth: 0 }}>
                       <Avatar sx={{ bgcolor: "primary.main" }}>
                         {quote.name?.charAt(0)?.toUpperCase() || "?"}
                       </Avatar>
-                      <Box minWidth={0}>
-                        <Typography variant="subtitle1" fontWeight={600} noWrap>
+                      <Box sx={{ minWidth: 0 }}>
+                        <Typography variant="subtitle1" noWrap sx={{ fontWeight: 600 }}>
                           {quote.name}
                         </Typography>
                         {quote.reference && (
                           <Typography
                             variant="caption"
-                            color="text.secondary"
-                            noWrap
+                            color="text.secondary" noWrap
                           >
                             Ref: {quote.reference}
                           </Typography>
@@ -286,9 +283,9 @@ function QuotationComponent({
                     <Stack
                       direction="row"
                       spacing={1}
-                      alignItems="center"
-                      flexShrink={0}
-                    >
+
+
+                     sx={{ alignItems: "center", flexShrink: 0 }}>
                       <Chip
                         icon={<FiCalendar size={12} />}
                         label={dateLabel}
@@ -326,8 +323,8 @@ function QuotationComponent({
                     <Stack
                       direction="row"
                       spacing={1}
-                      alignItems="center"
-                      sx={{
+
+                      sx={{ alignItems: "center",
                         alignSelf: "flex-start",
                         px: 1.5,
                         py: 1,
@@ -337,7 +334,7 @@ function QuotationComponent({
                       }}
                     >
                       <FiPhone size={14} />
-                      <Typography variant="body2" fontWeight={500}>
+                      <Typography variant="body2" sx={{ fontWeight: 500 }}>
                         {quote.mobile_no || "—"}
                       </Typography>
                     </Stack>
@@ -359,33 +356,33 @@ function QuotationComponent({
                         borderRadius: 2,
                         border: 1,
                         borderColor: "divider",
-                        bgcolor: (t) => t.palette.primary.light + "14",
+                        bgcolor: "var(--color-primary-border)",
                         cursor: "pointer",
                         transition: "all 0.15s",
                         "&:hover": {
-                          bgcolor: (t) => t.palette.primary.light + "26",
+                          bgcolor: "var(--color-primary-border)",
                           borderColor: "primary.main",
                         },
                       }}
                     >
                       <Stack
                         direction="row"
-                        alignItems="center"
-                        justifyContent="space-between"
-                      >
-                        <Stack direction="row" spacing={1} alignItems="center">
+
+
+                       sx={{ alignItems: "center", justifyContent: "space-between" }}>
+                        <Stack direction="row" spacing={1} sx={{ alignItems: "center" }}>
                           <FiFileText size={14} />
-                          <Typography variant="body2" fontWeight={600}>
+                          <Typography variant="body2" sx={{ fontWeight: 600 }}>
                             Total Sessions: {allSessions.length}
                           </Typography>
                         </Stack>
                         <Stack
                           direction="row"
                           spacing={0.5}
-                          alignItems="center"
-                          color="primary.main"
-                        >
-                          <Typography variant="body2" fontWeight={600}>
+
+
+                         sx={{ alignItems: "center", color: "primary.main" }}>
+                          <Typography variant="body2" sx={{ fontWeight: 600 }}>
                             View Details
                           </Typography>
                           <FiChevronRight size={14} />
@@ -394,14 +391,14 @@ function QuotationComponent({
                       <Stack
                         direction="row"
                         spacing={1}
-                        alignItems="center"
-                        sx={{ pl: 3 }}
+
+                        sx={{ alignItems: "center", pl: 3 }}
                       >
                         <FiUsers size={12} />
                         <Typography variant="caption" color="text.secondary">
                           Estimated Persons:
                         </Typography>
-                        <Typography variant="caption" fontWeight={600}>
+                        <Typography variant="caption" sx={{ fontWeight: 600 }}>
                           {totalPersons || "—"}
                         </Typography>
                       </Stack>
@@ -461,18 +458,17 @@ function QuotationComponent({
       {/* Sessions Modal */}
       <Dialog
         open={Boolean(sessionsModal)}
-        onClose={() => setSessionsModal(null)}
-        fullWidth
+        onClose={() => setSessionsModal(null)} fullWidth
         maxWidth="sm"
       >
         <DialogTitle sx={{ pb: 1 }}>
           <Stack
             direction="row"
-            justifyContent="space-between"
-            alignItems="center"
-          >
+
+
+           sx={{ justifyContent: "space-between", alignItems: "center" }}>
             <Box>
-              <Typography variant="h6" fontWeight={700}>
+              <Typography variant="h6" sx={{ fontWeight: 700 }}>
                 All Event Schedules
               </Typography>
               {sessionsModal && (
@@ -504,10 +500,10 @@ function QuotationComponent({
                 }}
               >
                 <Grid size={{ xs: 12, sm: 6 }}>
-                  <Stack direction="row" spacing={1} alignItems="center">
+                  <Stack direction="row" spacing={1} sx={{ alignItems: "center" }}>
                     <FiClock size={14} />
                     <Typography variant="body2">
-                      <Box component="span" color="text.secondary" mr={0.5}>
+                      <Box component="span" sx={{ color: "text.secondary", mr: 0.5 }}>
                         {session.event_date}
                       </Box>
                       <Box component="strong">
@@ -517,7 +513,7 @@ function QuotationComponent({
                   </Stack>
                 </Grid>
                 <Grid size={{ xs: 12, sm: 6 }}>
-                  <Stack direction="row" spacing={1} alignItems="center">
+                  <Stack direction="row" spacing={1} sx={{ alignItems: "center" }}>
                     <FiUsers size={14} />
                     <Typography variant="body2">
                       <Box component="strong">

@@ -153,8 +153,7 @@ function ShareIngredientComponent({
           <div className="mb-4">
             <p className="pb-1 font-bold">Delivery Date</p>
             <DatePicker
-              placeholderText="Event Date"
-              selected={selectedDate}
+              placeholderText="Event Date" selected={selectedDate}
               minDate={new Date()}
               dateFormat="dd/MM/yyyy"
               onChange={(date) => setSelectedDate(date)}

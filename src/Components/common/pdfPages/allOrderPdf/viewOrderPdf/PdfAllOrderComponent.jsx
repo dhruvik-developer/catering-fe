@@ -58,19 +58,23 @@ function PdfAllOrderComponent({
               gap: "12px",
               marginBottom: "20px",
             }}
+            className="no-print-button"
           >
             <button
-              onClick={() => navigate(-1)}
-              style={btnStyle("#fff", THEME.primaryText, THEME.primaryBorder)}
+              onClick={() => navigate("/all-order")}
+              style={btnStyle("#fff", "#333", "#ccc")}
             >
               ← Back
             </button>
-
             <button
-              onClick={downloadPDF}
-              style={btnStyle(THEME.primaryDark, "#fff")}
+              style={{
+                ...btnStyle(THEME.primary, "#fff"),
+                opacity: 0.8,
+                cursor: "default",
+              }}
+              title="Download Disabled"
             >
-              ↓ Download PDF
+              Download PDF
             </button>
           </div>
 

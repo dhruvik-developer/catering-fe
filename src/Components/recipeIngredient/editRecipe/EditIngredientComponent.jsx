@@ -36,7 +36,7 @@ function EditIngredientComponent({
       >
         Back
       </Button>
-      <Typography variant="h5" fontWeight={700} sx={{ mb: 3 }}>
+      <Typography variant="h5" sx={{ fontWeight: 700, mb: 3 }}>
         Edit Recipe Ingredient
       </Typography>
 
@@ -51,7 +51,7 @@ function EditIngredientComponent({
           placeholder="Enter Person Count (e.g., 100)"
         />
 
-        <Stack direction="row" spacing={1} alignItems="center">
+        <Stack direction="row" spacing={1} sx={{ alignItems: "center" }}>
           <TextField
             fullWidth
             label="Select Item"
@@ -72,9 +72,8 @@ function EditIngredientComponent({
         <Box>
           <Typography
             variant="body2"
-            fontWeight={500}
             color="text.secondary"
-            sx={{ mb: 1 }}
+            sx={{ fontWeight: 500, mb: 1 }}
           >
             {recipe.item.name} ingredients
           </Typography>
@@ -92,7 +91,7 @@ function EditIngredientComponent({
                     exit={{ opacity: 0, y: -10 }}
                     transition={{ duration: 0.3 }}
                   >
-                    <Stack direction="row" spacing={1} alignItems="center">
+                    <Stack direction="row" spacing={1} sx={{ alignItems: "center" }}>
                       <TextField
                         fullWidth
                         size="small"
@@ -138,7 +137,7 @@ function EditIngredientComponent({
           </Stack>
         </Box>
 
-        <Stack direction="row" justifyContent="center" sx={{ mt: 2 }}>
+        <Stack direction="row" sx={{ justifyContent: "center", mt: 2 }}>
           <Button variant="contained" color="primary" onClick={handleSubmit}>
             Submit
           </Button>

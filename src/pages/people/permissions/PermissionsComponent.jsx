@@ -88,7 +88,7 @@ function PermissionsComponent({
 
         <Box sx={{ flex: 1, overflowY: "auto", p: 1.5 }}>
           {subjects.length === 0 && !loading && (
-            <Stack alignItems="center" sx={{ py: 5, color: "text.disabled" }}>
+            <Stack sx={{ alignItems: "center", py: 5, color: "text.disabled" }}>
               <FiUsers size={32} />
               <Typography variant="caption" sx={{ mt: 1 }}>
                 No {selectedType}s found
@@ -137,20 +137,18 @@ function PermissionsComponent({
                   >
                     <FiUser size={18} />
                   </Avatar>
-                  <Box minWidth={0}>
+                  <Box sx={{ minWidth: 0 }}>
                     <Typography
                       variant="body2"
-                      fontWeight={700}
-                      color={isActive ? "primary.main" : "text.primary"}
-                      noWrap
-                    >
+
+                      color={isActive ? "primary.main" : "text.primary"} noWrap
+                     sx={{ fontWeight: 700 }}>
                       {sub.name || sub.username || "Unnamed"}
                     </Typography>
                     {sub.phone && (
                       <Typography
                         variant="caption"
-                        color="text.disabled"
-                        noWrap
+                        color="text.disabled" noWrap
                       >
                         {sub.phone}
                       </Typography>
@@ -179,10 +177,10 @@ function PermissionsComponent({
       >
         {!selectedId ? (
           <Stack
-            flex={1}
-            alignItems="center"
-            justifyContent="center"
-            sx={{ color: "text.disabled", py: 6 }}
+
+
+
+            sx={{ flex: 1, alignItems: "center", justifyContent: "center", color: "text.disabled", py: 6 }}
           >
             <Avatar
               variant="rounded"
@@ -196,7 +194,7 @@ function PermissionsComponent({
             >
               <FiShield size={36} />
             </Avatar>
-            <Typography variant="body2" fontWeight={500}>
+            <Typography variant="body2" sx={{ fontWeight: 500 }}>
               Select a {selectedType} to manage permissions
             </Typography>
           </Stack>
@@ -204,10 +202,10 @@ function PermissionsComponent({
           <>
             <Stack
               direction="row"
-              alignItems="center"
-              justifyContent="space-between"
+
+
               spacing={2}
-              sx={{
+              sx={{ alignItems: "center", justifyContent: "space-between",
                 p: 3,
                 borderBottom: 1,
                 borderColor: "divider",
@@ -215,7 +213,7 @@ function PermissionsComponent({
               }}
             >
               <Box>
-                <Typography variant="h6" fontWeight={700}>
+                <Typography variant="h6" sx={{ fontWeight: 700 }}>
                   Assign Permissions
                 </Typography>
                 <Typography variant="caption" color="text.secondary">
@@ -301,8 +299,8 @@ function PermissionsComponent({
                             <Stack
                               direction="row"
                               spacing={1.5}
-                              alignItems="center"
-                            >
+
+                             sx={{ alignItems: "center" }}>
                               <Avatar
                                 variant="rounded"
                                 sx={{
@@ -318,17 +316,17 @@ function PermissionsComponent({
                               </Avatar>
                               <Typography
                                 variant="body2"
-                                fontWeight={700}
+
                                 color="text.primary"
-                              >
+                               sx={{ fontWeight: 700 }}>
                                 {mod.name}
                               </Typography>
                             </Stack>
                             <Stack
                               direction="row"
                               spacing={1.5}
-                              alignItems="center"
-                            >
+
+                             sx={{ alignItems: "center" }}>
                               <Chip
                                 size="small"
                                 label={`${assignedCount}/${mod.permissions.length}`}
@@ -393,8 +391,8 @@ function PermissionsComponent({
                                     <Box>
                                       <Typography
                                         variant="caption"
-                                        fontWeight={700}
-                                        sx={{
+
+                                        sx={{ fontWeight: 700,
                                           display: "block",
                                           maxWidth: 150,
                                           overflow: "hidden",

@@ -47,7 +47,7 @@ function SectionHeader({ icon: Icon, title, subtitle }) {
         <Icon size={20} />
       </Avatar>
       <Box>
-        <Typography variant="h6" fontWeight={700} color="text.primary">
+        <Typography variant="h6" color="text.primary" sx={{ fontWeight: 700 }}>
           {title}
         </Typography>
         <Typography variant="body2" color="text.secondary">
@@ -68,7 +68,7 @@ function InfoTile({ label, value }) {
       >
         {label}
       </Typography>
-      <Typography variant="body1" fontWeight={700} color="text.primary">
+      <Typography variant="body1" color="text.primary" sx={{ fontWeight: 700 }}>
         {value || "—"}
       </Typography>
     </Box>
@@ -157,7 +157,7 @@ function Step3_Summary({
           >
             Grand Total
           </Typography>
-          <Typography variant="h5" fontWeight={800} color="primary.main">
+          <Typography variant="h5" color="primary.main" sx={{ fontWeight: 800 }}>
             ₹{Number(formData.grandTotalAmount || 0).toFixed(2)}
           </Typography>
         </Paper>
@@ -230,7 +230,7 @@ function Step3_Summary({
                   {cardIdx + 1}
                 </Avatar>
                 <Box>
-                  <Typography variant="subtitle1" fontWeight={700}>
+                  <Typography variant="subtitle1" sx={{ fontWeight: 700 }}>
                     {event.timeLabel}
                   </Typography>
                   <Typography
@@ -253,7 +253,7 @@ function Step3_Summary({
                 >
                   Subtotal
                 </Typography>
-                <Typography variant="h6" fontWeight={800}>
+                <Typography variant="h6" sx={{ fontWeight: 800 }}>
                   ₹{Number(event.subtotalAmount || 0).toFixed(2)}
                 </Typography>
               </Box>
@@ -288,7 +288,7 @@ function Step3_Summary({
                         >
                           Persons
                         </Typography>
-                        <Typography variant="body1" fontWeight={700}>
+                        <Typography variant="body1" sx={{ fontWeight: 700 }}>
                           {event.estimatedPersons || 0}
                         </Typography>
                       </Box>
@@ -371,9 +371,9 @@ function Step3_Summary({
                     <FiFileText size={15} />
                     <Typography
                       variant="body2"
-                      fontWeight={600}
+
                       color="primary.dark"
-                    >
+                     sx={{ fontWeight: 600 }}>
                       Selected Dishes
                     </Typography>
                     <Chip
@@ -427,13 +427,11 @@ function Step3_Summary({
                                   <FiFileText size={10} />
                                 </Avatar>
                                 <Typography
-                                  variant="body2"
-                                  fontWeight={500}
-                                  noWrap
+                                  variant="body2" noWrap
                                   color={
                                     isZeroPrice ? "error.main" : "text.primary"
                                   }
-                                >
+                                 sx={{ fontWeight: 500 }}>
                                   {dish.dishName}
                                 </Typography>
                               </Stack>
@@ -503,9 +501,9 @@ function Step3_Summary({
                       <FiUsers size={15} />
                       <Typography
                         variant="body2"
-                        fontWeight={600}
+
                         color="primary.dark"
-                      >
+                       sx={{ fontWeight: 600 }}>
                         Waiter Service
                       </Typography>
                       {event.waiterServices.length > 0 && (
@@ -629,9 +627,9 @@ function Step3_Summary({
                                 />
                                 <Typography
                                   variant="body2"
-                                  fontWeight={700}
+
                                   color="primary.main"
-                                  sx={{
+                                  sx={{ fontWeight: 700,
                                     minWidth: 80,
                                     textAlign: { xs: "left", md: "right" },
                                   }}
@@ -653,8 +651,7 @@ function Step3_Summary({
                                 </IconButton>
                               </Stack>
                               <TextField
-                                size="small"
-                                fullWidth
+                                size="small" fullWidth
                                 placeholder="Notes (optional)"
                                 value={ws.waiterNotes || ""}
                                 onChange={(e) =>
@@ -725,9 +722,9 @@ function Step3_Summary({
                       <FiPlus size={15} />
                       <Typography
                         variant="body2"
-                        fontWeight={600}
+
                         color="primary.dark"
-                      >
+                       sx={{ fontWeight: 600 }}>
                         Extra Services
                       </Typography>
                       {event.extraServices.length > 0 && (
@@ -824,9 +821,9 @@ function Step3_Summary({
                           />
                           <Typography
                             variant="body2"
-                            fontWeight={700}
+
                             color="text.primary"
-                            sx={{
+                            sx={{ fontWeight: 700,
                               minWidth: 70,
                               textAlign: { xs: "left", md: "right" },
                             }}
@@ -903,7 +900,7 @@ function Step3_Summary({
                 />
               }
               label={
-                <Typography fontWeight={500}>Display Rules on PDF</Typography>
+                <Typography sx={{ fontWeight: 500 }}>Display Rules on PDF</Typography>
               }
             />
           </Paper>
@@ -914,8 +911,7 @@ function Step3_Summary({
       <Box sx={{ pt: 2.5, borderTop: 1, borderColor: "divider" }}>
         <Stack
           direction="row"
-          spacing={1.5}
-          useFlexGap
+          spacing={1.5} useFlexGap
           sx={{ mb: 2.5, flexWrap: "wrap" }}
         >
           <Button
@@ -961,9 +957,9 @@ function Step3_Summary({
               <FiBookOpen size={15} />
               <Typography
                 variant="body2"
-                fontWeight={700}
+
                 color="primary.dark"
-              >
+               sx={{ fontWeight: 700 }}>
                 Terms & Rules
               </Typography>
             </Stack>
@@ -1005,7 +1001,7 @@ function Step3_Summary({
               sx={{ mb: 1.5, alignItems: "center" }}
             >
               <FiFileText size={15} />
-              <Typography variant="body2" fontWeight={700} color="info.dark">
+              <Typography variant="body2" color="info.dark" sx={{ fontWeight: 700 }}>
                 Suggestions
               </Typography>
             </Stack>

@@ -45,7 +45,7 @@ function AddItemComponent({
         Back
       </Button>
 
-      <Stack direction="row" spacing={1.5} alignItems="center" sx={{ mb: 3 }}>
+      <Stack direction="row" spacing={1.5} sx={{ alignItems: "center", mb: 3 }}>
         <Avatar
           variant="rounded"
           sx={{
@@ -58,7 +58,7 @@ function AddItemComponent({
           <FiTag size={20} />
         </Avatar>
         <Box>
-          <Typography variant="h5" fontWeight={700}>
+          <Typography variant="h5" sx={{ fontWeight: 700 }}>
             Create Item
           </Typography>
           <Typography variant="body2" color="text.secondary">
@@ -81,15 +81,14 @@ function AddItemComponent({
           <Box>
             <Typography
               variant="body2"
-              fontWeight={500}
+
               color="text.secondary"
-              sx={{ mb: 1 }}
+              sx={{ fontWeight: 500, mb: 1 }}
             >
               Category *
             </Typography>
             <Dropdown
-              options={categories}
-              selectedValue={category}
+              options={categories} selectedValue={category}
               onChange={(value) => setCategory(value)}
               placeholder="Select a category"
               isSearchable
@@ -98,9 +97,9 @@ function AddItemComponent({
 
           <Divider />
 
-          <Stack direction="row" spacing={1} alignItems="center">
+          <Stack direction="row" spacing={1} sx={{ alignItems: "center" }}>
             <FiDollarSign color="currentColor" size={18} />
-            <Typography variant="subtitle1" fontWeight={600}>
+            <Typography variant="subtitle1" sx={{ fontWeight: 600 }}>
               Pricing
             </Typography>
           </Stack>
@@ -132,7 +131,7 @@ function AddItemComponent({
             </Grid>
           </Grid>
 
-          <Stack direction="row" justifyContent="center">
+          <Stack direction="row" sx={{ justifyContent: "center" }}>
             <Button
               type="submit"
               variant="contained"

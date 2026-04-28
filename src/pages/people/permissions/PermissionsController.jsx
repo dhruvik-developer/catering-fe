@@ -156,9 +156,7 @@ function PermissionsController() {
             loading={loading}
             isSaving={isSaving}
             modules={modules}
-            users={users}
-            selectedType={selectedType}
-            selectedId={selectedId}
+            users={users} selectedType={selectedType} selectedId={selectedId}
             currentPermissions={currentPermissions}
             onTypeChange={handleTypeChange}
             onSelectSubject={handleSelectSubject}

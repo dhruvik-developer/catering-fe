@@ -114,8 +114,7 @@ function AddEditUserController() {
     <AddEditUserComponent
       navigate={navigate}
       mode={mode}
-      form={form}
-      errors={errors}
+      form={form} errors={errors}
       onInputChange={onInputChange}
       onSubmit={handleSubmit}
     />

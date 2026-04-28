@@ -104,8 +104,7 @@ function AddIngredientController() {
     <div>
       <AddIngredientComponent
         items={items}
-        ingredientItems={ingredientItems}
-        selectedItem={selectedItem}
+        ingredientItems={ingredientItems} selectedItem={selectedItem}
         setSelectedItem={setSelectedItem}
         personCount={personCount}
         setPersonCount={setPersonCount}

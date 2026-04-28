@@ -76,7 +76,7 @@ function FixedStaffSalaryModal({
             );
           }
         } catch (e) {
-            console.error("error parsing start/end date: ", e);
+            console.error(" error parsing start/end date: ", e);
         }
         try {
           if (initialData.payment_date) {
@@ -86,7 +86,7 @@ function FixedStaffSalaryModal({
             );
           }
         } catch(e) {
-            console.error("error parsing payment date: ", e);
+            console.error(" error parsing payment date: ", e);
         }
 
         setFormData({
@@ -242,8 +242,7 @@ function FixedStaffSalaryModal({
               </label>
               <input
                 type="date"
-                name="start_date"
-                required
+                name="start_date" required
                 value={formData.start_date}
                 onChange={handleChange}
                 className="w-full px-4 py-2 bg-gray-50 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)]/50 transition-all text-gray-800"
@@ -257,8 +256,7 @@ function FixedStaffSalaryModal({
               </label>
               <input
                 type="date"
-                name="end_date"
-                required
+                name="end_date" required
                 value={formData.end_date}
                 onChange={handleChange}
                 min={formData.start_date}
@@ -277,8 +275,7 @@ function FixedStaffSalaryModal({
               </label>
               <input
                 type="number"
-                name="months_count"
-                required
+                name="months_count" required
                 min="1"
                 step="1"
                 value={formData.months_count}
@@ -294,8 +291,7 @@ function FixedStaffSalaryModal({
               </label>
               <input
                 type="date"
-                name="payment_date"
-                required
+                name="payment_date" required
                 value={formData.payment_date}
                 onChange={handleChange}
                 className="w-full px-4 py-2 bg-gray-50 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)]/50 transition-all text-gray-800"

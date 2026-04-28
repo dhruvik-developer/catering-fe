@@ -168,8 +168,7 @@ function SettingsComponent({
                       name="caters_name"
                       value={formData.caters_name}
                       onChange={handleInputChange}
-                      placeholder="e.g. Shreeji Catering Services"
-                      required
+                      placeholder="e.g. Shreeji Catering Services" required
                       autoComplete="off"
                       className="w-full p-3 border-2 border-[var(--color-primary-border)] rounded-xl bg-white focus:outline-none focus:border-[var(--color-primary)] focus:ring-2 focus:ring-[var(--color-primary)]/20 transition-all text-gray-800 font-medium"
                     />
@@ -195,8 +194,7 @@ function SettingsComponent({
                       name="fssai_number"
                       value={formData.fssai_number}
                       onChange={handleInputChange}
-                      placeholder="e.g. 10021021000123"
-                      required
+                      placeholder="e.g. 10021021000123" required
                       autoComplete="off"
                       className="w-full p-3 border-2 border-[var(--color-primary-border)] rounded-xl bg-white focus:outline-none focus:border-[var(--color-primary)] focus:ring-2 focus:ring-[var(--color-primary)]/20 transition-all text-gray-800 font-medium"
                     />
@@ -421,8 +419,7 @@ function SettingsComponent({
                     name="godown_address"
                     value={formData.godown_address}
                     onChange={handleInputChange}
-                    placeholder="Enter full address for your Godown/Office. This will be used in Share options."
-                    required
+                    placeholder="Enter full address for your Godown/Office. This will be used in Share options." required
                     rows={3}
                     autoComplete="off"
                     className="w-full p-3 border-2 border-[var(--color-primary-border)] rounded-xl bg-white focus:outline-none focus:border-[var(--color-primary)] focus:ring-2 focus:ring-[var(--color-primary)]/20 transition-all text-gray-800 font-medium resize-none"

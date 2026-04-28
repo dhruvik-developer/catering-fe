@@ -100,8 +100,7 @@ const AddGroundCategory = ({ isOpen, onClose, onSuccess, editData = null }) => {
                 value={formData.name}
                 onChange={handleChange}
                 placeholder="e.g. Hygiene Items"
-                className="w-full px-4 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)] focus:border-transparent transition-all"
-                required
+                className="w-full px-4 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)] focus:border-transparent transition-all" required
               />
             </div>
 

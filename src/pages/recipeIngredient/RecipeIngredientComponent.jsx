@@ -46,12 +46,12 @@ function RecipeIngredientComponent({ loading, navigate, recipe }) {
     >
       <Stack
         direction={{ xs: "column", sm: "row" }}
-        justifyContent="space-between"
-        alignItems={{ xs: "stretch", sm: "center" }}
+
+
         spacing={2}
-        sx={{ mb: 3 }}
+        sx={{ justifyContent: "space-between", alignItems: { xs: "stretch", sm: "center" }, mb: 3 }}
       >
-        <Stack direction="row" spacing={1.5} alignItems="center">
+        <Stack direction="row" spacing={1.5} sx={{ alignItems: "center" }}>
           <Avatar
             variant="rounded"
             sx={{
@@ -64,7 +64,7 @@ function RecipeIngredientComponent({ loading, navigate, recipe }) {
             <FiBookOpen size={20} />
           </Avatar>
           <Box>
-            <Typography variant="h5" fontWeight={700}>
+            <Typography variant="h5" sx={{ fontWeight: 700 }}>
               Recipe Ingredient
             </Typography>
             <Typography variant="body2" color="text.secondary">
@@ -109,10 +109,10 @@ function RecipeIngredientComponent({ loading, navigate, recipe }) {
               >
                 <Stack
                   direction="row"
-                  justifyContent="space-between"
-                  alignItems="center"
+
+
                   onClick={() => toggleExpand(rec.id)}
-                  sx={{
+                  sx={{ justifyContent: "space-between", alignItems: "center",
                     px: 2.5,
                     py: 1.75,
                     bgcolor: (t) => t.palette.primary.light + "14",
@@ -120,7 +120,7 @@ function RecipeIngredientComponent({ loading, navigate, recipe }) {
                     "&:hover": { bgcolor: (t) => t.palette.primary.light + "26" },
                   }}
                 >
-                  <Stack direction="row" spacing={1.5} alignItems="center">
+                  <Stack direction="row" spacing={1.5} sx={{ alignItems: "center" }}>
                     <Avatar
                       variant="rounded"
                       sx={{
@@ -134,11 +134,11 @@ function RecipeIngredientComponent({ loading, navigate, recipe }) {
                     >
                       {rec.item?.name?.charAt(0)?.toUpperCase() || "?"}
                     </Avatar>
-                    <Typography variant="subtitle1" fontWeight={600}>
+                    <Typography variant="subtitle1" sx={{ fontWeight: 600 }}>
                       {rec.item.name}
                     </Typography>
                   </Stack>
-                  <Stack direction="row" spacing={1} alignItems="center">
+                  <Stack direction="row" spacing={1} sx={{ alignItems: "center" }}>
                     {rec.person_count && (
                       <Chip
                         size="small"
@@ -208,7 +208,7 @@ function RecipeIngredientComponent({ loading, navigate, recipe }) {
                               >
                                 {index + 1}
                               </Avatar>
-                              <Typography variant="body2" fontWeight={500} sx={{ flex: 1 }}>
+                              <Typography variant="body2" sx={{ fontWeight: 500, flex: 1 }}>
                                 {name}
                               </Typography>
                               {qty && (
@@ -232,8 +232,8 @@ function RecipeIngredientComponent({ loading, navigate, recipe }) {
                       <Typography
                         variant="body2"
                         color="text.secondary"
-                        textAlign="center"
-                        sx={{ py: 3 }}
+
+                        sx={{ textAlign: "center", py: 3 }}
                       >
                         No Ingredients Available
                       </Typography>

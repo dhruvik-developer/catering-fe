@@ -79,7 +79,7 @@ function CategoryComponent({
             <FiFolder size={20} />
           </Avatar>
           <Box>
-            <Typography variant="h5" fontWeight={700} color="text.primary">
+            <Typography variant="h5" color="text.primary" sx={{ fontWeight: 700 }}>
               Categories
             </Typography>
             <Typography variant="body2" color="text.secondary">
@@ -91,8 +91,7 @@ function CategoryComponent({
         {canCreateCategory && (
           <Stack 
             direction="row" 
-            spacing={1} 
-            useFlexGap 
+            spacing={1} useFlexGap
             sx={{ flexWrap: "wrap" }}
           >
             <Button

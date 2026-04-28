@@ -556,22 +556,18 @@ function ShareIngredientController() {
       mode={mode}
       eventAddress={eventAddress}
       ingredients={ingredients}
-      navigate={navigate}
-      selectedAddress={selectedAddress}
-      handleAddressChange={handleAddressChange}
-      selectedDate={selectedDate}
+      navigate={navigate} selectedAddress={selectedAddress}
+      handleAddressChange={handleAddressChange} selectedDate={selectedDate}
       setSelectedDate={setSelectedDate}
       deliveryTime={deliveryTime}
       setDeliveryTime={setDeliveryTime}
       vendorName={vendorName}
-      setVendorName={setVendorName}
-      selectedVendor={selectedVendor}
+      setVendorName={setVendorName} selectedVendor={selectedVendor}
       setSelectedVendor={(vendor) => {
         setSelectedVendor(vendor);
         setVendorName(vendor?.name || vendor?.vendor_name || "");
       }}
-      vendors={vendors}
-      checkedItems={checkedItems}
+      vendors={vendors} checkedItems={checkedItems}
       handleCheckboxChange={handleCheckboxChange}
       handleSubmit={handleSubmit}
       customAddress={customAddress}

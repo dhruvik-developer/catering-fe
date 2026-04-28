@@ -28,8 +28,8 @@ import {
   FiCalendar,
   FiCheckCircle,
   FiXCircle,
-  FiShare2,
   FiSearch,
+  FiShare2,
   FiX,
   FiChevronRight,
   FiFileText,
@@ -41,13 +41,11 @@ function AllOrderComponent({
   allOrder,
   loading,
   handleViewOrder: _handleViewOrder,
-  handleShareOrder,
   handleViewIngredient: _handleViewIngredient,
   handleViewIngredientBySession: _handleViewIngredientBySession,
   handleCompleteOrder,
   handleDeleteAllOrder,
   handleViewOrderDetails,
-  handleDownloadOrderPDF,
   totalCount,
   searchQuery,
   setSearchQuery,
@@ -65,7 +63,7 @@ function AllOrderComponent({
       sx={{ p: { xs: 2, sm: 3 }, borderRadius: 3, bgcolor: "background.paper" }}
     >
       {/* Title */}
-      <Stack direction="row" spacing={1.5} alignItems="center" sx={{ mb: 2.5 }}>
+      <Stack direction="row" spacing={1.5} sx={{ alignItems: "center", mb: 2.5 }}>
         <Avatar
           variant="rounded"
           sx={{
@@ -78,7 +76,7 @@ function AllOrderComponent({
           <FiClipboard size={20} />
         </Avatar>
         <Box>
-          <Typography variant="h5" fontWeight={700} color="text.primary">
+          <Typography variant="h5" color="text.primary" sx={{ fontWeight: 700 }}>
             All Orders
           </Typography>
           <Typography variant="body2" color="text.secondary">
@@ -93,9 +91,9 @@ function AllOrderComponent({
       <Stack
         direction={{ xs: "column", md: "row" }}
         spacing={{ xs: 1.5, md: 2 }}
-        alignItems={{ xs: "stretch", md: "center" }}
-        justifyContent="space-between"
-        sx={{ mb: 3 }}
+
+
+        sx={{ alignItems: { xs: "stretch", md: "center" }, justifyContent: "space-between", mb: 3 }}
       >
         <TextField
           value={searchQuery}
@@ -127,12 +125,10 @@ function AllOrderComponent({
 
         <Stack
           direction="row"
-          spacing={1}
-          flexWrap="wrap"
-          useFlexGap
-          alignItems="center"
-          justifyContent={{ xs: "flex-start", md: "flex-end" }}
-        >
+          spacing={1} useFlexGap
+
+
+         sx={{ flexWrap: "wrap", alignItems: "center", justifyContent: { xs: "flex-start", md: "flex-end" } }}>
           <ButtonGroup size="small">
             <Button onClick={() => handleQuickFilter("today")}>Today</Button>
             <Button onClick={() => handleQuickFilter("thisWeek")}>Week</Button>
@@ -238,10 +234,10 @@ function AllOrderComponent({
                   {/* Card Header */}
                   <Stack
                     direction="row"
-                    alignItems="center"
-                    justifyContent="space-between"
+
+
                     spacing={2}
-                    sx={{
+                    sx={{ alignItems: "center", justifyContent: "space-between",
                       px: 2.5,
                       py: 2,
                       bgcolor: (t) => t.palette.primary.light + "1f",
@@ -249,23 +245,20 @@ function AllOrderComponent({
                       borderColor: "divider",
                     }}
                   >
-                    <Stack direction="row" spacing={1.5} alignItems="center" minWidth={0}>
+                    <Stack direction="row" spacing={1.5} sx={{ alignItems: "center", minWidth: 0 }}>
                       <Avatar sx={{ bgcolor: "primary.main" }}>
                         {order.name?.charAt(0)?.toUpperCase() || "?"}
                       </Avatar>
-                      <Box minWidth={0}>
+                      <Box sx={{ minWidth: 0 }}>
                         <Typography
-                          variant="subtitle1"
-                          fontWeight={600}
-                          noWrap
-                        >
+                          variant="subtitle1" noWrap
+                         sx={{ fontWeight: 600 }}>
                           {order.name}
                         </Typography>
                         {order.reference && (
                           <Typography
                             variant="caption"
-                            color="text.secondary"
-                            noWrap
+                            color="text.secondary" noWrap
                           >
                             Ref: {order.reference}
                           </Typography>
@@ -294,8 +287,8 @@ function AllOrderComponent({
                     <Stack
                       direction="row"
                       spacing={1}
-                      alignItems="center"
-                      sx={{
+
+                      sx={{ alignItems: "center",
                         alignSelf: "flex-start",
                         px: 1.5,
                         py: 1,
@@ -305,7 +298,7 @@ function AllOrderComponent({
                       }}
                     >
                       <FiPhone size={14} />
-                      <Typography variant="body2" fontWeight={500}>
+                      <Typography variant="body2" sx={{ fontWeight: 500 }}>
                         {order.mobile_no || "—"}
                       </Typography>
                     </Stack>
@@ -333,22 +326,22 @@ function AllOrderComponent({
                     >
                       <Stack
                         direction="row"
-                        alignItems="center"
-                        justifyContent="space-between"
-                      >
-                        <Stack direction="row" spacing={1} alignItems="center">
+
+
+                       sx={{ alignItems: "center", justifyContent: "space-between" }}>
+                        <Stack direction="row" spacing={1} sx={{ alignItems: "center" }}>
                           <FiClipboard size={14} />
-                          <Typography variant="body2" fontWeight={600}>
+                          <Typography variant="body2" sx={{ fontWeight: 600 }}>
                             Total Sessions: {order.sessions?.length || 1}
                           </Typography>
                         </Stack>
                         <Stack
                           direction="row"
                           spacing={0.5}
-                          alignItems="center"
-                          color="primary.main"
-                        >
-                          <Typography variant="body2" fontWeight={600}>
+
+
+                         sx={{ alignItems: "center", color: "primary.main" }}>
+                          <Typography variant="body2" sx={{ fontWeight: 600 }}>
                             View Details
                           </Typography>
                           <FiChevronRight size={14} />
@@ -357,14 +350,14 @@ function AllOrderComponent({
                       <Stack
                         direction="row"
                         spacing={1}
-                        alignItems="center"
-                        sx={{ pl: 3 }}
+
+                        sx={{ alignItems: "center", pl: 3 }}
                       >
                         <FiUsers size={12} />
                         <Typography variant="caption" color="text.secondary">
                           Estimated Persons:
                         </Typography>
-                        <Typography variant="caption" fontWeight={600}>
+                        <Typography variant="caption" sx={{ fontWeight: 600 }}>
                           {totalPersons}
                         </Typography>
                       </Stack>
@@ -399,23 +392,25 @@ function AllOrderComponent({
                       fullWidth={!isTabletUp}
                       variant="outlined"
                       color="primary"
-                      startIcon={<FiShare2 size={14} />}
-                      onClick={() => handleShareOrder(order.id)}
+                      startIcon={<FiFileText size={14} />}
+                      onClick={() => navigate(`/view-all-order-pdf/${order.id}`)}
                       sx={{ flex: { sm: 1 } }}
                     >
-                      Share
+                      PDF
                     </Button>
                     <Button
                       size="small"
                       fullWidth={!isTabletUp}
                       variant="outlined"
                       color="primary"
-                      startIcon={<FiFileText size={14} />}
-                      onClick={() => handleDownloadOrderPDF(order.id)}
-                      sx={{ flex: { sm: 1 } }}
+                      startIcon={<FiShare2 size={14} />}
+                      sx={{ flex: { sm: 1 }, opacity: 0.8, cursor: "default" }}
+                      title="Sharing Disabled"
                     >
-                      PDF
+                      Share
                     </Button>
+
+
                     <Button
                       size="small"
                       fullWidth={!isTabletUp}

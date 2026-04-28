@@ -42,7 +42,7 @@ function AddEditUserComponent({
       >
         Back
       </Button>
-      <Typography variant="h5" fontWeight={700} sx={{ mb: 3 }}>
+      <Typography variant="h5" sx={{ fontWeight: 700, mb: 3 }}>
         {isEdit ? "Change User Password" : "Add New User"}
       </Typography>
 
@@ -112,7 +112,7 @@ function AddEditUserComponent({
             }}
           />
 
-          <Stack direction="row" justifyContent="center">
+          <Stack direction="row" sx={{ justifyContent: "center" }}>
             <Button
               type="submit"
               variant="contained"

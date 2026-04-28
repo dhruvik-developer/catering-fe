@@ -59,8 +59,7 @@ function AddRoleModal({
             name="name"
             value={formData.name}
             onChange={onChange}
-            placeholder="e.g., Chef"
-            autoFocus
+            placeholder="e.g., Chef" autoFocus
             className={`w-full rounded-xl border px-4 py-3 outline-none transition-all ${
               errors.name
                 ? "border-red-500 bg-red-50"

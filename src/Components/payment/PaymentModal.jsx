@@ -222,8 +222,7 @@ function PaymentModal({ isOpen, onClose, bookingId, onPaymentSuccess }) {
                       value={formData.transaction_amount}
                       onChange={handleChange}
                       className="w-full pl-8 pr-4 py-2.5 text-sm font-semibold rounded-xl border border-gray-300 focus:border-[var(--color-primary-tint)] focus:ring-2 focus:ring-[var(--color-primary-soft)] bg-white transition-all text-gray-800"
-                      placeholder={`Max ₹${Number(paymentData.pending_amount || 0).toLocaleString()}`}
-                      required
+                      placeholder={`Max ₹${Number(paymentData.pending_amount || 0).toLocaleString()}`} required
                     />
                   </div>
                 </div>
@@ -242,8 +241,7 @@ function PaymentModal({ isOpen, onClose, bookingId, onPaymentSuccess }) {
                         name="payment_mode"
                         value={formData.payment_mode}
                         onChange={handleChange}
-                        className="w-full pl-9 pr-4 py-2.5 text-sm font-semibold rounded-xl border border-gray-300 focus:border-[var(--color-primary-tint)] focus:ring-2 focus:ring-[var(--color-primary-soft)] bg-white appearance-none cursor-pointer transition-all text-gray-800"
-                        required
+                        className="w-full pl-9 pr-4 py-2.5 text-sm font-semibold rounded-xl border border-gray-300 focus:border-[var(--color-primary-tint)] focus:ring-2 focus:ring-[var(--color-primary-soft)] bg-white appearance-none cursor-pointer transition-all text-gray-800" required
                       >
                         {PAYMENT_MODES.map((mode) => (
                           <option key={mode.value} value={mode.value}>
@@ -269,8 +267,7 @@ function PaymentModal({ isOpen, onClose, bookingId, onPaymentSuccess }) {
                           setFormData({ ...formData, payment_date: date })
                         }
                         dateFormat="dd-MM-yyyy"
-                        className="w-full pl-9 pr-4 py-2.5 text-sm font-semibold rounded-xl border border-gray-300 focus:border-[var(--color-primary-tint)] focus:ring-2 focus:ring-[var(--color-primary-soft)] bg-white transition-all cursor-pointer text-gray-800"
-                        required
+                        className="w-full pl-9 pr-4 py-2.5 text-sm font-semibold rounded-xl border border-gray-300 focus:border-[var(--color-primary-tint)] focus:ring-2 focus:ring-[var(--color-primary-soft)] bg-white transition-all cursor-pointer text-gray-800" required
                       />
                     </div>
                   </div>
