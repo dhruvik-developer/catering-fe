@@ -45,7 +45,7 @@ const IngredientTable = ({
     <Stack
       direction={{ xs: "column", lg: "row" }}
       spacing={3}
-      alignItems="flex-start"
+      sx={{ alignItems: "flex-start" }}
     >
       {/* Left: Master Category List */}
       <Box sx={{ width: { xs: "100%", lg: "33.333%" } }}>
@@ -95,15 +95,13 @@ const IngredientTable = ({
               >
                 <Stack
                   direction="row"
-                  justifyContent="space-between"
-                  alignItems="center"
                   spacing={1}
+                  sx={{ justifyContent: "space-between", alignItems: "center" }}
                 >
                   <Stack
                     direction="row"
                     spacing={1.5}
-                    alignItems="center"
-                    sx={{ minWidth: 0, flex: 1 }}
+                    sx={{ alignItems: "center", minWidth: 0, flex: 1 }}
                   >
                     <Avatar
                       variant="rounded"
@@ -171,8 +169,6 @@ const IngredientTable = ({
       >
         <Stack
           direction={{ xs: "column", sm: "row" }}
-          justifyContent="space-between"
-          alignItems={{ xs: "stretch", sm: "center" }}
           spacing={2}
           sx={{
             px: 3,
@@ -180,10 +176,12 @@ const IngredientTable = ({
             borderBottom: 1,
             borderColor: "divider",
             bgcolor: "action.hover",
+            justifyContent: "space-between",
+            alignItems: { xs: "stretch", sm: "center" }
           }}
         >
           <Box>
-            <Stack direction="row" spacing={1} alignItems="center">
+            <Stack direction="row" spacing={1} sx={{ alignItems: "center" }}>
               <FiGrid color="currentColor" />
               <Typography variant="h6" fontWeight={700}>
                 {activeCategory?.name}
@@ -235,8 +233,7 @@ const IngredientTable = ({
                     <Stack
                       direction="row"
                       spacing={1.5}
-                      alignItems="center"
-                      sx={{ minWidth: 0, pr: 1 }}
+                      sx={{ alignItems: "center", minWidth: 0, pr: 1 }}
                     >
                       <Avatar
                         sx={{
@@ -281,7 +278,7 @@ const IngredientTable = ({
               ))}
             </Grid>
           ) : (
-            <Stack alignItems="center" justifyContent="center" sx={{ height: "100%" }}>
+            <Stack sx={{ alignItems: "center", justifyContent: "center", height: "100%" }}>
               <Typography variant="body1" color="text.secondary">
                 {searchQuery
                   ? "No ingredients match your search."

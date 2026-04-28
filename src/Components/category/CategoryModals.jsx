@@ -52,11 +52,16 @@ const ModalWrapper = ({ isOpen, onClose, children }) => {
 // ==================== ADD CATEGORY MODAL ====================
 export const AddCategoryModal = ({ isOpen, onClose, onSuccess }) => {
   const [categoryName, setCategoryName] = useState("");
+  const [parentId, setParentId] = useState(null);
   const [saving, setSaving] = useState(false);
   const createCategoryMutation = useCreateCategoryMutation();
+  const { data: categories = [] } = useCategories({}, { enabled: isOpen });
 
   useEffect(() => {
-    if (isOpen) setCategoryName("");
+    if (isOpen) {
+      setCategoryName("");
+      setParentId(null);
+    }
   }, [isOpen]);
 
   const handleSubmit = async (e) => {
@@ -75,7 +80,10 @@ export const AddCategoryModal = ({ isOpen, onClose, onSuccess }) => {
       .join(" ");
 
     setSaving(true);
-    const response = await createCategoryMutation.mutateAsync(formattedName);
+    const response = await createCategoryMutation.mutateAsync({
+      categoryName: formattedName,
+      parentId,
+    });
     setSaving(false);
     if (response) {
       onSuccess?.();
@@ -122,6 +130,21 @@ export const AddCategoryModal = ({ isOpen, onClose, onSuccess }) => {
               onChange={(e) => setCategoryName(e.target.value)}
             />
           </div>
+          <div className="relative z-20">
+            <label className="block font-medium text-gray-700 mb-2">
+              Parent Category (Optional)
+            </label>
+            <Dropdown
+              options={categories}
+              selectedValue={parentId}
+              onChange={(value) => setParentId(value)}
+              placeholder="Select a parent category"
+              isSearchable={true}
+            />
+            <p className="text-xs text-gray-400 mt-1">
+              Leave empty for top-level category
+            </p>
+          </div>
           <div className="flex items-center justify-end gap-3 pt-2">
             <button
               type="button"
@@ -152,7 +175,18 @@ export const AddItemModal = ({ isOpen, onClose, onSuccess, initialCategory }) =>
   const [selectionRate, setSelectionRate] = useState("");
   const [saving, setSaving] = useState(false);
   const createItemMutation = useCreateMenuItemMutation();
-  const { data: categories = [] } = useCategories({}, { enabled: isOpen });
+  const { data: topCategories = [] } = useCategories({}, { enabled: isOpen });
+
+  // Flatten categories and subcategories for the dropdown
+  const categories = topCategories.reduce((acc, cat) => {
+    acc.push(cat);
+    if (cat.subcategories && cat.subcategories.length > 0) {
+      cat.subcategories.forEach(sub => {
+        acc.push({ ...sub, name: `${cat.name} > ${sub.name}` });
+      });
+    }
+    return acc;
+  }, []);
 
   useEffect(() => {
     if (isOpen) {

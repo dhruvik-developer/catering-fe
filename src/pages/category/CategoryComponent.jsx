@@ -52,11 +52,13 @@ function CategoryComponent({
       <Stack
         direction={{ xs: "column", md: "row" }}
         spacing={2}
-        alignItems={{ xs: "stretch", md: "center" }}
-        justifyContent="space-between"
-        sx={{ mb: 3 }}
+        sx={{ 
+          mb: 3,
+          alignItems: { xs: "stretch", md: "center" },
+          justifyContent: "space-between"
+        }}
       >
-        <Stack direction="row" spacing={1.5} alignItems="center">
+        <Stack direction="row" spacing={1.5} sx={{ alignItems: "center" }}>
           <Avatar
             variant="rounded"
             sx={{
@@ -79,7 +81,12 @@ function CategoryComponent({
           </Box>
         </Stack>
         {canCreateCategory && (
-          <Stack direction="row" spacing={1} flexWrap="wrap" useFlexGap>
+          <Stack 
+            direction="row" 
+            spacing={1} 
+            useFlexGap 
+            sx={{ flexWrap: "wrap" }}
+          >
             <Button
               variant="contained"
               color="primary"

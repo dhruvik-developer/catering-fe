@@ -93,7 +93,7 @@ export const getIngredientCategories = async (params = {}) => {
 
 export const createIngredientCategory = async (name, isCommon = false) => {
   try {
-    const response = await ApiInstance.post("/categories/", {
+    const response = await ApiInstance.post("/ingredients-categories/", {
       name,
       is_common: isCommon,
     });

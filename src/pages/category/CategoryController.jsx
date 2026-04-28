@@ -88,19 +88,24 @@ function CategoryController() {
         .map((value) => value.trim().toLowerCase())
     );
 
-    return [...categoriesData]
-      .map((category) => ({
-        ...category,
-        items: (category.items || []).map((item) => {
-          const itemId = String(item?.id ?? "");
-          const itemName = String(item?.name ?? "").trim().toLowerCase();
-          const hasRecipe =
-            recipeItemIds.has(itemId) ||
-            (itemName !== "" && recipeItemNames.has(itemName));
+    const processCategory = (category) => ({
+      ...category,
+      items: (category.items || []).map((item) => {
+        const itemId = String(item?.id ?? "");
+        const itemName = String(item?.name ?? "").trim().toLowerCase();
+        const hasRecipe =
+          recipeItemIds.has(itemId) ||
+          (itemName !== "" && recipeItemNames.has(itemName));
 
-          return { ...item, has_recipe: hasRecipe };
-        }),
-      }))
+        return { ...item, has_recipe: hasRecipe };
+      }),
+      subcategories: (category.subcategories || [])
+        .map(processCategory)
+        .sort((a, b) => (a.positions || 0) - (b.positions || 0)),
+    });
+
+    return [...categoriesData]
+      .map(processCategory)
       .sort((a, b) => (a.positions || 0) - (b.positions || 0));
   }, [categoriesData, recipes]);
 
@@ -114,29 +119,36 @@ function CategoryController() {
       return;
     }
 
-    const { value: name } = await Swal.fire({
-      title: "Edit Category Name",
-      input: "text",
-      inputLabel: "Category Name",
-      inputValue: oldName || "",
-      inputPlaceholder: "Please Enter Category Name",
+    const category = categories.find(c => c.id === categoryId) || 
+                     categories.flatMap(c => c.subcategories || []).find(s => s.id === categoryId);
+
+    const { value: formValues } = await Swal.fire({
+      title: "Edit Category",
+      html:
+        `<div class="text-left mb-2"><label class="block text-sm font-medium text-gray-700">Category Name</label></div>` +
+        `<input id="swal-input1" class="swal2-input mt-0 w-full" value="${oldName || ""}">` +
+        `<div class="text-left mt-4 mb-2"><label class="block text-sm font-medium text-gray-700">Parent Category</label></div>` +
+        `<select id="swal-input2" class="swal2-input mt-0 w-full">
+          <option value="">None (Top Level)</option>
+          ${categories
+            .filter(c => c.id !== categoryId)
+            .map(c => `<option value="${c.id}" ${category?.parent === c.id ? 'selected' : ''}>${c.name}</option>`)
+            .join('')}
+        </select>`,
+      focusConfirm: false,
       showCancelButton: true,
       confirmButtonText: "Update",
       confirmButtonColor: "var(--color-primary)",
-      cancelButtonText: "Cancel",
-      customClass: {
-        inputLabel: "custom-stock-input-label",
-        input: "custom-stock-swal-input",
-      },
-      preConfirm: async (value) => {
-        if (!value || !value.trim()) {
-          Swal.showValidationMessage("Category name is required");
-        }
-        return value;
+      preConfirm: () => {
+        return [
+          document.getElementById("swal-input1").value,
+          document.getElementById("swal-input2").value,
+        ];
       },
     });
 
-    if (name && name.trim() !== oldName) {
+    if (formValues) {
+      const [name, parentId] = formValues;
       const formattedName = name
         .trim()
         .split(" ")
@@ -145,19 +157,10 @@ function CategoryController() {
         )
         .join(" ");
 
-      const isDuplicate = categories.some(
-        (cat) =>
-          cat.id !== categoryId &&
-          cat.name?.toLowerCase() === formattedName.toLowerCase()
-      );
-      if (isDuplicate) {
-        toast.error("Category name already exists");
-        return;
-      }
-
       const response = await updateCategoryMutation.mutateAsync({
         categoryId,
         newName: formattedName,
+        parentId: parentId || null,
       });
       if (response) {
         refreshData();

@@ -1,5 +1,5 @@
 /* eslint-disable react/prop-types */
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   Avatar,
   Box,
@@ -31,6 +31,7 @@ const CategoryTable = ({
 }) => {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedItemForRecipe, setSelectedItemForRecipe] = useState(null);
+  const [viewingSubCategoryId, setViewingSubCategoryId] = useState(null);
 
   const sortedCategories = [...categories].sort((a, b) => {
     if (a.positions === undefined) return 1;
@@ -38,27 +39,35 @@ const CategoryTable = ({
     return a.positions - b.positions;
   });
 
-  if (sortedCategories.length === 0) {
-    return (
-      <EmptyState
-        icon={<FiFolder size={24} />}
-        title="No Categories Available"
-        message="Add a category to get started."
-      />
-    );
-  }
-
   const activeCategory =
     sortedCategories.find((c) => c.id === activeCategoryId) ||
     sortedCategories[0];
-  const subcategories = activeCategory?.items || [];
-  const filteredSubcategories = subcategories.filter((sub) =>
-    sub.name.toLowerCase().includes(searchQuery.toLowerCase())
+
+  // If active category changes, reset viewing subcategory
+  useEffect(() => {
+    setViewingSubCategoryId(null);
+  }, [activeCategoryId]);
+
+  const subcategories = activeCategory?.subcategories || [];
+  const itemsOfActiveCategory = activeCategory?.items || [];
+
+  const currentViewingSubCategory = viewingSubCategoryId 
+    ? subcategories.find(s => s.id === viewingSubCategoryId)
+    : null;
+
+  const displayData = viewingSubCategoryId 
+    ? (currentViewingSubCategory?.items || [])
+    : (subcategories.length > 0 ? subcategories : itemsOfActiveCategory);
+
+  const filteredData = displayData.filter((item) =>
+    item.name.toLowerCase().includes(searchQuery.toLowerCase())
   );
+
+  const isViewingItems = viewingSubCategoryId || (subcategories.length === 0);
 
   return (
     <>
-      <Grid container spacing={2} alignItems="flex-start">
+      <Grid container spacing={2} sx={{ alignItems: "flex-start" }}>
         {/* Left: Category list */}
         <Grid size={{ xs: 12, lg: 4 }}>
           <Typography
@@ -116,8 +125,7 @@ const CategoryTable = ({
                   <Stack
                     direction="row"
                     spacing={1.5}
-                    alignItems="center"
-                    sx={{ minWidth: 0, flex: 1 }}
+                    sx={{ alignItems: "center", minWidth: 0, flex: 1 }}
                   >
                     <Avatar
                       variant="rounded"
@@ -157,8 +165,7 @@ const CategoryTable = ({
                     <Stack
                       direction="row"
                       spacing={0}
-                      alignItems="center"
-                      sx={{ flexShrink: 0 }}
+                      sx={{ alignItems: "center", flexShrink: 0 }}
                     >
                       {canUpdateCategory && (
                         <>
@@ -224,14 +231,14 @@ const CategoryTable = ({
             <Stack
               direction={{ xs: "column", sm: "row" }}
               spacing={2}
-              alignItems={{ xs: "stretch", sm: "center" }}
-              justifyContent="space-between"
               sx={{
                 px: 3,
                 py: 2.5,
                 borderBottom: 1,
                 borderColor: "divider",
                 bgcolor: "action.hover",
+                alignItems: { xs: "stretch", sm: "center" },
+                justifyContent: "space-between"
               }}
             >
               <Box>
@@ -240,11 +247,25 @@ const CategoryTable = ({
                   fontWeight={700}
                   sx={{ display: "flex", alignItems: "center", gap: 1 }}
                 >
-                  <FiFolder color="currentColor" />
+                  {viewingSubCategoryId && (
+                    <IconButton 
+                      size="small" 
+                      onClick={() => setViewingSubCategoryId(null)}
+                      sx={{ mr: 1, bgcolor: 'action.selected' }}
+                    >
+                      <FiFolder size={16} />
+                    </IconButton>
+                  )}
                   {activeCategory?.name}
+                  {viewingSubCategoryId && (
+                    <>
+                      <span style={{ margin: '0 8px', opacity: 0.5 }}>/</span>
+                      {currentViewingSubCategory?.name}
+                    </>
+                  )}
                 </Typography>
                 <Typography variant="body2" color="text.secondary">
-                  {subcategories.length} total items in this category
+                  {displayData.length} {isViewingItems ? 'items' : 'subcategories'} in this {viewingSubCategoryId ? 'subcategory' : 'category'}
                 </Typography>
               </Box>
               <TextField
@@ -265,13 +286,19 @@ const CategoryTable = ({
             </Stack>
 
             <Box sx={{ p: 3, overflowY: "auto", flex: 1 }}>
-              {filteredSubcategories.length > 0 ? (
+              {filteredData.length > 0 ? (
                 <Grid container spacing={1.5}>
-                  {filteredSubcategories.map((sub) => (
-                    <Grid key={sub.id} size={{ xs: 12, sm: 6, xl: 4 }}>
+                  {filteredData.map((item) => (
+                    <Grid key={item.id} size={{ xs: 12, sm: 6, xl: 4 }}>
                       <Paper
                         variant="outlined"
-                        onClick={() => setSelectedItemForRecipe(sub)}
+                        onClick={() => {
+                          if (!isViewingItems) {
+                            setViewingSubCategoryId(item.id);
+                          } else {
+                            setSelectedItemForRecipe(item);
+                          }
+                        }}
                         sx={{
                           p: 1.75,
                           display: "flex",
@@ -290,56 +317,68 @@ const CategoryTable = ({
                         <Stack
                           direction="row"
                           spacing={1.5}
-                          alignItems="center"
-                          sx={{ minWidth: 0, flex: 1 }}
+                          sx={{ alignItems: "center", minWidth: 0, flex: 1 }}
                         >
                           <Avatar
                             sx={{
                               width: 32,
                               height: 32,
                               bgcolor:
-                                sub.has_recipe === false
+                                isViewingItems && item.has_recipe === false
                                   ? "error.light"
                                   : "var(--color-primary-border)",
                               color:
-                                sub.has_recipe === false
+                                isViewingItems && item.has_recipe === false
                                   ? "error.main"
                                   : "primary.main",
                             }}
                           >
-                            <FiTag size={14} />
+                            {isViewingItems ? <FiTag size={14} /> : <FiFolder size={14} />}
                           </Avatar>
                           <Typography
                             variant="body2"
                             fontWeight={700}
                             noWrap
                             color={
-                              sub.has_recipe === false
+                              isViewingItems && item.has_recipe === false
                                 ? "error.main"
                                 : "text.primary"
                             }
                           >
-                            {sub.name}
+                            {item.name}
                           </Typography>
                         </Stack>
-                        {canDeleteCategory && (
-                          <IconButton
-                            size="small"
-                            color="error"
-                            className="delete-btn"
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              onSubCategoryDelete(sub.id);
-                            }}
-                            title="Delete Item"
-                            sx={{
-                              opacity: { xs: 1, sm: 0 },
-                              transition: "opacity 0.2s",
-                            }}
-                          >
-                            <FaTrash size={12} />
-                          </IconButton>
-                        )}
+                        <Stack direction="row" spacing={0.5} className="delete-btn" sx={{ opacity: { xs: 1, sm: 0 }, transition: "opacity 0.2s" }}>
+                          {!isViewingItems && canUpdateCategory && (
+                            <IconButton
+                              size="small"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                onEditCategory(item.id, item.name);
+                              }}
+                              title="Edit Subcategory"
+                            >
+                              <FiEdit2 size={12} />
+                            </IconButton>
+                          )}
+                          {canDeleteCategory && (
+                            <IconButton
+                              size="small"
+                              color="error"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                if (isViewingItems) {
+                                  onSubCategoryDelete(item.id);
+                                } else {
+                                  onItemDelete(item.id); // This actually deletes a category if not viewing items
+                                }
+                              }}
+                              title={isViewingItems ? "Delete Item" : "Delete Subcategory"}
+                            >
+                              <FaTrash size={12} />
+                            </IconButton>
+                          )}
+                        </Stack>
                       </Paper>
                     </Grid>
                   ))}

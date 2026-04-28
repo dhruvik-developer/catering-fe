@@ -36,10 +36,11 @@ export const getCategories = async (params = {}) => {
   }
 };
 
-export const createCategory = async (categoryName) => {
+export const createCategory = async (categoryName, parentId = null) => {
   try {
     const response = await ApiInstance.post("/categories/", {
       name: categoryName,
+      parent: parentId,
     });
 
     return handleMutationSuccess(
@@ -56,11 +57,11 @@ export const createCategory = async (categoryName) => {
   }
 };
 
-export const updateCategory = async (categoryId, newName) => {
+export const updateCategory = async (categoryId, newName, parentId = undefined) => {
   try {
-    const response = await ApiInstance.put(`/categories/${categoryId}/`, {
-      name: newName,
-    });
+    const data = { name: newName };
+    if (parentId !== undefined) data.parent = parentId;
+    const response = await ApiInstance.put(`/categories/${categoryId}/`, data);
 
     return handleMutationSuccess(
       response,

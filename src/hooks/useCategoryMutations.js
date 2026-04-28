@@ -13,14 +13,15 @@ const CATEGORIES_QUERY_KEYS = [["categories"]];
 export const useCreateCategoryMutation = () =>
   useApiMutation({
     mutationKey: ["mutations", "create-category"],
-    mutationFn: createCategory,
+    mutationFn: ({ categoryName, parentId }) => createCategory(categoryName, parentId),
     invalidateQueryKeys: CATEGORIES_QUERY_KEYS,
   });
 
 export const useUpdateCategoryMutation = () =>
   useApiMutation({
     mutationKey: ["mutations", "update-category"],
-    mutationFn: ({ categoryId, newName }) => updateCategory(categoryId, newName),
+    mutationFn: ({ categoryId, newName, parentId }) =>
+      updateCategory(categoryId, newName, parentId),
     invalidateQueryKeys: CATEGORIES_QUERY_KEYS,
   });
 

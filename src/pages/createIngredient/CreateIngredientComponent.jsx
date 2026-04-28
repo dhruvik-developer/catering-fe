@@ -36,12 +36,14 @@ function CreateIngredientComponent({
     >
       <Stack
         direction={{ xs: "column", sm: "row" }}
-        justifyContent="space-between"
-        alignItems={{ xs: "stretch", sm: "center" }}
         spacing={2}
-        sx={{ mb: 3 }}
+        sx={{ 
+          mb: 3,
+          justifyContent: "space-between",
+          alignItems: { xs: "stretch", sm: "center" }
+        }}
       >
-        <Stack direction="row" spacing={1.5} alignItems="center">
+        <Stack direction="row" spacing={1.5} sx={{ alignItems: "center" }}>
           <Avatar
             variant="rounded"
             sx={{
@@ -62,14 +64,14 @@ function CreateIngredientComponent({
             </Typography>
           </Box>
         </Stack>
-        <Stack direction="row" spacing={1} flexWrap="wrap" useFlexGap>
+        <Stack direction="row" spacing={1} useFlexGap sx={{ flexWrap: "wrap" }}>
           <Button
             variant="contained"
             color="primary"
             startIcon={<FiPlus size={15} />}
             onClick={onAddCategory}
           >
-            Add Category
+            Add Ingredient Category
           </Button>
           <Button
             variant="outlined"
@@ -77,7 +79,7 @@ function CreateIngredientComponent({
             startIcon={<FiPlus size={15} />}
             onClick={() => setShowAddItem(true)}
           >
-            Add Item
+            Add Ingredient Item
           </Button>
         </Stack>
       </Stack>
