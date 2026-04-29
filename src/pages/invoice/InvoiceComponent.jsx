@@ -106,23 +106,25 @@ function InvoiceComponent({
             width: { xs: "100%", md: 280 },
             flexShrink: 0,
           }}
-          InputProps={{
-            startAdornment: (
-              <InputAdornment position="start">
-                <FiSearch size={14} />
-              </InputAdornment>
-            ),
-            endAdornment: searchQuery ? (
-              <InputAdornment position="end">
-                <IconButton
-                  size="small"
-                  onClick={() => setSearchQuery("")}
-                  edge="end"
-                >
-                  <FiX size={14} />
-                </IconButton>
-              </InputAdornment>
-            ) : null,
+          slotProps={{
+            input: {
+              startAdornment: (
+                <InputAdornment position="start">
+                  <FiSearch size={14} />
+                </InputAdornment>
+              ),
+              endAdornment: searchQuery ? (
+                <InputAdornment position="end">
+                  <IconButton
+                    size="small"
+                    onClick={() => setSearchQuery("")}
+                    edge="end"
+                  >
+                    <FiX size={14} />
+                  </IconButton>
+                </InputAdornment>
+              ) : null,
+            },
           }}
         />
 

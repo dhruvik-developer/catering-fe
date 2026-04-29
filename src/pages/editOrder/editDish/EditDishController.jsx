@@ -11,6 +11,12 @@ import { getSingleOrder } from "../../../api/FetchAllOrder";
 import { getWaiterTypes } from "../../../api/EventStaffApis";
 import toast from "react-hot-toast";
 import { useCategories } from "../../../hooks/useCategories";
+import {
+  findCategoryItem,
+  flattenSelectedItemEntries,
+  getSelectedItemId,
+  getSelectedItemName,
+} from "../../../utils/categoryTree";
 
 function EditDishContoller() {
   const { id } = useParams();
@@ -73,47 +79,41 @@ function EditDishContoller() {
     try {
       const categories = dishesList;
 
-      // Helper to resolve dish IDs and selectionRate by name
+      // Helper to resolve dish IDs and prices from nested category trees.
       const resolveDishes = (selectedItemsObj) => {
         const resolved = [];
         if (!selectedItemsObj) return resolved;
-        Object.values(selectedItemsObj)
-          .flat()
-          .forEach((itemName) => {
+
+        flattenSelectedItemEntries(selectedItemsObj).forEach(
+          ({ categoryName: catKey, categoryPath, item: itemName }) => {
             let foundId = null;
             let selectionRate = 0;
             let baseCost = 0;
-            const targetName =
-              typeof itemName === "string" ? itemName : itemName.name || "";
+            const targetName = getSelectedItemName(itemName);
             if (!targetName) return;
-            let categoryName = "Dishes";
-            for (const cat of categories) {
-              const dish = cat.items?.find((d) => d.name === targetName);
-              if (dish) {
-                foundId = dish.id;
-                selectionRate = parseFloat(dish.selection_rate) || 0;
-                baseCost = parseFloat(dish.base_cost) || 0;
-                categoryName = cat.name;
-                break;
-              }
+
+            let categoryName = catKey || "Dishes";
+            const itemId = getSelectedItemId(itemName);
+            const categoryHint = categoryPath || catKey;
+            const matchedDish = findCategoryItem(categories, {
+              id: itemId,
+              name: targetName,
+              categoryName: categoryHint,
+            });
+
+            if (matchedDish) {
+              foundId = matchedDish.id;
+              selectionRate = parseFloat(matchedDish.selection_rate) || 0;
+              baseCost = parseFloat(matchedDish.base_cost) || 0;
+              categoryName = matchedDish.categoryName || categoryName;
+            } else if (typeof itemName === "object") {
+              foundId = itemId || null;
+              selectionRate =
+                parseFloat(itemName?.selection_rate ?? itemName?.selectionRate) ||
+                0;
+              baseCost = parseFloat(itemName?.base_cost ?? itemName?.baseCost) || 0;
             }
-            if (!foundId) {
-              // Attempt to find category from the key in selectedItemsObj if it exists
-              for (const [catKey, catItems] of Object.entries(
-                selectedItemsObj
-              )) {
-                if (
-                  catItems.some(
-                    (item) =>
-                      (typeof item === "string" ? item : item.name) ===
-                      targetName
-                  )
-                ) {
-                  categoryName = catKey;
-                  break;
-                }
-              }
-            }
+
             resolved.push({
               dishId: foundId,
               dishName: targetName,
@@ -122,7 +122,9 @@ function EditDishContoller() {
               baseCost,
               isOriginal: true,
             });
-          });
+          }
+        );
+
         return resolved;
       };
 

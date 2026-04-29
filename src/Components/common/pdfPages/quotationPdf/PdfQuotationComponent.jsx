@@ -23,6 +23,8 @@ const generateDishCode = (price, sessionIndex) => {
   return code;
 };
 
+const RUPEE_SYMBOL = "\u20B9";
+
 function PdfQuotationComponent({
   pdfQuotation,
   loading,
@@ -74,8 +76,9 @@ function PdfQuotationComponent({
             </button>
 
             <button
-              className="flex items-center gap-2 px-6 py-3 bg-[var(--color-primary)] text-white rounded-xl shadow-md opacity-80 cursor-default font-semibold text-sm"
-              title="Download Disabled"
+              className="flex items-center gap-2 px-6 py-3 bg-[var(--color-primary)] text-white rounded-xl shadow-md hover:bg-[var(--color-primary-dark)] focus:ring-4 focus:ring-[var(--color-primary-soft)] transition-all cursor-pointer font-semibold text-sm"
+              onClick={downloadPDF}
+              title="Download PDF"
             >
               <svg
                 className="w-4 h-4"
@@ -113,18 +116,19 @@ function PdfQuotationComponent({
             <div className="relative z-10">
               {/* Header Section */}
               <div 
-                className="px-10 pt-10 pb-6 flex flex-row items-start justify-between border-b border-white/10"
+                data-pdf-header
+                className="relative px-10 pt-10 pb-6 flex flex-row items-start justify-between border-b border-white/10"
                 style={{ backgroundColor: 'var(--color-primary)' }}
               >
                 {/* Company Info */}
-                <div className="flex flex-col items-start w-2/3">
+                <div className="flex flex-col items-start w-2/3 pr-8">
                   <h2 
                     className="text-3xl font-extrabold tracking-wide uppercase mb-1 drop-shadow-sm"
                     style={{ color: 'white' }}
                   >
                     {businessProfile?.caters_name || "Radha Caterers"}
                   </h2>
-                  <p className="text-sm text-white/90 font-medium whitespace-nowrap">
+                  <p className="text-sm text-white/90 font-medium leading-snug">
                     {businessProfile?.godown_address ||
                       "Radha Caterers, second floor, Krishna Row House, Parvati Nagar, Nana Varachha, Surat, Gujarat 395006."}
                   </p>
@@ -224,7 +228,7 @@ function PdfQuotationComponent({
                       Advance Amount
                     </span>
                     <span className="font-extrabold text-[var(--color-primary)] text-xl">
-                      ₹ {Number(itemData?.advance_amount || 0).toFixed(2)}
+                      {RUPEE_SYMBOL} {Number(itemData?.advance_amount || 0).toFixed(2)}
                     </span>
                   </div>
                   <div className="flex flex-col col-span-2 mt-2">
@@ -355,7 +359,7 @@ function PdfQuotationComponent({
                                     >
                                       <span>{service.service_name}</span>
                                       <span className="text-[var(--color-primary)] font-bold border-l border-gray-200 pl-2">
-                                        ₹
+                                        {RUPEE_SYMBOL}
                                         {Number(service.amount || 0).toFixed(2)}
                                       </span>
                                     </span>
@@ -393,11 +397,11 @@ function PdfQuotationComponent({
                                     </span>
                                     <span className="text-xs font-medium text-gray-700 bg-white border border-[var(--color-primary-border)]/30 px-3 py-1.5 rounded-lg flex items-center gap-2 shadow-sm">
                                       <span className="text-gray-500">Rate:</span>
-                                      <span className="font-bold text-[var(--color-primary)]">₹{Number(ws.rate || 0).toFixed(2)}/head</span>
+                                      <span className="font-bold text-[var(--color-primary)]">{RUPEE_SYMBOL}{Number(ws.rate || 0).toFixed(2)}/head</span>
                                     </span>
                                     <span className="text-xs font-medium text-gray-700 bg-white border border-[var(--color-primary-border)]/30 px-3 py-1.5 rounded-lg flex items-center gap-2 shadow-sm">
                                       <span className="text-gray-500">Total:</span>
-                                      <span className="font-bold text-[var(--color-primary)]">₹{Number(ws.amount || 0).toFixed(2)}</span>
+                                      <span className="font-bold text-[var(--color-primary)]">{RUPEE_SYMBOL}{Number(ws.amount || 0).toFixed(2)}</span>
                                     </span>
                                     {ws.notes ? (
                                       <span className="text-xs text-gray-500 italic w-full">{ws.notes}</span>
@@ -454,7 +458,10 @@ function PdfQuotationComponent({
               )}
 
               {/* Footer / Branding */}
-              <div className="px-10 py-5 bg-gradient-to-r from-[var(--color-primary)] to-[var(--color-primary-text)] text-white text-center">
+              <div
+                data-pdf-footer
+                className="px-10 py-5 bg-gradient-to-r from-[var(--color-primary)] to-[var(--color-primary-text)] text-white text-center"
+              >
                 <p className="text-xs font-bold tracking-[0.2em] text-white/90 uppercase">
                   Thank you for choosing{" "}
                   {businessProfile?.caters_name || "radha Sweet & Caterers"}

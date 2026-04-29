@@ -1,4 +1,5 @@
 import html2pdf from "html2pdf.js";
+import html2canvas from "html2canvas";
 import {
   ensureUnicodeWebFontsReady,
   PDF_UNICODE_DEFAULT_FONT,
@@ -19,7 +20,7 @@ function resolveCssColor(colorStr) {
     colorCtx.fillRect(0, 0, 1, 1);
     const [r, g, b, a] = colorCtx.getImageData(0, 0, 1, 1).data;
     return `rgba(${r}, ${g}, ${b}, ${a / 255})`;
-  } catch (e) {
+  } catch {
     return colorStr; // Fallback to original string if failure
   }
 }
@@ -30,6 +31,7 @@ function processColorString(value) {
   if (
     !value.includes("oklch") &&
     !value.includes("oklab") &&
+    !value.includes("color-mix") &&
     !value.includes("color(")
   ) {
     return value;
@@ -37,7 +39,10 @@ function processColorString(value) {
 
   // Replace all occurrences of modern function blocks with their rgba() equivalent.
   // This matches anything like oklch(0.6 0.2 300) or color(display-p3 1 0 0)
-  return value.replace(/(?:oklch|oklab|color)\([^()]+\)/g, resolveCssColor);
+  return value.replace(
+    /(?:color-mix|oklch|oklab|color)\((?:[^()]|\([^()]*\))*\)/g,
+    resolveCssColor
+  );
 }
 
 function formatWhatsAppNumber(rawNumber = "") {
@@ -92,6 +97,119 @@ function mergePageBreakOptions(basePagebreak = {}, customPagebreak = {}) {
   };
 }
 
+function splitPdfOptions(customOptions = {}) {
+  const { repeatingHeaderFooter, ...html2pdfOptions } = customOptions || {};
+  return { repeatingHeaderFooter, html2pdfOptions };
+}
+
+function normalizePdfMargin(margin = 0) {
+  if (Array.isArray(margin)) {
+    if (margin.length === 4) return margin;
+    if (margin.length === 2) return [margin[0], margin[1], margin[0], margin[1]];
+    if (margin.length === 1) return [margin[0], margin[0], margin[0], margin[0]];
+  }
+
+  return [margin, margin, margin, margin];
+}
+
+function getPdfPageSize(pdf) {
+  const pageSize = pdf.internal.pageSize;
+  return {
+    width: pageSize.getWidth ? pageSize.getWidth() : pageSize.width,
+    height: pageSize.getHeight ? pageSize.getHeight() : pageSize.height,
+  };
+}
+
+async function renderElementToPng(element, html2canvasOptions = {}) {
+  if (!element) return null;
+
+  const rect = element.getBoundingClientRect();
+  if (!rect.width || !rect.height) return null;
+
+  try {
+    const canvas = await html2canvas(element, {
+      ...html2canvasOptions,
+      backgroundColor: null,
+      logging: false,
+    });
+
+    return {
+      dataUrl: canvas.toDataURL("image/png"),
+      height: Math.ceil(rect.height),
+    };
+  } catch {
+    return null;
+  }
+}
+
+async function prepareRepeatingHeaderFooter(clone, opt, config = {}) {
+  const headerElement = config.headerSelector
+    ? clone.querySelector(config.headerSelector)
+    : null;
+  const footerElement = config.footerSelector
+    ? clone.querySelector(config.footerSelector)
+    : null;
+  const canvasOptions = {
+    ...(opt.html2canvas || {}),
+    width: clone.offsetWidth,
+    windowWidth: opt.html2canvas?.windowWidth || clone.offsetWidth,
+  };
+
+  const [header, footer] = await Promise.all([
+    renderElementToPng(headerElement, canvasOptions),
+    renderElementToPng(footerElement, canvasOptions),
+  ]);
+
+  if (config.removeOriginal !== false) {
+    if (header) headerElement?.remove();
+    if (footer) footerElement?.remove();
+  }
+
+  const margin = normalizePdfMargin(opt.margin);
+  const topGap = config.topGap ?? 0;
+  const bottomGap = config.bottomGap ?? 0;
+
+  opt.margin = [
+    margin[0] + (header?.height || 0) + topGap,
+    margin[1],
+    margin[2] + (footer?.height || 0) + bottomGap,
+    margin[3],
+  ];
+
+  return {
+    header,
+    footer,
+  };
+}
+
+function addRepeatingHeaderFooterToPdf(pdf, assets) {
+  if (!assets?.header && !assets?.footer) return;
+
+  const { width, height } = getPdfPageSize(pdf);
+  const pageCount = pdf.getNumberOfPages
+    ? pdf.getNumberOfPages()
+    : pdf.internal.getNumberOfPages();
+
+  for (let pageNumber = 1; pageNumber <= pageCount; pageNumber++) {
+    pdf.setPage(pageNumber);
+
+    if (assets.header?.dataUrl && assets.header.height) {
+      pdf.addImage(assets.header.dataUrl, "PNG", 0, 0, width, assets.header.height);
+    }
+
+    if (assets.footer?.dataUrl && assets.footer.height) {
+      pdf.addImage(
+        assets.footer.dataUrl,
+        "PNG",
+        0,
+        height - assets.footer.height,
+        width,
+        assets.footer.height
+      );
+    }
+  }
+}
+
 /**
  * Shared utility for exporting a DOM element to a PDF using html2pdf.js.
  * This ensures consistent A4 sizing, handles multi-page content gracefully,
@@ -109,6 +227,8 @@ export async function exportToPDF(
   customOptions = {}
 ) {
   const originalElement = document.getElementById(elementId);
+  const { repeatingHeaderFooter, html2pdfOptions } =
+    splitPdfOptions(customOptions);
 
   if (!originalElement) {
     if (toast?.error) toast.error("PDF content not found.");
@@ -199,12 +319,21 @@ export async function exportToPDF(
         scrollY: 0,
       },
       jsPDF: { unit: "px", format: [794, 1123], orientation: "portrait" }, // Use explicit pixels instead of mm so browsers can't fraction-warp the dimensions
-      ...customOptions,
+      ...html2pdfOptions,
     };
-    opt.pagebreak = mergePageBreakOptions(basePagebreak, customOptions.pagebreak);
+    opt.pagebreak = mergePageBreakOptions(
+      basePagebreak,
+      html2pdfOptions.pagebreak
+    );
+
+    const repeatingAssets = repeatingHeaderFooter
+      ? await prepareRepeatingHeaderFooter(clone, opt, repeatingHeaderFooter)
+      : null;
 
     const worker = html2pdf().set(opt).from(clone).toPdf();
     await applyUnicodeFontToHtml2PdfWorker(worker);
+    const pdf = await worker.get("pdf");
+    addRepeatingHeaderFooterToPdf(pdf, repeatingAssets);
     await worker.save();
 
     if (toast?.success && toastId) {
@@ -393,10 +522,6 @@ export async function shareToWhatsApp(
       "backgroundImage",
     ];
 
-    for (let i = 0; i < originalNodes.length; i++) {
-      const val = window.getComputedStyle(originalNodes[i])[propsToFix[0]]; // just checking first to optimize? No, keep it same
-    }
-    // proper loop:
     for (let i = 0; i < originalNodes.length; i++) {
       const oNode = originalNodes[i];
       const cNode = cloneNodes[i];

@@ -16,6 +16,12 @@ function PdfQuotationController() {
   const [pdfQuotation, setPdfQuotation] = useState([]);
   const pdfDownloadOptions = {
     margin: [6, 0, 6, 0],
+    repeatingHeaderFooter: {
+      headerSelector: "[data-pdf-header]",
+      footerSelector: "[data-pdf-footer]",
+      topGap: 0,
+      bottomGap: 0,
+    },
   };
 
   // Fetch Business Profile

@@ -40,12 +40,10 @@ import "react-datepicker/dist/react-datepicker.css";
 function AllOrderComponent({
   allOrder,
   loading,
-  handleViewOrder: _handleViewOrder,
-  handleViewIngredient: _handleViewIngredient,
-  handleViewIngredientBySession: _handleViewIngredientBySession,
   handleCompleteOrder,
   handleDeleteAllOrder,
   handleViewOrderDetails,
+  handleDownloadOrderPDF,
   totalCount,
   searchQuery,
   setSearchQuery,
@@ -103,23 +101,25 @@ function AllOrderComponent({
             width: { xs: "100%", md: 280 },
             flexShrink: 0,
           }}
-          InputProps={{
-            startAdornment: (
-              <InputAdornment position="start">
-                <FiSearch size={14} />
-              </InputAdornment>
-            ),
-            endAdornment: searchQuery ? (
-              <InputAdornment position="end">
-                <IconButton
-                  size="small"
-                  onClick={() => setSearchQuery("")}
-                  edge="end"
-                >
-                  <FiX size={14} />
-                </IconButton>
-              </InputAdornment>
-            ) : null,
+          slotProps={{
+            input: {
+              startAdornment: (
+                <InputAdornment position="start">
+                  <FiSearch size={14} />
+                </InputAdornment>
+              ),
+              endAdornment: searchQuery ? (
+                <InputAdornment position="end">
+                  <IconButton
+                    size="small"
+                    onClick={() => setSearchQuery("")}
+                    edge="end"
+                  >
+                    <FiX size={14} />
+                  </IconButton>
+                </InputAdornment>
+              ) : null,
+            },
           }}
         />
 
@@ -393,7 +393,7 @@ function AllOrderComponent({
                       variant="outlined"
                       color="primary"
                       startIcon={<FiFileText size={14} />}
-                      onClick={() => navigate(`/view-all-order-pdf/${order.id}`)}
+                      onClick={() => handleDownloadOrderPDF(order.id)}
                       sx={{ flex: { sm: 1 } }}
                     >
                       PDF

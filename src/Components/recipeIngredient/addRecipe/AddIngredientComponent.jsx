@@ -59,7 +59,8 @@ function AddIngredientComponent({
             placeholder="Enter Person Count (e.g., 100)"
             value={personCount}
             onChange={(e) => setPersonCount(parseInt(e.target.value) || 0)}
-            inputProps={{ min: 1 }} required
+            slotProps={{ htmlInput: { min: 1 } }}
+            required
           />
 
           <Box>
@@ -125,7 +126,7 @@ function AddIngredientComponent({
                               e.target.value
                             )
                           }
-                          inputProps={{ min: 0 }}
+                          slotProps={{ htmlInput: { min: 0 } }}
                         />
                         <TextField
                           size="small"

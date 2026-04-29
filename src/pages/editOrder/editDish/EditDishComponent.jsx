@@ -38,6 +38,10 @@ import {
   FiCalendar,
 } from "react-icons/fi";
 import { AiOutlineDelete } from "react-icons/ai";
+import {
+  flattenCategoryItems,
+  sortCategoryTree,
+} from "../../../utils/categoryTree";
 import Loader from "../../../Components/common/Loader";
 
 const TIME_OPTIONS = [
@@ -170,9 +174,7 @@ function EditDishComponent({
   const tomorrow = new Date();
   tomorrow.setDate(tomorrow.getDate() + 1);
 
-  const categoriesList = [...dishesList].sort(
-    (a, b) => (a.positions || 999) - (b.positions || 999)
-  );
+  const categoriesList = sortCategoryTree(dishesList);
 
   const toggleCategoryCollapse = (id) =>
     setCollapsedCategoryIds((prev) =>
@@ -209,6 +211,7 @@ function EditDishComponent({
           dishName: dish.name,
           categoryName,
           selectionRate: parseFloat(dish.selection_rate) || 0,
+          baseCost: parseFloat(dish.base_cost) || 0,
         },
       ]);
     }
@@ -314,7 +317,7 @@ function EditDishComponent({
                   name="mobile_no"
                   value={formData.mobile_no}
                   onChange={handleChange}
-                  inputProps={{ maxLength: 10 }}
+                  slotProps={{ htmlInput: { maxLength: 10 } }}
                   placeholder={errors.mobile_no || "10-digit mobile"}
                   error={!!errors.mobile_no}
                   helperText={errors.mobile_no || ""}
@@ -586,7 +589,7 @@ function EditDishComponent({
                                 }
                                 error={!!errors[`persons_${dIdx}_${sIdx}`]}
                                 helperText={errors[`persons_${dIdx}_${sIdx}`] || ""}
-                                inputProps={{ style: { textAlign: "center" } }}
+                                slotProps={{ htmlInput: { style: { textAlign: "center" } } }}
                               />
                             </Box>
                             <Box sx={{ width: { xs: "100%", md: 140 } }}>
@@ -613,10 +616,12 @@ function EditDishComponent({
                                 helperText={
                                   errors[`platePrice_${dIdx}_${sIdx}`] || ""
                                 }
-                                inputProps={{
-                                  style: {
-                                    textAlign: "center",
-                                    fontWeight: 700,
+                                slotProps={{
+                                  htmlInput: {
+                                    style: {
+                                      textAlign: "center",
+                                      fontWeight: 700,
+                                    },
                                   },
                                 }}
                                 sx={{
@@ -692,12 +697,14 @@ function EditDishComponent({
                             helperText={
                               errors[`event_address_${dIdx}_${sIdx}`] || ""
                             }
-                            InputProps={{
-                              startAdornment: (
-                                <InputAdornment position="start">
-                                  <FiMapPin size={12} />
-                                </InputAdornment>
-                              ),
+                            slotProps={{
+                              input: {
+                                startAdornment: (
+                                  <InputAdornment position="start">
+                                    <FiMapPin size={12} />
+                                  </InputAdornment>
+                                ),
+                              },
                             }}
                           />
 
@@ -893,7 +900,7 @@ function EditDishComponent({
                                             )
                                           }
                                           sx={{ flex: 1 }}
-                                          inputProps={{ style: { fontSize: "0.75rem" } }}
+                                          slotProps={{ htmlInput: { style: { fontSize: "0.75rem" } } }}
                                         />
                                         <TextField
                                           size="small"
@@ -909,11 +916,13 @@ function EditDishComponent({
                                             )
                                           }
                                           sx={{ width: 72 }}
-                                          inputProps={{
-                                            style: {
-                                              textAlign: "center",
-                                              fontWeight: 700,
-                                              fontSize: "0.75rem",
+                                          slotProps={{
+                                            htmlInput: {
+                                              style: {
+                                                textAlign: "center",
+                                                fontWeight: 700,
+                                                fontSize: "0.75rem",
+                                              },
                                             },
                                           }}
                                         />
@@ -931,10 +940,12 @@ function EditDishComponent({
                                             )
                                           }
                                           sx={{ width: 56 }}
-                                          inputProps={{
-                                            style: {
-                                              textAlign: "center",
-                                              fontSize: "0.75rem",
+                                          slotProps={{
+                                            htmlInput: {
+                                              style: {
+                                                textAlign: "center",
+                                                fontSize: "0.75rem",
+                                              },
                                             },
                                           }}
                                         />
@@ -1096,10 +1107,12 @@ function EditDishComponent({
                                         )
                                       }
                                       sx={{ width: 72 }}
-                                      inputProps={{
-                                        style: {
-                                          textAlign: "center",
-                                          fontSize: "0.75rem",
+                                      slotProps={{
+                                        htmlInput: {
+                                          style: {
+                                            textAlign: "center",
+                                            fontSize: "0.75rem",
+                                          },
                                         },
                                       }}
                                     />
@@ -1117,7 +1130,7 @@ function EditDishComponent({
                                         )
                                       }
                                       sx={{ flex: 2, minWidth: 100 }}
-                                      inputProps={{ style: { fontSize: "0.75rem" } }}
+                                      slotProps={{ htmlInput: { style: { fontSize: "0.75rem" } } }}
                                     />
                                     <Typography
                                       variant="caption"
@@ -1294,7 +1307,7 @@ function EditDishComponent({
             <Stack spacing={1.5}>
               {categoriesList.map((category) => {
                 const isCollapsed = collapsedCategoryIds.includes(category.id);
-                const items = category.items || [];
+                const items = flattenCategoryItems(category);
                 const selectedCount = items.filter((d) =>
                   tempDishes.some((td) => td.dishId === d.id)
                 ).length;
@@ -1390,7 +1403,10 @@ function EditDishComponent({
                               <Grid key={dish.id} size={{ xs: 6, sm: 4 }}>
                                 <Box
                                   onClick={() =>
-                                    handleTempDishToggle(dish, category.name)
+                                    handleTempDishToggle(
+                                      dish,
+                                      dish.categoryName || category.name
+                                    )
                                   }
                                   sx={{
                                     px: 1.5,
@@ -1438,12 +1454,22 @@ function EditDishComponent({
                                         state === "error" ? "error" : "primary"
                                       }
                                     />
-                                    <Typography
-                                      variant="body2" noWrap
-                                      sx={{ flex: 1 }}
-                                    >
-                                      {dish.name}
-                                    </Typography>
+                                    <Box sx={{ flex: 1, minWidth: 0 }}>
+                                      <Typography variant="body2" noWrap>
+                                        {dish.name}
+                                      </Typography>
+                                      {dish.categoryPath &&
+                                        dish.categoryPath !== category.name && (
+                                          <Typography
+                                            variant="caption"
+                                            color="text.secondary"
+                                            noWrap
+                                            sx={{ display: "block" }}
+                                          >
+                                            {dish.categoryPath}
+                                          </Typography>
+                                        )}
+                                    </Box>
                                   </Stack>
                                 </Box>
                               </Grid>

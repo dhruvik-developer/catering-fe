@@ -231,11 +231,11 @@ function QuotationController() {
   const handleDeleteQuotation = async (id) => {
     DeleteConfirmation({
       id,
-      apiEndpoint: "/status-change-event-bookings",
+      apiEndpoint: "/event-bookings",
       name: "quotation",
       successMessage: "Quotation deleted successfully!",
       onSuccess: refetchQuotations,
-      method: "POST",
+      method: "PUT",
       payload: { status: "cancelled" },
     });
   };

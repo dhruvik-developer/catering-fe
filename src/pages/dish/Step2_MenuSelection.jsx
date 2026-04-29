@@ -2,12 +2,10 @@
 import { useState, useMemo, useEffect } from "react";
 import {
   Avatar,
-  Badge,
   Box,
   Button,
   Chip,
   Divider,
-  IconButton,
   InputAdornment,
   Paper,
   Stack,
@@ -26,6 +24,11 @@ import {
 } from "react-icons/fi";
 import Loader from "../../Components/common/Loader";
 import EmptyState from "../../Components/common/EmptyState";
+import {
+  categoryMatchesQuery,
+  flattenCategoryItems,
+  sortCategoryTree,
+} from "../../utils/categoryTree";
 
 function Step2_MenuSelection({
   formData,
@@ -61,10 +64,7 @@ function Step2_MenuSelection({
   const [categorySearchQuery, setCategorySearchQuery] = useState("");
 
   const categoriesList = useMemo(
-    () =>
-      [...dishesList].sort(
-        (a, b) => (a.positions || 999) - (b.positions || 999)
-      ),
+    () => sortCategoryTree(dishesList),
     [dishesList]
   );
 
@@ -80,28 +80,19 @@ function Step2_MenuSelection({
   const filteredCategories = useMemo(() => {
     if (!categorySearchQuery.trim()) return categoriesList;
     return categoriesList.filter((cat) =>
-      cat.name.toLowerCase().includes(categorySearchQuery.toLowerCase())
+      categoryMatchesQuery(cat, categorySearchQuery)
     );
   }, [categoriesList, categorySearchQuery]);
 
   const activeCategory = categoriesList.find((c) => c.id === activeCategoryId);
 
-  const getAllItems = (category) => {
-    if (!category) return [];
-    let items = [...(category.items || [])];
-    if (category.subcategories) {
-      category.subcategories.forEach((sub) => {
-        items = [...items, ...getAllItems(sub)];
-      });
-    }
-    return items;
-  };
-
   const categoryItems = useMemo(() => {
-    const items = getAllItems(activeCategory);
+    const items = flattenCategoryItems(activeCategory);
     if (!searchQuery.trim()) return items;
     return items.filter((item) =>
-      item.name.toLowerCase().includes(searchQuery.toLowerCase())
+      `${item.name} ${item.categoryPath}`
+        .toLowerCase()
+        .includes(searchQuery.toLowerCase())
     );
   }, [activeCategory, searchQuery]);
 
@@ -121,7 +112,7 @@ function Step2_MenuSelection({
         {
           dishId: dish.id,
           dishName: dish.name,
-          categoryName: activeCategory?.name || "Dishes",
+          categoryName: dish.categoryName || activeCategory?.name || "Dishes",
           selectionRate: parseFloat(dish.selection_rate) || 0,
           baseCost: parseFloat(dish.base_cost) || 0,
         },
@@ -143,7 +134,7 @@ function Step2_MenuSelection({
   const getSelectedCountForCategory = (catId) => {
     const cat = categoriesList.find((c) => c.id === catId);
     if (!cat) return 0;
-    const allItems = getAllItems(cat);
+    const allItems = flattenCategoryItems(cat);
     return allItems.filter((item) => isDishSelected(item.id)).length;
   };
 
@@ -465,14 +456,25 @@ function Step2_MenuSelection({
                             <FiCheck size={13} strokeWidth={3} />
                           </Avatar>
                         )}
-                        <Typography
-                          variant="body2"
-
-                          color={selected ? "primary.main" : "text.primary"}
-                          sx={{ fontWeight: 600, lineHeight: 1.4 }}
-                        >
-                          {dish.name}
-                        </Typography>
+                        <Stack spacing={0.4} sx={{ minWidth: 0 }}>
+                          <Typography
+                            variant="body2"
+                            color={selected ? "primary.main" : "text.primary"}
+                            sx={{ fontWeight: 600, lineHeight: 1.4 }}
+                          >
+                            {dish.name}
+                          </Typography>
+                          {dish.categoryPath &&
+                            dish.categoryPath !== activeCategory?.name && (
+                              <Typography
+                                variant="caption"
+                                color="text.secondary"
+                                sx={{ lineHeight: 1.2 }}
+                              >
+                                {dish.categoryPath}
+                              </Typography>
+                            )}
+                        </Stack>
                       </Paper>
                     </Grid>
                   );

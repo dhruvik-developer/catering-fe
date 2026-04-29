@@ -945,17 +945,24 @@ const Header = ({ toggleSidebar }) => {
 
           {/* Profile */}
           <Button
+            disableElevation
             onClick={(e) => setProfileAnchor(e.currentTarget)}
             sx={{
-              bgcolor: "rgba(255,255,255,0.15)",
-              color: "inherit",
+              bgcolor: "var(--color-primary-contrast)",
+              color: "var(--color-primary)",
               border: "1px solid",
               borderColor: "rgba(255,255,255,0.2)",
               pl: 1.5,
               pr: 1,
               py: 0.5,
               borderRadius: 999,
-              "&:hover": { bgcolor: "rgba(255,255,255,0.25)" },
+              "&:hover": {
+                bgcolor: "var(--color-primary-contrast)",
+                boxShadow: "0 8px 18px rgba(15, 23, 42, 0.18)",
+              },
+              "& .MuiButton-endIcon": {
+                color: "var(--color-primary)",
+              },
             }}
             endIcon={
               <FiChevronDown
@@ -971,6 +978,7 @@ const Header = ({ toggleSidebar }) => {
               variant="body2"
 
               sx={{ fontWeight: 700,
+                color: "var(--color-primary)",
                 display: { xs: "none", sm: "inline" },
                 mr: 1,
               }}
@@ -979,8 +987,8 @@ const Header = ({ toggleSidebar }) => {
             </Typography>
             <Avatar
               sx={{
-                bgcolor: "rgba(255,255,255,0.3)",
-                color: "#ffffff",
+                bgcolor: "var(--color-primary)",
+                color: "var(--color-primary-contrast)",
                 width: 32,
                 height: 32,
                 fontSize: "0.8rem",

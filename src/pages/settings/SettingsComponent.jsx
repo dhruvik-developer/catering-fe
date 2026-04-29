@@ -1,4 +1,5 @@
 /* eslint-disable react/prop-types */
+import { useState } from "react";
 import {
   FiEdit3,
   FiSave,
@@ -10,8 +11,10 @@ import {
   FiMessageCircle,
   FiImage,
   FiDroplet,
+  FiFileText,
 } from "react-icons/fi";
 import { motion, AnimatePresence } from "framer-motion";
+import PdfFormatterSettings from "./PdfFormatterSettings";
 
 const DEFAULT_COLOR_CODE = "#845CBD";
 
@@ -25,6 +28,19 @@ const normalizeHexColor = (value) => {
   return DEFAULT_COLOR_CODE;
 };
 
+const SETTINGS_TABS = [
+  {
+    id: "business",
+    label: "Business Profile",
+    icon: FiUser,
+  },
+  {
+    id: "pdf",
+    label: "PDF Formats",
+    icon: FiFileText,
+  },
+];
+
 function SettingsComponent({
   formData,
   handleInputChange,
@@ -35,64 +51,101 @@ function SettingsComponent({
   handleCancel,
   extractedColors,
   canModifyProfile,
+  pdfFormatterManager,
 }) {
+  const [activeTab, setActiveTab] = useState("business");
   const normalizedColorCode = normalizeHexColor(formData.color_code);
+  const isBusinessTab = activeTab === "business";
 
   return (
     <div className="min-h-[calc(100vh-60px)] bg-gradient-to-br from-gray-50 via-[var(--color-primary-soft)]/30 to-gray-50 p-4 sm:p-6 lg:p-8">
-      <div className="max-w-4xl mx-auto space-y-6">
-        {/* ====== Page Header ====== */}
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <div className="p-2.5 rounded-xl bg-[var(--color-primary-soft)]">
-              <FiUser className="text-[var(--color-primary-text)]" size={22} />
-            </div>
-            <div>
-              <h2 className="text-xl font-bold text-gray-800">
-                Business Profile
-              </h2>
-              <p className="text-sm text-gray-400">
-                Manage your business information and settings
-              </p>
-            </div>
-          </div>
+      <div className="max-w-7xl mx-auto space-y-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 bg-white/80 border border-[var(--color-primary-soft)] rounded-2xl p-2 shadow-sm">
+          {SETTINGS_TABS.map((tab) => {
+            const Icon = tab.icon;
+            const active = activeTab === tab.id;
 
-          {!isEditing && canModifyProfile ? (
-            <button
-              type="button"
-              onClick={handleEdit}
-              className="flex items-center gap-2 px-5 py-2.5 font-semibold text-[var(--color-primary)] bg-[var(--color-primary-soft)] hover:brightness-95 rounded-xl transition-all duration-200 border border-[var(--color-primary)]/20 cursor-pointer"
-            >
-              <FiEdit3 size={16} />
-              <span>Edit Profile</span>
-            </button>
-          ) : isEditing ? (
-            <div className="flex items-center gap-2">
+            return (
               <button
+                key={tab.id}
                 type="button"
-                onClick={handleCancel}
-                className="flex items-center gap-2 px-4 py-2.5 font-semibold text-gray-600 bg-white hover:bg-gray-50 rounded-xl transition-all duration-200 border border-gray-300 cursor-pointer"
-              >
-                <FiX size={16} />
-                <span>Cancel</span>
-              </button>
-              <button
-                type="button"
-                onClick={handleSubmit}
-                disabled={loading}
-                className={`flex items-center gap-2 px-5 py-2.5 font-semibold text-white bg-gradient-to-r from-[var(--color-primary)] to-[var(--color-primary-dark)] hover:brightness-95 rounded-xl shadow-lg shadow-[var(--color-primary)]/20 transition-all duration-200 cursor-pointer ${
-                  loading ? "opacity-70 cursor-not-allowed" : ""
+                onClick={() => setActiveTab(tab.id)}
+                className={`flex items-center gap-3 px-4 py-3 rounded-xl text-left transition-all ${
+                  active
+                    ? "bg-[var(--color-primary)] text-white shadow-md"
+                    : "bg-transparent text-gray-600 hover:bg-white"
                 }`}
               >
-                <FiSave size={16} />
-                <span>{loading ? "Saving..." : "Save Changes"}</span>
+                <span
+                  className={`h-9 w-9 rounded-xl flex items-center justify-center ${
+                    active
+                      ? "bg-white/15 text-white"
+                      : "bg-white text-[var(--color-primary)]"
+                  }`}
+                >
+                  <Icon size={18} />
+                </span>
+                <span className="font-bold">{tab.label}</span>
               </button>
-            </div>
-          ) : null}
+            );
+          })}
         </div>
 
+        {/* ====== Page Header ====== */}
+        {isBusinessTab && (
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <div className="p-2.5 rounded-xl bg-[var(--color-primary-soft)]">
+                <FiUser className="text-[var(--color-primary-text)]" size={22} />
+              </div>
+              <div>
+                <h2 className="text-xl font-bold text-gray-800">
+                  Business Profile
+                </h2>
+                <p className="text-sm text-gray-400">
+                  Manage your business information and settings
+                </p>
+              </div>
+            </div>
+
+            {!isEditing && canModifyProfile ? (
+              <button
+                type="button"
+                onClick={handleEdit}
+                className="flex items-center gap-2 px-5 py-2.5 font-semibold text-[var(--color-primary)] bg-[var(--color-primary-soft)] hover:brightness-95 rounded-xl transition-all duration-200 border border-[var(--color-primary)]/20 cursor-pointer"
+              >
+                <FiEdit3 size={16} />
+                <span>Edit Profile</span>
+              </button>
+            ) : isEditing ? (
+              <div className="flex items-center gap-2">
+                <button
+                  type="button"
+                  onClick={handleCancel}
+                  className="flex items-center gap-2 px-4 py-2.5 font-semibold text-gray-600 bg-white hover:bg-gray-50 rounded-xl transition-all duration-200 border border-gray-300 cursor-pointer"
+                >
+                  <FiX size={16} />
+                  <span>Cancel</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={handleSubmit}
+                  disabled={loading}
+                  className={`flex items-center gap-2 px-5 py-2.5 font-semibold text-white bg-gradient-to-r from-[var(--color-primary)] to-[var(--color-primary-dark)] hover:brightness-95 rounded-xl shadow-lg shadow-[var(--color-primary)]/20 transition-all duration-200 cursor-pointer ${
+                    loading ? "opacity-70 cursor-not-allowed" : ""
+                  }`}
+                >
+                  <FiSave size={16} />
+                  <span>{loading ? "Saving..." : "Save Changes"}</span>
+                </button>
+              </div>
+            ) : null}
+          </div>
+        )}
+
         {/* ====== Profile Card ====== */}
-        <form onSubmit={handleSubmit}>
+        {isBusinessTab ? (
+          <form onSubmit={handleSubmit}>
           <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
             {/* Editing Mode Banner */}
             {isEditing && (
@@ -434,7 +487,10 @@ function SettingsComponent({
               </div>
             </div>
           </div>
-        </form>
+          </form>
+        ) : (
+          <PdfFormatterSettings manager={pdfFormatterManager} />
+        )}
       </div>
     </div>
   );

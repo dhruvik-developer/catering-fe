@@ -1,3 +1,5 @@
+import { getTenantScopedStorageKey } from "./tenantRuntime";
+
 const TOKEN_STORAGE_KEY = "accessToken";
 const USERNAME_STORAGE_KEY = "username";
 const USER_TYPE_STORAGE_KEY = "userType";
@@ -8,22 +10,33 @@ export const USER_ROLE_ADMIN = "admin";
 
 let accessToken =
   typeof window !== "undefined"
-    ? window.localStorage.getItem(TOKEN_STORAGE_KEY)
+    ? window.localStorage.getItem(getTenantScopedStorageKey(TOKEN_STORAGE_KEY))
     : null;
+
+const storage = {
+  get: (key) =>
+    typeof window !== "undefined"
+      ? window.localStorage.getItem(getTenantScopedStorageKey(key))
+      : null,
+  set: (key, value) => {
+    if (typeof window === "undefined") return;
+    window.localStorage.setItem(getTenantScopedStorageKey(key), value);
+  },
+  remove: (key) => {
+    if (typeof window === "undefined") return;
+    window.localStorage.removeItem(getTenantScopedStorageKey(key));
+  },
+};
 
 const tokenService = {
   getToken: () => accessToken,
   getUsername: () =>
-    typeof window !== "undefined"
-      ? window.localStorage.getItem(USERNAME_STORAGE_KEY)
-      : null,
+    storage.get(USERNAME_STORAGE_KEY),
   getUserType: () =>
-    typeof window !== "undefined"
-      ? window.localStorage.getItem(USER_TYPE_STORAGE_KEY)
-      : null,
+    storage.get(USER_TYPE_STORAGE_KEY),
   getPermissions: () => {
     if (typeof window === "undefined") return [];
-    const permissions = window.localStorage.getItem(PERMISSIONS_STORAGE_KEY);
+    const permissions = storage.get(PERMISSIONS_STORAGE_KEY);
     try {
       return permissions ? JSON.parse(permissions) : [];
     } catch (e) {
@@ -33,9 +46,7 @@ const tokenService = {
   },
   getEnabledModules: () => {
     if (typeof window === "undefined") return [];
-    const enabledModules = window.localStorage.getItem(
-      ENABLED_MODULES_STORAGE_KEY
-    );
+    const enabledModules = storage.get(ENABLED_MODULES_STORAGE_KEY);
     try {
       return enabledModules ? JSON.parse(enabledModules) : [];
     } catch (e) {
@@ -45,7 +56,7 @@ const tokenService = {
   },
   getTenant: () => {
     if (typeof window === "undefined") return null;
-    const tenant = window.localStorage.getItem(TENANT_STORAGE_KEY);
+    const tenant = storage.get(TENANT_STORAGE_KEY);
     try {
       return tenant ? JSON.parse(tenant) : null;
     } catch (e) {
@@ -59,79 +70,79 @@ const tokenService = {
     if (typeof window === "undefined") return;
 
     if (token) {
-      window.localStorage.setItem(TOKEN_STORAGE_KEY, token);
+      storage.set(TOKEN_STORAGE_KEY, token);
       return;
     }
 
-    window.localStorage.removeItem(TOKEN_STORAGE_KEY);
+    storage.remove(TOKEN_STORAGE_KEY);
   },
   setUsername: (username) => {
     if (typeof window === "undefined") return;
 
     if (username) {
-      window.localStorage.setItem(USERNAME_STORAGE_KEY, username);
+      storage.set(USERNAME_STORAGE_KEY, username);
       return;
     }
 
-    window.localStorage.removeItem(USERNAME_STORAGE_KEY);
+    storage.remove(USERNAME_STORAGE_KEY);
   },
   setUserType: (userType) => {
     if (typeof window === "undefined") return;
 
     if (userType) {
-      window.localStorage.setItem(USER_TYPE_STORAGE_KEY, userType);
+      storage.set(USER_TYPE_STORAGE_KEY, userType);
       return;
     }
 
-    window.localStorage.removeItem(USER_TYPE_STORAGE_KEY);
+    storage.remove(USER_TYPE_STORAGE_KEY);
   },
   setPermissions: (permissions) => {
     if (typeof window === "undefined") return;
 
     if (permissions && Array.isArray(permissions)) {
-      window.localStorage.setItem(
+      storage.set(
         PERMISSIONS_STORAGE_KEY,
         JSON.stringify(permissions)
       );
       return;
     }
 
-    window.localStorage.removeItem(PERMISSIONS_STORAGE_KEY);
+    storage.remove(PERMISSIONS_STORAGE_KEY);
   },
   setEnabledModules: (enabledModules) => {
     if (typeof window === "undefined") return;
 
     if (enabledModules && Array.isArray(enabledModules)) {
-      window.localStorage.setItem(
+      storage.set(
         ENABLED_MODULES_STORAGE_KEY,
         JSON.stringify(enabledModules)
       );
       return;
     }
 
-    window.localStorage.removeItem(ENABLED_MODULES_STORAGE_KEY);
+    storage.remove(ENABLED_MODULES_STORAGE_KEY);
   },
   setTenant: (tenant) => {
     if (typeof window === "undefined") return;
 
     if (tenant && typeof tenant === "object") {
-      window.localStorage.setItem(TENANT_STORAGE_KEY, JSON.stringify(tenant));
+      storage.set(TENANT_STORAGE_KEY, JSON.stringify(tenant));
       return;
     }
 
-    window.localStorage.removeItem(TENANT_STORAGE_KEY);
+    storage.remove(TENANT_STORAGE_KEY);
   },
   clearAuth: () => {
     accessToken = null;
 
     if (typeof window === "undefined") return;
 
-    window.localStorage.removeItem(TOKEN_STORAGE_KEY);
-    window.localStorage.removeItem(USERNAME_STORAGE_KEY);
-    window.localStorage.removeItem(USER_TYPE_STORAGE_KEY);
-    window.localStorage.removeItem(PERMISSIONS_STORAGE_KEY);
-    window.localStorage.removeItem(ENABLED_MODULES_STORAGE_KEY);
-    window.localStorage.removeItem(TENANT_STORAGE_KEY);
+    storage.remove(TOKEN_STORAGE_KEY);
+    storage.remove(USERNAME_STORAGE_KEY);
+    storage.remove(USER_TYPE_STORAGE_KEY);
+    storage.remove(PERMISSIONS_STORAGE_KEY);
+    storage.remove(ENABLED_MODULES_STORAGE_KEY);
+    storage.remove(TENANT_STORAGE_KEY);
   },
 };
 

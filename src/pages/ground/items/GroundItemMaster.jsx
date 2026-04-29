@@ -158,12 +158,14 @@ const GroundItemMaster = () => {
             onChange={(e) => setSearchTerm(e.target.value)}
             autoComplete="off"
             sx={{ flex: 1, minWidth: 220 }}
-            InputProps={{
-              startAdornment: (
-                <InputAdornment position="start">
-                  <FiSearch size={14} />
-                </InputAdornment>
-              ),
+            slotProps={{
+              input: {
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <FiSearch size={14} />
+                  </InputAdornment>
+                ),
+              },
             }}
           />
           <Select

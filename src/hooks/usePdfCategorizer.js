@@ -1,5 +1,11 @@
 import { useState, useEffect } from "react";
 import { useCategories } from "./useCategories";
+import {
+  findCategoryItem,
+  flattenSelectedItemEntries,
+  getSelectedItemId,
+  getSelectedItemName,
+} from "../utils/categoryTree";
 
 export const usePdfCategorizer = (pdfData, isReady = true) => {
   const [categorizedData, setCategorizedData] = useState(pdfData);
@@ -28,28 +34,21 @@ export const usePdfCategorizer = (pdfData, isReady = true) => {
           if (session.selected_items) {
             const resolvedItems = {};
 
-            Object.entries(session.selected_items).forEach(([key, items]) => {
-              if (!items || !Array.isArray(items)) return;
-
-              items.forEach((dishObj) => {
-                const dishName =
-                  typeof dishObj === "string"
-                    ? dishObj
-                    : dishObj?.name || dishObj?.dishName || "";
+            flattenSelectedItemEntries(session.selected_items).forEach(
+              ({ categoryName: key, categoryPath, item: dishObj }) => {
+                const dishName = getSelectedItemName(dishObj);
                 if (!dishName) return;
 
-                let foundCategoryName =
-                  key.toUpperCase() === "DISHES" ? null : key;
+                const categoryHint = categoryPath || key;
+                const matchedDish = findCategoryItem(categories, {
+                  id: getSelectedItemId(dishObj),
+                  name: dishName,
+                  categoryName: categoryHint,
+                });
 
-                if (!foundCategoryName) {
-                  for (const category of categories) {
-                    const match = category.items?.find((dish) => dish.name === dishName);
-                    if (match) {
-                      foundCategoryName = category.name;
-                      break;
-                    }
-                  }
-                }
+                let foundCategoryName =
+                  matchedDish?.categoryName ||
+                  (key.toUpperCase() === "DISHES" ? null : key);
 
                 if (!foundCategoryName) foundCategoryName = "Dishes";
 
@@ -57,8 +56,8 @@ export const usePdfCategorizer = (pdfData, isReady = true) => {
                   resolvedItems[foundCategoryName] = [];
                 }
                 resolvedItems[foundCategoryName].push(dishObj);
-              });
-            });
+              }
+            );
 
             session.selected_items = resolvedItems;
           }

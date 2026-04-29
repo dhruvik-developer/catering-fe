@@ -122,12 +122,14 @@ const GroundCategoryMaster = () => {
             onChange={(e) => setSearchTerm(e.target.value)}
             autoComplete="off"
             sx={{ width: { xs: "100%", sm: 320 } }}
-            InputProps={{
-              startAdornment: (
-                <InputAdornment position="start">
-                  <FiSearch size={14} />
-                </InputAdornment>
-              ),
+            slotProps={{
+              input: {
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <FiSearch size={14} />
+                  </InputAdornment>
+                ),
+              },
             }}
           />
         </Box>

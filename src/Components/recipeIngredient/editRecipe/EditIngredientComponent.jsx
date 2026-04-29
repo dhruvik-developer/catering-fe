@@ -47,7 +47,7 @@ function EditIngredientComponent({
           label="Recipe For Person Count"
           value={personCount}
           onChange={(e) => setPersonCount(parseInt(e.target.value) || 0)}
-          inputProps={{ min: 1 }}
+          slotProps={{ htmlInput: { min: 1 } }}
           placeholder="Enter Person Count (e.g., 100)"
         />
 
@@ -56,7 +56,7 @@ function EditIngredientComponent({
             fullWidth
             label="Select Item"
             value={recipe.item.name}
-            InputProps={{ readOnly: true }}
+            slotProps={{ input: { readOnly: true } }}
           />
           <IconButton
             size="large"

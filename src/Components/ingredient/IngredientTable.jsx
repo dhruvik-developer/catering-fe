@@ -197,12 +197,14 @@ const IngredientTable = ({
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             sx={{ width: { xs: "100%", sm: 260 } }}
-            InputProps={{
-              startAdornment: (
-                <InputAdornment position="start">
-                  <FiSearch size={14} />
-                </InputAdornment>
-              ),
+            slotProps={{
+              input: {
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <FiSearch size={14} />
+                  </InputAdornment>
+                ),
+              },
             }}
           />
         </Stack>

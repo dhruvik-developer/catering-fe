@@ -1,9 +1,10 @@
 import axios from "axios";
 import tokenService from "./tokenService";
 import { BASE_PATH } from "../utils/Config";
+import { getApiBaseUrl } from "./tenantRuntime";
 
 const ApiInstance = axios.create({
-  baseURL: import.meta.env.VITE_API_BASE_URL,
+  baseURL: getApiBaseUrl(),
 });
 
 const inFlightGetRequests = new Map();

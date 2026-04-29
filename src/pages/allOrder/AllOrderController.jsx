@@ -6,14 +6,14 @@ import AllOrderComponent from "./AllOrderComponent";
 // Parse date string in dd-mm-yyyy OR yyyy-mm-dd format
 function parseDate(str) {
   if (!str) return null;
-  const ddmmyyyy = str.match(/^(\d{1,2})[\-\/](\d{1,2})[\-\/](\d{4})$/);
+  const ddmmyyyy = str.match(/^(\d{1,2})[-/](\d{1,2})[-/](\d{4})$/);
   if (ddmmyyyy)
     return new Date(
       Number(ddmmyyyy[3]),
       Number(ddmmyyyy[2]) - 1,
       Number(ddmmyyyy[1])
     );
-  const yyyymmdd = str.match(/^(\d{4})[\-\/](\d{1,2})[\-\/](\d{1,2})/);
+  const yyyymmdd = str.match(/^(\d{4})[-/](\d{1,2})[-/](\d{1,2})/);
   if (yyyymmdd)
     return new Date(
       Number(yyyymmdd[1]),
@@ -29,11 +29,15 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 import { addPayment, updateOrder } from "../../api/PostAllOrder";
 import Swal from "sweetalert2";
 import { useOrders } from "../../hooks/useOrders";
+import {
+  flattenSelectedItemEntries,
+  getSelectedItemName,
+} from "../../utils/categoryTree";
 
 function AllOrderController() {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
-  const [searchParams, setSearchParams] = useSearchParams();
+  const [searchParams] = useSearchParams();
   const {
     data: allOrder = [],
     isLoading: loading,
@@ -191,19 +195,23 @@ function AllOrderController() {
     if (!selectedItems || typeof selectedItems !== "object") return {};
 
     const transformed = {};
-    Object.keys(selectedItems).forEach((category) => {
-      transformed[category] = selectedItems[category]
-        .map((item) => {
-          if (typeof item === "object" && item.name && item.name.name) {
-            return { name: item.name.name };
-          }
-          if (typeof item === "object" && item.name) {
-            return { name: item.name };
-          }
-          return { name: item };
-        })
-        .filter((item) => item && item.name);
+    flattenSelectedItemEntries(selectedItems).forEach(
+      ({ categoryName, item }) => {
+        const name = getSelectedItemName(item);
+        if (!name) return;
+
+        const category = categoryName || "Dishes";
+        if (!transformed[category]) transformed[category] = [];
+        transformed[category].push({ name });
+      }
+    );
+
+    Object.keys(transformed).forEach((category) => {
+      if (transformed[category].length === 0) {
+        delete transformed[category];
+      }
     });
+
     return transformed;
   };
 
@@ -229,7 +237,6 @@ function AllOrderController() {
         orderDetails.sessions && orderDetails.sessions.length > 0
           ? orderDetails.sessions
           : [orderDetails];
-      const hasMultipleSessions = sessions.length > 1;
 
       let baseExtraCharge = 0;
       let baseWaiterCharge = 0;
@@ -611,14 +618,14 @@ function AllOrderController() {
   const handleDeleteAllOrder = (id) => {
     DeleteConfirmation({
       id,
-      apiEndpoint: "/status-change-event-bookings",
+      apiEndpoint: "/event-bookings",
       name: "order",
       successMessage: "Order deleted successfully!",
       onSuccess: () => {
         refetchOrders();
         window.dispatchEvent(new Event("orderStatusChanged"));
       },
-      method: "POST",
+      method: "PUT",
       payload: { status: "cancelled" },
     });
   };
