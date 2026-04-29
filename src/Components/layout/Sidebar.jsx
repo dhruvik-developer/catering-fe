@@ -27,6 +27,7 @@ import { FiUsers } from "react-icons/fi";
 import usePermissions from "../../hooks/usePermissions";
 import { getAllBusinessProfiles } from "../../api/BusinessProfile";
 import { setSidebarOpen } from "../../redux/uiSlice";
+import { isPlatformAdminHost } from "../../services/tenantRuntime";
 
 const SIDEBAR_WIDTH = 288;
 
@@ -34,7 +35,7 @@ const hugeIcon = (icon) => (
   <HugeiconsIcon icon={icon} size={22} color="currentColor" />
 );
 
-const menuItems = [
+const tenantMenuItems = [
   {
     name: "Create Dish",
     path: "/dish",
@@ -100,6 +101,21 @@ const menuItems = [
     requiredPermission: "ground.view",
   },
 ];
+
+const adminMenuItems = [
+  {
+    name: "Tenants",
+    path: "/tenants",
+    icon: <FiUsers size={22} />,
+  },
+  {
+    name: "Subscription Plans",
+    path: "/subscription-plans",
+    icon: hugeIcon(TransactionHistoryIcon),
+  },
+];
+
+const menuItems = isPlatformAdminHost() ? adminMenuItems : tenantMenuItems;
 
 const activePaths = {
   "/dish": ["/dish", "/edit-dish", "/edit-item", "/pdf", "/edit-order-pdf"],

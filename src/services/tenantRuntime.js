@@ -15,6 +15,12 @@ export const getTenantScopedStorageKey = (key) => {
   return `${key}:${getRuntimeHostname()}`;
 };
 
+export const isPlatformAdminHost = () => {
+  const hostname = getRuntimeHostname();
+  // Support both production (admin.trayza.in) and local (admin.localhost)
+  return hostname === "admin.localhost" || hostname.startsWith("admin.");
+};
+
 export const getApiBaseUrl = () => {
   const explicitBaseUrl = trimSlashes(import.meta.env.VITE_API_BASE_URL || "");
   const forceStaticBaseUrl =

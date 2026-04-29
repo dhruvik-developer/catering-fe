@@ -11,8 +11,10 @@ import PropTypes from "prop-types";
 import "./index.css";
 import PrivateRoute from "./routes/PrivateRoute";
 import Layout from "./Components/layout/Layout";
+import TenantsController from "./pages/tenancy/TenantsController";
 import { UserProvider } from "./context/UserContext";
 import { BASE_PATH } from "./utils/Config";
+import { isPlatformAdminHost } from "./services/tenantRuntime";
 import { getAllBusinessProfiles } from "./api/BusinessProfile";
 import { setPrimaryColor, DEFAULT_PRIMARY_COLOR as DEFAULT_PRIMARY_FROM_STORE } from "./redux/themeSlice";
 import usePermissions from "./hooks/usePermissions";
@@ -178,8 +180,16 @@ const App = () => {
 
             <Route element={<PrivateRoute />}>
               <Route element={<Layout />}>
-                {/* All main routes */}
-                <Route path="/dish" element={<Dish />} />
+                {isPlatformAdminHost() ? (
+                  <>
+                    <Route path="/tenants" element={<TenantsController />} />
+                    <Route path="/subscription-plans" element={<div>Subscription Plans Page</div>} />
+                    <Route path="/" element={<Navigate to="/tenants" replace />} />
+                  </>
+                ) : (
+                  <>
+                    {/* All main routes */}
+                    <Route path="/dish" element={<Dish />} />
                 <Route path="/category" element={<Category />} />
                 <Route path="/order-management" element={<OrderManagementPage />}>
                   <Route
@@ -375,6 +385,8 @@ const App = () => {
                 />
                 <Route path="/dish-tags-pdf" element={<DishTagPdf />} />
                 {/* End of all PDF routes */}
+                  </>
+                )}
               </Route>
             </Route>
 
