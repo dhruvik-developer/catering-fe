@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import {
   Box,
   Button,
@@ -5,15 +6,108 @@ import {
   Chip,
   IconButton,
   Paper,
+  Stack,
   Table,
   TableBody,
   TableCell,
   TableContainer,
   TableHead,
   TableRow,
+  Tooltip,
   Typography,
 } from "@mui/material";
-import { FiEdit, FiUploadCloud, FiPlusCircle } from "react-icons/fi";
+import {
+  FiEdit,
+  FiUploadCloud,
+  FiPlusCircle,
+  FiTrash2,
+} from "react-icons/fi";
+
+const formatDate = (value) => {
+  if (!value) return null;
+  const d = new Date(value);
+  if (Number.isNaN(d.getTime())) return value;
+  return d.toLocaleDateString(undefined, {
+    day: "2-digit",
+    month: "short",
+    year: "numeric",
+  });
+};
+
+const daysUntil = (value) => {
+  if (!value) return null;
+  const d = new Date(value);
+  if (Number.isNaN(d.getTime())) return null;
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  return Math.ceil((d - today) / (1000 * 60 * 60 * 24));
+};
+
+const getStatusColor = (status) => {
+  switch (status) {
+    case "active":
+      return "success";
+    case "trialing":
+      return "info";
+    case "past_due":
+      return "warning";
+    case "suspended":
+    case "cancelled":
+    case "expired":
+      return "error";
+    default:
+      return "default";
+  }
+};
+
+const renderExpiry = (tenant) => {
+  const endDate = tenant.subscription_end_date || tenant.next_billing_date;
+  if (!endDate) {
+    return (
+      <Typography variant="caption" color="text.disabled">
+        —
+      </Typography>
+    );
+  }
+
+  const days = daysUntil(endDate);
+  const formatted = formatDate(endDate);
+  let label = formatted;
+  let color = "default";
+
+  if (days !== null) {
+    if (days < 0) {
+      label = `Expired ${Math.abs(days)}d ago`;
+      color = "error";
+    } else if (days === 0) {
+      label = "Expires today";
+      color = "error";
+    } else if (days <= 7) {
+      label = `${days}d left`;
+      color = "warning";
+    } else if (days <= 30) {
+      label = `${days}d left`;
+      color = "info";
+    }
+  }
+
+  return (
+    <Stack spacing={0.25}>
+      <Chip
+        size="small"
+        label={label}
+        color={color}
+        variant={color === "default" ? "outlined" : "filled"}
+        sx={{ fontWeight: 600, alignSelf: "flex-start" }}
+      />
+      {color !== "default" ? (
+        <Typography variant="caption" color="text.disabled">
+          {formatted}
+        </Typography>
+      ) : null}
+    </Stack>
+  );
+};
 
 const TenantsComponent = ({
   loading,
@@ -21,23 +115,8 @@ const TenantsComponent = ({
   onAddTenant,
   onEditTenant,
   onProvisionTenant,
+  onDeleteTenant,
 }) => {
-  const getStatusColor = (status) => {
-    switch (status) {
-      case "active":
-        return "success";
-      case "trialing":
-        return "info";
-      case "past_due":
-        return "warning";
-      case "suspended":
-      case "cancelled":
-        return "error";
-      default:
-        return "default";
-    }
-  };
-
   return (
     <Box sx={{ p: 3 }}>
       <Box sx={{ display: "flex", justifyContent: "space-between", mb: 3, alignItems: "center" }}>
@@ -72,6 +151,7 @@ const TenantsComponent = ({
                 <TableCell sx={{ fontWeight: 600 }}>Schema</TableCell>
                 <TableCell sx={{ fontWeight: 600 }}>Plan</TableCell>
                 <TableCell sx={{ fontWeight: 600 }}>Status</TableCell>
+                <TableCell sx={{ fontWeight: 600 }}>Expiry</TableCell>
                 <TableCell sx={{ fontWeight: 600 }}>Provisioning</TableCell>
                 <TableCell sx={{ fontWeight: 600 }} align="right">Actions</TableCell>
               </TableRow>
@@ -95,6 +175,7 @@ const TenantsComponent = ({
                       sx={{ borderRadius: "8px", fontWeight: 600 }}
                     />
                   </TableCell>
+                  <TableCell>{renderExpiry(tenant)}</TableCell>
                   <TableCell>
                     <Chip
                       label={tenant.schema_status || "Pending"}
@@ -104,23 +185,46 @@ const TenantsComponent = ({
                     />
                   </TableCell>
                   <TableCell align="right">
-                    <IconButton onClick={() => onEditTenant(tenant.id)} size="small" color="primary">
-                      <FiEdit size={18} />
-                    </IconButton>
-                    <IconButton
-                      onClick={() => onProvisionTenant(tenant.id)}
-                      size="small"
-                      color="secondary"
-                      disabled={tenant.schema_status === "ready"}
+                    <Tooltip title="Edit tenant">
+                      <IconButton onClick={() => onEditTenant(tenant.id)} size="small" color="primary">
+                        <FiEdit size={18} />
+                      </IconButton>
+                    </Tooltip>
+                    <Tooltip
+                      title={
+                        tenant.schema_status === "ready"
+                          ? "Already provisioned"
+                          : "Provision tenant schema"
+                      }
                     >
-                      <FiUploadCloud size={18} />
-                    </IconButton>
+                      <span>
+                        <IconButton
+                          onClick={() => onProvisionTenant(tenant.id)}
+                          size="small"
+                          color="secondary"
+                          disabled={tenant.schema_status === "ready"}
+                        >
+                          <FiUploadCloud size={18} />
+                        </IconButton>
+                      </span>
+                    </Tooltip>
+                    {onDeleteTenant ? (
+                      <Tooltip title="Delete tenant">
+                        <IconButton
+                          onClick={() => onDeleteTenant(tenant)}
+                          size="small"
+                          sx={{ color: "error.main" }}
+                        >
+                          <FiTrash2 size={18} />
+                        </IconButton>
+                      </Tooltip>
+                    ) : null}
                   </TableCell>
                 </TableRow>
               ))}
               {tenants.length === 0 && !loading && (
                 <TableRow>
-                  <TableCell colSpan={6} align="center" sx={{ py: 4 }}>
+                  <TableCell colSpan={7} align="center" sx={{ py: 4 }}>
                     No tenants found.
                   </TableCell>
                 </TableRow>

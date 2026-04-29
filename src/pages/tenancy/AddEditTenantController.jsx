@@ -10,6 +10,7 @@ import {
 } from "../../api/TenancyApis";
 import { getPermissionModules } from "../../api/AccessControlApis";
 import { getApiMessage } from "../../utils/apiResponse";
+import { queryClient } from "../../lib/queryClient";
 
 const EMPTY_FORM = {
   name: "",
@@ -251,6 +252,7 @@ function AddEditTenantController() {
         await createTenant(payload);
         toast.success("Tenant created successfully.");
       }
+      queryClient.invalidateQueries({ queryKey: ["tenants"] });
       navigate("/tenants");
     } catch (error) {
       toast.error(

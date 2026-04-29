@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
+import Swal from "sweetalert2";
 import SubscriptionPlansComponent from "./SubscriptionPlansComponent";
 import { useTenants } from "../../hooks/useTenants";
 import {
@@ -64,10 +65,16 @@ function SubscriptionPlansController() {
   const handleEdit = (id) => navigate(`/edit-subscription-plan/${id}`);
 
   const handleDelete = async (plan) => {
-    const confirmed = window.confirm(
-      `Delete the "${plan.name}" plan? This cannot be undone.`
-    );
-    if (!confirmed) return;
+    const result = await Swal.fire({
+      title: `Delete "${plan.name}"?`,
+      text: "This cannot be undone.",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#c2272d",
+      cancelButtonColor: "#3085d6",
+      confirmButtonText: "Yes, delete plan",
+    });
+    if (!result.isConfirmed) return;
     try {
       await deleteSubscriptionPlan(plan.id);
       toast.success("Plan deleted.");

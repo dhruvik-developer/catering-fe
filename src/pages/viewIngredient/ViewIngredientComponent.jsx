@@ -224,7 +224,7 @@ function ViewIngredientComponent({
     const dishEntries =
       orderLocalByDishBySession[sessionId]?.[dishName] || [];
     for (const row of dishEntries) {
-      // eslint-disable-next-line no-await-in-loop
+       
       await onDeleteOrderLocalIngredient(sessionId, row.key);
     }
   };

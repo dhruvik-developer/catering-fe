@@ -5,6 +5,66 @@ import {
   PDF_UNICODE_DEFAULT_FONT,
   prepareUnicodePdfDocument,
 } from "./pdf/unicodePdfFont";
+import { getPdfFormatters } from "../api/PdfFormatters";
+
+let defaultFormatterPromise = null;
+
+async function fetchDefaultFormatterHtml() {
+  if (defaultFormatterPromise) return defaultFormatterPromise;
+  defaultFormatterPromise = (async () => {
+    try {
+      const response = await getPdfFormatters();
+      const list = response?.data || [];
+      const active = list.filter((f) => f.is_active !== false);
+      const chosen = active.find((f) => f.is_default) || active[0] || null;
+      return chosen?.html_content || "";
+    } catch {
+      return "";
+    }
+  })();
+  return defaultFormatterPromise;
+}
+
+export function clearPdfTemplateCache() {
+  defaultFormatterPromise = null;
+}
+
+function applyTemplateWrap(clone, templateHtml) {
+  if (!templateHtml) return clone;
+  let parsed;
+  try {
+    parsed = new DOMParser().parseFromString(templateHtml, "text/html");
+  } catch {
+    return clone;
+  }
+  const page = parsed.querySelector(".page");
+  const contentSlot = page?.querySelector(".content");
+  if (!page || !contentSlot) return clone;
+
+  const styleSources = Array.from(parsed.querySelectorAll("style"))
+    .map((s) => s.textContent || "")
+    .join("\n");
+
+  while (contentSlot.firstChild) contentSlot.removeChild(contentSlot.firstChild);
+  contentSlot.appendChild(clone);
+
+  const wrapper = document.createElement("div");
+  wrapper.className = "pdf-template-wrap";
+  wrapper.style.width = "794px";
+  if (styleSources) {
+    const styleEl = document.createElement("style");
+    styleEl.textContent = styleSources;
+    wrapper.appendChild(styleEl);
+  }
+  wrapper.appendChild(page);
+  return wrapper;
+}
+
+async function buildExportRoot(clone, useTemplate) {
+  if (useTemplate === false) return clone;
+  const templateHtml = await fetchDefaultFormatterHtml();
+  return applyTemplateWrap(clone, templateHtml);
+}
 
 // Helper to convert modern CSS colors (oklab/oklch) to standard rgba() for html2canvas support.
 const colorCanvas = document.createElement("canvas");
@@ -229,6 +289,7 @@ export async function exportToPDF(
   const originalElement = document.getElementById(elementId);
   const { repeatingHeaderFooter, html2pdfOptions } =
     splitPdfOptions(customOptions);
+  const useTemplate = customOptions.useTemplate !== false;
 
   if (!originalElement) {
     if (toast?.error) toast.error("PDF content not found.");
@@ -253,6 +314,8 @@ export async function exportToPDF(
 
     await ensureUnicodeWebFontsReady();
 
+    const exportRoot = await buildExportRoot(clone, useTemplate);
+
     // We must append the clone to the document body momentarily with visibility hidden.
     // This allows getComputedStyle to work accurately.
     wrapper = document.createElement("div");
@@ -260,7 +323,7 @@ export async function exportToPDF(
     wrapper.style.left = "-9999px";
     wrapper.style.top = "-9999px";
     wrapper.style.width = originalElement.offsetWidth + "px"; // Match width for styling
-    wrapper.appendChild(clone);
+    wrapper.appendChild(exportRoot);
     document.body.appendChild(wrapper);
 
     // Recursively apply computed RGB strings directly into style to polyfill oklab errors
@@ -327,10 +390,10 @@ export async function exportToPDF(
     );
 
     const repeatingAssets = repeatingHeaderFooter
-      ? await prepareRepeatingHeaderFooter(clone, opt, repeatingHeaderFooter)
+      ? await prepareRepeatingHeaderFooter(exportRoot, opt, repeatingHeaderFooter)
       : null;
 
-    const worker = html2pdf().set(opt).from(clone).toPdf();
+    const worker = html2pdf().set(opt).from(exportRoot).toPdf();
     await applyUnicodeFontToHtml2PdfWorker(worker);
     const pdf = await worker.get("pdf");
     addRepeatingHeaderFooterToPdf(pdf, repeatingAssets);
@@ -356,6 +419,7 @@ export async function generatePdfBlob(
   customOptions = {}
 ) {
   const originalElement = document.getElementById(elementId);
+  const useTemplate = customOptions.useTemplate !== false;
 
   if (!originalElement) {
     console.error(`Preview failed: Element with ID '${elementId}' not found.`);
@@ -377,12 +441,14 @@ export async function generatePdfBlob(
 
     await ensureUnicodeWebFontsReady();
 
+    const exportRoot = await buildExportRoot(clone, useTemplate);
+
     wrapper = document.createElement("div");
     wrapper.style.position = "absolute";
     wrapper.style.left = "-9999px";
     wrapper.style.top = "-9999px";
     wrapper.style.width = originalElement.offsetWidth + "px";
-    wrapper.appendChild(clone);
+    wrapper.appendChild(exportRoot);
     document.body.appendChild(wrapper);
 
     const originalNodes = [
@@ -443,7 +509,7 @@ export async function generatePdfBlob(
     };
     opt.pagebreak = mergePageBreakOptions(basePagebreak, customOptions.pagebreak);
 
-    const worker = html2pdf().set(opt).from(clone).toPdf();
+    const worker = html2pdf().set(opt).from(exportRoot).toPdf();
     await applyUnicodeFontToHtml2PdfWorker(worker);
     return await worker.output("blob");
   } catch (err) {
@@ -469,6 +535,7 @@ export async function shareToWhatsApp(
   prefilledText = ""
 ) {
   const originalElement = document.getElementById(elementId);
+  const useTemplate = customOptions.useTemplate !== false;
 
   if (!originalElement) {
     if (toast?.error) toast.error("PDF content not found.");
@@ -494,12 +561,14 @@ export async function shareToWhatsApp(
 
     await ensureUnicodeWebFontsReady();
 
+    const exportRoot = await buildExportRoot(clone, useTemplate);
+
     wrapper = document.createElement("div");
     wrapper.style.position = "absolute";
     wrapper.style.left = "-9999px";
     wrapper.style.top = "-9999px";
     wrapper.style.width = originalElement.offsetWidth + "px";
-    wrapper.appendChild(clone);
+    wrapper.appendChild(exportRoot);
     document.body.appendChild(wrapper);
 
     const originalNodes = [
@@ -572,13 +641,13 @@ export async function shareToWhatsApp(
       : `https://wa.me/${messageText ? `?text=${encodeURIComponent(messageText)}` : ""}`;
 
     // Always download the PDF first so the user has the file ready to attach
-    const downloadWorker = html2pdf().set(opt).from(clone).toPdf();
+    const downloadWorker = html2pdf().set(opt).from(exportRoot).toPdf();
     await applyUnicodeFontToHtml2PdfWorker(downloadWorker);
     await downloadWorker.save();
 
     if (isMobile && navigator.canShare) {
       // Only try to use the native share drawer on mobile devices
-      const shareWorker = html2pdf().set(opt).from(clone).toPdf();
+      const shareWorker = html2pdf().set(opt).from(exportRoot).toPdf();
       await applyUnicodeFontToHtml2PdfWorker(shareWorker);
       const pdfBlob = await shareWorker.output("blob");
       const file = new File([pdfBlob], fileName, { type: "application/pdf" });

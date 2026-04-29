@@ -1,4 +1,4 @@
-/* eslint-disable no-undef */
+ 
 import { useLocation, useNavigate } from "react-router-dom";
 import ShareIngredientComponent from "./ShareIngredientComponent";
 import toast from "react-hot-toast";
