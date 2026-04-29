@@ -1,8 +1,11 @@
 import toast from "react-hot-toast";
 import ApiInstance from "../services/ApiInstance";
+import { isPlatformAdminHost } from "../services/tenantRuntime";
 
 let businessProfilesInFlightRequest = null;
 let businessProfilesCache = null;
+
+const EMPTY_PROFILES_RESPONSE = { status: true, data: [] };
 
 const toMultipartFormData = (payload = {}) => {
   const formData = new FormData();
@@ -44,6 +47,12 @@ export const updateBusinessProfile = async (id, payload) => {
 };
 
 export const getAllBusinessProfiles = async () => {
+  // Business profiles are tenant-scoped; the platform admin schema doesn't
+  // expose this endpoint, so skip the network call entirely on admin.* hosts.
+  if (isPlatformAdminHost()) {
+    return EMPTY_PROFILES_RESPONSE;
+  }
+
   if (businessProfilesCache) {
     return businessProfilesCache;
   }

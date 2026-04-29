@@ -1,5 +1,6 @@
 /* eslint-disable react/prop-types */
 import {
+  Avatar,
   Box,
   Button,
   IconButton,
@@ -22,6 +23,7 @@ function LoginComponent({
   errors,
   businessLogo,
   isLogoLoading,
+  isAdminHost,
   onShowPassword,
   handleInputChange,
   handleSubmit,
@@ -73,8 +75,36 @@ function LoginComponent({
           justifyContent: "center",
         }}
       >
-        <Stack sx={{ mb: 2, alignItems: "center" }}>
-          {isLogoLoading ? (
+        <Stack sx={{ mb: 2, alignItems: "center" }} spacing={1}>
+          {isAdminHost ? (
+            <>
+              <Avatar
+                sx={{
+                  width: 88,
+                  height: 88,
+                  fontSize: "2rem",
+                  fontWeight: 800,
+                  letterSpacing: 1,
+                  color: "var(--color-primary-contrast)",
+                  background:
+                    "linear-gradient(135deg, var(--color-primary) 0%, color-mix(in srgb, var(--color-primary), black 25%) 100%)",
+                  boxShadow: "0 16px 32px -16px rgba(15, 23, 42, 0.55)",
+                }}
+              >
+                EV
+              </Avatar>
+              <Typography
+                variant="overline"
+                sx={{
+                  fontWeight: 800,
+                  letterSpacing: 2,
+                  color: "var(--color-primary)",
+                }}
+              >
+                Trayza Admin Login
+              </Typography>
+            </>
+          ) : isLogoLoading ? (
             <Skeleton variant="rounded" width={180} height={80} />
           ) : businessLogo ? (
             <BaseImage
@@ -92,7 +122,7 @@ function LoginComponent({
           variant="h5"
           sx={{ fontWeight: 600, mb: 3, textAlign: "center" }}
         >
-          Sign In
+          {isAdminHost ? "Operations Sign In" : "Sign In"}
         </Typography>
 
         <Box component="form" onSubmit={handleSubmit}>

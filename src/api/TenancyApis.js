@@ -44,3 +44,18 @@ export const getSubscriptionPlans = async () => {
     throw error;
   }
 };
+
+export const createSubscriptionPlan = async (data) => {
+  const response = await ApiInstance.post("/subscription-plans/", data);
+  return response.data;
+};
+
+export const updateSubscriptionPlan = async (id, data) => {
+  const response = await ApiInstance.put(`/subscription-plans/${id}/`, data);
+  return response.data;
+};
+
+export const deleteSubscriptionPlan = async (id) => {
+  const response = await ApiInstance.delete(`/subscription-plans/${id}/`);
+  return response.data;
+};

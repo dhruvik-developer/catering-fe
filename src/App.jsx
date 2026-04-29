@@ -76,6 +76,12 @@ import {
   GroundCategoryMaster,
   GroundItemMaster,
   EventGroundChecklist,
+  SuperAdminDashboard,
+  SuperAdminSubscriptionPlans,
+  SuperAdminUserModels,
+  SuperAdminAccessControl,
+  AddEditTenantController,
+  AddEditSubscriptionPlanController,
 } from "./app/routes";
 
 const DEFAULT_PRIMARY_COLOR = "#845cbd";
@@ -182,9 +188,16 @@ const App = () => {
               <Route element={<Layout />}>
                 {isPlatformAdminHost() ? (
                   <>
+                    <Route path="/dashboard" element={<SuperAdminDashboard />} />
                     <Route path="/tenants" element={<TenantsController />} />
-                    <Route path="/subscription-plans" element={<div>Subscription Plans Page</div>} />
-                    <Route path="/" element={<Navigate to="/tenants" replace />} />
+                    <Route path="/add-tenant" element={<AddEditTenantController />} />
+                    <Route path="/edit-tenant/:id" element={<AddEditTenantController />} />
+                    <Route path="/subscription-plans" element={<SuperAdminSubscriptionPlans />} />
+                    <Route path="/add-subscription-plan" element={<AddEditSubscriptionPlanController />} />
+                    <Route path="/edit-subscription-plan/:id" element={<AddEditSubscriptionPlanController />} />
+                    <Route path="/admin-users" element={<SuperAdminUserModels />} />
+                    <Route path="/access-control" element={<SuperAdminAccessControl />} />
+                    <Route path="/" element={<Navigate to="/dashboard" replace />} />
                   </>
                 ) : (
                   <>

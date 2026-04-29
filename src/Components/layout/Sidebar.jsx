@@ -23,7 +23,7 @@ import {
   TaskAdd01Icon,
   TransactionHistoryIcon,
 } from "@hugeicons/core-free-icons";
-import { FiUsers } from "react-icons/fi";
+import { FiUsers, FiGrid, FiShield, FiKey } from "react-icons/fi";
 import usePermissions from "../../hooks/usePermissions";
 import { getAllBusinessProfiles } from "../../api/BusinessProfile";
 import { setSidebarOpen } from "../../redux/uiSlice";
@@ -104,6 +104,11 @@ const tenantMenuItems = [
 
 const adminMenuItems = [
   {
+    name: "Dashboard",
+    path: "/dashboard",
+    icon: <FiGrid size={22} />,
+  },
+  {
     name: "Tenants",
     path: "/tenants",
     icon: <FiUsers size={22} />,
@@ -113,9 +118,20 @@ const adminMenuItems = [
     path: "/subscription-plans",
     icon: hugeIcon(TransactionHistoryIcon),
   },
+  {
+    name: "Access Control",
+    path: "/access-control",
+    icon: <FiKey size={22} />,
+  },
+  {
+    name: "User Models",
+    path: "/admin-users",
+    icon: <FiShield size={22} />,
+  },
 ];
 
-const menuItems = isPlatformAdminHost() ? adminMenuItems : tenantMenuItems;
+const isAdminHost = isPlatformAdminHost();
+const menuItems = isAdminHost ? adminMenuItems : tenantMenuItems;
 
 const activePaths = {
   "/dish": ["/dish", "/edit-dish", "/edit-item", "/pdf", "/edit-order-pdf"],
@@ -183,9 +199,10 @@ function Sidebar() {
   const open = useSelector((s) => s.ui.sidebarOpen);
   const { hasPermission } = usePermissions();
   const [businessLogo, setBusinessLogo] = useState("");
-  const [isLogoLoading, setIsLogoLoading] = useState(true);
+  const [isLogoLoading, setIsLogoLoading] = useState(!isAdminHost);
 
   useEffect(() => {
+    if (isAdminHost) return;
     const fetchBusinessLogo = async () => {
       try {
         const response = await getAllBusinessProfiles();
@@ -205,17 +222,35 @@ function Sidebar() {
     fetchBusinessLogo();
   }, []);
 
-  const close = () => dispatch(setSidebarOpen(false));
+  const close = () => {
+    if (isAdminHost) return;
+    dispatch(setSidebarOpen(false));
+  };
 
   const isMenuItemActive = (itemPath) =>
     activePaths[itemPath]?.some((p) => location.pathname.startsWith(p)) ||
     location.pathname === itemPath;
 
+  const drawerVariant = isAdminHost ? "permanent" : "temporary";
+  const drawerOpen = isAdminHost ? true : open;
+
   return (
     <Drawer
       anchor="left"
-      open={open}
+      variant={drawerVariant}
+      open={drawerOpen}
       onClose={close}
+      sx={
+        isAdminHost
+          ? {
+              width: SIDEBAR_WIDTH,
+              flexShrink: 0,
+              "& .MuiDrawer-paper": {
+                position: "relative",
+              },
+            }
+          : undefined
+      }
       PaperProps={{
         sx: {
           width: SIDEBAR_WIDTH,
@@ -230,7 +265,7 @@ function Sidebar() {
         },
       }}
     >
-      {/* Logo area */}
+      {/* Logo / brand area */}
       <Stack
         sx={{ alignItems: "center",
           p: 2.5,
@@ -241,7 +276,31 @@ function Sidebar() {
             "linear-gradient(135deg, color-mix(in srgb, var(--color-primary), white 92%), rgba(255,255,255,0.3))",
         }}
       >
-        {isLogoLoading ? (
+        {isAdminHost ? (
+          <Stack spacing={0.5} sx={{ alignItems: "center", py: 1 }}>
+            <Avatar
+              variant="rounded"
+              sx={{
+                bgcolor: "var(--color-primary)",
+                color: "var(--color-primary-contrast)",
+                width: 48,
+                height: 48,
+                fontWeight: 800,
+              }}
+            >
+              SA
+            </Avatar>
+            <Typography
+              variant="subtitle2"
+              sx={{ fontWeight: 800, color: "var(--color-primary)", letterSpacing: 0.5 }}
+            >
+              SuperAdmin Portal
+            </Typography>
+            <Typography variant="caption" color="text.secondary">
+              Platform control center
+            </Typography>
+          </Stack>
+        ) : isLogoLoading ? (
           <Skeleton variant="rounded" width={180} height={80} />
         ) : businessLogo ? (
           <Box

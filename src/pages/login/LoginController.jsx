@@ -6,6 +6,8 @@ import toast from "react-hot-toast";
 import LoginComponent from "./LoginComponent";
 import { getAllBusinessProfiles } from "../../api/BusinessProfile";
 import { getDefaultRouteForAccess } from "../../utils/accessControl";
+import { isPlatformAdminHost } from "../../services/tenantRuntime";
+import { getApiErrorMessage } from "../../utils/apiResponse";
 
 function LoginController() {
   const [credentials, setCredentials] = useState({
@@ -88,9 +90,20 @@ function LoginController() {
 
       login(access, username, userType, permissions, enabledModules, tenant);
       toast.success(response?.data?.message || "Login successfully");
-      navigate(getDefaultRouteForAccess(permissions, enabledModules) || "/login");
+      const target = isPlatformAdminHost()
+        ? "/dashboard"
+        : getDefaultRouteForAccess(permissions, enabledModules) || "/login";
+      navigate(target);
     } catch (error) {
-      toast.error(error?.message || "Login failed. Please check your credentials.");
+      const status = error?.response?.status;
+      // Backend returns 401 both for wrong password AND for a cross-tenant
+      // login (e.g. a Hare Krishna user posting to kailashcaterers.localhost).
+      // We can't tell those apart safely, so we keep the message generic.
+      const fallback =
+        status === 401
+          ? "Invalid credentials for this workspace."
+          : "Login failed. Please try again.";
+      toast.error(getApiErrorMessage(error, fallback));
     } finally {
       setLoading(false);
     }
@@ -102,6 +115,7 @@ function LoginController() {
       showPassword={showPassword} errors={errors}
       businessLogo={businessLogo}
       isLogoLoading={isLogoLoading}
+      isAdminHost={isPlatformAdminHost()}
       onShowPassword={togglePassword}
       handleInputChange={handleInputChange}
       handleSubmit={handleSubmit}

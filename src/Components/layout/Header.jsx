@@ -37,6 +37,7 @@ import { getStockCategory } from "../../api/FetchStockCategory";
 import { getAllOrder } from "../../api/FetchAllOrder";
 import usePermissions from "../../hooks/usePermissions";
 import { getDefaultRouteForAccess } from "../../utils/accessControl";
+import { isPlatformAdminHost } from "../../services/tenantRuntime";
 
 // Parse date string in dd-mm-yyyy OR yyyy-mm-dd format
 function parseDate(str) {
@@ -181,12 +182,14 @@ const Header = ({ toggleSidebar }) => {
   const location = useLocation();
   const displayName = username || "User";
   const initial = displayName.charAt(0).toUpperCase();
-  const homeRoute =
-    getDefaultRouteForAccess(permissions, enabledModules) || "/login";
-  const canViewStock = hasPermission("stock.view");
-  const canViewOrders = hasPermission("event_bookings.view");
-  const canViewSettings = hasPermission("business_profiles.view");
-  const canViewUsers = hasPermission("users.view");
+  const isAdminHost = isPlatformAdminHost();
+  const homeRoute = isAdminHost
+    ? "/dashboard"
+    : getDefaultRouteForAccess(permissions, enabledModules) || "/login";
+  const canViewStock = !isAdminHost && hasPermission("stock.view");
+  const canViewOrders = !isAdminHost && hasPermission("event_bookings.view");
+  const canViewSettings = !isAdminHost && hasPermission("business_profiles.view");
+  const canViewUsers = !isAdminHost && hasPermission("users.view");
 
   const [lowStockCount, setLowStockCount] = useState(0);
   const [lowStockItems, setLowStockItems] = useState([]);
@@ -466,17 +469,19 @@ const Header = ({ toggleSidebar }) => {
           spacing={1}
           sx={{ alignItems: "center", minWidth: 0 }}
         >
-          <IconButton
-            edge="start"
-            onClick={toggleSidebar}
-            sx={{
-              color: "inherit",
-              "&:hover": { bgcolor: "rgba(255,255,255,0.15)" },
-            }}
-            aria-label="toggle sidebar"
-          >
-            <FiMenu />
-          </IconButton>
+          {!isAdminHost && (
+            <IconButton
+              edge="start"
+              onClick={toggleSidebar}
+              sx={{
+                color: "inherit",
+                "&:hover": { bgcolor: "rgba(255,255,255,0.15)" },
+              }}
+              aria-label="toggle sidebar"
+            >
+              <FiMenu />
+            </IconButton>
+          )}
 
           <Breadcrumbs
             separator={<FiChevronRight size={12} />}
@@ -914,11 +919,13 @@ const Header = ({ toggleSidebar }) => {
             )}
           </Menu>
 
-          <Divider
-            orientation="vertical"
-            flexItem
-            sx={{ my: 1, bgcolor: "rgba(255,255,255,0.3)" }}
-          />
+          {!isAdminHost && (
+            <Divider
+              orientation="vertical"
+              flexItem
+              sx={{ my: 1, bgcolor: "rgba(255,255,255,0.3)" }}
+            />
+          )}
 
           {canViewOrders && (
             <Button
@@ -974,17 +981,18 @@ const Header = ({ toggleSidebar }) => {
               />
             }
           >
-            <Typography
-              variant="body2"
-
-              sx={{ fontWeight: 700,
-                color: "var(--color-primary)",
-                display: { xs: "none", sm: "inline" },
-                mr: 1,
-              }}
-            >
-              {displayName}
-            </Typography>
+            {!isAdminHost && (
+              <Typography
+                variant="body2"
+                sx={{ fontWeight: 700,
+                  color: "var(--color-primary)",
+                  display: { xs: "none", sm: "inline" },
+                  mr: 1,
+                }}
+              >
+                {displayName}
+              </Typography>
+            )}
             <Avatar
               sx={{
                 bgcolor: "var(--color-primary)",
