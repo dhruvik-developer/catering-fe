@@ -1,9 +1,9 @@
 #!/bin/bash
 
 # === CONFIG ===
-APP_DIR="/root/radha-admin-master"     # Change to your actual frontend directory
+APP_DIR="/root/catering-fe"     # Change to your actual frontend directory
 BUILD_DIR="$APP_DIR/dist"
-PORT=3003                            # Change if you want a different port
+PORT=3009                            # Change if you want a different port
 
 # === Navigate to app directory ===
 cd $APP_DIR || exit
