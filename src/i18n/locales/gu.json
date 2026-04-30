@@ -1,0 +1,109 @@
+{
+  "common": {
+    "loading": "લોડ થઈ રહ્યું છે...",
+    "save": "સાચવો",
+    "cancel": "રદ કરો",
+    "delete": "કાઢી નાખો",
+    "edit": "સુધારો",
+    "add": "ઉમેરો",
+    "search": "શોધો",
+    "submit": "મોકલો",
+    "close": "બંધ કરો",
+    "yes": "હા",
+    "no": "ના",
+    "actions": "ક્રિયાઓ",
+    "status": "સ્થિતિ",
+    "name": "નામ",
+    "date": "તારીખ",
+    "time": "સમય",
+    "back": "પાછા",
+    "saving": "સાચવી રહ્યું છે..."
+  },
+  "category": {
+    "createTitle": "શ્રેણી બનાવો",
+    "createSubtitle": "તમારી વસ્તુઓ ગોઠવવા માટે નવી શ્રેણી ઉમેરો",
+    "nameLabel": "શ્રેણીનું નામ",
+    "namePlaceholder": "કૃપા કરીને શ્રેણીનું નામ દાખલ કરો",
+    "saveButton": "શ્રેણી સાચવો"
+  },
+  "header": {
+    "lowStock": "ઓછો સ્ટોક",
+    "lowStockTitle": "ઓછા સ્ટોકની વસ્તુઓ",
+    "lowStockEmpty": "બધા સ્ટોકના સ્તર સારા છે",
+    "lowStockEmptyHint": "કોઈ વસ્તુ ચેતવણી સ્તરથી નીચે નથી",
+    "viewAllLowStock": "બધી ઓછા સ્ટોકની વસ્તુઓ જુઓ",
+    "alert_one": "{{count}} ચેતવણી",
+    "alert_other": "{{count}} ચેતવણીઓ",
+    "upcoming": "આગામી",
+    "upcomingTitle": "આગામી ઓર્ડર",
+    "next7Days": "આગામી 7 દિવસ",
+    "noUpcoming": "કોઈ આગામી ઓર્ડર નથી",
+    "noUpcomingHint": "આગામી 7 દિવસમાં કોઈ ઇવેન્ટ નથી",
+    "viewAllUpcoming": "બધા આગામી ઓર્ડર જુઓ",
+    "today": "આજે",
+    "tomorrow": "આવતીકાલે",
+    "inDays": "{{count}} દિવસમાં",
+    "calendar": "કેલેન્ડર",
+    "users": "વપરાશકર્તાઓ",
+    "settings": "સેટિંગ્સ",
+    "logout": "લૉગઆઉટ",
+    "logoutSuccess": "સફળતાપૂર્વક લૉગઆઉટ થયું!",
+    "min": "ન્યૂનતમ"
+  },
+  "breadcrumbs": {
+    "dish": "વાનગી બનાવો",
+    "category": "શ્રેણી",
+    "order-management": "ઓર્ડર મેનેજમેન્ટ",
+    "quotation": "કોટેશન",
+    "all-order": "બધા ઓર્ડર",
+    "invoice": "ઈનવોઈસ",
+    "stock": "સ્ટોક",
+    "payment-history": "ચુકવણીનો ઇતિહાસ",
+    "expense": "ખર્ચ",
+    "user": "વપરાશકર્તાઓ",
+    "calendar": "કેલેન્ડર",
+    "people": "લોકો",
+    "vendor": "વિક્રેતા",
+    "event-staff": "ઇવેન્ટ સ્ટાફ",
+    "settings": "સેટિંગ્સ"
+  },
+  "language": {
+    "english": "English",
+    "gujarati": "ગુજરાતી",
+    "hindi": "हिन्दी",
+    "switch": "ભાષા"
+  },
+  "status": {
+    "pending": "બાકી",
+    "approved": "મંજૂર",
+    "confirmed": "પુષ્ટિ",
+    "done": "પૂર્ણ",
+    "completed": "પૂર્ણ થયું",
+    "cancelled": "રદ કર્યું",
+    "rejected": "નકારેલું",
+    "draft": "ડ્રાફ્ટ",
+    "active": "સક્રિય",
+    "inactive": "નિષ્ક્રિય"
+  },
+  "payment": {
+    "paid": "ચૂકવેલ",
+    "unpaid": "બાકી",
+    "partial": "આંશિક",
+    "refunded": "પાછું આપેલું"
+  },
+  "units": {
+    "KG": "કિગ્રા",
+    "G": "ગ્રામ",
+    "L": "લિ",
+    "ML": "મિલિ",
+    "QTY": "નંગ",
+    "PCS": "પીસ"
+  },
+  "multilang": {
+    "english": "English",
+    "gujarati": "ગુજરાતી",
+    "hindi": "हिन्दी",
+    "fillAtLeastOne": "ઓછામાં ઓછી એક ભાષામાં લખો",
+    "namePlaceholder": "{{language}} માં નામ લખો"
+  }
+}

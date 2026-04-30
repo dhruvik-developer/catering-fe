@@ -1,0 +1,109 @@
+{
+  "common": {
+    "loading": "लोड हो रहा है...",
+    "save": "सहेजें",
+    "cancel": "रद्द करें",
+    "delete": "हटाएं",
+    "edit": "संपादित करें",
+    "add": "जोड़ें",
+    "search": "खोजें",
+    "submit": "जमा करें",
+    "close": "बंद करें",
+    "yes": "हाँ",
+    "no": "नहीं",
+    "actions": "कार्य",
+    "status": "स्थिति",
+    "name": "नाम",
+    "date": "तारीख",
+    "time": "समय",
+    "back": "वापस",
+    "saving": "सहेज रहे हैं..."
+  },
+  "category": {
+    "createTitle": "श्रेणी बनाएं",
+    "createSubtitle": "अपनी वस्तुओं को व्यवस्थित करने के लिए नई श्रेणी जोड़ें",
+    "nameLabel": "श्रेणी का नाम",
+    "namePlaceholder": "कृपया श्रेणी का नाम दर्ज करें",
+    "saveButton": "श्रेणी सहेजें"
+  },
+  "header": {
+    "lowStock": "कम स्टॉक",
+    "lowStockTitle": "कम स्टॉक वाली वस्तुएं",
+    "lowStockEmpty": "सभी स्टॉक स्तर अच्छे हैं",
+    "lowStockEmptyHint": "कोई वस्तु अलर्ट स्तर से नीचे नहीं है",
+    "viewAllLowStock": "सभी कम स्टॉक वस्तुएं देखें",
+    "alert_one": "{{count}} अलर्ट",
+    "alert_other": "{{count}} अलर्ट",
+    "upcoming": "आगामी",
+    "upcomingTitle": "आगामी ऑर्डर",
+    "next7Days": "अगले 7 दिन",
+    "noUpcoming": "कोई आगामी ऑर्डर नहीं",
+    "noUpcomingHint": "अगले 7 दिनों में कोई इवेंट नहीं",
+    "viewAllUpcoming": "सभी आगामी ऑर्डर देखें",
+    "today": "आज",
+    "tomorrow": "कल",
+    "inDays": "{{count}} दिनों में",
+    "calendar": "कैलेंडर",
+    "users": "उपयोगकर्ता",
+    "settings": "सेटिंग्स",
+    "logout": "लॉगआउट",
+    "logoutSuccess": "सफलतापूर्वक लॉगआउट हुआ!",
+    "min": "न्यूनतम"
+  },
+  "breadcrumbs": {
+    "dish": "व्यंजन बनाएं",
+    "category": "श्रेणी",
+    "order-management": "ऑर्डर प्रबंधन",
+    "quotation": "कोटेशन",
+    "all-order": "सभी ऑर्डर",
+    "invoice": "चालान",
+    "stock": "स्टॉक",
+    "payment-history": "भुगतान इतिहास",
+    "expense": "खर्च",
+    "user": "उपयोगकर्ता",
+    "calendar": "कैलेंडर",
+    "people": "लोग",
+    "vendor": "विक्रेता",
+    "event-staff": "इवेंट स्टाफ",
+    "settings": "सेटिंग्स"
+  },
+  "language": {
+    "english": "English",
+    "gujarati": "ગુજરાતી",
+    "hindi": "हिन्दी",
+    "switch": "भाषा"
+  },
+  "status": {
+    "pending": "लंबित",
+    "approved": "स्वीकृत",
+    "confirmed": "पुष्टि",
+    "done": "पूर्ण",
+    "completed": "पूरा हुआ",
+    "cancelled": "रद्द",
+    "rejected": "अस्वीकृत",
+    "draft": "ड्राफ्ट",
+    "active": "सक्रिय",
+    "inactive": "निष्क्रिय"
+  },
+  "payment": {
+    "paid": "भुगतान किया",
+    "unpaid": "बकाया",
+    "partial": "आंशिक",
+    "refunded": "वापस किया"
+  },
+  "units": {
+    "KG": "किग्रा",
+    "G": "ग्राम",
+    "L": "ली",
+    "ML": "मिलि",
+    "QTY": "नग",
+    "PCS": "पीस"
+  },
+  "multilang": {
+    "english": "English",
+    "gujarati": "ગુજરાતી",
+    "hindi": "हिन्दी",
+    "fillAtLeastOne": "कम से कम एक भाषा में भरें",
+    "namePlaceholder": "{{language}} में नाम दर्ज करें"
+  }
+}

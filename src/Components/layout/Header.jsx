@@ -32,12 +32,14 @@ import {
 } from "react-icons/fi";
 import { useNavigate, useLocation } from "react-router-dom";
 import toast from "react-hot-toast";
+import { useTranslation } from "react-i18next";
 import { UserContext } from "../../context/UserContext";
 import { getStockCategory } from "../../api/FetchStockCategory";
 import { getAllOrder } from "../../api/FetchAllOrder";
 import usePermissions from "../../hooks/usePermissions";
 import { getDefaultRouteForAccess } from "../../utils/accessControl";
 import { isPlatformAdminHost } from "../../services/tenantRuntime";
+import LanguageSwitcher from "../common/LanguageSwitcher";
 
 // Parse date string in dd-mm-yyyy OR yyyy-mm-dd format
 function parseDate(str) {
@@ -175,6 +177,7 @@ const parentRoutes = {
 };
 
 const Header = ({ toggleSidebar }) => {
+  const { t } = useTranslation();
   const { username, logout, permissions, enabledModules } =
     useContext(UserContext);
   const { hasPermission } = usePermissions();
@@ -271,7 +274,11 @@ const Header = ({ toggleSidebar }) => {
 
         if (parentKey && !visitedKeys.has(parentKey)) {
           visitedKeys.add(parentKey);
+          const parentTranslated = t(`breadcrumbs.${parentKey}`, {
+            defaultValue: "",
+          });
           const label =
+            parentTranslated ||
             routeLabels[parentKey] ||
             parentKey.charAt(0).toUpperCase() +
               parentKey.slice(1).replace(/-/g, " ");
@@ -306,7 +313,9 @@ const Header = ({ toggleSidebar }) => {
         continue;
       }
 
+      const translated = t(`breadcrumbs.${segment}`, { defaultValue: "" });
       const label =
+        translated ||
         routeLabels[segment] ||
         segment.charAt(0).toUpperCase() + segment.slice(1).replace(/-/g, " ");
       const isLast =
@@ -330,7 +339,7 @@ const Header = ({ toggleSidebar }) => {
     }
 
     return crumbs;
-  }, [location.pathname, location.state]);
+  }, [location.pathname, location.state, t]);
 
   // Fetch low stock + upcoming orders; refresh on explicit events (logic preserved)
   useEffect(() => {
@@ -431,7 +440,7 @@ const Header = ({ toggleSidebar }) => {
   const handleLogout = () => {
     setProfileAnchor(null);
     logout();
-    toast.success("Logout successfully!");
+    toast.success(t("header.logoutSuccess"));
     navigate("/login");
   };
 
@@ -568,7 +577,7 @@ const Header = ({ toggleSidebar }) => {
                   component="span"
                   sx={{ display: { xs: "none", sm: "inline" } }}
                 >
-                  Low Stock
+                  {t("header.lowStock")}
                 </Box>
                 <Box
                   component="span"
@@ -607,7 +616,7 @@ const Header = ({ toggleSidebar }) => {
                 <Stack direction="row" spacing={1} sx={{ alignItems: "center" }}>
                   <FiAlertTriangle size={14} />
                   <Typography variant="subtitle2" sx={{ fontWeight: 700 }}>
-                    Low Stock Items
+                    {t("header.lowStockTitle")}
                   </Typography>
                 </Stack>
                 <Typography
@@ -621,7 +630,7 @@ const Header = ({ toggleSidebar }) => {
                     borderRadius: 99,
                   }}
                 >
-                  {lowStockCount} Alert{lowStockCount !== 1 ? "s" : ""}
+                  {t("header.alert", { count: lowStockCount })}
                 </Typography>
               </Stack>
             </Box>
@@ -630,10 +639,10 @@ const Header = ({ toggleSidebar }) => {
               <Box sx={{ py: 4, textAlign: "center", color: "text.disabled" }}>
                 <FiBox size={28} style={{ opacity: 0.4 }} />
                 <Typography variant="body2" sx={{ mt: 1 }}>
-                  All stock levels are good
+                  {t("header.lowStockEmpty")}
                 </Typography>
                 <Typography variant="caption">
-                  No items below alert level
+                  {t("header.lowStockEmptyHint")}
                 </Typography>
               </Box>
             ) : (
@@ -690,7 +699,7 @@ const Header = ({ toggleSidebar }) => {
                         {item.quantity} {unit}
                       </Typography>
                       <Typography variant="caption" color="text.disabled">
-                        Min: {item.alert} {unit}
+                        {t("header.min")}: {item.alert} {unit}
                       </Typography>
                     </Stack>
                   </MenuItem>
@@ -714,7 +723,7 @@ const Header = ({ toggleSidebar }) => {
                     fontSize: "0.75rem",
                   }}
                 >
-                  View All Low Stock Items <FiChevronRight size={12} />
+                  {t("header.viewAllLowStock")} <FiChevronRight size={12} />
                 </MenuItem>
               </>
             )}
@@ -745,7 +754,7 @@ const Header = ({ toggleSidebar }) => {
                   component="span"
                   sx={{ display: { xs: "none", sm: "inline" } }}
                 >
-                  Upcoming
+                  {t("header.upcoming")}
                 </Box>
                 <Box
                   component="span"
@@ -784,7 +793,7 @@ const Header = ({ toggleSidebar }) => {
                 <Stack direction="row" spacing={1} sx={{ alignItems: "center" }}>
                   <FiClipboard size={14} />
                   <Typography variant="subtitle2" sx={{ fontWeight: 700 }}>
-                    Upcoming Orders
+                    {t("header.upcomingTitle")}
                   </Typography>
                 </Stack>
                 <Typography
@@ -798,7 +807,7 @@ const Header = ({ toggleSidebar }) => {
                     borderRadius: 99,
                   }}
                 >
-                  Next 7 Days
+                  {t("header.next7Days")}
                 </Typography>
               </Stack>
             </Box>
@@ -807,10 +816,10 @@ const Header = ({ toggleSidebar }) => {
               <Box sx={{ py: 4, textAlign: "center", color: "text.disabled" }}>
                 <FiClipboard size={28} style={{ opacity: 0.4 }} />
                 <Typography variant="body2" sx={{ mt: 1 }}>
-                  No upcoming orders
+                  {t("header.noUpcoming")}
                 </Typography>
                 <Typography variant="caption">
-                  No events in the next 7 days
+                  {t("header.noUpcomingHint")}
                 </Typography>
               </Box>
             ) : (
@@ -827,10 +836,10 @@ const Header = ({ toggleSidebar }) => {
                   : -1;
                 const dayLabel =
                   diffDays === 0
-                    ? "Today"
+                    ? t("header.today")
                     : diffDays === 1
-                      ? "Tomorrow"
-                      : `In ${diffDays} days`;
+                      ? t("header.tomorrow")
+                      : t("header.inDays", { count: diffDays });
 
                 return (
                   <MenuItem
@@ -913,7 +922,7 @@ const Header = ({ toggleSidebar }) => {
                     fontSize: "0.75rem",
                   }}
                 >
-                  View All Upcoming Orders <FiChevronRight size={12} />
+                  {t("header.viewAllUpcoming")} <FiChevronRight size={12} />
                 </MenuItem>
               </>
             )}
@@ -926,6 +935,8 @@ const Header = ({ toggleSidebar }) => {
               sx={{ my: 1, bgcolor: "rgba(255,255,255,0.3)" }}
             />
           )}
+
+          <LanguageSwitcher />
 
           {canViewOrders && (
             <Button
@@ -945,7 +956,7 @@ const Header = ({ toggleSidebar }) => {
                 component="span"
                 sx={{ display: { xs: "none", md: "inline" } }}
               >
-                Calendar
+                {t("header.calendar")}
               </Box>
             </Button>
           )}
@@ -1033,7 +1044,7 @@ const Header = ({ toggleSidebar }) => {
                   <FiUsers size={16} />
                 </ListItemIcon>
                 <Typography variant="body2" sx={{ fontWeight: 500 }}>
-                  Users
+                  {t("header.users")}
                 </Typography>
               </MenuItem>
             )}
@@ -1048,7 +1059,7 @@ const Header = ({ toggleSidebar }) => {
                   <FiSettings size={16} />
                 </ListItemIcon>
                 <Typography variant="body2" sx={{ fontWeight: 500 }}>
-                  Settings
+                  {t("header.settings")}
                 </Typography>
               </MenuItem>
             )}
@@ -1058,7 +1069,7 @@ const Header = ({ toggleSidebar }) => {
                 <TbLogout2 size={16} />
               </ListItemIcon>
               <Typography variant="body2" sx={{ fontWeight: 500 }}>
-                Logout
+                {t("header.logout")}
               </Typography>
             </MenuItem>
           </Menu>

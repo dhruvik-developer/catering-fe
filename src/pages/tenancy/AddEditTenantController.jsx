@@ -38,6 +38,29 @@ const extractList = (response) => {
   return [];
 };
 
+const getFilledDomains = (domains = []) =>
+  domains
+    .map((d) => ({
+      ...(d.id ? { id: d.id } : {}),
+      domain: (d.domain || "").trim(),
+      is_primary: !!d.is_primary,
+    }))
+    .filter((d) => d.domain);
+
+const buildDomainPayload = (domains = [], fallbackDomain) => {
+  const filledDomains = getFilledDomains(domains);
+  if (filledDomains.length === 0) {
+    return [{ domain: fallbackDomain, is_primary: true }];
+  }
+  if (filledDomains.some((d) => d.is_primary)) {
+    return filledDomains;
+  }
+  return filledDomains.map((d, index) => ({
+    ...d,
+    is_primary: index === 0,
+  }));
+};
+
 function AddEditTenantController() {
   const navigate = useNavigate();
   const { id } = useParams();
@@ -182,14 +205,10 @@ function AddEditTenantController() {
         "Password is required when an admin username is provided";
     }
 
-    // Domain validation — multi-tenant requires an exact-match Domain row
-    // for the host the user will load. No domain = unreachable tenant.
-    const filledDomains = (form.domains || []).filter((d) =>
-      (d.domain || "").trim()
-    );
-    if (filledDomains.length === 0) {
-      newErrors.domains = "Add at least one domain so this tenant is reachable";
-    } else {
+    // Domain validation for user-provided hostnames.
+    // Empty domain is allowed; the schema name becomes the primary fallback.
+    const filledDomains = getFilledDomains(form.domains);
+    if (filledDomains.length > 0) {
       const lower = filledDomains.map((d) => d.domain.trim().toLowerCase());
       const reserved = lower.find(
         (d) => d === "admin" || d.startsWith("admin.")
@@ -224,23 +243,25 @@ function AddEditTenantController() {
       subscription_status: form.subscription_status,
       subscription_start_date: form.subscription_start_date || null,
       subscription_end_date: form.subscription_end_date || null,
-      domains: (form.domains || [])
-        .filter((d) => (d.domain || "").trim())
-        .map((d) => ({
-          ...(d.id ? { id: d.id } : {}),
-          domain: d.domain.trim(),
-          is_primary: !!d.is_primary,
-        })),
     };
+    const domainPayload = buildDomainPayload(
+      form.domains,
+      form.schema_name.trim().toLowerCase()
+    );
+    payload.domains = domainPayload;
+    payload.domain =
+      domainPayload.find((d) => d.is_primary)?.domain || domainPayload[0].domain;
 
     if (form.subscription_plan) {
       payload.subscription_plan = form.subscription_plan;
     }
 
     if (!isEdit && form.admin_username.trim()) {
-      payload.admin_username = form.admin_username.trim();
-      payload.admin_email = form.admin_email.trim() || null;
-      payload.admin_password = form.admin_password;
+      payload.admin = {
+        username: form.admin_username.trim(),
+        email: form.admin_email.trim(),
+        password: form.admin_password,
+      };
     }
 
     setSaving(true);

@@ -5,17 +5,22 @@ import {
   Button,
   Paper,
   Stack,
-  TextField,
   Typography,
 } from "@mui/material";
 import { FiArrowLeft, FiFolder } from "react-icons/fi";
+import { useTranslation } from "react-i18next";
+import MultiLangInput from "../../common/MultiLangInput";
 
 function AddCategoryComponent({
   categoryName,
   setCategoryName,
   navigate,
   handleSubmit,
+  submitting = false,
+  disableSubmit = false,
 }) {
+  const { t } = useTranslation();
+
   return (
     <Paper
       elevation={0}
@@ -32,7 +37,7 @@ function AddCategoryComponent({
         onClick={() => navigate(-1)}
         sx={{ mb: 3 }}
       >
-        Back
+        {t("common.back")}
       </Button>
 
       <Stack direction="row" spacing={1.5} sx={{ alignItems: "center", mb: 3 }}>
@@ -49,23 +54,22 @@ function AddCategoryComponent({
         </Avatar>
         <Box>
           <Typography variant="h5" sx={{ fontWeight: 700 }}>
-            Create Category
+            {t("category.createTitle")}
           </Typography>
           <Typography variant="body2" color="text.secondary">
-            Add a new category to organize your items
+            {t("category.createSubtitle")}
           </Typography>
         </Box>
       </Stack>
 
       <Box component="form" onSubmit={handleSubmit}>
         <Stack spacing={3}>
-          <TextField
-            fullWidth
-            label="Category Name *"
-            placeholder="Please Enter Category Name"
-            name="name"
+          <MultiLangInput
+            label={t("category.nameLabel")}
             value={categoryName}
-            onChange={(e) => setCategoryName(e.target.value)}
+            onChange={setCategoryName}
+            placeholder={t("category.namePlaceholder")}
+            required
           />
           <Stack direction="row" sx={{ justifyContent: "center" }}>
             <Button
@@ -73,9 +77,10 @@ function AddCategoryComponent({
               variant="contained"
               color="primary"
               size="large"
+              disabled={disableSubmit || submitting}
               sx={{ px: 4 }}
             >
-              Save Category
+              {submitting ? t("common.saving") : t("category.saveButton")}
             </Button>
           </Stack>
         </Stack>

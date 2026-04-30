@@ -402,7 +402,7 @@ function AddEditTenantComponent({
         <SectionCard
           icon={<FiGlobe size={18} />}
           title="Domains"
-          subtitle="Map one or more hostnames to this tenant. The domain must match the request host exactly (e.g. acme.localhost, not just acme)."
+          subtitle="Map one or more hostnames to this tenant. If blank, the schema name becomes the primary domain."
         >
           {errors.domains ? (
             <Typography

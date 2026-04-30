@@ -5,6 +5,7 @@ import { store } from "./redux/Store";
 import ThemeBridge from "./theme/ThemeBridge";
 import App from "./App";
 import { queryClient } from "./lib/queryClient";
+import "./i18n";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <QueryClientProvider client={queryClient}>

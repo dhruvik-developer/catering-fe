@@ -1,0 +1,109 @@
+{
+  "common": {
+    "loading": "Loading...",
+    "save": "Save",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "edit": "Edit",
+    "add": "Add",
+    "search": "Search",
+    "submit": "Submit",
+    "close": "Close",
+    "yes": "Yes",
+    "no": "No",
+    "actions": "Actions",
+    "status": "Status",
+    "name": "Name",
+    "date": "Date",
+    "time": "Time",
+    "back": "Back",
+    "saving": "Saving..."
+  },
+  "category": {
+    "createTitle": "Create Category",
+    "createSubtitle": "Add a new category to organize your items",
+    "nameLabel": "Category Name",
+    "namePlaceholder": "Please enter category name",
+    "saveButton": "Save Category"
+  },
+  "header": {
+    "lowStock": "Low Stock",
+    "lowStockTitle": "Low Stock Items",
+    "lowStockEmpty": "All stock levels are good",
+    "lowStockEmptyHint": "No items below alert level",
+    "viewAllLowStock": "View All Low Stock Items",
+    "alert_one": "{{count}} Alert",
+    "alert_other": "{{count}} Alerts",
+    "upcoming": "Upcoming",
+    "upcomingTitle": "Upcoming Orders",
+    "next7Days": "Next 7 Days",
+    "noUpcoming": "No upcoming orders",
+    "noUpcomingHint": "No events in the next 7 days",
+    "viewAllUpcoming": "View All Upcoming Orders",
+    "today": "Today",
+    "tomorrow": "Tomorrow",
+    "inDays": "In {{count}} days",
+    "calendar": "Calendar",
+    "users": "Users",
+    "settings": "Settings",
+    "logout": "Logout",
+    "logoutSuccess": "Logout successfully!",
+    "min": "Min"
+  },
+  "breadcrumbs": {
+    "dish": "Create Dish",
+    "category": "Category",
+    "order-management": "Order Management",
+    "quotation": "Quotation",
+    "all-order": "All Orders",
+    "invoice": "Invoice",
+    "stock": "Stock",
+    "payment-history": "Payment History",
+    "expense": "Expense",
+    "user": "Users",
+    "calendar": "Calendar",
+    "people": "People",
+    "vendor": "Vendor",
+    "event-staff": "Event Staff",
+    "settings": "Settings"
+  },
+  "language": {
+    "english": "English",
+    "gujarati": "ગુજરાતી",
+    "hindi": "हिन्दी",
+    "switch": "Language"
+  },
+  "status": {
+    "pending": "Pending",
+    "approved": "Approved",
+    "confirmed": "Confirmed",
+    "done": "Done",
+    "completed": "Completed",
+    "cancelled": "Cancelled",
+    "rejected": "Rejected",
+    "draft": "Draft",
+    "active": "Active",
+    "inactive": "Inactive"
+  },
+  "payment": {
+    "paid": "Paid",
+    "unpaid": "Unpaid",
+    "partial": "Partial",
+    "refunded": "Refunded"
+  },
+  "units": {
+    "KG": "Kg",
+    "G": "g",
+    "L": "L",
+    "ML": "mL",
+    "QTY": "Qty",
+    "PCS": "Pcs"
+  },
+  "multilang": {
+    "english": "English",
+    "gujarati": "Gujarati",
+    "hindi": "Hindi",
+    "fillAtLeastOne": "Please fill at least one language",
+    "namePlaceholder": "Enter name in {{language}}"
+  }
+}
