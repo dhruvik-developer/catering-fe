@@ -284,7 +284,7 @@ function AddEditTenantComponent({
               name="subscription_start_date"
               value={form.subscription_start_date || ""}
               onChange={onChange}
-              InputLabelProps={{ shrink: true }}
+              slotProps={{ inputLabel: { shrink: true } }}
             />
             <TextField
               type="date"
@@ -293,7 +293,7 @@ function AddEditTenantComponent({
               name="subscription_end_date"
               value={form.subscription_end_date || ""}
               onChange={onChange}
-              InputLabelProps={{ shrink: true }}
+              slotProps={{ inputLabel: { shrink: true } }}
             />
           </Box>
         </SectionCard>

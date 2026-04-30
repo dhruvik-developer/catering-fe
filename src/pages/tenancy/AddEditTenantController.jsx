@@ -47,10 +47,10 @@ const getFilledDomains = (domains = []) =>
     }))
     .filter((d) => d.domain);
 
-const buildDomainPayload = (domains = [], fallbackDomain) => {
+const buildDomainPayload = (domains = []) => {
   const filledDomains = getFilledDomains(domains);
   if (filledDomains.length === 0) {
-    return [{ domain: fallbackDomain, is_primary: true }];
+    return [];
   }
   if (filledDomains.some((d) => d.is_primary)) {
     return filledDomains;
@@ -244,13 +244,13 @@ function AddEditTenantController() {
       subscription_start_date: form.subscription_start_date || null,
       subscription_end_date: form.subscription_end_date || null,
     };
-    const domainPayload = buildDomainPayload(
-      form.domains,
-      form.schema_name.trim().toLowerCase()
-    );
-    payload.domains = domainPayload;
-    payload.domain =
-      domainPayload.find((d) => d.is_primary)?.domain || domainPayload[0].domain;
+    const domainPayload = buildDomainPayload(form.domains);
+    if (domainPayload.length > 0) {
+      payload.domains = domainPayload;
+      payload.domain =
+        domainPayload.find((d) => d.is_primary)?.domain ||
+        domainPayload[0].domain;
+    }
 
     if (form.subscription_plan) {
       payload.subscription_plan = form.subscription_plan;
