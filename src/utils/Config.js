@@ -1,1 +1,1 @@
-export const BASE_PATH = "/radha";
+export const BASE_PATH = "";
