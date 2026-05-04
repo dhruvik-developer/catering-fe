@@ -9,8 +9,10 @@ import Swal from "sweetalert2";
 import { updateQuotation } from "../../api/PostQuotation";
 import { addPayment } from "../../api/PostAllOrder";
 import { useQuotations } from "../../hooks/useQuotations";
+import { useTranslation } from "react-i18next";
 
 function QuotationController() {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   const {
@@ -78,7 +80,7 @@ function QuotationController() {
     try {
       const response = await getSingleQuotation(id);
       if (!response.data.status) {
-        toast.error("Failed to fetch quotation details");
+        toast.error(t("quotation.messages.fetchFailed"));
         return;
       }
       const quotationDetails = response.data.data;
@@ -127,27 +129,29 @@ function QuotationController() {
       };
 
       const { value: formValues } = await Swal.fire({
-        title: `Confirm Order For ${quotationDetails.name}`,
+        title: t("quotation.confirmModal.title", {
+          name: quotationDetails.name,
+        }),
         html:
           `<div style="margin-bottom: 20px; padding: 12px; background: #fdfae8; border: 1px solid #fce88a; border-radius: 8px; text-align: center;">
-                        <span style="font-size: 14px; color: #8a6d3b; font-weight: 600;">Total Order Amount</span><br/>
+                        <span style="font-size: 14px; color: #8a6d3b; font-weight: 600;">${t("quotation.confirmModal.totalOrderAmount")}</span><br/>
                         <span style="font-size: 22px; color: var(--color-primary); font-weight: 800;">₹ ${formatAmount(totalOrderAmount)}</span>
                     </div>` +
-          '<label class="custom-stock-label">Payment Mode</label>' +
+          `<label class="custom-stock-label">${t("quotation.confirmModal.paymentMode")}</label>` +
           '<select id="payment-type" class="swal2-input custom-stock-input">' +
-          '<option value="CASH" selected>Cash</option>' +
-          '<option value="CHEQUE">Cheque</option>' +
-          '<option value="BANK_TRANSFER">Bank Transfer</option>' +
-          '<option value="ONLINE">Online</option>' +
-          '<option value="OTHER">Other</option>' +
+          `<option value="CASH" selected>${t("paymentModes.cash")}</option>` +
+          `<option value="CHEQUE">${t("paymentModes.cheque")}</option>` +
+          `<option value="BANK_TRANSFER">${t("paymentModes.bank_transfer")}</option>` +
+          `<option value="ONLINE">${t("paymentModes.online")}</option>` +
+          `<option value="OTHER">${t("paymentModes.other")}</option>` +
           "</select>" +
-          '<label class="custom-stock-label">Advance Amount</label>' +
-          '<input id="payment-amount" class="swal2-input custom-stock-input" placeholder="Please Enter Advance Amount" type="number" min="0">',
+          `<label class="custom-stock-label">${t("quotation.confirmModal.advanceAmount")}</label>` +
+          `<input id="payment-amount" class="swal2-input custom-stock-input" placeholder="${t("quotation.confirmModal.advancePlaceholder")}" type="number" min="0">`,
         focusConfirm: false,
         showCancelButton: true,
-        confirmButtonText: "Confirm",
+        confirmButtonText: t("quotation.actions.confirm"),
         confirmButtonColor: "var(--color-primary)",
-        cancelButtonText: "Cancel",
+        cancelButtonText: t("common.cancel"),
         customClass: {
           popup: "custom-popup",
           confirmButton: "custom-confirm-button",
@@ -161,7 +165,9 @@ function QuotationController() {
 
           if (advanceAmountNum > totalOrderAmount) {
             Swal.showValidationMessage(
-              `Advance amount cannot exceed total order amount (₹${formatAmount(totalOrderAmount)})`
+              t("quotation.confirmModal.advanceExceeds", {
+                amount: formatAmount(totalOrderAmount),
+              })
             );
             return false;
           }
@@ -205,7 +211,7 @@ function QuotationController() {
               transaction_amount: Number(formValues.advance_amount || 0),
               settlement_amount: 0,
               payment_mode: formValues.advance_payment_mode || "CASH",
-              note: "Order completion payment",
+              note: t("quotation.confirmModal.paymentNote"),
               total_extra_amount:
                 Number(quotationDetails.extra_service_amount || 0) +
                 Number(quotationDetails.waiter_service_amount || 0),
@@ -217,12 +223,12 @@ function QuotationController() {
             queryClient.invalidateQueries({ queryKey: ["payment-history"] });
           }
         } catch (error) {
-          toast.error("Failed to confirm quotation");
+          toast.error(t("quotation.messages.confirmFailed"));
           console.error(error);
         }
       }
     } catch (error) {
-      toast.error("Failed to confirm quotation");
+      toast.error(t("quotation.messages.confirmFailed"));
       console.error(error);
     }
   };
@@ -232,8 +238,8 @@ function QuotationController() {
     DeleteConfirmation({
       id,
       apiEndpoint: "/event-bookings",
-      name: "quotation",
-      successMessage: "Quotation deleted successfully!",
+      name: t("entities.quotation"),
+      successMessage: t("quotation.messages.deleteSuccess"),
       onSuccess: refetchQuotations,
       method: "PUT",
       payload: { status: "cancelled" },

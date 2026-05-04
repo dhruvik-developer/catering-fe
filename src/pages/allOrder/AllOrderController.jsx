@@ -29,12 +29,14 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 import { addPayment, updateOrder } from "../../api/PostAllOrder";
 import Swal from "sweetalert2";
 import { useOrders } from "../../hooks/useOrders";
+import { useTranslation } from "react-i18next";
 import {
   flattenSelectedItemEntries,
   getSelectedItemName,
 } from "../../utils/categoryTree";
 
 function AllOrderController() {
+  const { t, i18n } = useTranslation();
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   const [searchParams] = useSearchParams();
@@ -200,7 +202,7 @@ function AllOrderController() {
         const name = getSelectedItemName(item);
         if (!name) return;
 
-        const category = categoryName || "Dishes";
+        const category = categoryName || t("allOrders.completeModal.dishes");
         if (!transformed[category]) transformed[category] = [];
         transformed[category].push({ name });
       }
@@ -220,7 +222,7 @@ function AllOrderController() {
     try {
       const response = await getSingleOrder(id);
       if (!response.data.status) {
-        toast.error("Failed to fetch order details");
+        toast.error(t("allOrders.messages.fetchFailed"));
         return;
       }
       const orderDetails = response.data.data;
@@ -281,7 +283,14 @@ function AllOrderController() {
               d = new Date(`${parts[2]}-${parts[1]}-${parts[0]}`);
             }
             if (!isNaN(d)) {
-              return d.toLocaleString("en-GB", {
+              const locale =
+                {
+                  gu: "gu-IN",
+                  hi: "hi-IN",
+                  en: "en-GB",
+                }[(i18n.resolvedLanguage || i18n.language || "en").slice(0, 2)] ||
+                "en-GB";
+              return d.toLocaleString(locale, {
                 day: "2-digit",
                 month: "short",
                 year: "numeric",
@@ -298,7 +307,8 @@ function AllOrderController() {
         sessionData
           .map((session, index) => {
             const sessionTitle =
-              sessions[index].event_time || `Session ${index + 1}`;
+              sessions[index].event_time ||
+              t("allOrders.completeModal.session", { count: index + 1 });
             const sessionDate = formatSessionDate(sessions[index].event_date);
             const displayLabel = sessionDate
               ? `${sessionTitle} (${sessionDate})`
@@ -314,29 +324,29 @@ function AllOrderController() {
                 
                 <div class="grid grid-cols-2 gap-4">
                   <div class="text-left">
-                    <label class="block text-xs font-semibold text-gray-500 mb-1">Per Dish Price (₹)</label> 
-                    <input id="per-dish-amount-${index}" class="swal2-input custom-stock-input m-0 w-full px-3 py-2 border border-gray-200 rounded-lg text-sm bg-white focus:outline-none focus:border-[var(--color-primary)] transition-all font-bold" placeholder="Price" type="number" value="${session.per_dish_amount}">
+                    <label class="block text-xs font-semibold text-gray-500 mb-1">${t("allOrders.completeModal.perDishPrice")}</label> 
+                    <input id="per-dish-amount-${index}" class="swal2-input custom-stock-input m-0 w-full px-3 py-2 border border-gray-200 rounded-lg text-sm bg-white focus:outline-none focus:border-[var(--color-primary)] transition-all font-bold" placeholder="${t("allOrders.completeModal.pricePlaceholder")}" type="number" value="${session.per_dish_amount}">
                   </div>
                   <div class="text-left">
-                    <label class="block text-xs font-semibold text-gray-500 mb-1">Dish Count</label> 
-                    <input id="estimated-persons-${index}" class="swal2-input custom-stock-input m-0 w-full px-3 py-2 border border-gray-200 rounded-lg text-sm bg-white focus:outline-none focus:border-[var(--color-primary)] transition-all font-bold" placeholder="Count" type="number" value="${session.estimated_persons}">
+                    <label class="block text-xs font-semibold text-gray-500 mb-1">${t("allOrders.completeModal.dishCount")}</label> 
+                    <input id="estimated-persons-${index}" class="swal2-input custom-stock-input m-0 w-full px-3 py-2 border border-gray-200 rounded-lg text-sm bg-white focus:outline-none focus:border-[var(--color-primary)] transition-all font-bold" placeholder="${t("allOrders.completeModal.countPlaceholder")}" type="number" value="${session.estimated_persons}">
                   </div>
                 </div>
                 
                 <div class="mt-3 pt-3 border-t border-[var(--color-primary-border)]/30 flex flex-col gap-2 bg-white px-3 py-2 rounded-lg">
                   <div class="flex justify-between items-center">
-                    <span class="text-xs font-bold text-gray-500">Slot Total</span>
+                    <span class="text-xs font-bold text-gray-500">${t("allOrders.completeModal.slotTotal")}</span>
                     <span class="font-black text-[var(--color-primary-text)] text-lg" id="slot-total-${index}">₹${formatAmount(initialSlotTotal)}</span>
                   </div>
                   ${Number(sessions[index].extra_service_amount) > 0 ? `
                   <div class="flex justify-between items-center border-t border-gray-100 pt-2 mt-1">
-                    <span class="text-[11px] font-bold text-[var(--color-primary-tint)]">Extra Service Charge</span>
+                    <span class="text-[11px] font-bold text-[var(--color-primary-tint)]">${t("allOrders.completeModal.extraServiceCharge")}</span>
                     <span class="font-bold text-[var(--color-primary)] text-sm">₹${formatAmount(sessions[index].extra_service_amount)}</span>
                   </div>
                   ` : ''}
                   ${Number(sessions[index].waiter_service_amount) > 0 ? `
                   <div class="flex justify-between items-center border-t border-gray-100 pt-2 mt-1">
-                    <span class="text-[11px] font-bold text-[var(--color-primary-tint)]">Waiter Service</span>
+                    <span class="text-[11px] font-bold text-[var(--color-primary-tint)]">${t("allOrders.completeModal.waiterService")}</span>
                     <span class="font-bold text-[var(--color-primary)] text-sm">₹${formatAmount(sessions[index].waiter_service_amount)}</span>
                   </div>
                   ` : ''}
@@ -347,73 +357,73 @@ function AllOrderController() {
           .join("");
 
       const { value: formValues } = await Swal.fire({
-        title: `<span class="text-[20px] font-bold">Complete Order: ${orderDetails.name}</span>`,
+        title: `<span class="text-[20px] font-bold">${t("allOrders.completeModal.title", { name: orderDetails.name })}</span>`,
         html: ` 
           <div class="text-left overflow-y-auto max-h-[60vh] p-1 scrollbar-hide">
             ${inputsHtml}
             
             <div class="bg-gray-50 rounded-xl p-4 border border-gray-200 mt-4">
-              <h3 class="text-left font-bold text-gray-700 mb-3 text-sm">Order Subtotals</h3>
+              <h3 class="text-left font-bold text-gray-700 mb-3 text-sm">${t("allOrders.completeModal.orderSubtotals")}</h3>
               
               <div class="space-y-2 text-sm">
                 <div class="flex justify-between items-center text-gray-600">
-                  <span class="font-medium">Total Dish Count</span>
+                  <span class="font-medium">${t("allOrders.completeModal.totalDishCount")}</span>
                   <span id="total-dish-count" class="font-bold text-gray-800">${totalDishCount}</span>
                 </div>
                 <div class="flex justify-between items-center text-gray-600">
-                  <span class="font-medium">Total Dish Amount</span>
+                  <span class="font-medium">${t("allOrders.completeModal.totalDishAmount")}</span>
                   <span id="dish-amount" class="font-bold text-gray-800">₹${formatAmount(dishAmount)}</span>
                 </div>
                 ${extraServiceAmount > 0 ? `
                 <div class="flex justify-between items-center text-gray-600">
-                  <span class="font-medium">Extra Charge</span>
+                  <span class="font-medium">${t("allOrders.completeModal.extraCharge")}</span>
                   <span class="font-bold text-gray-800">₹${formatAmount(extraServiceAmount)}</span>
                 </div>` : ''}
                 ${waiterServiceAmount > 0 ? `
                 <div class="flex justify-between items-center text-gray-600">
-                  <span class="font-medium">Waiter Service</span>
+                  <span class="font-medium">${t("allOrders.completeModal.waiterService")}</span>
                   <span class="font-bold text-gray-800">₹${formatAmount(waiterServiceAmount)}</span>
                 </div>` : ''}
               </div>
               
               <div class="mt-3 pt-3 border-t border-gray-200 flex justify-between items-center">
-                <span class="font-bold text-gray-700">Total Amount</span>
+                <span class="font-bold text-gray-700">${t("allOrders.completeModal.totalAmount")}</span>
                 <span id="total-amount" class="font-black text-[var(--color-primary)] text-lg">₹${formatAmount(totalAmount)}</span>
               </div>
             </div>
 
             <div class="bg-white rounded-xl p-4 border border-gray-200 mt-4 space-y-4">
-              <h3 class="text-left font-bold text-gray-700 text-sm m-0">Payment Details</h3>
+              <h3 class="text-left font-bold text-gray-700 text-sm m-0">${t("allOrders.completeModal.paymentDetails")}</h3>
               
               <div class="flex justify-between items-center bg-[var(--color-primary-tint)] p-3 rounded-lg border border-[var(--color-primary-border)]/30 mb-2">
-                <span class="text-xs font-semibold text-[var(--color-primary-text)]">Advance Paid at Confirmation</span>
+                <span class="text-xs font-semibold text-[var(--color-primary-text)]">${t("allOrders.completeModal.advancePaidAtConfirmation")}</span>
                 <span class="font-bold text-[var(--color-primary-text)]">₹${formatAmount(orderDetails.advance_amount || 0)}</span>
               </div>
               
               <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div class="text-left">
-                  <label class="block text-xs font-semibold text-gray-500 mb-1">Amount Paid at Completion (₹)</label> 
-                  <input id="completion-payment" class="swal2-input custom-stock-input w-full m-0 px-3 py-2 border border-gray-200 rounded-lg text-sm bg-white focus:outline-none focus:border-[var(--color-primary)] transition-all" placeholder="Enter Amount" type="number">
+                  <label class="block text-xs font-semibold text-gray-500 mb-1">${t("allOrders.completeModal.amountPaidAtCompletion")}</label> 
+                  <input id="completion-payment" class="swal2-input custom-stock-input w-full m-0 px-3 py-2 border border-gray-200 rounded-lg text-sm bg-white focus:outline-none focus:border-[var(--color-primary)] transition-all" placeholder="${t("allOrders.completeModal.enterAmount")}" type="number">
                 </div>
                 <div class="text-left">
-                  <label class="block text-xs font-semibold text-gray-500 mb-1">Payment Mode</label> 
+                  <label class="block text-xs font-semibold text-gray-500 mb-1">${t("quotation.confirmModal.paymentMode")}</label> 
                   <select id="payment-mode" class="swal2-input custom-stock-input w-full m-0 px-3 py-2 border border-gray-200 rounded-lg text-sm bg-white focus:outline-none focus:border-[var(--color-primary)] transition-all">
-                    <option value="CASH">Cash</option>
-                    <option value="ONLINE">Online</option>
-                    <option value="CHEQUE">Cheque</option>
-                    <option value="OTHER">Other</option>
+                    <option value="CASH">${t("paymentModes.cash")}</option>
+                    <option value="ONLINE">${t("paymentModes.online")}</option>
+                    <option value="CHEQUE">${t("paymentModes.cheque")}</option>
+                    <option value="OTHER">${t("paymentModes.other")}</option>
                   </select>
                 </div>
               </div>
               
               <div class="text-left">
-                <label class="block text-xs font-semibold text-gray-500 mb-1">Note / Reference</label> 
-                <input id="payment-note" class="swal2-input custom-stock-input w-full m-0 px-3 py-2 border border-gray-200 rounded-lg text-sm bg-white focus:outline-none focus:border-[var(--color-primary)] transition-all" placeholder="Optional notes" type="text">
+                <label class="block text-xs font-semibold text-gray-500 mb-1">${t("allOrders.completeModal.noteReference")}</label> 
+                <input id="payment-note" class="swal2-input custom-stock-input w-full m-0 px-3 py-2 border border-gray-200 rounded-lg text-sm bg-white focus:outline-none focus:border-[var(--color-primary)] transition-all" placeholder="${t("allOrders.completeModal.optionalNotes")}" type="text">
               </div>
             </div>
             
             <div class="mt-4 p-4 bg-[var(--color-primary)]/10 rounded-xl border border-[var(--color-primary)]/20 flex justify-between items-center">
-              <span class="font-bold text-[var(--color-primary)] text-sm">Total Remaining Amount</span>
+              <span class="font-bold text-[var(--color-primary)] text-sm">${t("allOrders.completeModal.totalRemainingAmount")}</span>
               <span id="final-remaining-amount" class="text-2xl font-black text-[var(--color-primary)]">₹${formatAmount(remainingAmount)}</span>
             </div>
           </div>
@@ -421,9 +431,9 @@ function AllOrderController() {
         width: "600px",
         focusConfirm: false,
         showCancelButton: true,
-        confirmButtonText: "Submit",
+        confirmButtonText: t("common.submit"),
         confirmButtonColor: "var(--color-primary)",
-        cancelButtonText: "Cancel",
+        cancelButtonText: t("common.cancel"),
         customClass: {
           popup: "custom-popup",
           confirmButton: "custom-confirm-button",
@@ -511,7 +521,9 @@ function AllOrderController() {
 
           if (completionPayment > remainingAmount) {
             Swal.showValidationMessage(
-              `Payment cannot exceed the remaining amount (₹${formatAmount(remainingAmount)})`
+              t("allOrders.completeModal.paymentExceeds", {
+                amount: formatAmount(remainingAmount),
+              })
             );
             return false;
           }
@@ -593,23 +605,23 @@ function AllOrderController() {
             transaction_amount: formValues.completion_payment || 0,
             settlement_amount: 0,
             payment_mode: formValues.payment_mode,
-            note: formValues.payment_note || "Order completion payment",
+            note: formValues.payment_note || t("quotation.confirmModal.paymentNote"),
             total_extra_amount: extraServiceAmount + waiterServiceAmount,
           };
           const paymentResponse = await addPayment(paymentPayload);
           if (paymentResponse) {
-            toast.success("Order confirmed successfully!");
+            toast.success(t("allOrders.messages.confirmSuccess"));
             refetchOrders();
             queryClient.invalidateQueries({ queryKey: ["payment-history"] });
             window.dispatchEvent(new Event("orderStatusChanged"));
           }
         } catch (error) {
-          toast.error("Failed to confirm order");
+          toast.error(t("allOrders.messages.confirmFailed"));
           console.error(error);
         }
       }
     } catch (error) {
-      toast.error("Failed to confirm order");
+      toast.error(t("allOrders.messages.confirmFailed"));
       console.error(error);
     }
   };
@@ -619,8 +631,8 @@ function AllOrderController() {
     DeleteConfirmation({
       id,
       apiEndpoint: "/event-bookings",
-      name: "order",
-      successMessage: "Order deleted successfully!",
+      name: t("entities.order"),
+      successMessage: t("allOrders.messages.deleteSuccess"),
       onSuccess: () => {
         refetchOrders();
         window.dispatchEvent(new Event("orderStatusChanged"));

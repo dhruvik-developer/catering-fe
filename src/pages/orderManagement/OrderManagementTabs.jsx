@@ -1,28 +1,29 @@
 import { Link, useLocation } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import { FiClipboard, FiFileText, FiFile, FiBarChart2 } from "react-icons/fi";
 import usePermissions from "../../hooks/usePermissions";
 
 const tabs = [
   {
-    label: "Quotation",
+    labelKey: "orderManagement.tabs.quotation",
     icon: FiFileText,
     path: "/order-management/quotation",
     requiredPermission: "quotations.view",
   },
   {
-    label: "All Order",
+    labelKey: "orderManagement.tabs.allOrder",
     icon: FiClipboard,
     path: "/order-management/all-order",
     requiredPermission: "event_bookings.view",
   },
   {
-    label: "Invoice",
+    labelKey: "orderManagement.tabs.invoice",
     icon: FiFile,
     path: "/order-management/invoice",
     requiredPermission: "invoices.view",
   },
   {
-    label: "Event Summary",
+    labelKey: "orderManagement.tabs.eventSummary",
     icon: FiBarChart2,
     path: "/order-management/event-summary",
     requiredPermission: "event_summary.view",
@@ -31,6 +32,7 @@ const tabs = [
 
 function OrderManagementTabs() {
   const location = useLocation();
+  const { t } = useTranslation();
   const { hasPermission } = usePermissions();
 
   return (
@@ -70,7 +72,7 @@ function OrderManagementTabs() {
               </div>
               <div className="min-w-0">
                 <p className="text-sm font-semibold sm:text-base">
-                  {tab.label}
+                  {t(tab.labelKey)}
                 </p>
               </div>
             </Link>

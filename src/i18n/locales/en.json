@@ -11,6 +11,8 @@
     "close": "Close",
     "yes": "Yes",
     "no": "No",
+    "confirm": "Confirm",
+    "item": "item",
     "actions": "Actions",
     "status": "Status",
     "name": "Name",
@@ -57,6 +59,7 @@
     "quotation": "Quotation",
     "all-order": "All Orders",
     "invoice": "Invoice",
+    "event-summary": "Event Summary",
     "stock": "Stock",
     "payment-history": "Payment History",
     "expense": "Expense",
@@ -91,6 +94,13 @@
     "partial": "Partial",
     "refunded": "Refunded"
   },
+  "paymentModes": {
+    "cash": "Cash",
+    "online": "Online",
+    "cheque": "Cheque",
+    "bank_transfer": "Bank Transfer",
+    "other": "Other"
+  },
   "units": {
     "KG": "Kg",
     "G": "g",
@@ -105,5 +115,324 @@
     "hindi": "Hindi",
     "fillAtLeastOne": "Please fill at least one language",
     "namePlaceholder": "Enter name in {{language}}"
+  },
+  "entities": {
+    "quotation": "quotation",
+    "order": "order"
+  },
+  "confirmDelete": {
+    "title": "Are you sure you want to delete this {{name}}?",
+    "text": "You won't be able to revert this!",
+    "confirm": "Yes, delete it!",
+    "failed": "Failed to delete {{name}}",
+    "error": "Error deleting {{name}}"
+  },
+  "dishFlow": {
+    "steps": {
+      "clientEvent": "Client & Event",
+      "menuSelection": "Menu Selection",
+      "summaryServices": "Summary & Services"
+    },
+    "time": {
+      "breakfast": "Breakfast",
+      "lunch": "Lunch",
+      "dinner": "Dinner",
+      "highTea": "High Tea",
+      "lateNightSnack": "Late Night Snack"
+    },
+    "client": {
+      "title": "Client Information",
+      "subtitle": "Enter basic details of the client",
+      "clientName": "Client Name *",
+      "clientNamePlaceholder": "Enter client name",
+      "mobileNumber": "Mobile Number *",
+      "mobilePlaceholder": "Mobile Number",
+      "orderDate": "Order Date",
+      "referenceName": "Reference Name (Optional)",
+      "referencePlaceholder": "Reference Name"
+    },
+    "schedule": {
+      "title": "Event Schedule",
+      "subtitle": "Add event dates and time slots for each day",
+      "eventDate": "Event Date:",
+      "chooseDate": "Choose Date",
+      "deleteDay": "Delete Day",
+      "slot": "Slot {{count}}",
+      "eventTiming": "Event Timing",
+      "selectTiming": "Select Timing...",
+      "maxLimitReached": "(Max 3 limit reached)",
+      "numberOfPersons": "Number of Persons",
+      "personsPlaceholder": "e.g. 250",
+      "removeTimeSlot": "Remove this time slot",
+      "addTimeSlot": "Add Time Slot",
+      "addEventDate": "Add Event Date",
+      "continueToMenu": "Continue to Menu Selection"
+    },
+    "menu": {
+      "noTimings": "No event timings defined. Please go back and add event dates with time slots.",
+      "goBack": "Go Back",
+      "searchCategory": "Search category...",
+      "searchDishes": "Search dishes...",
+      "thisEvent": "This Event",
+      "allEvents": "All Events",
+      "dishesCount": "{{count}} dishes",
+      "noDishesTitle": "No dishes found",
+      "noDishesMessage": "Try selecting a different category or adjusting your search.",
+      "continueToSummary": "Continue to Summary",
+      "dishes": "Dishes"
+    },
+    "summary": {
+      "title": "Event Summary & Services",
+      "subtitle": "Review each event, set pricing, and add services",
+      "grandTotal": "Grand Total",
+      "client": "Client",
+      "mobile": "Mobile",
+      "reference": "Reference",
+      "totalEvents": "Total Events",
+      "day": "Day {{count}}",
+      "subtotal": "Subtotal",
+      "persons": "Persons",
+      "perPlatePrice": "Per Plate Price (₹)",
+      "pricePlaceholder": "e.g. 350",
+      "venue": "Venue",
+      "venuePlaceholder": "Event venue / address",
+      "selectedDishes": "Selected Dishes",
+      "zeroPriceWarning": "Red highlighted items are not counted in dish price",
+      "noDishesSelected": "No dishes selected for this event.",
+      "waiterService": "Waiter Service",
+      "addWaiter": "Add Waiter",
+      "waiterType": "Waiter type",
+      "selectWaiterType": "Select waiter type",
+      "loading": "Loading...",
+      "perHead": "/head",
+      "countPlaceholder": "Count",
+      "notesPlaceholder": "Notes (optional)",
+      "totalWaiterCharge": "Total Waiter Charge: ₹{{amount}}",
+      "noWaiterServices": "No waiter services added.",
+      "extraServices": "Extra Services",
+      "addService": "Add Service",
+      "serviceName": "Service name",
+      "price": "₹ Price",
+      "qty": "Qty",
+      "noExtraServices": "No extra services added.",
+      "generalDescription": "General Description",
+      "descriptionPlaceholder": "Notes for the entire event...",
+      "displayRules": "Display Rules on PDF",
+      "viewRules": "View Rules",
+      "viewSuggestions": "View Suggestions",
+      "termsRules": "Terms & Rules",
+      "suggestions": "Suggestions",
+      "backToMenu": "Back to Menu",
+      "reviewGeneratePdf": "Review & Generate PDF"
+    },
+    "rules": [
+      "The party must arrange the cooking area on time.",
+      "The party must confirm the menu and dish count 10 days before the event.",
+      "The party must arrange water supply for utensils and waste disposal.",
+      "The party must arrange tables for counters and other pandal service equipment.",
+      "The party must pay 30% advance payment after placing the order."
+    ],
+    "suggestions": [
+      "Consider adding a welcome drinks section for events with 200+ guests.",
+      "Multi-day events benefit from varied menus to avoid repetition.",
+      "Ensure dessert selection aligns with the number of main course dishes."
+    ],
+    "validation": {
+      "nameRequired": "Name is required",
+      "nameOnlyNumbers": "Name cannot contain only numbers. Please enter a valid name.",
+      "nameMustStartAlpha": "Name must start with an alphabetic character.",
+      "referenceOnlyNumbers": "Reference Name cannot contain only numbers. Please enter a valid name.",
+      "referenceMustStartAlpha": "Reference Name must start with an alphabetic character.",
+      "mobileRequired": "Mobile number is required",
+      "mobileTenDigits": "Mobile number must be exactly 10 digits",
+      "scheduleRequired": "At least one event date is required",
+      "required": "Required",
+      "max3Limit": "Max 3 limit",
+      "max100000": "Max limit 100,000",
+      "validDates": "Ensure all schedule dates have a valid Date.",
+      "timeSlotRequired": "Ensure all dates have at least one time slot.",
+      "mandatoryBeforeProceeding": "Please fill in all mandatory fields before proceeding.",
+      "selectDishes": "Select dishes",
+      "selectDishBeforeProceeding": "Please select at least one item/dish before proceeding.",
+      "timeSlotIsRequired": "Time slot is required",
+      "personsRequired": "Number of persons is required",
+      "priceRequired": "Price is required",
+      "addressRequired": "Address is required",
+      "eventVenueMandatory": "Event venue/address is mandatory. Please enter the venue details.",
+      "personsMandatory": "Number of persons is mandatory. Please enter a valid number.",
+      "priceMandatory": "Per plate price is mandatory. Please enter a valid price.",
+      "timeLabelMandatory": "Time slot label is mandatory.",
+      "selectItemsForEvent": "Please select items for this event.",
+      "reviewMandatory": "Please review all mandatory fields before submitting.",
+      "marginWarning": "{{slotName}}: Per Plate Price is ₹{{price}}, but should be at least ₹{{minPrice}} based on base cost + 20% margin.",
+      "marginTitle": "Price Margin Warning",
+      "marginHtml": "The per plate price is below the minimum margin. Do you still want to place this order?",
+      "marginConfirm": "Yes, Proceed anyway"
+    }
+  },
+  "sidebar": {
+    "superAdminPortal": "SuperAdmin Portal",
+    "platformControlCenter": "Platform control center",
+    "logoHint": "Set your business profile logo in Settings tab.",
+    "goToSettings": "Go to Settings",
+    "dashboard": "Dashboard",
+    "tenants": "Tenants",
+    "subscriptionPlans": "Subscription Plans",
+    "accessControl": "Access Control",
+    "userModels": "User Models",
+    "createDish": "Create Dish",
+    "category": "Category",
+    "orderManagement": "Order Management",
+    "stock": "Stock",
+    "paymentHistory": "Payment History",
+    "expense": "Expense",
+    "createIngredient": "Create Ingredient",
+    "people": "People",
+    "groundChecklist": "Ground Checklist"
+  },
+  "orderManagement": {
+    "tabs": {
+      "quotation": "Quotation",
+      "allOrder": "All Order",
+      "invoice": "Invoice",
+      "eventSummary": "Event Summary"
+    }
+  },
+  "filters": {
+    "today": "Today",
+    "week": "Week",
+    "month": "Month",
+    "upcoming": "Upcoming",
+    "next7Days": "Next 7 Days",
+    "next30Days": "Next 30 Days",
+    "all": "All",
+    "selectDateRange": "Select date range",
+    "selectEventDateRange": "Select event date range"
+  },
+  "list": {
+    "searchNameOrMobile": "Search name or mobile..."
+  },
+  "quotation": {
+    "title": "Quotation List",
+    "count_one": "{{count}} quotation",
+    "count_other": "{{count}} quotations",
+    "countOf": "{{count}} of {{total}} quotations",
+    "loading": "Loading Quotations...",
+    "reference": "Ref",
+    "empty": {
+      "title": "No Quotations Yet",
+      "filteredTitle": "No Quotations Match Your Filters",
+      "message": "Quotations will appear here once created.",
+      "filteredMessage": "Try adjusting your date range or search."
+    },
+    "actions": {
+      "view": "View",
+      "confirm": "Confirm",
+      "edit": "Edit Quotation"
+    },
+    "messages": {
+      "fetchFailed": "Failed to fetch quotation details",
+      "confirmFailed": "Failed to confirm quotation",
+      "deleteSuccess": "Quotation deleted successfully!"
+    },
+    "confirmModal": {
+      "title": "Confirm Order For {{name}}",
+      "totalOrderAmount": "Total Order Amount",
+      "paymentMode": "Payment Mode",
+      "advanceAmount": "Advance Amount",
+      "advancePlaceholder": "Please Enter Advance Amount",
+      "advanceExceeds": "Advance amount cannot exceed total order amount (₹{{amount}})",
+      "paymentNote": "Order completion payment"
+    },
+    "sessions": {
+      "viewAllEvents": "View All Events",
+      "total": "Total Sessions: {{count}}",
+      "viewDetails": "View Details",
+      "estimatedPersons": "Estimated Persons",
+      "allSchedules": "All Event Schedules",
+      "modalSubtitle": "{{name}} — {{count}} event",
+      "modalSubtitle_one": "{{name}} — {{count}} event",
+      "modalSubtitle_other": "{{name}} — {{count}} events",
+      "persons": "persons"
+    }
+  },
+  "allOrders": {
+    "title": "All Orders",
+    "count_one": "{{count}} order",
+    "count_other": "{{count}} orders",
+    "countOf": "{{count}} of {{total}} orders",
+    "loading": "Loading Orders...",
+    "empty": {
+      "title": "No Orders Available",
+      "filteredTitle": "No Orders Match Your Filters",
+      "message": "Orders will appear here once created.",
+      "filteredMessage": "Try clearing the filters to see all orders."
+    },
+    "actions": {
+      "complete": "Complete",
+      "share": "Share",
+      "sharingDisabled": "Sharing Disabled"
+    },
+    "sessions": {
+      "viewDetailedOrder": "View Detailed Order",
+      "total": "Total Sessions: {{count}}",
+      "viewDetails": "View Details",
+      "estimatedPersons": "Estimated Persons"
+    },
+    "messages": {
+      "fetchFailed": "Failed to fetch order details",
+      "confirmSuccess": "Order confirmed successfully!",
+      "confirmFailed": "Failed to confirm order",
+      "deleteSuccess": "Order deleted successfully!"
+    },
+    "completeModal": {
+      "title": "Complete Order: {{name}}",
+      "session": "Session {{count}}",
+      "dishes": "Dishes",
+      "perDishPrice": "Per Dish Price (₹)",
+      "pricePlaceholder": "Price",
+      "dishCount": "Dish Count",
+      "countPlaceholder": "Count",
+      "slotTotal": "Slot Total",
+      "extraServiceCharge": "Extra Service Charge",
+      "waiterService": "Waiter Service",
+      "orderSubtotals": "Order Subtotals",
+      "totalDishCount": "Total Dish Count",
+      "totalDishAmount": "Total Dish Amount",
+      "extraCharge": "Extra Charge",
+      "totalAmount": "Total Amount",
+      "paymentDetails": "Payment Details",
+      "advancePaidAtConfirmation": "Advance Paid at Confirmation",
+      "amountPaidAtCompletion": "Amount Paid at Completion (₹)",
+      "enterAmount": "Enter Amount",
+      "noteReference": "Note / Reference",
+      "optionalNotes": "Optional notes",
+      "totalRemainingAmount": "Total Remaining Amount",
+      "paymentExceeds": "Payment cannot exceed the remaining amount (₹{{amount}})"
+    }
+  },
+  "invoice": {
+    "title": "Invoice List",
+    "count_one": "{{count}} invoice",
+    "count_other": "{{count}} invoices",
+    "countOf": "{{count}} of {{total}} invoices",
+    "loading": "Loading Invoices...",
+    "empty": {
+      "title": "No Invoices Yet",
+      "filteredTitle": "No Invoices Match Your Filters",
+      "message": "Invoices will appear here once generated.",
+      "filteredMessage": "Try adjusting your date filters or search parameters."
+    },
+    "amount": {
+      "paid": "Paid: ₹{{amount}}",
+      "advance": "Adv: ₹{{amount}}",
+      "total": "Total: ₹{{amount}}",
+      "pending": "Pending Amount ₹{{amount}}"
+    },
+    "actions": {
+      "viewOrder": "View Order",
+      "completePayment": "Complete Payment",
+      "sendBill": "Send Bill"
+    }
   }
 }

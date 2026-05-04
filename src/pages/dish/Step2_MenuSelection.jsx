@@ -15,6 +15,7 @@ import {
   Typography,
 } from "@mui/material";
 import Grid from "@mui/material/Grid";
+import { useTranslation } from "react-i18next";
 import {
   FiSearch,
   FiArrowLeft,
@@ -29,6 +30,8 @@ import {
   flattenCategoryItems,
   sortCategoryTree,
 } from "../../utils/categoryTree";
+import { useLocalized } from "../../i18n/helpers";
+import { translateTimeLabel } from "./dishI18n";
 
 function Step2_MenuSelection({
   formData,
@@ -38,6 +41,8 @@ function Step2_MenuSelection({
   onNext,
   onBack,
 }) {
+  const { t } = useTranslation();
+  const pickLocalized = useLocalized();
   // Flatten all timeslots into tabs
   const tabs = useMemo(() => {
     const result = [];
@@ -49,14 +54,14 @@ function Step2_MenuSelection({
         result.push({
           dIdx,
           sIdx,
-          label: slot.timeLabel || `Slot ${sIdx + 1}`,
+          label: slot.timeLabel || t("dishFlow.schedule.slot", { count: sIdx + 1 }),
           dateStr,
           dishes: slot.dishes || [],
         });
       });
     });
     return result;
-  }, [formData.schedule]);
+  }, [formData.schedule, t]);
 
   const [activeTabIndex, setActiveTabIndex] = useState(0);
   const [activeCategoryId, setActiveCategoryId] = useState(null);
@@ -112,7 +117,7 @@ function Step2_MenuSelection({
         {
           dishId: dish.id,
           dishName: dish.name,
-          categoryName: dish.categoryName || activeCategory?.name || "Dishes",
+          categoryName: dish.categoryName || activeCategory?.name || t("dishFlow.menu.dishes"),
           selectionRate: parseFloat(dish.selection_rate) || 0,
           baseCost: parseFloat(dish.base_cost) || 0,
         },
@@ -142,8 +147,7 @@ function Step2_MenuSelection({
     return (
       <Box sx={{ py: 10, textAlign: "center" }}>
         <Typography color="text.secondary" sx={{ mb: 2 }}>
-          No event timings defined. Please go back and add event dates with time
-          slots.
+          {t("dishFlow.menu.noTimings")}
         </Typography>
         <Button
           variant="outlined"
@@ -151,7 +155,7 @@ function Step2_MenuSelection({
           startIcon={<FiArrowLeft />}
           onClick={onBack}
         >
-          Go Back
+          {t("dishFlow.menu.goBack")}
         </Button>
       </Box>
     );
@@ -195,7 +199,7 @@ function Step2_MenuSelection({
                     letterSpacing: 0.5,
                   }}
                 >
-                  <span>{tab.label}</span>
+                  <span>{translateTimeLabel(t, tab.label)}</span>
                   <Typography
                     variant="caption"
                     color="text.disabled"
@@ -257,7 +261,7 @@ function Step2_MenuSelection({
             <TextField
               fullWidth
               size="small"
-              placeholder="Search category..."
+              placeholder={t("dishFlow.menu.searchCategory")}
               value={categorySearchQuery}
               onChange={(e) => setCategorySearchQuery(e.target.value)}
               slotProps={{
@@ -312,7 +316,7 @@ function Step2_MenuSelection({
                     variant="body2" noWrap
                     sx={{ fontWeight: "inherit", color: "inherit" }}
                   >
-                    {cat.name}
+                    {pickLocalized(cat, "name") || cat.name}
                   </Typography>
                   {selectedCount > 0 && (
                     <Chip
@@ -344,7 +348,7 @@ function Step2_MenuSelection({
           >
             <TextField
               size="small"
-              placeholder="Search dishes..."
+              placeholder={t("dishFlow.menu.searchDishes")}
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               sx={{ flex: 1, maxWidth: 360 }}
@@ -365,10 +369,10 @@ function Step2_MenuSelection({
                   color="text.disabled"
                   sx={{ textTransform: "uppercase", fontWeight: 700 }}
                 >
-                  This Event
+                  {t("dishFlow.menu.thisEvent")}
                 </Typography>
                 <Typography variant="body2" color="primary.main" sx={{ fontWeight: 700 }}>
-                  {currentDishes.length} dishes
+                  {t("dishFlow.menu.dishesCount", { count: currentDishes.length })}
                 </Typography>
               </Box>
               <Divider orientation="vertical" flexItem />
@@ -378,10 +382,10 @@ function Step2_MenuSelection({
                   color="text.disabled"
                   sx={{ textTransform: "uppercase", fontWeight: 700 }}
                 >
-                  All Events
+                  {t("dishFlow.menu.allEvents")}
                 </Typography>
                 <Typography variant="body2" sx={{ fontWeight: 700 }}>
-                  {totalSelectedAll} dishes
+                  {t("dishFlow.menu.dishesCount", { count: totalSelectedAll })}
                 </Typography>
               </Box>
             </Stack>
@@ -402,8 +406,8 @@ function Step2_MenuSelection({
             ) : categoryItems.length === 0 ? (
               <EmptyState
                 icon={<FiGrid size={24} />}
-                title="No dishes found"
-                message="Try selecting a different category or adjusting your search."
+                title={t("dishFlow.menu.noDishesTitle")}
+                message={t("dishFlow.menu.noDishesMessage")}
               />
             ) : (
               <Grid container spacing={1.5}>
@@ -462,7 +466,7 @@ function Step2_MenuSelection({
                             color={selected ? "primary.main" : "text.primary"}
                             sx={{ fontWeight: 600, lineHeight: 1.4 }}
                           >
-                            {dish.name}
+                            {pickLocalized(dish, "name") || dish.name}
                           </Typography>
                           {dish.categoryPath &&
                             dish.categoryPath !== activeCategory?.name && (
@@ -471,7 +475,7 @@ function Step2_MenuSelection({
                                 color="text.secondary"
                                 sx={{ lineHeight: 1.2 }}
                               >
-                                {dish.categoryPath}
+                              {dish.categoryPath}
                               </Typography>
                             )}
                         </Stack>
@@ -504,7 +508,7 @@ function Step2_MenuSelection({
           startIcon={<FiArrowLeft size={16} />}
           onClick={onBack}
         >
-          Back
+          {t("common.back")}
         </Button>
 
         <Stack
@@ -524,7 +528,7 @@ function Step2_MenuSelection({
             {tabs.map((tab, idx) => (
               <Chip
                 key={idx}
-                label={`${tab.label}: ${tab.dishes.length}`}
+                label={`${translateTimeLabel(t, tab.label)}: ${tab.dishes.length}`}
                 size="small"
                 color={tab.dishes.length > 0 ? "primary" : "default"}
                 variant={tab.dishes.length > 0 ? "filled" : "outlined"}
@@ -539,7 +543,7 @@ function Step2_MenuSelection({
             endIcon={<FiArrowRight size={18} />}
             onClick={onNext}
           >
-            Continue to Summary
+            {t("dishFlow.menu.continueToSummary")}
           </Button>
         </Stack>
       </Stack>

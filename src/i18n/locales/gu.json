@@ -1,5 +1,7 @@
 {
   "common": {
+    "confirm": "પુષ્ટિ કરો",
+    "item": "આઇટમ",
     "loading": "લોડ થઈ રહ્યું છે...",
     "save": "સાચવો",
     "cancel": "રદ કરો",
@@ -51,6 +53,7 @@
     "min": "ન્યૂનતમ"
   },
   "breadcrumbs": {
+    "event-summary": "ઇવેન્ટ સારાંશ",
     "dish": "વાનગી બનાવો",
     "category": "શ્રેણી",
     "order-management": "ઓર્ડર મેનેજમેન્ટ",
@@ -91,6 +94,13 @@
     "partial": "આંશિક",
     "refunded": "પાછું આપેલું"
   },
+  "paymentModes": {
+    "cash": "રોકડ",
+    "online": "ઓનલાઇન",
+    "cheque": "ચેક",
+    "bank_transfer": "બેંક ટ્રાન્સફર",
+    "other": "અન્ય"
+  },
   "units": {
     "KG": "કિગ્રા",
     "G": "ગ્રામ",
@@ -105,5 +115,324 @@
     "hindi": "हिन्दी",
     "fillAtLeastOne": "ઓછામાં ઓછી એક ભાષામાં લખો",
     "namePlaceholder": "{{language}} માં નામ લખો"
+  },
+  "entities": {
+    "quotation": "કોટેશન",
+    "order": "ઓર્ડર"
+  },
+  "confirmDelete": {
+    "title": "શું તમે આ {{name}} કાઢી નાખવા માંગો છો?",
+    "text": "આ ક્રિયા પાછી ફેરવી શકાશે નહીં!",
+    "confirm": "હા, કાઢી નાખો!",
+    "failed": "{{name}} કાઢી નાખવામાં નિષ્ફળ",
+    "error": "{{name}} કાઢતી વખતે ભૂલ"
+  },
+  "dishFlow": {
+    "steps": {
+      "clientEvent": "ક્લાયન્ટ અને ઇવેન્ટ",
+      "menuSelection": "મેનુ પસંદગી",
+      "summaryServices": "સારાંશ અને સેવાઓ"
+    },
+    "time": {
+      "breakfast": "નાસ્તો",
+      "lunch": "લંચ",
+      "dinner": "ડિનર",
+      "highTea": "હાઈ ટી",
+      "lateNightSnack": "મોડી રાતનો નાસ્તો"
+    },
+    "client": {
+      "title": "ક્લાયન્ટ માહિતી",
+      "subtitle": "ક્લાયન્ટની મૂળ વિગતો દાખલ કરો",
+      "clientName": "ક્લાયન્ટ નામ *",
+      "clientNamePlaceholder": "ક્લાયન્ટનું નામ દાખલ કરો",
+      "mobileNumber": "મોબાઇલ નંબર *",
+      "mobilePlaceholder": "મોબાઇલ નંબર",
+      "orderDate": "ઓર્ડર તારીખ",
+      "referenceName": "સંદર્ભ નામ (વૈકલ્પિક)",
+      "referencePlaceholder": "સંદર્ભ નામ"
+    },
+    "schedule": {
+      "title": "ઇવેન્ટ શેડ્યૂલ",
+      "subtitle": "દરેક દિવસ માટે ઇવેન્ટ તારીખો અને સમય સ્લોટ ઉમેરો",
+      "eventDate": "ઇવેન્ટ તારીખ:",
+      "chooseDate": "તારીખ પસંદ કરો",
+      "deleteDay": "દિવસ કાઢી નાખો",
+      "slot": "સ્લોટ {{count}}",
+      "eventTiming": "ઇવેન્ટ સમય",
+      "selectTiming": "સમય પસંદ કરો...",
+      "maxLimitReached": "(મહત્તમ 3 મર્યાદા પહોંચી)",
+      "numberOfPersons": "વ્યક્તિઓની સંખ્યા",
+      "personsPlaceholder": "દા.ત. 250",
+      "removeTimeSlot": "આ સમય સ્લોટ દૂર કરો",
+      "addTimeSlot": "સમય સ્લોટ ઉમેરો",
+      "addEventDate": "ઇવેન્ટ તારીખ ઉમેરો",
+      "continueToMenu": "મેનુ પસંદગી પર આગળ વધો"
+    },
+    "menu": {
+      "noTimings": "કોઈ ઇવેન્ટ સમય નક્કી નથી. કૃપા કરીને પાછા જઈને ઇવેન્ટ તારીખો સાથે સમય સ્લોટ ઉમેરો.",
+      "goBack": "પાછા જાઓ",
+      "searchCategory": "શ્રેણી શોધો...",
+      "searchDishes": "વાનગીઓ શોધો...",
+      "thisEvent": "આ ઇવેન્ટ",
+      "allEvents": "બધી ઇવેન્ટ",
+      "dishesCount": "{{count}} વાનગીઓ",
+      "noDishesTitle": "કોઈ વાનગી મળી નથી",
+      "noDishesMessage": "બીજી શ્રેણી પસંદ કરો અથવા શોધ બદલો.",
+      "continueToSummary": "સારાંશ પર આગળ વધો",
+      "dishes": "વાનગીઓ"
+    },
+    "summary": {
+      "title": "ઇવેન્ટ સારાંશ અને સેવાઓ",
+      "subtitle": "દરેક ઇવેન્ટની સમીક્ષા કરો, ભાવ સેટ કરો અને સેવાઓ ઉમેરો",
+      "grandTotal": "કુલ રકમ",
+      "client": "ક્લાયન્ટ",
+      "mobile": "મોબાઇલ",
+      "reference": "સંદર્ભ",
+      "totalEvents": "કુલ ઇવેન્ટ",
+      "day": "દિવસ {{count}}",
+      "subtotal": "સબટોટલ",
+      "persons": "વ્યક્તિઓ",
+      "perPlatePrice": "પ્રતિ પ્લેટ કિંમત (₹)",
+      "pricePlaceholder": "દા.ત. 350",
+      "venue": "સ્થળ",
+      "venuePlaceholder": "ઇવેન્ટ સ્થળ / સરનામું",
+      "selectedDishes": "પસંદ કરેલી વાનગીઓ",
+      "zeroPriceWarning": "લાલ હાઇલાઇટ કરેલી આઇટમ્સ વાનગી કિંમતમાં ગણાતી નથી",
+      "noDishesSelected": "આ ઇવેન્ટ માટે કોઈ વાનગી પસંદ નથી.",
+      "waiterService": "વેઇટર સેવા",
+      "addWaiter": "વેઇટર ઉમેરો",
+      "waiterType": "વેઇટર પ્રકાર",
+      "selectWaiterType": "વેઇટર પ્રકાર પસંદ કરો",
+      "loading": "લોડ થઈ રહ્યું છે...",
+      "perHead": "/વ્યક્તિ",
+      "countPlaceholder": "સંખ્યા",
+      "notesPlaceholder": "નોંધો (વૈકલ્પિક)",
+      "totalWaiterCharge": "કુલ વેઇટર ચાર્જ: ₹{{amount}}",
+      "noWaiterServices": "કોઈ વેઇટર સેવા ઉમેરાઈ નથી.",
+      "extraServices": "વધારાની સેવાઓ",
+      "addService": "સેવા ઉમેરો",
+      "serviceName": "સેવાનું નામ",
+      "price": "₹ કિંમત",
+      "qty": "જથ્થો",
+      "noExtraServices": "કોઈ વધારાની સેવા ઉમેરાઈ નથી.",
+      "generalDescription": "સામાન્ય વર્ણન",
+      "descriptionPlaceholder": "સંપૂર્ણ ઇવેન્ટ માટે નોંધો...",
+      "displayRules": "PDF પર નિયમો બતાવો",
+      "viewRules": "નિયમો જુઓ",
+      "viewSuggestions": "સૂચનો જુઓ",
+      "termsRules": "શરતો અને નિયમો",
+      "suggestions": "સૂચનો",
+      "backToMenu": "મેનુ પર પાછા",
+      "reviewGeneratePdf": "સમીક્ષા કરો અને PDF બનાવો"
+    },
+    "rules": [
+      "પાર્ટીએ રસોઈ વિસ્તાર સમયસર તૈયાર કરવો પડશે.",
+      "પાર્ટીએ ઇવેન્ટના 10 દિવસ પહેલા મેનુ અને વાનગી સંખ્યા કન્ફર્મ કરવી પડશે.",
+      "પાર્ટીએ વાસણો અને કચરા નિકાલ માટે પાણીની વ્યવસ્થા કરવી પડશે.",
+      "પાર્ટીએ કાઉન્ટર અને પંડાલ સેવા સાધનો માટે ટેબલની વ્યવસ્થા કરવી પડશે.",
+      "ઓર્ડર મૂક્યા પછી પાર્ટીએ 30% એડવાન્સ ચુકવણી કરવી પડશે."
+    ],
+    "suggestions": [
+      "200થી વધુ મહેમાનો માટે વેલકમ ડ્રિન્ક્સ વિભાગ ઉમેરવાનું વિચારો.",
+      "બહુદિવસીય ઇવેન્ટમાં પુનરાવર્તન ટાળવા વિવિધ મેનુ લાભદાયક રહે છે.",
+      "ડેઝર્ટ પસંદગી મુખ્ય વાનગીઓની સંખ્યાને અનુરૂપ છે તેની ખાતરી કરો."
+    ],
+    "validation": {
+      "nameRequired": "નામ જરૂરી છે",
+      "nameOnlyNumbers": "નામમાં માત્ર નંબર હોઈ શકતા નથી. કૃપા કરીને યોગ્ય નામ દાખલ કરો.",
+      "nameMustStartAlpha": "નામ અક્ષરથી શરૂ થવું જોઈએ.",
+      "referenceOnlyNumbers": "સંદર્ભ નામમાં માત્ર નંબર હોઈ શકતા નથી. કૃપા કરીને યોગ્ય નામ દાખલ કરો.",
+      "referenceMustStartAlpha": "સંદર્ભ નામ અક્ષરથી શરૂ થવું જોઈએ.",
+      "mobileRequired": "મોબાઇલ નંબર જરૂરી છે",
+      "mobileTenDigits": "મોબાઇલ નંબર ચોક્કસ 10 અંકોનો હોવો જોઈએ",
+      "scheduleRequired": "ઓછામાં ઓછી એક ઇવેન્ટ તારીખ જરૂરી છે",
+      "required": "જરૂરી",
+      "max3Limit": "મહત્તમ 3 મર્યાદા",
+      "max100000": "મહત્તમ મર્યાદા 100,000",
+      "validDates": "બધી શેડ્યૂલ તારીખો માન્ય હોવી જોઈએ.",
+      "timeSlotRequired": "બધી તારીખોમાં ઓછામાં ઓછો એક સમય સ્લોટ હોવો જોઈએ.",
+      "mandatoryBeforeProceeding": "આગળ વધતા પહેલા બધા ફરજિયાત ફીલ્ડ ભરો.",
+      "selectDishes": "વાનગીઓ પસંદ કરો",
+      "selectDishBeforeProceeding": "આગળ વધતા પહેલા ઓછામાં ઓછી એક આઇટમ/વાનગી પસંદ કરો.",
+      "timeSlotIsRequired": "સમય સ્લોટ જરૂરી છે",
+      "personsRequired": "વ્યક્તિઓની સંખ્યા જરૂરી છે",
+      "priceRequired": "કિંમત જરૂરી છે",
+      "addressRequired": "સરનામું જરૂરી છે",
+      "eventVenueMandatory": "ઇવેન્ટ સ્થળ/સરનામું ફરજિયાત છે. કૃપા કરીને સ્થળની વિગતો દાખલ કરો.",
+      "personsMandatory": "વ્યક્તિઓની સંખ્યા ફરજિયાત છે. કૃપા કરીને યોગ્ય સંખ્યા દાખલ કરો.",
+      "priceMandatory": "પ્રતિ પ્લેટ કિંમત ફરજિયાત છે. કૃપા કરીને યોગ્ય કિંમત દાખલ કરો.",
+      "timeLabelMandatory": "સમય સ્લોટ લેબલ ફરજિયાત છે.",
+      "selectItemsForEvent": "કૃપા કરીને આ ઇવેન્ટ માટે આઇટમ્સ પસંદ કરો.",
+      "reviewMandatory": "સબમિટ કરતા પહેલા બધા ફરજિયાત ફીલ્ડ તપાસો.",
+      "marginWarning": "{{slotName}}: પ્રતિ પ્લેટ કિંમત ₹{{price}} છે, પરંતુ બેઝ કોસ્ટ + 20% માર્જિન મુજબ ઓછામાં ઓછી ₹{{minPrice}} હોવી જોઈએ.",
+      "marginTitle": "કિંમત માર્જિન ચેતવણી",
+      "marginHtml": "પ્રતિ પ્લેટ કિંમત ન્યૂનતમ માર્જિનથી ઓછી છે. શું તમે હજુ પણ આ ઓર્ડર મૂકવા માંગો છો?",
+      "marginConfirm": "હા, આગળ વધો"
+    }
+  },
+  "sidebar": {
+    "superAdminPortal": "સુપર એડમિન પોર્ટલ",
+    "platformControlCenter": "પ્લેટફોર્મ નિયંત્રણ કેન્દ્ર",
+    "logoHint": "સેટિંગ્સ ટેબમાં તમારા વ્યવસાયનો લોગો સેટ કરો.",
+    "goToSettings": "સેટિંગ્સ પર જાઓ",
+    "dashboard": "ડેશબોર્ડ",
+    "tenants": "ટેનન્ટ્સ",
+    "subscriptionPlans": "સબ્સ્ક્રિપ્શન પ્લાન",
+    "accessControl": "ઍક્સેસ કંટ્રોલ",
+    "userModels": "યુઝર મોડલ્સ",
+    "createDish": "વાનગી બનાવો",
+    "category": "શ્રેણી",
+    "orderManagement": "ઓર્ડર મેનેજમેન્ટ",
+    "stock": "સ્ટોક",
+    "paymentHistory": "ચુકવણીનો ઇતિહાસ",
+    "expense": "ખર્ચ",
+    "createIngredient": "ઇન્ગ્રેડિયન્ટ બનાવો",
+    "people": "લોકો",
+    "groundChecklist": "ગ્રાઉન્ડ ચેકલિસ્ટ"
+  },
+  "orderManagement": {
+    "tabs": {
+      "quotation": "કોટેશન",
+      "allOrder": "બધા ઓર્ડર",
+      "invoice": "ઇનવોઇસ",
+      "eventSummary": "ઇવેન્ટ સારાંશ"
+    }
+  },
+  "filters": {
+    "today": "આજે",
+    "week": "અઠવાડિયું",
+    "month": "મહિનો",
+    "upcoming": "આગામી",
+    "next7Days": "આગામી 7 દિવસ",
+    "next30Days": "આગામી 30 દિવસ",
+    "all": "બધું",
+    "selectDateRange": "તારીખ રેન્જ પસંદ કરો",
+    "selectEventDateRange": "ઇવેન્ટ તારીખ રેન્જ પસંદ કરો"
+  },
+  "list": {
+    "searchNameOrMobile": "નામ અથવા મોબાઇલ શોધો..."
+  },
+  "quotation": {
+    "messages": {
+      "fetchFailed": "કોટેશનની વિગતો લાવવામાં નિષ્ફળ",
+      "confirmFailed": "કોટેશન કન્ફર્મ કરવામાં નિષ્ફળ",
+      "deleteSuccess": "કોટેશન સફળતાપૂર્વક કાઢી નાખ્યું!"
+    },
+    "confirmModal": {
+      "title": "{{name}} માટે ઓર્ડર કન્ફર્મ કરો",
+      "totalOrderAmount": "કુલ ઓર્ડર રકમ",
+      "paymentMode": "ચુકવણી મોડ",
+      "advanceAmount": "એડવાન્સ રકમ",
+      "advancePlaceholder": "કૃપા કરીને એડવાન્સ રકમ દાખલ કરો",
+      "advanceExceeds": "એડવાન્સ રકમ કુલ ઓર્ડર રકમથી વધારે ન હોઈ શકે (₹{{amount}})",
+      "paymentNote": "ઓર્ડર પૂર્ણ કરવાની ચુકવણી"
+    },
+    "title": "કોટેશન યાદી",
+    "count_one": "{{count}} કોટેશન",
+    "count_other": "{{count}} કોટેશન",
+    "countOf": "{{total}}માંથી {{count}} કોટેશન",
+    "loading": "કોટેશન લોડ થઈ રહ્યા છે...",
+    "reference": "રેફ",
+    "empty": {
+      "title": "હજુ કોઈ કોટેશન નથી",
+      "filteredTitle": "તમારા ફિલ્ટર સાથે કોઈ કોટેશન મળ્યું નથી",
+      "message": "કોટેશન બનાવ્યા પછી અહીં દેખાશે.",
+      "filteredMessage": "તારીખ રેન્જ અથવા શોધ બદલીને જુઓ."
+    },
+    "actions": {
+      "view": "જુઓ",
+      "confirm": "કન્ફર્મ કરો",
+      "edit": "કોટેશન સુધારો"
+    },
+    "sessions": {
+      "viewAllEvents": "બધી ઇવેન્ટ જુઓ",
+      "total": "કુલ સેશન: {{count}}",
+      "viewDetails": "વિગતો જુઓ",
+      "estimatedPersons": "અંદાજિત વ્યક્તિઓ",
+      "allSchedules": "બધા ઇવેન્ટ શેડ્યૂલ",
+      "modalSubtitle": "{{name}} — {{count}} ઇવેન્ટ",
+      "modalSubtitle_one": "{{name}} — {{count}} ઇવેન્ટ",
+      "modalSubtitle_other": "{{name}} — {{count}} ઇવેન્ટ",
+      "persons": "વ્યક્તિઓ"
+    }
+  },
+  "allOrders": {
+    "actions": {
+      "complete": "પૂર્ણ કરો",
+      "share": "શેર કરો",
+      "sharingDisabled": "શેરિંગ બંધ છે"
+    },
+    "sessions": {
+      "viewDetailedOrder": "ઓર્ડરની વિગત જુઓ",
+      "total": "કુલ સેશન: {{count}}",
+      "viewDetails": "વિગતો જુઓ",
+      "estimatedPersons": "અંદાજિત વ્યક્તિઓ"
+    },
+    "messages": {
+      "fetchFailed": "ઓર્ડરની વિગતો લાવવામાં નિષ્ફળ",
+      "confirmSuccess": "ઓર્ડર સફળતાપૂર્વક કન્ફર્મ થયો!",
+      "confirmFailed": "ઓર્ડર કન્ફર્મ કરવામાં નિષ્ફળ",
+      "deleteSuccess": "ઓર્ડર સફળતાપૂર્વક કાઢી નાખ્યો!"
+    },
+    "completeModal": {
+      "title": "ઓર્ડર પૂર્ણ કરો: {{name}}",
+      "session": "સેશન {{count}}",
+      "dishes": "વાનગીઓ",
+      "perDishPrice": "પ્રતિ વાનગી કિંમત (₹)",
+      "pricePlaceholder": "કિંમત",
+      "dishCount": "વાનગી સંખ્યા",
+      "countPlaceholder": "સંખ્યા",
+      "slotTotal": "સ્લોટ કુલ",
+      "extraServiceCharge": "વધારાનો સર્વિસ ચાર્જ",
+      "waiterService": "વેઇટર સર્વિસ",
+      "orderSubtotals": "ઓર્ડર સબટોટલ",
+      "totalDishCount": "કુલ વાનગી સંખ્યા",
+      "totalDishAmount": "કુલ વાનગી રકમ",
+      "extraCharge": "વધારાનો ચાર્જ",
+      "totalAmount": "કુલ રકમ",
+      "paymentDetails": "ચુકવણી વિગતો",
+      "advancePaidAtConfirmation": "કન્ફર્મેશન વખતે ચુકવેલ એડવાન્સ",
+      "amountPaidAtCompletion": "પૂર્ણ કરતી વખતે ચુકવેલ રકમ (₹)",
+      "enterAmount": "રકમ દાખલ કરો",
+      "noteReference": "નોંધ / સંદર્ભ",
+      "optionalNotes": "વૈકલ્પિક નોંધ",
+      "totalRemainingAmount": "કુલ બાકી રકમ",
+      "paymentExceeds": "ચુકવણી બાકી રકમથી વધારે ન હોઈ શકે (₹{{amount}})"
+    },
+    "title": "બધા ઓર્ડર",
+    "count_one": "{{count}} ઓર્ડર",
+    "count_other": "{{count}} ઓર્ડર",
+    "countOf": "{{total}}માંથી {{count}} ઓર્ડર",
+    "loading": "ઓર્ડર લોડ થઈ રહ્યા છે...",
+    "empty": {
+      "title": "કોઈ ઓર્ડર ઉપલબ્ધ નથી",
+      "filteredTitle": "તમારા ફિલ્ટર સાથે કોઈ ઓર્ડર મળ્યો નથી",
+      "message": "ઓર્ડર બનાવ્યા પછી અહીં દેખાશે.",
+      "filteredMessage": "બધા ઓર્ડર જોવા માટે ફિલ્ટર સાફ કરો."
+    }
+  },
+  "invoice": {
+    "amount": {
+      "paid": "ચૂકવેલ: ₹{{amount}}",
+      "advance": "એડવાન્સ: ₹{{amount}}",
+      "total": "કુલ: ₹{{amount}}",
+      "pending": "બાકી રકમ ₹{{amount}}"
+    },
+    "actions": {
+      "viewOrder": "ઓર્ડર જુઓ",
+      "completePayment": "ચુકવણી પૂર્ણ કરો",
+      "sendBill": "બિલ મોકલો"
+    },
+    "title": "ઇનવોઇસ યાદી",
+    "count_one": "{{count}} ઇનવોઇસ",
+    "count_other": "{{count}} ઇનવોઇસ",
+    "countOf": "{{total}}માંથી {{count}} ઇનવોઇસ",
+    "loading": "ઇનવોઇસ લોડ થઈ રહ્યા છે...",
+    "empty": {
+      "title": "હજુ કોઈ ઇનવોઇસ નથી",
+      "filteredTitle": "તમારા ફિલ્ટર સાથે કોઈ ઇનવોઇસ મળ્યો નથી",
+      "message": "ઇનવોઇસ જનરેટ થયા પછી અહીં દેખાશે.",
+      "filteredMessage": "તારીખ ફિલ્ટર અથવા શોધ બદલીને જુઓ."
+    }
   }
 }

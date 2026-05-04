@@ -2,6 +2,7 @@ import Swal from "sweetalert2";
 import { toast } from "react-hot-toast";
 import { executeConfirmationRequest } from "../../api/requestActions";
 import { queryClient } from "../../lib/queryClient";
+import i18n from "../../i18n";
 
 const QUERY_KEY_BY_ENDPOINT = {
   "/categories": ["categories"],
@@ -20,14 +21,16 @@ const DeleteConfirmation = async ({
   payload = {},
   executeRequest,
 }) => {
+  const itemName = name || i18n.t("common.item");
   const result = await Swal.fire({
-    title: `Are you sure you want to delete this ${name}?`,
-    text: "You won't be able to revert this!",
+    title: i18n.t("confirmDelete.title", { name: itemName }),
+    text: i18n.t("confirmDelete.text"),
     icon: "warning",
     showCancelButton: true,
     confirmButtonColor: "#c2272d",
     cancelButtonColor: "#3085d6",
-    confirmButtonText: "Yes, delete it!",
+    confirmButtonText: i18n.t("confirmDelete.confirm"),
+    cancelButtonText: i18n.t("common.cancel"),
   });
 
   if (result.isConfirmed) {
@@ -49,10 +52,10 @@ const DeleteConfirmation = async ({
         }
         if (onSuccess) onSuccess();
       } else {
-        toast.error(`Failed to delete ${name}`);
+        toast.error(i18n.t("confirmDelete.failed", { name: itemName }));
       }
     } catch (error) {
-      toast.error(`Error deleting ${name}`);
+      toast.error(i18n.t("confirmDelete.error", { name: itemName }));
       console.error("Delete API Error:", error);
     }
   }

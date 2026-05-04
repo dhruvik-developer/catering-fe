@@ -8,15 +8,16 @@ import {
   StepButton,
   StepLabel,
 } from "@mui/material";
+import { useTranslation } from "react-i18next";
 import { FiUser, FiGrid, FiClipboard } from "react-icons/fi";
 import Step1_ClientEvent from "./Step1_ClientEvent";
 import Step2_MenuSelection from "./Step2_MenuSelection";
 import Step3_Summary from "./Step3_Summary";
 
 const STEPS = [
-  { id: 1, label: "Client & Event", icon: FiUser },
-  { id: 2, label: "Menu Selection", icon: FiGrid },
-  { id: 3, label: "Summary & Services", icon: FiClipboard },
+  { id: 1, labelKey: "dishFlow.steps.clientEvent", icon: FiUser },
+  { id: 2, labelKey: "dishFlow.steps.menuSelection", icon: FiGrid },
+  { id: 3, labelKey: "dishFlow.steps.summaryServices", icon: FiClipboard },
 ];
 
 function StepIcon({ icon: Icon, active, completed }) {
@@ -74,6 +75,7 @@ function DishComponent({
   validateStep1,
   validateStep2,
 }) {
+  const { t } = useTranslation();
   const [currentStep, setCurrentStep] = useState(1);
 
   const goToStep2 = () => {
@@ -164,7 +166,7 @@ function DishComponent({
                   sx={{ "&.Mui-disabled": { cursor: "default" } }}
                 >
                   <StepLabel slots={{ stepIcon: CustomStepIcon }}>
-                    {step.label}
+                    {t(step.labelKey)}
                   </StepLabel>
                 </StepButton>
               </Step>

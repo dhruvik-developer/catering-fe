@@ -1,5 +1,6 @@
 /* eslint-disable react/prop-types */
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import {
   Avatar,
   Box,
@@ -57,8 +58,14 @@ function QuotationComponent({
   handleCompleteQuotation,
 }) {
   const theme = useTheme();
+  const { t } = useTranslation();
   const [sessionsModal, setSessionsModal] = useState(null);
   const hasFilters = Boolean(searchQuery || dateRange[0] || dateRange[1]);
+  const visibleCount = quotation?.length || 0;
+  const countText =
+    totalCount !== visibleCount
+      ? t("quotation.countOf", { count: visibleCount, total: totalCount || 0 })
+      : t("quotation.count", { count: visibleCount });
 
   return (
     <Paper
@@ -80,12 +87,10 @@ function QuotationComponent({
         </Avatar>
         <Box>
           <Typography variant="h5" color="text.primary" sx={{ fontWeight: 700 }}>
-            Quotation List
+            {t("quotation.title")}
           </Typography>
           <Typography variant="body2" color="text.secondary">
-            {quotation?.length || 0}
-            {totalCount !== quotation?.length ? ` of ${totalCount}` : ""}{" "}
-            quotation{quotation?.length !== 1 ? "s" : ""}
+            {countText}
           </Typography>
         </Box>
       </Stack>
@@ -101,7 +106,7 @@ function QuotationComponent({
         <TextField
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
-          placeholder="Search name or mobile..."
+          placeholder={t("list.searchNameOrMobile")}
           autoComplete="off"
           sx={{
             width: { xs: "100%", md: 280 },
@@ -136,12 +141,14 @@ function QuotationComponent({
 
          sx={{ flexWrap: "wrap", alignItems: "center", justifyContent: { xs: "flex-start", md: "flex-end" } }}>
           <ButtonGroup size="small">
-            <Button onClick={() => handleQuickFilter("today")}>Today</Button>
+            <Button onClick={() => handleQuickFilter("today")}>
+              {t("filters.today")}
+            </Button>
             <Button onClick={() => handleQuickFilter("next7Days")}>
-              Next 7 Days
+              {t("filters.next7Days")}
             </Button>
             <Button onClick={() => handleQuickFilter("next30Days")}>
-              Next 30 Days
+              {t("filters.next30Days")}
             </Button>
           </ButtonGroup>
 
@@ -187,7 +194,7 @@ function QuotationComponent({
               endDate={dateRange[1]}
               onChange={(update) => setDateRange(update)}
               dateFormat="dd MMM yyyy"
-              placeholderText="Select date range"
+              placeholderText={t("filters.selectDateRange")}
               minDate={new Date()}
               isClearable
             />
@@ -196,17 +203,19 @@ function QuotationComponent({
       </Stack>
 
       {loading ? (
-        <Loader message="Loading Quotations..." />
+        <Loader message={t("quotation.loading")} />
       ) : !quotation || quotation.length === 0 ? (
         <EmptyState
           icon={<FiFileText size={24} />}
           title={
-            hasFilters ? "No Quotations Match Your Filters" : "No Quotations Yet"
+            hasFilters
+              ? t("quotation.empty.filteredTitle")
+              : t("quotation.empty.title")
           }
           message={
             hasFilters
-              ? "Try adjusting your date range or search."
-              : "Quotations will appear here once created."
+              ? t("quotation.empty.filteredMessage")
+              : t("quotation.empty.message")
           }
         />
       ) : (
@@ -277,7 +286,7 @@ function QuotationComponent({
                             variant="caption"
                             color="text.secondary" noWrap
                           >
-                            Ref: {quote.reference}
+                            {t("quotation.reference")}: {quote.reference}
                           </Typography>
                         )}
                       </Box>
@@ -306,7 +315,7 @@ function QuotationComponent({
                       <IconButton
                         size="small"
                         onClick={() => handleEditOrder(quote.id)}
-                        title="Edit Quotation"
+                        title={t("quotation.actions.edit")}
                       >
                         <FiEdit2 size={15} />
                       </IconButton>
@@ -348,7 +357,7 @@ function QuotationComponent({
                           sessions: allSessions,
                         })
                       }
-                      title="View All Events"
+                      title={t("quotation.sessions.viewAllEvents")}
                       sx={{
                         display: "flex",
                         flexDirection: "column",
@@ -375,7 +384,9 @@ function QuotationComponent({
                         <Stack direction="row" spacing={1} sx={{ alignItems: "center" }}>
                           <FiFileText size={14} />
                           <Typography variant="body2" sx={{ fontWeight: 600 }}>
-                            Total Sessions: {allSessions.length}
+                            {t("quotation.sessions.total", {
+                              count: allSessions.length,
+                            })}
                           </Typography>
                         </Stack>
                         <Stack
@@ -385,7 +396,7 @@ function QuotationComponent({
 
                          sx={{ alignItems: "center", color: "primary.main" }}>
                           <Typography variant="body2" sx={{ fontWeight: 600 }}>
-                            View Details
+                            {t("quotation.sessions.viewDetails")}
                           </Typography>
                           <FiChevronRight size={14} />
                         </Stack>
@@ -398,7 +409,7 @@ function QuotationComponent({
                       >
                         <FiUsers size={12} />
                         <Typography variant="caption" color="text.secondary">
-                          Estimated Persons:
+                          {t("quotation.sessions.estimatedPersons")}:
                         </Typography>
                         <Typography variant="caption" sx={{ fontWeight: 600 }}>
                           {totalPersons || "—"}
@@ -427,7 +438,7 @@ function QuotationComponent({
                       onClick={() => handleViewQuotation(quote.id)}
                       sx={{ flex: { sm: 1 } }}
                     >
-                      View
+                      {t("quotation.actions.view")}
                     </Button>
                     <Button
                       size="small"
@@ -437,7 +448,7 @@ function QuotationComponent({
                       onClick={() => handleCompleteQuotation(quote.id)}
                       sx={{ flex: { sm: 1 } }}
                     >
-                      Confirm
+                      {t("quotation.actions.confirm")}
                     </Button>
                     <Button
                       size="small"
@@ -447,7 +458,7 @@ function QuotationComponent({
                       onClick={() => handleDeleteQuotation(quote.id)}
                       sx={{ flex: { sm: 1 } }}
                     >
-                      Cancel
+                      {t("common.cancel")}
                     </Button>
                   </CardActions>
                 </Card>
@@ -471,12 +482,14 @@ function QuotationComponent({
            sx={{ justifyContent: "space-between", alignItems: "center" }}>
             <Box>
               <Typography variant="h6" sx={{ fontWeight: 700 }}>
-                All Event Schedules
+                {t("quotation.sessions.allSchedules")}
               </Typography>
               {sessionsModal && (
                 <Typography variant="caption" color="text.secondary">
-                  {sessionsModal.name} — {sessionsModal.sessions.length} event
-                  {sessionsModal.sessions.length !== 1 ? "s" : ""}
+                  {t("quotation.sessions.modalSubtitle", {
+                    name: sessionsModal.name,
+                    count: sessionsModal.sessions.length,
+                  })}
                 </Typography>
               )}
             </Box>
@@ -521,7 +534,7 @@ function QuotationComponent({
                       <Box component="strong">
                         {session.estimated_persons || "—"}
                       </Box>{" "}
-                      persons
+                      {t("quotation.sessions.persons")}
                     </Typography>
                   </Stack>
                 </Grid>
@@ -534,7 +547,7 @@ function QuotationComponent({
             variant="contained"
             onClick={() => setSessionsModal(null)}
           >
-            Close
+            {t("common.close")}
           </Button>
         </DialogActions>
       </Dialog>

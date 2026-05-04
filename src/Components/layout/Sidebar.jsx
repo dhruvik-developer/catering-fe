@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import { useDispatch, useSelector } from "react-redux";
 import {
   Avatar,
@@ -38,18 +39,21 @@ const hugeIcon = (icon) => (
 const tenantMenuItems = [
   {
     name: "Create Dish",
+    labelKey: "sidebar.createDish",
     path: "/dish",
     icon: hugeIcon(Dish01Icon),
     requiredPermission: ["event_session.view", "dishes.view"],
   },
   {
     name: "Category",
+    labelKey: "sidebar.category",
     path: "/category",
     icon: hugeIcon(MenuRestaurantIcon),
     requiredPermission: "categories.view",
   },
   {
     name: "Order Management",
+    labelKey: "sidebar.orderManagement",
     path: "/order-management",
     icon: hugeIcon(Note03Icon),
     requiredPermission: [
@@ -61,18 +65,21 @@ const tenantMenuItems = [
   },
   {
     name: "Stock",
+    labelKey: "sidebar.stock",
     path: "/stock",
     icon: hugeIcon(StickyNote02Icon),
     requiredPermission: "stock.view",
   },
   {
     name: "Payment History",
+    labelKey: "sidebar.paymentHistory",
     path: "/payment-history",
     icon: hugeIcon(TransactionHistoryIcon),
     requiredPermission: "payments.view",
   },
   {
     name: "Expense",
+    labelKey: "sidebar.expense",
     path: "/expense",
     icon: hugeIcon(MoneyReceiveSquareIcon),
     requiredPermission: [
@@ -84,18 +91,21 @@ const tenantMenuItems = [
   },
   {
     name: "Create Ingredient",
+    labelKey: "sidebar.createIngredient",
     path: "/create-recipe-ingredient",
     icon: hugeIcon(TaskAdd01Icon),
     requiredPermission: "categories.view",
   },
   {
     name: "People",
+    labelKey: "sidebar.people",
     path: "/people",
     icon: <FiUsers size={22} />,
     requiredPermission: ["vendors.view", "eventstaff.view"],
   },
   {
     name: "Ground Checklist",
+    labelKey: "sidebar.groundChecklist",
     path: "/ground-checklist",
     icon: hugeIcon(TaskAdd01Icon),
     requiredPermission: "ground.view",
@@ -105,26 +115,31 @@ const tenantMenuItems = [
 const adminMenuItems = [
   {
     name: "Dashboard",
+    labelKey: "sidebar.dashboard",
     path: "/dashboard",
     icon: <FiGrid size={22} />,
   },
   {
     name: "Tenants",
+    labelKey: "sidebar.tenants",
     path: "/tenants",
     icon: <FiUsers size={22} />,
   },
   {
     name: "Subscription Plans",
+    labelKey: "sidebar.subscriptionPlans",
     path: "/subscription-plans",
     icon: hugeIcon(TransactionHistoryIcon),
   },
   {
     name: "Access Control",
+    labelKey: "sidebar.accessControl",
     path: "/access-control",
     icon: <FiKey size={22} />,
   },
   {
     name: "User Models",
+    labelKey: "sidebar.userModels",
     path: "/admin-users",
     icon: <FiShield size={22} />,
   },
@@ -195,6 +210,7 @@ const activePaths = {
 
 function Sidebar() {
   const location = useLocation();
+  const { t } = useTranslation();
   const dispatch = useDispatch();
   const open = useSelector((s) => s.ui.sidebarOpen);
   const { hasPermission } = usePermissions();
@@ -294,10 +310,10 @@ function Sidebar() {
               variant="subtitle2"
               sx={{ fontWeight: 800, color: "var(--color-primary)", letterSpacing: 0.5 }}
             >
-              SuperAdmin Portal
+              {t("sidebar.superAdminPortal")}
             </Typography>
             <Typography variant="caption" color="text.secondary">
-              Platform control center
+              {t("sidebar.platformControlCenter")}
             </Typography>
           </Stack>
         ) : isLogoLoading ? (
@@ -317,7 +333,7 @@ function Sidebar() {
               color="text.secondary"
               sx={{ textAlign: "center", lineHeight: 1.35 }}
             >
-              Set your business profile logo in Settings tab.
+              {t("sidebar.logoHint")}
             </Typography>
             {hasPermission("business_profiles.view") && (
               <Link
@@ -330,7 +346,7 @@ function Sidebar() {
                   color="primary.main"
                   sx={{ fontWeight: 600, "&:hover": { textDecoration: "underline" } }}
                 >
-                  Go to Settings
+                  {t("sidebar.goToSettings")}
                 </Typography>
               </Link>
             )}
@@ -397,7 +413,7 @@ function Sidebar() {
                   {item.icon}
                 </Avatar>
                 <ListItemText
-                  primary={item.name}
+                  primary={t(item.labelKey, { defaultValue: item.name })}
                   primaryTypographyProps={{
                     fontWeight: 600,
                     fontSize: "0.95rem",

@@ -1,12 +1,15 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
+import { useTranslation } from "react-i18next";
 import DishComponent from "./DishComponent";
 import { getWaiterTypes } from "../../api/EventStaffApis";
 import { createEventBooking } from "../../api/PostEventBooking";
 import { useCategories } from "../../hooks/useCategories";
+import { translateTimeLabel } from "./dishI18n";
 
 function DishContoller() {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const [waiterTypes, setWaiterTypes] = useState([]);
   const [isLoadingWaiterTypes, setIsLoadingWaiterTypes] = useState(false);
@@ -321,31 +324,31 @@ function DishContoller() {
     let newErrors = {};
 
     if (!formData.name.trim()) {
-      newErrors.name = "Name is required";
+      newErrors.name = t("dishFlow.validation.nameRequired");
     } else if (/^[0-9]+$/.test(formData.name.trim())) {
-      newErrors.name = "Name cannot contain only numbers. Please enter a valid name.";
+      newErrors.name = t("dishFlow.validation.nameOnlyNumbers");
     } else if (!/^[A-Za-z]/.test(formData.name.trim())) {
-      newErrors.name = "Name must start with an alphabetic character.";
+      newErrors.name = t("dishFlow.validation.nameMustStartAlpha");
     }
 
     if (formData.reference && formData.reference.trim() && formData.reference.trim() !== "-") {
       if (/^[0-9]+$/.test(formData.reference.trim())) {
-        newErrors.reference = "Reference Name cannot contain only numbers. Please enter a valid name.";
+        newErrors.reference = t("dishFlow.validation.referenceOnlyNumbers");
       } else if (!/^[A-Za-z]/.test(formData.reference.trim())) {
-        newErrors.reference = "Reference Name must start with an alphabetic character.";
+        newErrors.reference = t("dishFlow.validation.referenceMustStartAlpha");
       }
     }
     if (!formData.mobile_no.trim()) {
-      newErrors.mobile_no = "Mobile number is required";
+      newErrors.mobile_no = t("dishFlow.validation.mobileRequired");
     } else if (formData.mobile_no.length !== 10) {
-      newErrors.mobile_no = "Mobile number must be exactly 10 digits";
+      newErrors.mobile_no = t("dishFlow.validation.mobileTenDigits");
     }
 
     // if (!formData.reference.trim()) newErrors.reference = "Reference is required";
 
     // Validate Schedule Array
     if (!formData.schedule || formData.schedule.length === 0) {
-      newErrors.schedule = "At least one event date is required";
+      newErrors.schedule = t("dishFlow.validation.scheduleRequired");
     } else {
       let isScheduleValid = true;
       let isSlotValid = true;
@@ -358,39 +361,39 @@ function DishContoller() {
           const timeLabelCounts = {};
           day.timeSlots.forEach((slot, sIdx) => {
             if (!slot.timeLabel) {
-              newErrors[`timeLabel_${dIdx}_${sIdx}`] = "Required";
+              newErrors[`timeLabel_${dIdx}_${sIdx}`] = t("dishFlow.validation.required");
             } else {
               timeLabelCounts[slot.timeLabel] =
                 (timeLabelCounts[slot.timeLabel] || 0) + 1;
               if (timeLabelCounts[slot.timeLabel] > 3) {
-                newErrors[`timeLabel_${dIdx}_${sIdx}`] = `Max 3 limit`;
+                newErrors[`timeLabel_${dIdx}_${sIdx}`] = t("dishFlow.validation.max3Limit");
               }
             }
 
             if (!slot.estimatedPersons || slot.estimatedPersons <= 0) {
-              newErrors[`persons_${dIdx}_${sIdx}`] = "Required";
+              newErrors[`persons_${dIdx}_${sIdx}`] = t("dishFlow.validation.required");
             } else if (Number(slot.estimatedPersons) > 100000) {
-              newErrors[`persons_${dIdx}_${sIdx}`] = "Max limit 100,000";
+              newErrors[`persons_${dIdx}_${sIdx}`] = t("dishFlow.validation.max100000");
             }
           });
         }
       });
 
       if (!isScheduleValid)
-        newErrors.schedule = "Ensure all schedule dates have a valid Date.";
+        newErrors.schedule = t("dishFlow.validation.validDates");
       if (!isSlotValid)
-        newErrors.slots = "Ensure all dates have at least one time slot.";
+        newErrors.slots = t("dishFlow.validation.timeSlotRequired");
     }
 
     setErrors(newErrors);
     const isValid = Object.keys(newErrors).length === 0;
     if (!isValid) {
-      if (newErrors.name && newErrors.name !== "Name is required") {
+      if (newErrors.name && newErrors.name !== t("dishFlow.validation.nameRequired")) {
         toast.error(newErrors.name);
       } else if (newErrors.reference) {
         toast.error(newErrors.reference);
       } else {
-        toast.error("Please fill in all mandatory fields before proceeding.");
+        toast.error(t("dishFlow.validation.mandatoryBeforeProceeding"));
       }
     }
     return isValid;
@@ -403,7 +406,7 @@ function DishContoller() {
     formData.schedule.forEach((day, dIdx) => {
       day.timeSlots.forEach((slot, sIdx) => {
         if (!slot.dishes || slot.dishes.length === 0) {
-          newErrors[`dishes_${dIdx}_${sIdx}`] = "Select dishes";
+          newErrors[`dishes_${dIdx}_${sIdx}`] = t("dishFlow.validation.selectDishes");
         }
       });
     });
@@ -411,7 +414,7 @@ function DishContoller() {
     setErrors(newErrors);
     const isValid = Object.keys(newErrors).length === 0;
     if (!isValid)
-      toast.error("Please select at least one item/dish before proceeding.");
+      toast.error(t("dishFlow.validation.selectDishBeforeProceeding"));
     return isValid;
   };
 
@@ -421,28 +424,28 @@ function DishContoller() {
     let marginWarnings = [];
 
     if (!formData.name.trim()) {
-      newErrors.name = "Name is required";
+      newErrors.name = t("dishFlow.validation.nameRequired");
     } else if (/^[0-9]+$/.test(formData.name.trim())) {
-      newErrors.name = "Name cannot contain only numbers. Please enter a valid name.";
+      newErrors.name = t("dishFlow.validation.nameOnlyNumbers");
     } else if (!/^[A-Za-z]/.test(formData.name.trim())) {
-      newErrors.name = "Name must start with an alphabetic character.";
+      newErrors.name = t("dishFlow.validation.nameMustStartAlpha");
     }
 
     if (formData.reference && formData.reference.trim() && formData.reference.trim() !== "-") {
       if (/^[0-9]+$/.test(formData.reference.trim())) {
-        newErrors.reference = "Reference Name cannot contain only numbers. Please enter a valid name.";
+        newErrors.reference = t("dishFlow.validation.referenceOnlyNumbers");
       } else if (!/^[A-Za-z]/.test(formData.reference.trim())) {
-        newErrors.reference = "Reference Name must start with an alphabetic character.";
+        newErrors.reference = t("dishFlow.validation.referenceMustStartAlpha");
       }
     }
     if (!formData.mobile_no.trim()) {
-      newErrors.mobile_no = "Mobile number is required";
+      newErrors.mobile_no = t("dishFlow.validation.mobileRequired");
     } else if (formData.mobile_no.length !== 10) {
-      newErrors.mobile_no = "Mobile number must be exactly 10 digits";
+      newErrors.mobile_no = t("dishFlow.validation.mobileTenDigits");
     }
 
     if (!formData.schedule || formData.schedule.length === 0) {
-      newErrors.schedule = "At least one event date is required";
+      newErrors.schedule = t("dishFlow.validation.scheduleRequired");
     } else {
       let isScheduleValid = true;
       let isSlotValid = true;
@@ -455,25 +458,26 @@ function DishContoller() {
           const timeLabelCounts = {};
           day.timeSlots.forEach((slot, sIdx) => {
             const slotName =
-              slot.timeLabel || `Slot ${sIdx + 1} (Day ${dIdx + 1})`;
+              translateTimeLabel(t, slot.timeLabel) ||
+              `${t("dishFlow.schedule.slot", { count: sIdx + 1 })} (${t("dishFlow.summary.day", { count: dIdx + 1 })})`;
             if (!slot.timeLabel) {
-              newErrors[`timeLabel_${dIdx}_${sIdx}`] = "Time slot is required";
+              newErrors[`timeLabel_${dIdx}_${sIdx}`] = t("dishFlow.validation.timeSlotIsRequired");
             } else {
               timeLabelCounts[slot.timeLabel] =
                 (timeLabelCounts[slot.timeLabel] || 0) + 1;
               if (timeLabelCounts[slot.timeLabel] > 3) {
-                newErrors[`timeLabel_${dIdx}_${sIdx}`] = `Max 3 limit`;
+                newErrors[`timeLabel_${dIdx}_${sIdx}`] = t("dishFlow.validation.max3Limit");
               }
             }
 
             if (!slot.estimatedPersons || slot.estimatedPersons <= 0) {
-              newErrors[`persons_${dIdx}_${sIdx}`] = "Number of persons is required";
+              newErrors[`persons_${dIdx}_${sIdx}`] = t("dishFlow.validation.personsRequired");
             } else if (Number(slot.estimatedPersons) > 100000) {
-              newErrors[`persons_${dIdx}_${sIdx}`] = "Max limit 100,000";
+              newErrors[`persons_${dIdx}_${sIdx}`] = t("dishFlow.validation.max100000");
             }
 
             if (!slot.perPlatePrice || slot.perPlatePrice <= 0) {
-              newErrors[`platePrice_${dIdx}_${sIdx}`] = "Price is required";
+              newErrors[`platePrice_${dIdx}_${sIdx}`] = t("dishFlow.validation.priceRequired");
             } else {
               const minPrice =
                 (slot.dishes || []).reduce(
@@ -482,25 +486,29 @@ function DishContoller() {
                 ) * 1.2;
               if (Number(slot.perPlatePrice) < minPrice) {
                 marginWarnings.push(
-                  `${slotName}: Per Plate Price is ₹${slot.perPlatePrice}, but should be at least ₹${minPrice.toFixed(2)} based on base cost + 20% margin.`
+                  t("dishFlow.validation.marginWarning", {
+                    slotName,
+                    price: slot.perPlatePrice,
+                    minPrice: minPrice.toFixed(2),
+                  })
                 );
               }
             }
 
             if (!slot.dishes || slot.dishes.length === 0)
-              newErrors[`dishes_${dIdx}_${sIdx}`] = "Select dishes";
+              newErrors[`dishes_${dIdx}_${sIdx}`] = t("dishFlow.validation.selectDishes");
 
             if (!slot.event_address || !slot.event_address.trim()) {
-              newErrors[`event_address_${dIdx}_${sIdx}`] = "Address is required";
+              newErrors[`event_address_${dIdx}_${sIdx}`] = t("dishFlow.validation.addressRequired");
             }
           });
         }
       });
 
       if (!isScheduleValid)
-        newErrors.schedule = "Ensure all schedule dates have a valid Date.";
+        newErrors.schedule = t("dishFlow.validation.validDates");
       if (!isSlotValid)
-        newErrors.slots = "Ensure all dates have at least one time slot.";
+        newErrors.slots = t("dishFlow.validation.timeSlotRequired");
     }
 
     setErrors(newErrors);
@@ -511,19 +519,19 @@ function DishContoller() {
       if (firstErrorKey === "name" || firstErrorKey === "reference" || firstErrorKey === "mobile_no") {
         toast.error(newErrors[firstErrorKey]);
       } else if (firstErrorKey.startsWith("event_address")) {
-        toast.error("Event venue/address is mandatory. Please enter the venue details.");
+        toast.error(t("dishFlow.validation.eventVenueMandatory"));
       } else if (firstErrorKey.startsWith("persons")) {
-        toast.error("Number of persons is mandatory. Please enter a valid number.");
+        toast.error(t("dishFlow.validation.personsMandatory"));
       } else if (firstErrorKey.startsWith("platePrice")) {
-        toast.error("Per plate price is mandatory. Please enter a valid price.");
+        toast.error(t("dishFlow.validation.priceMandatory"));
       } else if (firstErrorKey.startsWith("timeLabel")) {
-        toast.error("Time slot label is mandatory.");
+        toast.error(t("dishFlow.validation.timeLabelMandatory"));
       } else if (firstErrorKey.startsWith("dishes")) {
-        toast.error("Please select items for this event.");
+        toast.error(t("dishFlow.validation.selectItemsForEvent"));
       } else if (firstErrorKey === "schedule" || firstErrorKey === "slots") {
         toast.error(newErrors[firstErrorKey]);
       } else {
-        toast.error("Please review all mandatory fields before submitting.");
+        toast.error(t("dishFlow.validation.reviewMandatory"));
       }
     }
     return { isValid, marginWarnings };
@@ -627,13 +635,14 @@ function DishContoller() {
     if (marginWarnings.length > 0) {
       import("sweetalert2").then(({ default: Swal }) => {
         Swal.fire({
-          title: "Price Margin Warning",
-          html: `<p class="text-sm mt-2 font-bold text-gray-800">The per plate price is below the minimum margin. Do you still want to place this order?</p>`,
+          title: t("dishFlow.validation.marginTitle"),
+          html: `<p class="text-sm mt-2 font-bold text-gray-800">${t("dishFlow.validation.marginHtml")}</p>`,
           icon: "warning",
           showCancelButton: true,
           confirmButtonColor: "var(--color-primary)",
           cancelButtonColor: "#d33",
-          confirmButtonText: "Yes, Proceed anyway",
+          confirmButtonText: t("dishFlow.validation.marginConfirm"),
+          cancelButtonText: t("common.cancel"),
         }).then((result) => {
           if (result.isConfirmed) {
             submitPayload();

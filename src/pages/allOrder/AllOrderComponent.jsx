@@ -1,4 +1,5 @@
 /* eslint-disable react/prop-types */
+import { useTranslation } from "react-i18next";
 import {
   Avatar,
   Box,
@@ -52,8 +53,14 @@ function AllOrderComponent({
   handleQuickFilter,
 }) {
   const theme = useTheme();
+  const { t } = useTranslation();
   const isTabletUp = useMediaQuery(theme.breakpoints.up("md"));
   const hasFilters = Boolean(searchQuery || dateRange[0] || dateRange[1]);
+  const visibleCount = allOrder?.length || 0;
+  const countText =
+    totalCount !== visibleCount
+      ? t("allOrders.countOf", { count: visibleCount, total: totalCount || 0 })
+      : t("allOrders.count", { count: visibleCount });
 
   return (
     <Paper
@@ -75,12 +82,10 @@ function AllOrderComponent({
         </Avatar>
         <Box>
           <Typography variant="h5" color="text.primary" sx={{ fontWeight: 700 }}>
-            All Orders
+            {t("allOrders.title")}
           </Typography>
           <Typography variant="body2" color="text.secondary">
-            {allOrder?.length || 0}
-            {totalCount !== allOrder?.length ? ` of ${totalCount}` : ""}{" "}
-            order{allOrder?.length !== 1 ? "s" : ""}
+            {countText}
           </Typography>
         </Box>
       </Stack>
@@ -96,7 +101,7 @@ function AllOrderComponent({
         <TextField
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
-          placeholder="Search name or mobile..."
+          placeholder={t("list.searchNameOrMobile")}
           sx={{
             width: { xs: "100%", md: 280 },
             flexShrink: 0,
@@ -130,13 +135,17 @@ function AllOrderComponent({
 
          sx={{ flexWrap: "wrap", alignItems: "center", justifyContent: { xs: "flex-start", md: "flex-end" } }}>
           <ButtonGroup size="small">
-            <Button onClick={() => handleQuickFilter("today")}>Today</Button>
-            <Button onClick={() => handleQuickFilter("thisWeek")}>Week</Button>
+            <Button onClick={() => handleQuickFilter("today")}>
+              {t("filters.today")}
+            </Button>
+            <Button onClick={() => handleQuickFilter("thisWeek")}>
+              {t("filters.week")}
+            </Button>
             <Button onClick={() => handleQuickFilter("thisMonth")}>
-              Month
+              {t("filters.month")}
             </Button>
             <Button onClick={() => handleQuickFilter("upcoming")}>
-              Upcoming
+              {t("filters.upcoming")}
             </Button>
           </ButtonGroup>
 
@@ -182,7 +191,7 @@ function AllOrderComponent({
               endDate={dateRange[1]}
               onChange={(update) => setDateRange(update)}
               dateFormat="dd MMM yyyy"
-              placeholderText="Select event date range"
+              placeholderText={t("filters.selectEventDateRange")}
               isClearable
             />
           </Box>
@@ -190,17 +199,19 @@ function AllOrderComponent({
       </Stack>
 
       {loading ? (
-        <Loader message="Loading Orders..." />
+        <Loader message={t("allOrders.loading")} />
       ) : allOrder.length === 0 ? (
         <EmptyState
           icon={<FiClipboard size={24} />}
           title={
-            hasFilters ? "No Orders Match Your Filters" : "No Orders Available"
+            hasFilters
+              ? t("allOrders.empty.filteredTitle")
+              : t("allOrders.empty.title")
           }
           message={
             hasFilters
-              ? "Try clearing the filters to see all orders."
-              : "Orders will appear here once created."
+              ? t("allOrders.empty.filteredMessage")
+              : t("allOrders.empty.message")
           }
         />
       ) : (
@@ -260,7 +271,7 @@ function AllOrderComponent({
                             variant="caption"
                             color="text.secondary" noWrap
                           >
-                            Ref: {order.reference}
+                            {t("quotation.reference")}: {order.reference}
                           </Typography>
                         )}
                       </Box>
@@ -305,7 +316,7 @@ function AllOrderComponent({
 
                     <Box
                       onClick={() => handleViewOrderDetails(order.id)}
-                      title="View Detailed Order"
+                      title={t("allOrders.sessions.viewDetailedOrder")}
                       sx={{
                         display: "flex",
                         flexDirection: "column",
@@ -332,7 +343,9 @@ function AllOrderComponent({
                         <Stack direction="row" spacing={1} sx={{ alignItems: "center" }}>
                           <FiClipboard size={14} />
                           <Typography variant="body2" sx={{ fontWeight: 600 }}>
-                            Total Sessions: {order.sessions?.length || 1}
+                            {t("allOrders.sessions.total", {
+                              count: order.sessions?.length || 1,
+                            })}
                           </Typography>
                         </Stack>
                         <Stack
@@ -342,7 +355,7 @@ function AllOrderComponent({
 
                          sx={{ alignItems: "center", color: "primary.main" }}>
                           <Typography variant="body2" sx={{ fontWeight: 600 }}>
-                            View Details
+                            {t("allOrders.sessions.viewDetails")}
                           </Typography>
                           <FiChevronRight size={14} />
                         </Stack>
@@ -355,7 +368,7 @@ function AllOrderComponent({
                       >
                         <FiUsers size={12} />
                         <Typography variant="caption" color="text.secondary">
-                          Estimated Persons:
+                          {t("allOrders.sessions.estimatedPersons")}:
                         </Typography>
                         <Typography variant="caption" sx={{ fontWeight: 600 }}>
                           {totalPersons}
@@ -385,7 +398,7 @@ function AllOrderComponent({
                       onClick={() => handleCompleteOrder(order.id)}
                       sx={{ flex: { sm: 1 } }}
                     >
-                      Complete
+                      {t("allOrders.actions.complete")}
                     </Button>
                     <Button
                       size="small"
@@ -405,9 +418,9 @@ function AllOrderComponent({
                       color="primary"
                       startIcon={<FiShare2 size={14} />}
                       sx={{ flex: { sm: 1 }, opacity: 0.8, cursor: "default" }}
-                      title="Sharing Disabled"
+                      title={t("allOrders.actions.sharingDisabled")}
                     >
-                      Share
+                      {t("allOrders.actions.share")}
                     </Button>
 
 
@@ -420,7 +433,7 @@ function AllOrderComponent({
                       onClick={() => handleDeleteAllOrder(order.id)}
                       sx={{ flex: { sm: 1 } }}
                     >
-                      Cancel
+                      {t("common.cancel")}
                     </Button>
                   </CardActions>
                 </Card>

@@ -20,6 +20,7 @@ import {
   Typography,
 } from "@mui/material";
 import Grid from "@mui/material/Grid";
+import { useTranslation } from "react-i18next";
 import {
   FiArrowLeft,
   FiFileText,
@@ -31,6 +32,7 @@ import {
   FiBookOpen,
   FiSend,
 } from "react-icons/fi";
+import { translateTimeLabel } from "./dishI18n";
 
 function SectionHeader({ icon: Icon, title, subtitle }) {
   return (
@@ -91,6 +93,7 @@ function Step3_Summary({
   handleSubmit,
   onBack,
 }) {
+  const { t } = useTranslation();
   const [showRules, setShowRules] = useState(false);
   const [showSuggestions, setShowSuggestions] = useState(false);
 
@@ -105,8 +108,8 @@ function Step3_Summary({
         dIdx,
         sIdx,
         dateStr,
-        dayLabel: `Day ${dIdx + 1}`,
-        timeLabel: slot.timeLabel || `Slot ${sIdx + 1}`,
+        dayLabel: t("dishFlow.summary.day", { count: dIdx + 1 }),
+        timeLabel: slot.timeLabel || t("dishFlow.schedule.slot", { count: sIdx + 1 }),
         estimatedPersons: slot.estimatedPersons,
         perPlatePrice: slot.perPlatePrice,
         waiterServices: slot.waiterServices || [],
@@ -131,8 +134,8 @@ function Step3_Summary({
       >
         <SectionHeader
           icon={FiClipboard}
-          title="Event Summary & Services"
-          subtitle="Review each event, set pricing, and add services"
+          title={t("dishFlow.summary.title")}
+          subtitle={t("dishFlow.summary.subtitle")}
         />
         <Paper
           elevation={0}
@@ -155,7 +158,7 @@ function Step3_Summary({
               color: "success.dark",
             }}
           >
-            Grand Total
+            {t("dishFlow.summary.grandTotal")}
           </Typography>
           <Typography variant="h5" color="primary.main" sx={{ fontWeight: 800 }}>
             ₹{Number(formData.grandTotalAmount || 0).toFixed(2)}
@@ -175,16 +178,16 @@ function Step3_Summary({
       >
         <Grid container spacing={2}>
           <Grid size={{ xs: 6, md: 3 }}>
-            <InfoTile label="Client" value={formData.name} />
+            <InfoTile label={t("dishFlow.summary.client")} value={formData.name} />
           </Grid>
           <Grid size={{ xs: 6, md: 3 }}>
-            <InfoTile label="Mobile" value={formData.mobile_no} />
+            <InfoTile label={t("dishFlow.summary.mobile")} value={formData.mobile_no} />
           </Grid>
           <Grid size={{ xs: 6, md: 3 }}>
-            <InfoTile label="Reference" value={formData.reference} />
+            <InfoTile label={t("dishFlow.summary.reference")} value={formData.reference} />
           </Grid>
           <Grid size={{ xs: 6, md: 3 }}>
-            <InfoTile label="Total Events" value={eventCards.length} />
+            <InfoTile label={t("dishFlow.summary.totalEvents")} value={eventCards.length} />
           </Grid>
         </Grid>
       </Paper>
@@ -231,7 +234,7 @@ function Step3_Summary({
                 </Avatar>
                 <Box>
                   <Typography variant="subtitle1" sx={{ fontWeight: 700 }}>
-                    {event.timeLabel}
+                    {translateTimeLabel(t, event.timeLabel)}
                   </Typography>
                   <Typography
                     variant="caption"
@@ -251,7 +254,7 @@ function Step3_Summary({
                     letterSpacing: 1,
                   }}
                 >
-                  Subtotal
+                  {t("dishFlow.summary.subtotal")}
                 </Typography>
                 <Typography variant="h6" sx={{ fontWeight: 800 }}>
                   ₹{Number(event.subtotalAmount || 0).toFixed(2)}
@@ -286,7 +289,7 @@ function Step3_Summary({
                             fontWeight: 700,
                           }}
                         >
-                          Persons
+                          {t("dishFlow.summary.persons")}
                         </Typography>
                         <Typography variant="body1" sx={{ fontWeight: 700 }}>
                           {event.estimatedPersons || 0}
@@ -297,8 +300,8 @@ function Step3_Summary({
                   <Grid size={{ xs: 12, md: 4 }}>
                     <TextField
                       fullWidth
-                      label="Per Plate Price (₹)"
-                      placeholder="e.g. 350"
+                      label={t("dishFlow.summary.perPlatePrice")}
+                      placeholder={t("dishFlow.summary.pricePlaceholder")}
                       value={event.perPlatePrice || ""}
                       onChange={(e) =>
                         handleSlotChange(
@@ -320,8 +323,8 @@ function Step3_Summary({
                   <Grid size={{ xs: 12, md: 4 }}>
                     <TextField
                       fullWidth
-                      label="Venue"
-                      placeholder="Event venue / address"
+                      label={t("dishFlow.summary.venue")}
+                      placeholder={t("dishFlow.summary.venuePlaceholder")}
                       value={event.event_address}
                       onChange={(e) =>
                         handleSlotChange(
@@ -374,7 +377,7 @@ function Step3_Summary({
 
                       color="primary.dark"
                      sx={{ fontWeight: 600 }}>
-                      Selected Dishes
+                      {t("dishFlow.summary.selectedDishes")}
                     </Typography>
                     <Chip
                       size="small"
@@ -464,7 +467,7 @@ function Step3_Summary({
                               bgcolor: (t) => t.palette.error.light + "33",
                             }}
                           />
-                          Red highlighted items are not counted in dish price
+                          {t("dishFlow.summary.zeroPriceWarning")}
                         </Typography>
                       )}
                     </>
@@ -474,7 +477,7 @@ function Step3_Summary({
                       color="text.disabled"
                       fontStyle="italic"
                     >
-                      No dishes selected for this event.
+                      {t("dishFlow.summary.noDishesSelected")}
                     </Typography>
                   )}
                 </Paper>
@@ -504,7 +507,7 @@ function Step3_Summary({
 
                         color="primary.dark"
                        sx={{ fontWeight: 600 }}>
-                        Waiter Service
+                        {t("dishFlow.summary.waiterService")}
                       </Typography>
                       {event.waiterServices.length > 0 && (
                         <Chip
@@ -524,7 +527,7 @@ function Step3_Summary({
                         handleSlotAddWaiter(event.dIdx, event.sIdx)
                       }
                     >
-                      Add Waiter
+                      {t("dishFlow.summary.addWaiter")}
                     </Button>
                   </Stack>
 
@@ -552,9 +555,9 @@ function Step3_Summary({
                                 }}
                               >
                                 <FormControl size="small" sx={{ flex: 1 }}>
-                                  <InputLabel>Waiter type</InputLabel>
+                                  <InputLabel>{t("dishFlow.summary.waiterType")}</InputLabel>
                                   <Select
-                                    label="Waiter type"
+                                    label={t("dishFlow.summary.waiterType")}
                                     value={ws.waiterType || ""}
                                     onChange={(e) =>
                                       handleSlotWaiterChange(
@@ -567,11 +570,11 @@ function Step3_Summary({
                                     }
                                   >
                                     <MenuItem value="">
-                                      <em>Select waiter type</em>
+                                      <em>{t("dishFlow.summary.selectWaiterType")}</em>
                                     </MenuItem>
                                     {isLoadingWaiterTypes && (
                                       <MenuItem value="">
-                                        <em>Loading…</em>
+                                        <em>{t("dishFlow.summary.loading")}</em>
                                       </MenuItem>
                                     )}
                                     {!isLoadingWaiterTypes &&
@@ -601,12 +604,12 @@ function Step3_Summary({
                                     <Box component="strong">
                                       {(Number(ws.waiterRate) || 0).toFixed(2)}
                                     </Box>
-                                    /head
+                                    {t("dishFlow.summary.perHead")}
                                   </Typography>
                                 </Box>
                                 <TextField
                                   size="small"
-                                  placeholder="Count"
+                                  placeholder={t("dishFlow.summary.countPlaceholder")}
                                   value={ws.waiterCount || ""}
                                   onChange={(e) =>
                                     handleSlotWaiterChange(
@@ -652,7 +655,7 @@ function Step3_Summary({
                               </Stack>
                               <TextField
                                 size="small" fullWidth
-                                placeholder="Notes (optional)"
+                                placeholder={t("dishFlow.summary.notesPlaceholder")}
                                 value={ws.waiterNotes || ""}
                                 onChange={(e) =>
                                   handleSlotWaiterChange(
@@ -676,15 +679,17 @@ function Step3_Summary({
                             color="primary"
                             variant="outlined"
                             sx={{ fontWeight: 700 }}
-                            label={`Total Waiter Charge: ₹${event.waiterServices
-                              .reduce(
-                                (sum, ws) =>
-                                  sum +
-                                  (Number(ws.waiterRate) || 0) *
-                                    (Number(ws.waiterCount) || 0),
-                                0
-                              )
-                              .toFixed(2)}`}
+                            label={t("dishFlow.summary.totalWaiterCharge", {
+                              amount: event.waiterServices
+                                .reduce(
+                                  (sum, ws) =>
+                                    sum +
+                                    (Number(ws.waiterRate) || 0) *
+                                      (Number(ws.waiterCount) || 0),
+                                  0
+                                )
+                                .toFixed(2),
+                            })}
                           />
                         </Stack>
                       )}
@@ -695,7 +700,7 @@ function Step3_Summary({
                       color="text.disabled"
                       fontStyle="italic"
                     >
-                      No waiter services added.
+                      {t("dishFlow.summary.noWaiterServices")}
                     </Typography>
                   )}
                 </Paper>
@@ -725,7 +730,7 @@ function Step3_Summary({
 
                         color="primary.dark"
                        sx={{ fontWeight: 600 }}>
-                        Extra Services
+                        {t("dishFlow.summary.extraServices")}
                       </Typography>
                       {event.extraServices.length > 0 && (
                         <Chip
@@ -745,7 +750,7 @@ function Step3_Summary({
                         handleSlotAddExtra(event.dIdx, event.sIdx)
                       }
                     >
-                      Add Service
+                      {t("dishFlow.summary.addService")}
                     </Button>
                   </Stack>
 
@@ -767,7 +772,7 @@ function Step3_Summary({
                         >
                           <TextField
                             size="small"
-                            placeholder="Service name"
+                            placeholder={t("dishFlow.summary.serviceName")}
                             value={extra.serviceName || ""}
                             onChange={(e) =>
                               handleSlotExtraChange(
@@ -783,7 +788,7 @@ function Step3_Summary({
                           />
                           <TextField
                             size="small"
-                            placeholder="₹ Price"
+                            placeholder={t("dishFlow.summary.price")}
                             value={extra.price || ""}
                             onChange={(e) =>
                               handleSlotExtraChange(
@@ -802,7 +807,7 @@ function Step3_Summary({
                           />
                           <TextField
                             size="small"
-                            placeholder="Qty"
+                            placeholder={t("dishFlow.summary.qty")}
                             value={extra.quantity || ""}
                             onChange={(e) =>
                               handleSlotExtraChange(
@@ -855,7 +860,7 @@ function Step3_Summary({
                       color="text.disabled"
                       fontStyle="italic"
                     >
-                      No extra services added.
+                      {t("dishFlow.summary.noExtraServices")}
                     </Typography>
                   )}
                 </Paper>
@@ -872,9 +877,9 @@ function Step3_Summary({
             fullWidth
             multiline
             rows={4}
-            label="General Description"
+            label={t("dishFlow.summary.generalDescription")}
             name="description"
-            placeholder="Notes for the entire event..."
+            placeholder={t("dishFlow.summary.descriptionPlaceholder")}
             value={formData.description || ""}
             onChange={handleChange}
           />
@@ -900,7 +905,9 @@ function Step3_Summary({
                 />
               }
               label={
-                <Typography sx={{ fontWeight: 500 }}>Display Rules on PDF</Typography>
+                <Typography sx={{ fontWeight: 500 }}>
+                  {t("dishFlow.summary.displayRules")}
+                </Typography>
               }
             />
           </Paper>
@@ -923,7 +930,7 @@ function Step3_Summary({
               setShowSuggestions(false);
             }}
           >
-            View Rules
+            {t("dishFlow.summary.viewRules")}
           </Button>
           <Button
             variant={showSuggestions ? "contained" : "outlined"}
@@ -934,7 +941,7 @@ function Step3_Summary({
               setShowRules(false);
             }}
           >
-            View Suggestions
+            {t("dishFlow.summary.viewSuggestions")}
           </Button>
         </Stack>
 
@@ -960,17 +967,11 @@ function Step3_Summary({
 
                 color="primary.dark"
                sx={{ fontWeight: 700 }}>
-                Terms & Rules
+                {t("dishFlow.summary.termsRules")}
               </Typography>
             </Stack>
             <Stack component="ol" spacing={1} sx={{ pl: 2, m: 0 }}>
-              {[
-                "The party must arrange the cooking area on time.",
-                "The party must confirm the menu and dish count 10 days before the event.",
-                "The party must arrange water supply for utensils and waste disposal.",
-                "The party must arrange tables for counters and other pandal service equipment.",
-                "The party must pay 30% advance payment after placing the order.",
-              ].map((rule, idx) => (
+              {t("dishFlow.rules", { returnObjects: true }).map((rule, idx) => (
                 <Typography
                   key={idx}
                   component="li"
@@ -1002,15 +1003,11 @@ function Step3_Summary({
             >
               <FiFileText size={15} />
               <Typography variant="body2" color="info.dark" sx={{ fontWeight: 700 }}>
-                Suggestions
+                {t("dishFlow.summary.suggestions")}
               </Typography>
             </Stack>
             <Stack component="ul" spacing={1} sx={{ pl: 2, m: 0 }}>
-              {[
-                "Consider adding a welcome drinks section for events with 200+ guests.",
-                "Multi-day events benefit from varied menus to avoid repetition.",
-                "Ensure dessert selection aligns with the number of main course dishes.",
-              ].map((tip, idx) => (
+              {t("dishFlow.suggestions", { returnObjects: true }).map((tip, idx) => (
                 <Typography
                   key={idx}
                   component="li"
@@ -1038,7 +1035,7 @@ function Step3_Summary({
             startIcon={<FiArrowLeft size={16} />}
             onClick={onBack}
           >
-            Back to Menu
+            {t("dishFlow.summary.backToMenu")}
           </Button>
           <Button
             variant="contained"
@@ -1054,7 +1051,7 @@ function Step3_Summary({
                 `linear-gradient(90deg, ${t.palette.primary.main}, ${t.palette.primary.dark})`,
             }}
           >
-            Review &amp; Generate PDF
+            {t("dishFlow.summary.reviewGeneratePdf")}
           </Button>
         </Stack>
       </Box>

@@ -16,6 +16,7 @@ import {
   Typography,
 } from "@mui/material";
 import Grid from "@mui/material/Grid";
+import { useTranslation } from "react-i18next";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import {
@@ -26,13 +27,14 @@ import {
   FiArrowRight,
   FiTrash2,
 } from "react-icons/fi";
+import { TIME_LABEL_KEYS } from "./dishI18n";
 
 const TIME_OPTIONS = [
-  { value: "Breakfast", label: "Breakfast" },
-  { value: "Lunch", label: "Lunch" },
-  { value: "Dinner", label: "Dinner" },
-  { value: "High Tea", label: "High Tea" },
-  { value: "Late Night Nasto", label: "Late Night Snack" },
+  { value: "Breakfast", labelKey: TIME_LABEL_KEYS.Breakfast },
+  { value: "Lunch", labelKey: TIME_LABEL_KEYS.Lunch },
+  { value: "Dinner", labelKey: TIME_LABEL_KEYS.Dinner },
+  { value: "High Tea", labelKey: TIME_LABEL_KEYS["High Tea"] },
+  { value: "Late Night Nasto", labelKey: TIME_LABEL_KEYS["Late Night Nasto"] },
 ];
 
 function SectionHeader({ icon: Icon, title, subtitle }) {
@@ -126,6 +128,7 @@ function Step1_ClientEvent({
   handleSlotChange,
   onNext,
 }) {
+  const { t } = useTranslation();
   const tomorrow = new Date();
   tomorrow.setDate(tomorrow.getDate() + 1);
 
@@ -141,8 +144,8 @@ function Step1_ClientEvent({
       >
         <SectionHeader
           icon={FiUser}
-          title="Client Information"
-          subtitle="Enter basic details of the client"
+          title={t("dishFlow.client.title")}
+          subtitle={t("dishFlow.client.subtitle")}
         />
 
         <Grid
@@ -154,11 +157,11 @@ function Step1_ClientEvent({
           <Grid size={{ xs: 12, md: 6 }}>
             <TextField
               fullWidth
-              label="Client Name *"
+              label={t("dishFlow.client.clientName")}
               name="name"
               value={formData.name || ""}
               onChange={handleChange}
-              placeholder={errors.name || "Enter client name"}
+              placeholder={errors.name || t("dishFlow.client.clientNamePlaceholder")}
               error={Boolean(errors.name)}
               helperText={errors.name || undefined}
             />
@@ -166,11 +169,11 @@ function Step1_ClientEvent({
           <Grid size={{ xs: 12, md: 6 }}>
             <TextField
               fullWidth
-              label="Mobile Number *"
+              label={t("dishFlow.client.mobileNumber")}
               name="mobile_no"
               value={formData.mobile_no || ""}
               onChange={handleChange}
-              placeholder={errors.mobile_no || "Mobile Number"}
+              placeholder={errors.mobile_no || t("dishFlow.client.mobilePlaceholder")}
               slotProps={{ htmlInput: { maxLength: 10 } }}
               error={Boolean(errors.mobile_no)}
               helperText={errors.mobile_no || undefined}
@@ -181,18 +184,18 @@ function Step1_ClientEvent({
               selected={formData.date}
               dateFormat="dd/MM/yyyy" disabled
               textFieldProps={{
-                label: "Order Date",
+                label: t("dishFlow.client.orderDate"),
               }}
             />
           </Grid>
           <Grid size={{ xs: 12, md: 6 }}>
             <TextField
               fullWidth
-              label="Reference Name (Optional)"
+              label={t("dishFlow.client.referenceName")}
               name="reference"
               value={formData.reference || ""}
               onChange={handleChange}
-              placeholder="Reference Name"
+              placeholder={t("dishFlow.client.referencePlaceholder")}
               error={Boolean(errors.reference)}
               helperText={errors.reference || undefined}
             />
@@ -210,8 +213,8 @@ function Step1_ClientEvent({
       >
         <SectionHeader
           icon={FiCalendar}
-          title="Event Schedule"
-          subtitle="Add event dates and time slots for each day"
+          title={t("dishFlow.schedule.title")}
+          subtitle={t("dishFlow.schedule.subtitle")}
         />
 
         {errors.schedule && (
@@ -300,16 +303,16 @@ function Step1_ClientEvent({
                       color="text.primary"
                       sx={{ fontWeight: 700, flexShrink: 0 }}
                     >
-                      Event Date:
+                      {t("dishFlow.schedule.eventDate")}
                     </Typography>
                     <DatePickerInput
                       sx={{ width: { xs: "100%", sm: 160 } }}
-                      placeholderText="Choose Date"
+                      placeholderText={t("dishFlow.schedule.chooseDate")}
                       minDate={tomorrow}
                       dateFormat="dd/MM/yyyy" selected={day.event_date}
                       onChange={(date) => handleScheduleDateChange(dIdx, date)}
                       textFieldProps={{
-                        placeholder: "Choose Date",
+                        placeholder: t("dishFlow.schedule.chooseDate"),
                         helperText: null,
                       }}
                     />
@@ -320,7 +323,7 @@ function Step1_ClientEvent({
                     size="small"
                     color="error"
                     onClick={() => handleRemoveSchedule(dIdx)}
-                    title="Delete Day"
+                    title={t("dishFlow.schedule.deleteDay")}
                     sx={{
                       alignSelf: { xs: "flex-end", md: "center" },
                     }}
@@ -384,7 +387,7 @@ function Step1_ClientEvent({
                           color="primary.main"
                           sx={{ fontWeight: 700, textTransform: "uppercase", letterSpacing: 0.5 }}
                         >
-                          Slot {sIdx + 1}
+                          {t("dishFlow.schedule.slot", { count: sIdx + 1 })}
                         </Typography>
                       </Stack>
 
@@ -399,9 +402,9 @@ function Step1_ClientEvent({
                             size="small"
                             error={Boolean(errors[`timeLabel_${dIdx}_${sIdx}`])}
                           >
-                            <InputLabel>Event Timing</InputLabel>
+                            <InputLabel>{t("dishFlow.schedule.eventTiming")}</InputLabel>
                             <Select
-                              label="Event Timing"
+                              label={t("dishFlow.schedule.eventTiming")}
                               value={slot.timeLabel || ""}
                               onChange={(e) =>
                                 handleSlotChange(
@@ -413,13 +416,13 @@ function Step1_ClientEvent({
                               }
                             >
                               <MenuItem value="">
-                                <em>Select Timing...</em>
+                                <em>{t("dishFlow.schedule.selectTiming")}</em>
                               </MenuItem>
-                              {TIME_OPTIONS.map((t) => {
+                              {TIME_OPTIONS.map((option) => {
                                 const count = day.timeSlots.reduce(
                                   (acc, currentSlot, currIdx) =>
                                     currIdx !== sIdx &&
-                                    currentSlot.timeLabel === t.value
+                                    currentSlot.timeLabel === option.value
                                       ? acc + 1
                                       : acc,
                                   0
@@ -427,12 +430,12 @@ function Step1_ClientEvent({
                                 const isDisabled = count >= 3;
                                 return (
                                   <MenuItem
-                                    key={t.value}
-                                    value={t.value}
+                                    key={option.value}
+                                    value={option.value}
                                     disabled={isDisabled}
                                   >
-                                    {t.label}{" "}
-                                    {isDisabled && "(Max 3 limit reached)"}
+                                    {t(option.labelKey)}{" "}
+                                    {isDisabled && t("dishFlow.schedule.maxLimitReached")}
                                   </MenuItem>
                                 );
                               })}
@@ -448,8 +451,8 @@ function Step1_ClientEvent({
                           <TextField
                             fullWidth
                             size="small"
-                            label="Number of Persons"
-                            placeholder="e.g. 250"
+                            label={t("dishFlow.schedule.numberOfPersons")}
+                            placeholder={t("dishFlow.schedule.personsPlaceholder")}
                             value={slot.estimatedPersons || ""}
                             onChange={(e) =>
                               handleSlotChange(
@@ -472,7 +475,7 @@ function Step1_ClientEvent({
                           size="small"
                           color="error"
                           onClick={() => handleRemoveTimeSlot(dIdx, sIdx)}
-                          title="Remove this time slot"
+                          title={t("dishFlow.schedule.removeTimeSlot")}
                         >
                           <FiTrash2 size={16} />
                         </IconButton>
@@ -498,7 +501,7 @@ function Step1_ClientEvent({
                     },
                   }}
                 >
-                  Add Time Slot
+                  {t("dishFlow.schedule.addTimeSlot")}
                 </Button>
               </Stack>
             </Paper>
@@ -524,7 +527,7 @@ function Step1_ClientEvent({
           startIcon={<FiPlus size={16} />}
           onClick={handleAddSchedule}
         >
-          Add Event Date
+          {t("dishFlow.schedule.addEventDate")}
         </Button>
         <Button
           variant="contained"
@@ -533,7 +536,7 @@ function Step1_ClientEvent({
           endIcon={<FiArrowRight size={18} />}
           onClick={onNext}
         >
-          Continue to Menu Selection
+          {t("dishFlow.schedule.continueToMenu")}
         </Button>
       </Stack>
     </Stack>

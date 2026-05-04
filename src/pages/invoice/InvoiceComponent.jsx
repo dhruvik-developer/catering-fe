@@ -1,4 +1,5 @@
 /* eslint-disable react/prop-types */
+import { useTranslation } from "react-i18next";
 import {
   Avatar,
   Box,
@@ -57,7 +58,21 @@ function InvoiceComponent({
   handleQuickFilter,
 }) {
   const theme = useTheme();
+  const { t } = useTranslation();
   const hasFilters = Boolean(searchQuery || dateRange[0] || dateRange[1]);
+  const visibleCount = invoice?.length || 0;
+  const countText =
+    totalCount !== visibleCount
+      ? t("invoice.countOf", { count: visibleCount, total: totalCount || 0 })
+      : t("invoice.count", { count: visibleCount });
+  const translatePaymentStatus = (status) =>
+    t(`payment.${String(status || "").toLowerCase()}`, {
+      defaultValue: status || "—",
+    });
+  const translatePaymentMode = (mode) =>
+    t(`paymentModes.${String(mode || "").toLowerCase()}`, {
+      defaultValue: mode || "—",
+    });
 
   return (
     <Paper
@@ -79,12 +94,10 @@ function InvoiceComponent({
         </Avatar>
         <Box>
           <Typography variant="h5" color="text.primary" sx={{ fontWeight: 700 }}>
-            Invoice List
+            {t("invoice.title")}
           </Typography>
           <Typography variant="body2" color="text.secondary">
-            {invoice?.length || 0}
-            {totalCount !== invoice?.length ? ` of ${totalCount}` : ""} invoice
-            {invoice?.length !== 1 ? "s" : ""}
+            {countText}
           </Typography>
         </Box>
       </Stack>
@@ -100,7 +113,7 @@ function InvoiceComponent({
         <TextField
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
-          placeholder="Search name or mobile..."
+          placeholder={t("list.searchNameOrMobile")}
           autoComplete="off"
           sx={{
             width: { xs: "100%", md: 280 },
@@ -135,10 +148,14 @@ function InvoiceComponent({
 
          sx={{ flexWrap: "wrap", alignItems: "center", justifyContent: { xs: "flex-start", md: "flex-end" } }}>
           <ButtonGroup size="small">
-            <Button onClick={() => handleQuickFilter("today")}>Today</Button>
-            <Button onClick={() => handleQuickFilter("thisWeek")}>Week</Button>
+            <Button onClick={() => handleQuickFilter("today")}>
+              {t("filters.today")}
+            </Button>
+            <Button onClick={() => handleQuickFilter("thisWeek")}>
+              {t("filters.week")}
+            </Button>
             <Button onClick={() => handleQuickFilter("thisMonth")}>
-              Month
+              {t("filters.month")}
             </Button>
           </ButtonGroup>
 
@@ -184,7 +201,7 @@ function InvoiceComponent({
               endDate={dateRange[1]}
               onChange={(update) => setDateRange(update)}
               dateFormat="dd MMM yyyy"
-              placeholderText="Select date range"
+              placeholderText={t("filters.selectDateRange")}
               maxDate={new Date()}
               isClearable
             />
@@ -196,25 +213,27 @@ function InvoiceComponent({
             onChange={(e) => setSelectedFilter(e.target.value)}
             sx={{ minWidth: 120 }}
           >
-            <MenuItem value="All">All</MenuItem>
-            <MenuItem value="Paid">Paid</MenuItem>
-            <MenuItem value="Unpaid">Unpaid</MenuItem>
+            <MenuItem value="All">{t("filters.all")}</MenuItem>
+            <MenuItem value="Paid">{t("payment.paid")}</MenuItem>
+            <MenuItem value="Unpaid">{t("payment.unpaid")}</MenuItem>
           </Select>
         </Stack>
       </Stack>
 
       {loading ? (
-        <Loader message="Loading Invoices..." />
+        <Loader message={t("invoice.loading")} />
       ) : !invoice || invoice.length === 0 ? (
         <EmptyState
           icon={<FiFileText size={24} />}
           title={
-            hasFilters ? "No Invoices Match Your Filters" : "No Invoices Yet"
+            hasFilters
+              ? t("invoice.empty.filteredTitle")
+              : t("invoice.empty.title")
           }
           message={
             hasFilters
-              ? "Try adjusting your date filters or search parameters."
-              : "Invoices will appear here once generated."
+              ? t("invoice.empty.filteredMessage")
+              : t("invoice.empty.message")
           }
         />
       ) : (
@@ -287,7 +306,7 @@ function InvoiceComponent({
                       </Box>
                     </Stack>
                     <Chip
-                      label={invo.payment_status || "—"}
+                      label={translatePaymentStatus(invo.payment_status)}
                       size="small"
                       color={getStatusChipColor(invo.payment_status)}
                       sx={{ fontWeight: 700, flexShrink: 0 }}
@@ -312,7 +331,7 @@ function InvoiceComponent({
                         >
                           <FiCreditCard size={14} />
                           <Typography variant="body2" noWrap sx={{ fontWeight: 500 }}>
-                            {invo.payment_mode || "—"}
+                            {translatePaymentMode(invo.payment_mode)}
                           </Typography>
                         </Stack>
                       </Grid>
@@ -332,8 +351,12 @@ function InvoiceComponent({
                           <FiDollarSign size={14} />
                           <Typography variant="body2" sx={{ fontWeight: 500 }}>
                             {invo.payment_status === "PAID"
-                              ? `Paid: ₹${Number(invo.total_amount || 0).toFixed(2)}`
-                              : `Adv: ₹${Number(invo.advance_amount || 0).toFixed(2)}`}
+                              ? t("invoice.amount.paid", {
+                                  amount: Number(invo.total_amount || 0).toFixed(2),
+                                })
+                              : t("invoice.amount.advance", {
+                                  amount: Number(invo.advance_amount || 0).toFixed(2),
+                                })}
                           </Typography>
                         </Stack>
                       </Grid>
@@ -356,7 +379,9 @@ function InvoiceComponent({
 
                             color="text.primary"
                            sx={{ fontWeight: 600 }}>
-                            Total: ₹{Number(invo.total_amount || 0).toFixed(2)}
+                            {t("invoice.amount.total", {
+                              amount: Number(invo.total_amount || 0).toFixed(2),
+                            })}
                           </Typography>
                         </Stack>
                       </Grid>
@@ -391,8 +416,9 @@ function InvoiceComponent({
                                 }}
                               />
                               <Typography variant="body2" sx={{ fontWeight: 500 }}>
-                                Pending Amount₹{" "}
-                                {Math.max(0, calculatedPending).toFixed(2)}
+                                {t("invoice.amount.pending", {
+                                  amount: Math.max(0, calculatedPending).toFixed(2),
+                                })}
                               </Typography>
                             </Stack>
                           </Stack>
@@ -421,7 +447,7 @@ function InvoiceComponent({
                       onClick={() => navigate(`/invoice-order-pdf/${invo.id}`)}
                       sx={{ flex: { sm: 1 } }}
                     >
-                      View Order
+                      {t("invoice.actions.viewOrder")}
                     </Button>
                     {invo.payment_status !== "PAID" && (
                       <Button
@@ -434,7 +460,7 @@ function InvoiceComponent({
                         }
                         sx={{ flex: { sm: 1 } }}
                       >
-                        Complete Payment
+                        {t("invoice.actions.completePayment")}
                       </Button>
                     )}
                     <Button
@@ -445,7 +471,7 @@ function InvoiceComponent({
                       onClick={() => navigate(`/invoice-bill-pdf/${invo.id}`)}
                       sx={{ flex: { sm: 1 } }}
                     >
-                      Send Bill
+                      {t("invoice.actions.sendBill")}
                     </Button>
                   </CardActions>
                 </Card>
