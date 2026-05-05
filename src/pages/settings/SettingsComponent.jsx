@@ -15,6 +15,8 @@ import {
 } from "react-icons/fi";
 import { motion, AnimatePresence } from "framer-motion";
 import PdfFormatterSettings from "./PdfFormatterSettings";
+import PageHero from "../../Components/common/PageHero";
+import { FiSettings } from "react-icons/fi";
 
 const DEFAULT_COLOR_CODE = "#845CBD";
 
@@ -59,7 +61,13 @@ function SettingsComponent({
 
   return (
     <div className="min-h-[calc(100vh-60px)] bg-gradient-to-br from-gray-50 via-[var(--color-primary-soft)]/30 to-gray-50 p-4 sm:p-6 lg:p-8">
-      <div className="max-w-7xl mx-auto space-y-8">
+      <div className="max-w-7xl mx-auto space-y-6">
+        <PageHero
+          icon={<FiSettings size={24} />}
+          eyebrow="Workspace"
+          title="Settings"
+          subtitle="Customize your business profile, branding, and PDF templates."
+        />
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 bg-white/80 border border-[var(--color-primary-soft)] rounded-2xl p-2 shadow-sm">
           {SETTINGS_TABS.map((tab) => {
             const Icon = tab.icon;

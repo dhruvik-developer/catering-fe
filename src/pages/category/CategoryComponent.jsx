@@ -11,6 +11,7 @@ import {
 import { FiFolder } from "react-icons/fi";
 import CategoryTable from "../../Components/category/CategoryTable";
 import Loader from "../../Components/common/Loader";
+import PageHero from "../../Components/common/PageHero";
 import {
   AddCategoryModal,
   AddItemModal,
@@ -49,45 +50,30 @@ function CategoryComponent({
     categories?.reduce((sum, c) => sum + countSubcategories(c), 0) || 0;
 
   return (
-    <Paper
-      elevation={0}
-      sx={{
-        p: { xs: 2, sm: 3 },
-        borderRadius: 3,
-        bgcolor: "var(--color-primary-soft)",
-      }}
-    >
-      <Stack
-        direction={{ xs: "column", md: "row" }}
-        spacing={2}
-        sx={{ 
-          mb: 3,
-          alignItems: { xs: "stretch", md: "center" },
-          justifyContent: "space-between"
+    <>
+      <PageHero
+        icon={<FiFolder size={24} />}
+        eyebrow="Menu library"
+        title="Categories"
+        subtitle={`${categories?.length || 0} categories • ${subcategoryCount} subcategories`}
+      />
+      <Paper
+        elevation={0}
+        sx={{
+          p: { xs: 2, sm: 3 },
+          borderRadius: 3,
+          bgcolor: "var(--color-primary-soft)",
         }}
       >
-        <Stack direction="row" spacing={1.5} sx={{ alignItems: "center" }}>
-          <Avatar
-            variant="rounded"
-            sx={{
-              bgcolor: "var(--color-primary-border)",
-              color: "primary.main",
-              width: 44,
-              height: 44,
-            }}
-          >
-            <FiFolder size={20} />
-          </Avatar>
-          <Box>
-            <Typography variant="h5" color="text.primary" sx={{ fontWeight: 700 }}>
-              Categories
-            </Typography>
-            <Typography variant="body2" color="text.secondary">
-              {categories?.length || 0} categories • {subcategoryCount}{" "}
-              subcategories
-            </Typography>
-          </Box>
-        </Stack>
+        <Stack
+          direction={{ xs: "column", md: "row" }}
+          spacing={2}
+          sx={{
+            mb: 3,
+            alignItems: { xs: "stretch", md: "center" },
+            justifyContent: "flex-end",
+          }}
+        >
         {canCreateCategory && (
           <Stack 
             direction="row" 
@@ -155,7 +141,8 @@ function CategoryComponent({
         onClose={() => setShowAddIngredient(false)}
         onSuccess={onRefresh}
       />
-    </Paper>
+      </Paper>
+    </>
   );
 }
 

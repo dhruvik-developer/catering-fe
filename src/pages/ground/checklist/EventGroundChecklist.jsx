@@ -24,6 +24,7 @@ import { HugeiconsIcon } from "@hugeicons/react";
 import { TaskAdd01Icon } from "@hugeicons/core-free-icons";
 import Loader from "../../../Components/common/Loader";
 import EmptyState from "../../../Components/common/EmptyState";
+import PageHero from "../../../Components/common/PageHero";
 import {
   getGroundCategories,
   deleteGroundCategory,
@@ -164,38 +165,22 @@ const EventGroundChecklist = () => {
   };
 
   return (
-    <Paper
-      elevation={0}
-      sx={{ p: { xs: 2, sm: 3 }, borderRadius: 3, bgcolor: "background.paper" }}
-    >
-      <Stack
-        direction={{ xs: "column", md: "row" }}
-        spacing={2}
-
-
-        sx={{ alignItems: { xs: "stretch", md: "center" }, justifyContent: "space-between", mb: 3 }}
+    <>
+      <PageHero
+        icon={<HugeiconsIcon icon={TaskAdd01Icon} size={24} />}
+        eyebrow="Ground prep"
+        title="Ground Checklist"
+        subtitle={`${categories.length} categories • ${totalItems} items`}
+      />
+      <Paper
+        elevation={0}
+        sx={{ p: { xs: 2, sm: 3 }, borderRadius: 3, bgcolor: "background.paper" }}
       >
-        <Stack direction="row" spacing={1.5} sx={{ alignItems: "center" }}>
-          <Avatar
-            variant="rounded"
-            sx={{
-              bgcolor: "var(--color-primary-border)",
-              color: "primary.main",
-              width: 44,
-              height: 44,
-            }}
-          >
-            <HugeiconsIcon icon={TaskAdd01Icon} size={22} />
-          </Avatar>
-          <Box>
-            <Typography variant="h5" color="text.primary" sx={{ fontWeight: 700 }}>
-              Ground Checklist
-            </Typography>
-            <Typography variant="body2" color="text.secondary">
-              {categories.length} categories • {totalItems} items
-            </Typography>
-          </Box>
-        </Stack>
+        <Stack
+          direction={{ xs: "column", md: "row" }}
+          spacing={2}
+          sx={{ alignItems: { xs: "stretch", md: "center" }, justifyContent: "flex-end", mb: 3 }}
+        >
         {canCreateGround && (
           <Stack direction="row" spacing={1} useFlexGap sx={{ flexWrap: "wrap" }}>
             <Button
@@ -558,7 +543,8 @@ const EventGroundChecklist = () => {
         categories={categories.filter((c) => c.is_active)}
         editData={editItemData}
       />
-    </Paper>
+      </Paper>
+    </>
   );
 };
 

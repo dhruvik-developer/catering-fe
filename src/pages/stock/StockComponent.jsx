@@ -15,6 +15,7 @@ import {
 import Grid from "@mui/material/Grid";
 import Loader from "../../Components/common/Loader";
 import EmptyState from "../../Components/common/EmptyState";
+import PageHero from "../../Components/common/PageHero";
 import Dropdown from "../../Components/common/formDropDown/DropDown";
 import {
   FiPackage,
@@ -159,30 +160,17 @@ function StockComponent({
         backdropFilter: "blur(18px)",
       }}
     >
-      {/* Title */}
-      <Stack direction="row" spacing={1.5} sx={{ alignItems: "center", mb: 2.5 }}>
-        <Avatar
-          variant="rounded"
-          sx={{
-            background:
-              "linear-gradient(135deg, var(--color-primary-soft), rgba(255,255,255,0.75))",
-            color: "primary.main",
-            border: "1px solid var(--color-primary-border)",
-            width: 44,
-            height: 44,
-          }}
-        >
-          <FiPackage size={20} />
-        </Avatar>
-        <Box>
-          <Typography variant="h5" color="text.primary" sx={{ fontWeight: 700 }}>
-            Stocks
-          </Typography>
-          <Typography variant="body2" color="text.secondary">
-            Manage your inventory &amp; stock levels
-          </Typography>
-        </Box>
-      </Stack>
+      {/* Hero — replaces the prior inline Avatar+Title block. Wraps inside
+           the Paper so the existing scroll/animation behaviour is unchanged;
+           only the visual treatment of the page header changes. */}
+      <Box sx={{ mb: 2.5 }}>
+        <PageHero
+          icon={<FiPackage size={24} />}
+          eyebrow="Inventory"
+          title="Stocks"
+          subtitle="Manage your inventory & stock levels"
+        />
+      </Box>
 
       {loading ? (
         <Loader message="Loading Stocks Details..." />

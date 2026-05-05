@@ -18,6 +18,7 @@ import {
   FiBox,
 } from "react-icons/fi";
 import Loader from "../../Components/common/Loader";
+import PageHero from "../../Components/common/PageHero";
 
 const ICON_BY_MODULE = {
   default: <FiBox size={18} />,
@@ -57,62 +58,28 @@ const AccessControlComponent = ({ loading, modules = [], tenants = [] }) => {
     );
   }
 
+  const heroChipSx = {
+    bgcolor: "rgba(255,255,255,0.18)",
+    color: "var(--color-primary-contrast,white)",
+    border: "1px solid rgba(255,255,255,0.35)",
+    fontWeight: 700,
+    "& .MuiChip-icon": { color: "var(--color-primary-contrast,white)" },
+  };
+
   return (
     <Stack spacing={3}>
-      <Paper
-        elevation={0}
-        sx={{
-          p: { xs: 2.5, sm: 3 },
-          borderRadius: 3,
-          bgcolor: "background.paper",
-          border: "1px solid var(--app-border)",
-        }}
-      >
-        <Stack
-          direction={{ xs: "column", sm: "row" }}
-          spacing={2}
-          sx={{
-            alignItems: { xs: "flex-start", sm: "center" },
-            justifyContent: "space-between",
-          }}
-        >
-          <Stack direction="row" spacing={2} sx={{ alignItems: "center" }}>
-            <Avatar
-              variant="rounded"
-              sx={{
-                bgcolor: "var(--color-primary-border)",
-                color: "primary.main",
-                width: 48,
-                height: 48,
-              }}
-            >
-              <FiShield size={22} />
-            </Avatar>
-            <Box>
-              <Typography variant="h5" sx={{ fontWeight: 700 }}>
-                Access Control
-              </Typography>
-              <Typography variant="body2" color="text.secondary">
-                Platform-wide modules, actions and tenant adoption
-              </Typography>
-            </Box>
-          </Stack>
-          <Stack direction="row" spacing={1.5}>
-            <Chip
-              icon={<FiBox />}
-              label={`${modules.length} modules`}
-              variant="outlined"
-              sx={{ fontWeight: 600 }}
-            />
-            <Chip
-              icon={<FiKey />}
-              label={`${totalActions} actions`}
-              variant="outlined"
-              sx={{ fontWeight: 600 }}
-            />
-          </Stack>
-        </Stack>
-      </Paper>
+      <PageHero
+        icon={<FiShield size={24} />}
+        eyebrow="Platform"
+        title="Access Control"
+        subtitle="Platform-wide modules, actions and tenant adoption"
+        chips={
+          <>
+            <Chip icon={<FiBox />} label={`${modules.length} modules`} sx={heroChipSx} />
+            <Chip icon={<FiKey />} label={`${totalActions} actions`} sx={heroChipSx} />
+          </>
+        }
+      />
 
       {modules.length === 0 ? (
         <Card

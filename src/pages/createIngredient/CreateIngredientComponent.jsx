@@ -11,6 +11,7 @@ import {
 import { FiGrid, FiPlus } from "react-icons/fi";
 import IngredientTable from "../../Components/ingredient/IngredientTable";
 import Loader from "../../Components/common/Loader";
+import PageHero from "../../Components/common/PageHero";
 import { AddIngredientItemModal } from "../../Components/ingredient/IngredientModals";
 
 function CreateIngredientComponent({
@@ -29,60 +30,45 @@ function CreateIngredientComponent({
   const totalItems =
     categories?.reduce((sum, c) => sum + (c.items?.length || 0), 0) || 0;
 
+  const heroActionSx = {
+    bgcolor: "rgba(255,255,255,0.18)",
+    color: "var(--color-primary-contrast,white)",
+    border: "1px solid rgba(255,255,255,0.35)",
+    "&:hover": { bgcolor: "rgba(255,255,255,0.28)" },
+  };
+
   return (
-    <Paper
-      elevation={0}
-      sx={{ p: { xs: 2, sm: 3 }, borderRadius: 3, bgcolor: "background.paper" }}
-    >
-      <Stack
-        direction={{ xs: "column", sm: "row" }}
-        spacing={2}
-        sx={{ 
-          mb: 3,
-          justifyContent: "space-between",
-          alignItems: { xs: "stretch", sm: "center" }
-        }}
+    <>
+      <PageHero
+        icon={<FiGrid size={24} />}
+        eyebrow="Pantry"
+        title="Create Ingredient Item"
+        subtitle={`${categories?.length || 0} categories • ${totalItems} items`}
+        actions={
+          <>
+            <Button
+              variant="contained"
+              startIcon={<FiPlus size={15} />}
+              onClick={onAddCategory}
+              sx={heroActionSx}
+            >
+              Add Ingredient Category
+            </Button>
+            <Button
+              variant="outlined"
+              startIcon={<FiPlus size={15} />}
+              onClick={() => setShowAddItem(true)}
+              sx={heroActionSx}
+            >
+              Add Ingredient Item
+            </Button>
+          </>
+        }
+      />
+      <Paper
+        elevation={0}
+        sx={{ p: { xs: 2, sm: 3 }, borderRadius: 3, bgcolor: "background.paper" }}
       >
-        <Stack direction="row" spacing={1.5} sx={{ alignItems: "center" }}>
-          <Avatar
-            variant="rounded"
-            sx={{
-              bgcolor: "var(--color-primary-border)",
-              color: "primary.main",
-              width: 44,
-              height: 44,
-            }}
-          >
-            <FiGrid size={20} />
-          </Avatar>
-          <Box>
-            <Typography variant="h5" sx={{ fontWeight: 700 }}>
-              Create Ingredient Item
-            </Typography>
-            <Typography variant="body2" color="text.secondary">
-              {categories?.length || 0} categories • {totalItems} items
-            </Typography>
-          </Box>
-        </Stack>
-        <Stack direction="row" spacing={1} useFlexGap sx={{ flexWrap: "wrap" }}>
-          <Button
-            variant="contained"
-            color="primary"
-            startIcon={<FiPlus size={15} />}
-            onClick={onAddCategory}
-          >
-            Add Ingredient Category
-          </Button>
-          <Button
-            variant="outlined"
-            color="primary"
-            startIcon={<FiPlus size={15} />}
-            onClick={() => setShowAddItem(true)}
-          >
-            Add Ingredient Item
-          </Button>
-        </Stack>
-      </Stack>
 
       {loading ? (
         <Loader message="Loading ingredient categories & subcategories..." />
@@ -105,7 +91,8 @@ function CreateIngredientComponent({
           activeCategoryId || (categories?.length > 0 ? categories[0].id : null)
         }
       />
-    </Paper>
+      </Paper>
+    </>
   );
 }
 

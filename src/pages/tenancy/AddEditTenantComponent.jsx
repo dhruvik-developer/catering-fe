@@ -27,8 +27,10 @@ import {
   FiPackage,
   FiKey,
   FiGlobe,
+  FiUsers,
 } from "react-icons/fi";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
+import PageHero from "../../Components/common/PageHero";
 
 const SectionCard = ({ icon, title, subtitle, children }) => (
   <Card
@@ -113,60 +115,47 @@ function AddEditTenantComponent({
     );
   })();
 
+  const heroBtnSx = {
+    bgcolor: "rgba(255,255,255,0.18)",
+    color: "var(--color-primary-contrast,white)",
+    border: "1px solid rgba(255,255,255,0.35)",
+    "&:hover": { bgcolor: "rgba(255,255,255,0.28)" },
+  };
+
   return (
     <Box component="form" onSubmit={onSubmit}>
-      <Paper
-        elevation={0}
-        sx={{
-          p: { xs: 2, sm: 2.5 },
-          borderRadius: 3,
-          bgcolor: "background.paper",
-          border: "1px solid var(--app-border)",
-          mb: 2.5,
-        }}
-      >
-        <Stack
-          direction={{ xs: "column", sm: "row" }}
-          spacing={2}
-          sx={{
-            alignItems: { xs: "flex-start", sm: "center" },
-            justifyContent: "space-between",
-          }}
-        >
-          <Stack direction="row" spacing={2} sx={{ alignItems: "center" }}>
+      <PageHero
+        icon={<FiUsers size={24} />}
+        eyebrow="Platform"
+        title={isEdit ? "Edit Tenant" : "Add Tenant"}
+        subtitle={
+          isEdit
+            ? "Update tenant details, subscription, and admin credentials."
+            : "Provision a new client schema and configure its subscription."
+        }
+        actions={
+          <>
             <Button
               variant="outlined"
               startIcon={<FiArrowLeft size={16} />}
               onClick={onCancel}
+              disabled={saving}
+              sx={heroBtnSx}
             >
               Back
-            </Button>
-            <Box>
-              <Typography variant="h5" sx={{ fontWeight: 800 }}>
-                {isEdit ? "Edit Tenant" : "Add Tenant"}
-              </Typography>
-              <Typography variant="body2" color="text.secondary">
-                {isEdit
-                  ? "Update tenant details, subscription, and admin credentials."
-                  : "Provision a new client schema and configure its subscription."}
-              </Typography>
-            </Box>
-          </Stack>
-          <Stack direction="row" spacing={1}>
-            <Button variant="outlined" onClick={onCancel} disabled={saving}>
-              Cancel
             </Button>
             <Button
               type="submit"
               variant="contained"
               startIcon={<FiCheck size={16} />}
               disabled={saving}
+              sx={heroBtnSx}
             >
               {saving ? "Saving..." : isEdit ? "Update Tenant" : "Save Tenant"}
             </Button>
-          </Stack>
-        </Stack>
-      </Paper>
+          </>
+        }
+      />
 
       <Stack spacing={2.5}>
         {/* Tenant section */}

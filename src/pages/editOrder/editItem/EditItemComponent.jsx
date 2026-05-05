@@ -20,6 +20,7 @@ import {
 } from "react-icons/fi";
 import Loader from "../../../Components/common/Loader";
 import EmptyState from "../../../Components/common/EmptyState";
+import PageHero from "../../../Components/common/PageHero";
 
 function EditItemComponent({
   categories,
@@ -43,54 +44,36 @@ function EditItemComponent({
   );
 
   return (
-    <Paper
-      elevation={0}
-      sx={{ p: { xs: 2, sm: 3 }, borderRadius: 3, bgcolor: "background.paper" }}
-    >
-      {/* Header */}
-      <Stack
-        direction={{ xs: "column", sm: "row" }}
-
-
-        spacing={2}
-        sx={{ justifyContent: "space-between", alignItems: { xs: "stretch", sm: "center" }, mb: 3 }}
+    <>
+      <PageHero
+        icon={<FiList size={24} />}
+        eyebrow="Edit"
+        title="Items"
+        subtitle={
+          totalSelected > 0
+            ? `${totalSelected} item${totalSelected !== 1 ? "s" : ""} selected`
+            : "Pick the items you'd like to include in this booking."
+        }
+      />
+      <Paper
+        elevation={0}
+        sx={{ p: { xs: 2, sm: 3 }, borderRadius: 3, bgcolor: "background.paper" }}
       >
-        <Stack direction="row" spacing={1.5} sx={{ alignItems: "center" }}>
-          <Avatar
-            variant="rounded"
-            sx={{
-              bgcolor: "var(--color-primary-border)",
-              color: "primary.main",
-              width: 44,
-              height: 44,
-            }}
-          >
-            <FiList size={20} />
-          </Avatar>
-          <Box>
-            <Typography variant="h5" color="text.primary" sx={{ fontWeight: 700 }}>
-              Items
-            </Typography>
-            <Typography
-              variant="body2"
-              color={totalSelected > 0 ? "primary.main" : "text.secondary"}
-
-             sx={{ fontWeight: totalSelected > 0 ? 600 : 400 }}>
-              {totalSelected > 0
-                ? `${totalSelected} item${totalSelected !== 1 ? "s" : ""} selected`
-                : "Select items for your order"}
-            </Typography>
-          </Box>
-        </Stack>
-        <Button
-          variant="contained"
-          color="primary"
-          startIcon={<FiPlus size={15} />}
-          onClick={() => navigate("/create-item")}
+        {/* Header (action row only — title moved to PageHero above) */}
+        <Stack
+          direction={{ xs: "column", sm: "row" }}
+          spacing={2}
+          sx={{ justifyContent: "flex-end", alignItems: { xs: "stretch", sm: "center" }, mb: 3 }}
         >
-          Add Item
-        </Button>
-      </Stack>
+          <Button
+            variant="contained"
+            color="primary"
+            startIcon={<FiPlus size={15} />}
+            onClick={() => navigate("/create-item")}
+          >
+            Add Item
+          </Button>
+        </Stack>
 
       {loading ? (
         <Loader message="Loading Items..." />
@@ -342,7 +325,8 @@ function EditItemComponent({
           </Stack>
         </>
       )}
-    </Paper>
+      </Paper>
+    </>
   );
 }
 

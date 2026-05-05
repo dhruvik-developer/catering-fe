@@ -9,6 +9,7 @@ import {
 } from "@mui/material";
 import Loader from "../../../Components/common/Loader";
 import StaffTable from "../../../Components/eventStaff/StaffTable";
+import PageHero from "../../../Components/common/PageHero";
 import { FiUsers, FiUserPlus } from "react-icons/fi";
 import usePermissions from "../../../hooks/usePermissions";
 
@@ -21,63 +22,49 @@ function StaffComponent({
   onStaffPaymentSummary,
 }) {
   const { hasPermission } = usePermissions();
+  const heroActionSx = {
+    bgcolor: "rgba(255,255,255,0.18)",
+    color: "var(--color-primary-contrast,white)",
+    border: "1px solid rgba(255,255,255,0.35)",
+    "&:hover": { bgcolor: "rgba(255,255,255,0.28)" },
+  };
+
   return (
-    <Paper
-      elevation={0}
-      sx={{ p: { xs: 2, sm: 3 }, borderRadius: 3, bgcolor: "background.paper" }}
-    >
-      <Stack
-        direction={{ xs: "column", sm: "row" }}
-        spacing={2}
-
-
-        sx={{ alignItems: { xs: "stretch", sm: "center" }, justifyContent: "space-between", mb: 3 }}
+    <>
+      <PageHero
+        icon={<FiUsers size={24} />}
+        eyebrow="Event team"
+        title="Event Staff"
+        subtitle={`${staffList?.length || 0} staff member${staffList?.length !== 1 ? "s" : ""} registered`}
+        actions={
+          hasPermission("eventstaff.create") ? (
+            <Button
+              variant="contained"
+              startIcon={<FiUserPlus size={15} />}
+              onClick={onStaffAdd}
+              sx={heroActionSx}
+            >
+              Add Staff
+            </Button>
+          ) : null
+        }
+      />
+      <Paper
+        elevation={0}
+        sx={{ p: { xs: 2, sm: 3 }, borderRadius: 3, bgcolor: "background.paper" }}
       >
-        <Stack direction="row" spacing={1.5} sx={{ alignItems: "center" }}>
-          <Avatar
-            variant="rounded"
-            sx={{
-              bgcolor: "var(--color-primary-border)",
-              color: "primary.main",
-              width: 44,
-              height: 44,
-            }}
-          >
-            <FiUsers size={20} />
-          </Avatar>
-          <Box>
-            <Typography variant="h5" color="text.primary" sx={{ fontWeight: 700 }}>
-              Event Staff
-            </Typography>
-            <Typography variant="body2" color="text.secondary">
-              {staffList?.length || 0} staff member
-              {staffList?.length !== 1 ? "s" : ""} registered
-            </Typography>
-          </Box>
-        </Stack>
-        {hasPermission("eventstaff.create") && (
-          <Button
-            variant="contained"
-            color="primary"
-            startIcon={<FiUserPlus size={15} />}
-            onClick={onStaffAdd}
-          >
-            Add Staff
-          </Button>
+        {loading ? (
+          <Loader message="Loading staff..." />
+        ) : (
+          <StaffTable
+            staffList={staffList}
+            onStaffEdit={onStaffEdit}
+            onStaffDelete={onStaffDelete}
+            onStaffPaymentSummary={onStaffPaymentSummary}
+          />
         )}
-      </Stack>
-
-      {loading ? (
-        <Loader message="Loading staff..." />
-      ) : (
-        <StaffTable
-          staffList={staffList}
-          onStaffEdit={onStaffEdit}
-          onStaffDelete={onStaffDelete}
-          onStaffPaymentSummary={onStaffPaymentSummary}
-        />
-      )}
-    </Paper>
+      </Paper>
+    </>
   );
 }
 

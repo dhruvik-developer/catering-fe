@@ -26,6 +26,7 @@ import { useTheme } from "@mui/material/styles";
 import Grid from "@mui/material/Grid";
 import Loader from "../../Components/common/Loader";
 import EmptyState from "../../Components/common/EmptyState";
+import PageHero from "../../Components/common/PageHero";
 import {
   FiFileText,
   FiPhone,
@@ -68,34 +69,18 @@ function QuotationComponent({
       : t("quotation.count", { count: visibleCount });
 
   return (
-    <Paper
-      elevation={0}
-      sx={{ p: { xs: 2, sm: 3 }, borderRadius: 3, bgcolor: "background.paper" }}
-    >
-      {/* Title */}
-      <Stack direction="row" spacing={1.5} sx={{ alignItems: "center", mb: 2.5 }}>
-        <Avatar
-          variant="rounded"
-          sx={{
-            bgcolor: "var(--color-primary-border)",
-            color: "primary.main",
-            width: 44,
-            height: 44,
-          }}
-        >
-          <FiFileText size={20} />
-        </Avatar>
-        <Box>
-          <Typography variant="h5" color="text.primary" sx={{ fontWeight: 700 }}>
-            {t("quotation.title")}
-          </Typography>
-          <Typography variant="body2" color="text.secondary">
-            {countText}
-          </Typography>
-        </Box>
-      </Stack>
-
-      {/* Filter row */}
+    <>
+      <PageHero
+        icon={<FiFileText size={24} />}
+        eyebrow={t("quotation.eyebrow", { defaultValue: "Bookings pipeline" })}
+        title={t("quotation.title")}
+        subtitle={countText}
+      />
+      <Paper
+        elevation={0}
+        sx={{ p: { xs: 2, sm: 3 }, borderRadius: 3, bgcolor: "background.paper" }}
+      >
+        {/* Filter row */}
       <Stack
         direction={{ xs: "column", md: "row" }}
         spacing={{ xs: 1.5, md: 2 }}
@@ -551,7 +536,8 @@ function QuotationComponent({
           </Button>
         </DialogActions>
       </Dialog>
-    </Paper>
+          </Paper>
+    </>
   );
 }
 

@@ -17,34 +17,21 @@ import { FaBuilding } from "react-icons/fa";
 import { FiPieChart } from "react-icons/fi";
 import Loader from "../../../Components/common/Loader";
 import EmptyState from "../../../Components/common/EmptyState";
+import PageHero from "../../../Components/common/PageHero";
 
 function AgencySummaryComponent({ loading, summaryData }) {
   return (
-    <Paper
-      elevation={0}
-      sx={{ p: { xs: 2, sm: 3 }, borderRadius: 3, bgcolor: "background.paper" }}
-    >
-      <Stack direction="row" spacing={1.5} sx={{ alignItems: "center", mb: 3 }}>
-        <Avatar
-          variant="rounded"
-          sx={{
-            bgcolor: "var(--color-primary-border)",
-            color: "primary.main",
-            width: 44,
-            height: 44,
-          }}
-        >
-          <FiPieChart size={20} />
-        </Avatar>
-        <Box>
-          <Typography variant="h5" sx={{ fontWeight: 700 }}>
-            Agency Summary Report
-          </Typography>
-          <Typography variant="body2" color="text.secondary">
-            Overview of total spend and staff count by labor agency
-          </Typography>
-        </Box>
-      </Stack>
+    <>
+      <PageHero
+        icon={<FiPieChart size={24} />}
+        eyebrow="Reports"
+        title="Agency Summary Report"
+        subtitle="Overview of total spend and staff count by labor agency"
+      />
+      <Paper
+        elevation={0}
+        sx={{ p: { xs: 2, sm: 3 }, borderRadius: 3, bgcolor: "background.paper" }}
+      >
 
       {loading ? (
         <Loader message="Loading report data..." />
@@ -110,7 +97,8 @@ function AgencySummaryComponent({ loading, summaryData }) {
           </Table>
         </TableContainer>
       )}
-    </Paper>
+      </Paper>
+    </>
   );
 }
 

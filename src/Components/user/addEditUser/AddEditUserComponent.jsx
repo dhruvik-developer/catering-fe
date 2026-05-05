@@ -11,7 +11,8 @@ import {
   Typography,
 } from "@mui/material";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
-import { FiArrowLeft } from "react-icons/fi";
+import { FiArrowLeft, FiUserPlus } from "react-icons/fi";
+import PageHero from "../../common/PageHero";
 
 function AddEditUserComponent({
   navigate,
@@ -25,26 +26,40 @@ function AddEditUserComponent({
   const [showPassword, setShowPassword] = useState(false);
 
   return (
-    <Paper
-      elevation={0}
-      sx={{
-        p: { xs: 2, sm: 3 },
-        borderRadius: 3,
-        bgcolor: "background.paper",
-        mt: 5,
-      }}
-    >
-      <Button
-        variant="outlined"
-        startIcon={<FiArrowLeft size={16} />}
-        onClick={() => navigate(-1)}
-        sx={{ mb: 2 }}
+    <>
+      <PageHero
+        icon={<FiUserPlus size={24} />}
+        eyebrow={isEdit ? "Update credentials" : "Onboarding"}
+        title={isEdit ? "Change User Password" : "Add New User"}
+        subtitle={
+          isEdit
+            ? "Set a new password for this user account."
+            : "Register a new user with workspace access."
+        }
+        actions={
+          <Button
+            variant="outlined"
+            startIcon={<FiArrowLeft size={16} />}
+            onClick={() => navigate(-1)}
+            sx={{
+              bgcolor: "rgba(255,255,255,0.18)",
+              color: "var(--color-primary-contrast,white)",
+              border: "1px solid rgba(255,255,255,0.35)",
+              "&:hover": { bgcolor: "rgba(255,255,255,0.28)" },
+            }}
+          >
+            Back
+          </Button>
+        }
+      />
+      <Paper
+        elevation={0}
+        sx={{
+          p: { xs: 2, sm: 3 },
+          borderRadius: 3,
+          bgcolor: "background.paper",
+        }}
       >
-        Back
-      </Button>
-      <Typography variant="h5" sx={{ fontWeight: 700, mb: 3 }}>
-        {isEdit ? "Change User Password" : "Add New User"}
-      </Typography>
 
       <Box component="form" onSubmit={onSubmit}>
         <Stack spacing={2.5}>
@@ -124,7 +139,8 @@ function AddEditUserComponent({
           </Stack>
         </Stack>
       </Box>
-    </Paper>
+      </Paper>
+    </>
   );
 }
 

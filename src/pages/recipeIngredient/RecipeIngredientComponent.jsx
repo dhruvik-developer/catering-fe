@@ -22,6 +22,7 @@ import {
 } from "react-icons/fi";
 import Loader from "../../Components/common/Loader";
 import EmptyState from "../../Components/common/EmptyState";
+import PageHero from "../../Components/common/PageHero";
 
 function RecipeIngredientComponent({ loading, navigate, recipe }) {
   const [expanded, setExpanded] = useState(null);
@@ -39,49 +40,35 @@ function RecipeIngredientComponent({ loading, navigate, recipe }) {
     return [];
   };
 
+  const heroActionSx = {
+    bgcolor: "rgba(255,255,255,0.18)",
+    color: "var(--color-primary-contrast,white)",
+    border: "1px solid rgba(255,255,255,0.35)",
+    "&:hover": { bgcolor: "rgba(255,255,255,0.28)" },
+  };
+
   return (
-    <Paper
-      elevation={0}
-      sx={{ p: { xs: 2, sm: 3 }, borderRadius: 3, bgcolor: "background.paper" }}
-    >
-      <Stack
-        direction={{ xs: "column", sm: "row" }}
-
-
-        spacing={2}
-        sx={{ justifyContent: "space-between", alignItems: { xs: "stretch", sm: "center" }, mb: 3 }}
-      >
-        <Stack direction="row" spacing={1.5} sx={{ alignItems: "center" }}>
-          <Avatar
-            variant="rounded"
-            sx={{
-              bgcolor: "var(--color-primary-border)",
-              color: "primary.main",
-              width: 44,
-              height: 44,
-            }}
+    <>
+      <PageHero
+        icon={<FiBookOpen size={24} />}
+        eyebrow="Recipes"
+        title="Recipe Ingredient"
+        subtitle={`${recipe?.length || 0} recipe${recipe?.length !== 1 ? "s" : ""} available`}
+        actions={
+          <Button
+            variant="contained"
+            startIcon={<FiPlus size={15} />}
+            onClick={() => navigate("/create-ingredient")}
+            sx={heroActionSx}
           >
-            <FiBookOpen size={20} />
-          </Avatar>
-          <Box>
-            <Typography variant="h5" sx={{ fontWeight: 700 }}>
-              Recipe Ingredient
-            </Typography>
-            <Typography variant="body2" color="text.secondary">
-              {recipe?.length || 0} recipe{recipe?.length !== 1 ? "s" : ""}{" "}
-              available
-            </Typography>
-          </Box>
-        </Stack>
-        <Button
-          variant="contained"
-          color="primary"
-          startIcon={<FiPlus size={15} />}
-          onClick={() => navigate("/create-ingredient")}
-        >
-          Add Ingredient
-        </Button>
-      </Stack>
+            Add Ingredient
+          </Button>
+        }
+      />
+      <Paper
+        elevation={0}
+        sx={{ p: { xs: 2, sm: 3 }, borderRadius: 3, bgcolor: "background.paper" }}
+      >
 
       {loading ? (
         <Loader message="Loading Recipes..." />
@@ -245,7 +232,8 @@ function RecipeIngredientComponent({ loading, navigate, recipe }) {
           })}
         </Stack>
       )}
-    </Paper>
+      </Paper>
+    </>
   );
 }
 

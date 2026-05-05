@@ -9,6 +9,7 @@ import {
   deleteWaiterType,
 } from "../../api/EventStaffApis";
 import Loader from "../../Components/common/Loader";
+import PageHero from "../../Components/common/PageHero";
 
 const waitersFromApi = async (setWaiterTypes, setLoading) => {
   setLoading(true);
@@ -127,26 +128,21 @@ const WaiterTypeManagement = () => {
   return (
     <div className="space-y-6 animate-in fade-in duration-500">
       {/* Page Header */}
-      <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
-        <div className="flex items-center gap-3">
-          <div className="p-3 bg-[var(--color-primary-soft)] rounded-xl">
-            <FiUsers className="text-[var(--color-primary-text)]" size={24} />
-          </div>
-          <div>
-            <h2 className="text-2xl font-bold text-gray-800">Waiter Types</h2>
-            <p className="text-sm text-gray-500">
-              Manage waiter categories and their per-person pricing for events.
-            </p>
-          </div>
-        </div>
-        <button
-          className="flex items-center gap-2 rounded-xl bg-[var(--color-primary)] hover:brightness-95 px-5 py-2.5 text-white font-semibold transition-all shadow-md shadow-[var(--color-primary)]/20 cursor-pointer"
-          onClick={() => setIsAddModalOpen(true)}
-        >
-          <FiPlus size={18} />
-          Add Waiter Type
-        </button>
-      </div>
+      <PageHero
+        icon={<FiUsers size={24} />}
+        eyebrow="Service team"
+        title="Waiter Types"
+        subtitle="Manage waiter categories and their per-person pricing for events."
+        actions={
+          <button
+            className="flex items-center gap-2 rounded-xl bg-white/15 border border-white/30 hover:bg-white/25 px-5 py-2.5 text-white font-semibold transition-all cursor-pointer"
+            onClick={() => setIsAddModalOpen(true)}
+          >
+            <FiPlus size={18} />
+            Add Waiter Type
+          </button>
+        }
+      />
 
       {/* Add Modal */}
       {isAddModalOpen && (

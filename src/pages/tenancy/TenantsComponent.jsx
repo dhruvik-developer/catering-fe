@@ -21,7 +21,9 @@ import {
   FiUploadCloud,
   FiPlusCircle,
   FiTrash2,
+  FiUsers,
 } from "react-icons/fi";
+import PageHero from "../../Components/common/PageHero";
 
 const formatDate = (value) => {
   if (!value) return null;
@@ -119,28 +121,31 @@ const TenantsComponent = ({
 }) => {
   return (
     <Box sx={{ p: 3 }}>
-      <Box sx={{ display: "flex", justifyContent: "space-between", mb: 3, alignItems: "center" }}>
-        <Typography variant="h4" sx={{ fontWeight: 700, color: "var(--color-primary)" }}>
-          Tenants Management
-        </Typography>
-        <Button
-          variant="contained"
-          startIcon={<FiPlusCircle size={20} />}
-          onClick={onAddTenant}
-          sx={{
-            borderRadius: "12px",
-            background: "var(--color-primary)",
-            textTransform: "none",
-            px: 3,
-            py: 1,
-            "&:hover": {
-              background: "var(--color-primary-dark)",
-            },
-          }}
-        >
-          Add Tenant
-        </Button>
-      </Box>
+      <PageHero
+        icon={<FiUsers size={24} />}
+        eyebrow="Platform"
+        title="Tenants Management"
+        subtitle={`${tenants.length} tenant${tenants.length !== 1 ? "s" : ""} provisioned`}
+        actions={
+          <Button
+            variant="contained"
+            startIcon={<FiPlusCircle size={20} />}
+            onClick={onAddTenant}
+            sx={{
+              borderRadius: "12px",
+              textTransform: "none",
+              px: 3,
+              py: 1,
+              bgcolor: "rgba(255,255,255,0.18)",
+              color: "var(--color-primary-contrast,white)",
+              border: "1px solid rgba(255,255,255,0.35)",
+              "&:hover": { bgcolor: "rgba(255,255,255,0.28)" },
+            }}
+          >
+            Add Tenant
+          </Button>
+        }
+      />
 
       <Card sx={{ borderRadius: "16px", boxShadow: "var(--app-shadow-strong)", overflow: "hidden" }}>
         <TableContainer component={Paper} elevation={0}>

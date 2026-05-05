@@ -18,6 +18,8 @@ import {
 } from "react-icons/fa";
 import Loader from "../../Components/common/Loader";
 import EmptyState from "../../Components/common/EmptyState";
+import PageHero from "../../Components/common/PageHero";
+import { FiCreditCard } from "react-icons/fi";
 
 function StatCard({ icon, iconBg, iconColor, label, amount, footnote }) {
   const formatted =
@@ -63,18 +65,17 @@ function StatCard({ icon, iconBg, iconColor, label, amount, footnote }) {
 
 function PaymentHistoryComponent({ paymentData, loading }) {
   return (
-    <Paper
-      elevation={0}
-      sx={{ p: { xs: 2, sm: 3 }, borderRadius: 3, bgcolor: "background.paper" }}
-    >
-      <Typography
-        variant="h5"
-
-        color="text.primary"
-        sx={{ fontWeight: 700, mb: 3 }}
+    <>
+      <PageHero
+        icon={<FiCreditCard size={24} />}
+        eyebrow="Cash flow"
+        title="Payment History"
+        subtitle="Every payment received and outstanding balance, at a glance."
+      />
+      <Paper
+        elevation={0}
+        sx={{ p: { xs: 2, sm: 3 }, borderRadius: 3, bgcolor: "background.paper" }}
       >
-        Payment History
-      </Typography>
 
       {loading ? (
         <Loader message="Loading Payment Histories..." />
@@ -161,7 +162,8 @@ function PaymentHistoryComponent({ paymentData, loading }) {
           </Grid>
         </Stack>
       )}
-    </Paper>
+      </Paper>
+    </>
   );
 }
 

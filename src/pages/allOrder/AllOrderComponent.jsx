@@ -22,6 +22,7 @@ import { useTheme } from "@mui/material/styles";
 import Grid from "@mui/material/Grid";
 import Loader from "../../Components/common/Loader";
 import EmptyState from "../../Components/common/EmptyState";
+import PageHero from "../../Components/common/PageHero";
 import {
   FiClipboard,
   FiPhone,
@@ -63,32 +64,17 @@ function AllOrderComponent({
       : t("allOrders.count", { count: visibleCount });
 
   return (
-    <Paper
-      elevation={0}
-      sx={{ p: { xs: 2, sm: 3 }, borderRadius: 3, bgcolor: "background.paper" }}
-    >
-      {/* Title */}
-      <Stack direction="row" spacing={1.5} sx={{ alignItems: "center", mb: 2.5 }}>
-        <Avatar
-          variant="rounded"
-          sx={{
-            bgcolor: "var(--color-primary-border)",
-            color: "primary.main",
-            width: 44,
-            height: 44,
-          }}
-        >
-          <FiClipboard size={20} />
-        </Avatar>
-        <Box>
-          <Typography variant="h5" color="text.primary" sx={{ fontWeight: 700 }}>
-            {t("allOrders.title")}
-          </Typography>
-          <Typography variant="body2" color="text.secondary">
-            {countText}
-          </Typography>
-        </Box>
-      </Stack>
+    <>
+      <PageHero
+        icon={<FiClipboard size={24} />}
+        eyebrow={t("allOrders.eyebrow", { defaultValue: "Order management" })}
+        title={t("allOrders.title")}
+        subtitle={countText}
+      />
+      <Paper
+        elevation={0}
+        sx={{ p: { xs: 2, sm: 3 }, borderRadius: 3, bgcolor: "background.paper" }}
+      >
 
       {/* Filter row: search on the left, quick filters + date range on the right */}
       <Stack
@@ -442,7 +428,8 @@ function AllOrderComponent({
           })}
         </Grid>
       )}
-    </Paper>
+      </Paper>
+    </>
   );
 }
 

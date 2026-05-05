@@ -20,6 +20,7 @@ import { useNavigate } from "react-router-dom";
 import { FiFileText, FiChevronRight } from "react-icons/fi";
 import Loader from "../../../Components/common/Loader";
 import EmptyState from "../../../Components/common/EmptyState";
+import PageHero from "../../../Components/common/PageHero";
 
 function EventSummaryComponent({
   loading,
@@ -35,41 +36,23 @@ function EventSummaryComponent({
     });
 
   return (
-    <Paper
-      elevation={0}
-      sx={{ p: { xs: 2, sm: 3 }, borderRadius: 3, bgcolor: "background.paper" }}
-    >
-      <Stack
-        direction={{ xs: "column", md: "row" }}
-
-
-        spacing={2}
-        sx={{ justifyContent: "space-between", alignItems: { xs: "stretch", md: "center" }, mb: 3 }}
+    <>
+      <PageHero
+        icon={<FiFileText size={24} />}
+        eyebrow="Reports"
+        title="Summary Report"
+        subtitle="Click a staff member to view their full event & payment details"
+      />
+      <Paper
+        elevation={0}
+        sx={{ p: { xs: 2, sm: 3 }, borderRadius: 3, bgcolor: "background.paper" }}
       >
-        <Stack direction="row" spacing={1.5} sx={{ alignItems: "center" }}>
-          <Avatar
-            variant="rounded"
-            sx={{
-              bgcolor: "var(--color-primary-border)",
-              color: "primary.main",
-              width: 44,
-              height: 44,
-            }}
-          >
-            <FiFileText size={20} />
-          </Avatar>
-          <Box>
-            <Typography variant="h5" sx={{ fontWeight: 700 }}>
-              Summary Report
-            </Typography>
-            <Typography variant="body2" color="text.secondary">
-              Click a staff member to view their full event &amp; payment
-              details
-            </Typography>
-          </Box>
-        </Stack>
-
-        <Stack direction="row" spacing={1} sx={{ alignItems: "center" }}>
+        {/* Filter row (kept inside Paper) */}
+        <Stack
+          direction="row"
+          spacing={1}
+          sx={{ alignItems: "center", justifyContent: "flex-end", mb: 3 }}
+        >
           <Typography variant="body2" color="text.secondary" sx={{ fontWeight: 600 }}>
             Filter by Staff Type:
           </Typography>
@@ -85,7 +68,6 @@ function EventSummaryComponent({
             <MenuItem value="Contract">Contract</MenuItem>
           </Select>
         </Stack>
-      </Stack>
 
       {loading ? (
         <Loader message="Loading report data..." />
@@ -213,7 +195,8 @@ function EventSummaryComponent({
           </Table>
         </TableContainer>
       )}
-    </Paper>
+      </Paper>
+    </>
   );
 }
 

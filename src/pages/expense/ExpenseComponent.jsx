@@ -22,6 +22,7 @@ import { useTheme } from "@mui/material/styles";
 import Grid from "@mui/material/Grid";
 import Loader from "../../Components/common/Loader";
 import EmptyState from "../../Components/common/EmptyState";
+import PageHero from "../../Components/common/PageHero";
 import { FiDollarSign, FiPlus, FiTag, FiTrash2, FiEdit2 } from "react-icons/fi";
 import usePermissions from "../../hooks/usePermissions";
 
@@ -48,66 +49,51 @@ function ExpenseComponent({
   const canDeleteCategory = hasPermission("expense_categories.delete");
   const canUseExpenseActions = canUpdateExpense || canDeleteExpense;
 
-  return (
-    <Paper
-      elevation={0}
-      sx={{ p: { xs: 2, sm: 3 }, borderRadius: 3, bgcolor: "background.paper" }}
-    >
-      {/* Header */}
-      <Stack
-        direction={{ xs: "column", sm: "row" }}
-
-
-        spacing={2}
-        sx={{ justifyContent: "space-between", alignItems: { xs: "stretch", sm: "center" }, mb: 3 }}
-      >
-        <Stack direction="row" spacing={1.5} sx={{ alignItems: "center" }}>
-          <Avatar
-            variant="rounded"
-            sx={{
-              bgcolor: "var(--color-primary-border)",
-              color: "primary.main",
-              width: 44,
-              height: 44,
-            }}
+  const heroActionSx = {
+    bgcolor: "rgba(255,255,255,0.18)",
+    color: "var(--color-primary-contrast,white)",
+    border: "1px solid rgba(255,255,255,0.35)",
+    "&:hover": { bgcolor: "rgba(255,255,255,0.28)" },
+  };
+  const expenseActions =
+    canCreateExpense || canCreateCategory ? (
+      <>
+        {canCreateExpense && (
+          <Button
+            variant="contained"
+            startIcon={<FiPlus size={15} />}
+            onClick={handleAddExpense}
+            sx={heroActionSx}
           >
-            <FiDollarSign size={20} />
-          </Avatar>
-          <Box>
-            <Typography variant="h5" color="text.primary" sx={{ fontWeight: 700 }}>
-              Expenses
-            </Typography>
-            <Typography variant="body2" color="text.secondary">
-              {expenses?.length || 0} expense{expenses?.length !== 1 ? "s" : ""}{" "}
-              recorded
-            </Typography>
-          </Box>
-        </Stack>
-        {(canCreateExpense || canCreateCategory) && (
-          <Stack direction="row" spacing={1} useFlexGap sx={{ flexWrap: "wrap" }}>
-            {canCreateExpense && (
-              <Button
-                variant="contained"
-                color="primary"
-                startIcon={<FiPlus size={15} />}
-                onClick={handleAddExpense}
-              >
-                Add Expense
-              </Button>
-            )}
-            {canCreateCategory && (
-              <Button
-                variant="outlined"
-                color="primary"
-                startIcon={<FiTag size={15} />}
-                onClick={handleAddCategory}
-              >
-                Add Category
-              </Button>
-            )}
-          </Stack>
+            Add Expense
+          </Button>
         )}
-      </Stack>
+        {canCreateCategory && (
+          <Button
+            variant="outlined"
+            startIcon={<FiTag size={15} />}
+            onClick={handleAddCategory}
+            sx={heroActionSx}
+          >
+            Add Category
+          </Button>
+        )}
+      </>
+    ) : null;
+
+  return (
+    <>
+      <PageHero
+        icon={<FiDollarSign size={24} />}
+        eyebrow="Spending"
+        title="Expenses"
+        subtitle={`${expenses?.length || 0} expense${expenses?.length !== 1 ? "s" : ""} recorded`}
+        actions={expenseActions}
+      />
+      <Paper
+        elevation={0}
+        sx={{ p: { xs: 2, sm: 3 }, borderRadius: 3, bgcolor: "background.paper" }}
+      >
 
       {/* Total Expense Card */}
       <Card
@@ -354,7 +340,8 @@ function ExpenseComponent({
           ))}
         </Grid>
       )}
-    </Paper>
+      </Paper>
+    </>
   );
 }
 

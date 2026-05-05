@@ -2,6 +2,8 @@
 import DatePicker from "react-datepicker";
 import Input from "../../Components/common/formInputs/Input";
 import { motion, AnimatePresence } from "framer-motion";
+import PageHero from "../../Components/common/PageHero";
+import { FiTruck, FiArrowLeft } from "react-icons/fi";
 
 function ShareOutsourcedComponent({
   eventAddress,
@@ -23,21 +25,24 @@ function ShareOutsourcedComponent({
   businessProfile,
 }) {
   return (
-    <div className="p-6 bg-white rounded-xl shadow-lg">
-      {/* Header Section */}
-      <div className="header-button-div">
-        <button
-          type="button"
-          className="px-4 py-2 mb-[10px] font-medium bg-gray-300 border border-gray-300 rounded-md cursor-pointer"
-          onClick={() => navigate(-1)}
-        >
-          Back
-        </button>
-      </div>
-
-      <div className="flex justify-between items-center mb-4">
-        <h2 className="text-2xl font-semibold">Share Outsourced Items</h2>
-      </div>
+    <div className="space-y-4">
+      <PageHero
+        icon={<FiTruck size={24} />}
+        eyebrow="Outsourced supply"
+        title="Share Outsourced Items"
+        subtitle="Send the consolidated outsourced item list to your vendors."
+        actions={
+          <button
+            type="button"
+            className="flex items-center gap-2 rounded-xl bg-white/15 border border-white/30 hover:bg-white/25 px-4 py-2 text-white font-semibold transition-all cursor-pointer"
+            onClick={() => navigate(-1)}
+          >
+            <FiArrowLeft size={14} />
+            Back
+          </button>
+        }
+      />
+      <div className="p-6 bg-white rounded-xl shadow-lg">
 
       {/* Address Section */}
       <div className="mb-6">
@@ -198,6 +203,7 @@ function ShareOutsourcedComponent({
         >
           Generate Share PDF
         </button>
+      </div>
       </div>
     </div>
   );

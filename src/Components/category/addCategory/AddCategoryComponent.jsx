@@ -10,6 +10,7 @@ import {
 import { FiArrowLeft, FiFolder } from "react-icons/fi";
 import { useTranslation } from "react-i18next";
 import MultiLangInput from "../../common/MultiLangInput";
+import PageHero from "../../common/PageHero";
 
 function AddCategoryComponent({
   categoryName,
@@ -22,45 +23,36 @@ function AddCategoryComponent({
   const { t } = useTranslation();
 
   return (
-    <Paper
-      elevation={0}
-      sx={{
-        p: { xs: 2, sm: 3 },
-        borderRadius: 3,
-        bgcolor: "background.paper",
-        mt: 5,
-      }}
-    >
-      <Button
-        variant="outlined"
-        startIcon={<FiArrowLeft size={16} />}
-        onClick={() => navigate(-1)}
-        sx={{ mb: 3 }}
+    <>
+      <PageHero
+        icon={<FiFolder size={24} />}
+        eyebrow="Menu library"
+        title={t("category.createTitle")}
+        subtitle={t("category.createSubtitle")}
+        actions={
+          <Button
+            variant="outlined"
+            startIcon={<FiArrowLeft size={16} />}
+            onClick={() => navigate(-1)}
+            sx={{
+              bgcolor: "rgba(255,255,255,0.18)",
+              color: "var(--color-primary-contrast,white)",
+              border: "1px solid rgba(255,255,255,0.35)",
+              "&:hover": { bgcolor: "rgba(255,255,255,0.28)" },
+            }}
+          >
+            {t("common.back")}
+          </Button>
+        }
+      />
+      <Paper
+        elevation={0}
+        sx={{
+          p: { xs: 2, sm: 3 },
+          borderRadius: 3,
+          bgcolor: "background.paper",
+        }}
       >
-        {t("common.back")}
-      </Button>
-
-      <Stack direction="row" spacing={1.5} sx={{ alignItems: "center", mb: 3 }}>
-        <Avatar
-          variant="rounded"
-          sx={{
-            bgcolor: "var(--color-primary-border)",
-            color: "primary.main",
-            width: 44,
-            height: 44,
-          }}
-        >
-          <FiFolder size={20} />
-        </Avatar>
-        <Box>
-          <Typography variant="h5" sx={{ fontWeight: 700 }}>
-            {t("category.createTitle")}
-          </Typography>
-          <Typography variant="body2" color="text.secondary">
-            {t("category.createSubtitle")}
-          </Typography>
-        </Box>
-      </Stack>
 
       <Box component="form" onSubmit={handleSubmit}>
         <Stack spacing={3}>
@@ -85,7 +77,8 @@ function AddCategoryComponent({
           </Stack>
         </Stack>
       </Box>
-    </Paper>
+      </Paper>
+    </>
   );
 }
 

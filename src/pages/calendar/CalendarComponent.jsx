@@ -12,6 +12,7 @@ import {
   FiList,
 } from "react-icons/fi";
 import Loader from "../../Components/common/Loader";
+import PageHero from "../../Components/common/PageHero";
 
 const MONTH_NAMES = [
   "January",
@@ -159,9 +160,16 @@ function CalendarComponent({ orders, loading, navigate }) {
   return (
     <div
       className="flex flex-col"
-      style={{ height: "calc(100vh - 105px)", overflow: "hidden" }}
+      style={{ height: "calc(100vh - 60px)", overflow: "hidden" }}
     >
-      {/* Month Navigation Header */}
+      <PageHero
+        icon={<FiCalendar size={24} />}
+        eyebrow="Schedule"
+        title="Calendar"
+        subtitle={`${orders.length} total order${orders.length !== 1 ? "s" : ""} on the books`}
+      />
+      {/* Month Navigation Header — kept on white background so the existing
+          select/chevron controls stay legible */}
       <div className="bg-white rounded-xl shadow-lg px-6 py-4 mb-4 flex items-center justify-between flex-shrink-0">
         <div className="flex items-center gap-3">
           <div className="p-2.5 rounded-xl bg-[var(--color-primary-soft)]">

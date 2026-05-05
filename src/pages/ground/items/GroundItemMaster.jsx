@@ -25,6 +25,7 @@ import { StickyNote02Icon } from "@hugeicons/core-free-icons";
 import toast from "react-hot-toast";
 import Loader from "../../../Components/common/Loader";
 import EmptyState from "../../../Components/common/EmptyState";
+import PageHero from "../../../Components/common/PageHero";
 import { getGroundItems, getGroundCategories } from "../../../api/GroundApis";
 import AddGroundItem from "./AddGroundItem";
 import usePermissions from "../../../hooks/usePermissions";
@@ -98,49 +99,36 @@ const GroundItemMaster = () => {
   };
   const canCreateGround = hasPermission("ground.create");
 
+  const heroActionSx = {
+    bgcolor: "rgba(255,255,255,0.18)",
+    color: "var(--color-primary-contrast,white)",
+    border: "1px solid rgba(255,255,255,0.35)",
+    "&:hover": { bgcolor: "rgba(255,255,255,0.28)" },
+  };
+
   return (
-    <Paper
-      elevation={0}
-      sx={{ p: { xs: 2, sm: 3 }, borderRadius: 3, bgcolor: "background.paper" }}
-    >
-      <Stack
-        direction={{ xs: "column", md: "row" }}
-        spacing={2}
-
-
-        sx={{ alignItems: { xs: "stretch", md: "center" }, justifyContent: "space-between", mb: 3 }}
+    <>
+      <PageHero
+        icon={<HugeiconsIcon icon={StickyNote02Icon} size={24} />}
+        eyebrow="Inventory"
+        title="Ground Items"
+        subtitle="Manage inventory items and equipment used on the ground"
+        actions={
+          canCreateGround ? (
+            <Button
+              variant="contained"
+              onClick={() => setIsAddModalOpen(true)}
+              sx={heroActionSx}
+            >
+              + Add Item
+            </Button>
+          ) : null
+        }
+      />
+      <Paper
+        elevation={0}
+        sx={{ p: { xs: 2, sm: 3 }, borderRadius: 3, bgcolor: "background.paper" }}
       >
-        <Stack direction="row" spacing={1.5} sx={{ alignItems: "center" }}>
-          <Avatar
-            variant="rounded"
-            sx={{
-              bgcolor: "var(--color-primary-border)",
-              color: "primary.main",
-              width: 44,
-              height: 44,
-            }}
-          >
-            <HugeiconsIcon icon={StickyNote02Icon} size={22} />
-          </Avatar>
-          <Box>
-            <Typography variant="h5" color="text.primary" sx={{ fontWeight: 700 }}>
-              Ground Items
-            </Typography>
-            <Typography variant="body2" color="text.secondary">
-              Manage inventory items and equipment used on the ground
-            </Typography>
-          </Box>
-        </Stack>
-        {canCreateGround && (
-          <Button
-            variant="contained"
-            color="primary"
-            onClick={() => setIsAddModalOpen(true)}
-          >
-            + Add Item
-          </Button>
-        )}
-      </Stack>
 
       <Paper variant="outlined" sx={{ borderRadius: 2, overflow: "hidden" }}>
         <Stack
@@ -261,7 +249,8 @@ const GroundItemMaster = () => {
         onSuccess={handleAddSuccess}
         categories={categories}
       />
-    </Paper>
+      </Paper>
+    </>
   );
 };
 

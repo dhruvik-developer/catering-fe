@@ -23,6 +23,7 @@ import {
   FiPackage,
   FiZap,
 } from "react-icons/fi";
+import PageHero from "../../Components/common/PageHero";
 
 const BILLING_CYCLES = [
   { value: "monthly", label: "Monthly" },
@@ -46,58 +47,43 @@ function AddEditSubscriptionPlanComponent({
   onSubmit,
 }) {
   const selectedModules = form.modules || [];
+  const heroBtnSx = {
+    bgcolor: "rgba(255,255,255,0.18)",
+    color: "var(--color-primary-contrast,white)",
+    border: "1px solid rgba(255,255,255,0.35)",
+    "&:hover": { bgcolor: "rgba(255,255,255,0.28)" },
+  };
+
   return (
     <Box component="form" onSubmit={onSubmit}>
-      <Paper
-        elevation={0}
-        sx={{
-          p: { xs: 2, sm: 2.5 },
-          borderRadius: 3,
-          bgcolor: "background.paper",
-          border: "1px solid var(--app-border)",
-          mb: 2.5,
-        }}
-      >
-        <Stack
-          direction={{ xs: "column", sm: "row" }}
-          spacing={2}
-          sx={{
-            alignItems: { xs: "flex-start", sm: "center" },
-            justifyContent: "space-between",
-          }}
-        >
-          <Stack direction="row" spacing={2} sx={{ alignItems: "center" }}>
+      <PageHero
+        icon={<FiCreditCard size={24} />}
+        eyebrow="Platform"
+        title={isEdit ? "Edit Subscription Plan" : "Add Subscription Plan"}
+        subtitle="Define what tenants get and how often they pay for it."
+        actions={
+          <>
             <Button
               variant="outlined"
               startIcon={<FiArrowLeft size={16} />}
               onClick={onCancel}
+              disabled={saving}
+              sx={heroBtnSx}
             >
               Back
-            </Button>
-            <Box>
-              <Typography variant="h5" sx={{ fontWeight: 800 }}>
-                {isEdit ? "Edit Subscription Plan" : "Add Subscription Plan"}
-              </Typography>
-              <Typography variant="body2" color="text.secondary">
-                Define what tenants get and how often they pay for it.
-              </Typography>
-            </Box>
-          </Stack>
-          <Stack direction="row" spacing={1}>
-            <Button variant="outlined" onClick={onCancel} disabled={saving}>
-              Cancel
             </Button>
             <Button
               type="submit"
               variant="contained"
               startIcon={<FiCheck size={16} />}
               disabled={saving}
+              sx={heroBtnSx}
             >
               {saving ? "Saving..." : isEdit ? "Update Plan" : "Save Plan"}
             </Button>
-          </Stack>
-        </Stack>
-      </Paper>
+          </>
+        }
+      />
 
       <Card
         sx={{

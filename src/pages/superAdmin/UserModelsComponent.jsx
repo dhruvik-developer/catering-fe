@@ -20,6 +20,7 @@ import {
 } from "@mui/material";
 import { FiUsers, FiSearch, FiShield } from "react-icons/fi";
 import Loader from "../../Components/common/Loader";
+import PageHero from "../../Components/common/PageHero";
 
 const formatDate = (value) => {
   if (!value) return "-";
@@ -115,10 +116,17 @@ const UserModelsComponent = ({ loading, tenants = [] }) => {
 
   return (
     <Stack spacing={3}>
+      <PageHero
+        icon={<FiShield size={24} />}
+        eyebrow="Platform"
+        title="User Models"
+        subtitle={`${filteredUsers.length} of ${allUsers.length} users across ${tenants.length} tenant${tenants.length !== 1 ? "s" : ""}`}
+      />
+      {/* Filter row (white surface so the inputs render correctly) */}
       <Paper
         elevation={0}
         sx={{
-          p: { xs: 2.5, sm: 3 },
+          p: { xs: 2, sm: 2.5 },
           borderRadius: 3,
           bgcolor: "background.paper",
           border: "1px solid var(--app-border)",
@@ -126,69 +134,39 @@ const UserModelsComponent = ({ loading, tenants = [] }) => {
       >
         <Stack
           direction={{ xs: "column", sm: "row" }}
-          spacing={2}
-          sx={{
-            alignItems: { xs: "flex-start", sm: "center" },
-            justifyContent: "space-between",
-          }}
+          spacing={1.5}
+          sx={{ width: "100%", alignItems: "stretch" }}
         >
-          <Stack direction="row" spacing={2} sx={{ alignItems: "center" }}>
-            <Avatar
-              variant="rounded"
-              sx={{
-                bgcolor: "var(--color-primary-border)",
-                color: "primary.main",
-                width: 48,
-                height: 48,
-              }}
-            >
-              <FiShield size={22} />
-            </Avatar>
-            <Box>
-              <Typography variant="h5" sx={{ fontWeight: 700 }}>
-                User Models
-              </Typography>
-              <Typography variant="body2" color="text.secondary">
-                {filteredUsers.length} of {allUsers.length} users across {tenants.length} tenant{tenants.length !== 1 ? "s" : ""}
-              </Typography>
-            </Box>
-          </Stack>
-          <Stack
-            direction={{ xs: "column", sm: "row" }}
-            spacing={1.5}
-            sx={{ width: { xs: "100%", sm: "auto" } }}
+          <TextField
+            size="small"
+            placeholder="Search users..."
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            sx={{ flex: 1, minWidth: 220 }}
+            slotProps={{
+              input: {
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <FiSearch />
+                  </InputAdornment>
+                ),
+              },
+            }}
+          />
+          <TextField
+            select
+            size="small"
+            value={tenantFilter}
+            onChange={(e) => setTenantFilter(e.target.value)}
+            sx={{ minWidth: 200 }}
           >
-            <TextField
-              size="small"
-              placeholder="Search users..."
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              sx={{ minWidth: 220 }}
-              slotProps={{
-                input: {
-                  startAdornment: (
-                    <InputAdornment position="start">
-                      <FiSearch />
-                    </InputAdornment>
-                  ),
-                },
-              }}
-            />
-            <TextField
-              select
-              size="small"
-              value={tenantFilter}
-              onChange={(e) => setTenantFilter(e.target.value)}
-              sx={{ minWidth: 200 }}
-            >
-              <MenuItem value="all">All tenants</MenuItem>
-              {tenants.map((t) => (
-                <MenuItem key={t.id} value={t.id}>
-                  {t.name}
-                </MenuItem>
-              ))}
-            </TextField>
-          </Stack>
+            <MenuItem value="all">All tenants</MenuItem>
+            {tenants.map((t) => (
+              <MenuItem key={t.id} value={t.id}>
+                {t.name}
+              </MenuItem>
+            ))}
+          </TextField>
         </Stack>
       </Paper>
 

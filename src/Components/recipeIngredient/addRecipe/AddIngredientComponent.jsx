@@ -9,9 +9,10 @@ import {
   Typography,
 } from "@mui/material";
 import { FaTimes } from "react-icons/fa";
-import { FiArrowLeft } from "react-icons/fi";
+import { FiArrowLeft, FiBookOpen } from "react-icons/fi";
 import { motion, AnimatePresence } from "framer-motion";
 import Dropdown from "../../common/formDropDown/DropDown";
+import PageHero from "../../common/PageHero";
 
 function AddIngredientComponent({
   items,
@@ -29,26 +30,36 @@ function AddIngredientComponent({
   const selectedItemName = items.find((item) => item.id === selectedItem)?.name;
 
   return (
-    <Paper
-      elevation={0}
-      sx={{
-        p: { xs: 2, sm: 3 },
-        borderRadius: 3,
-        bgcolor: "background.paper",
-        mt: 5,
-      }}
-    >
-      <Button
-        variant="outlined"
-        startIcon={<FiArrowLeft size={16} />}
-        onClick={() => navigate(-1)}
-        sx={{ mb: 2 }}
+    <>
+      <PageHero
+        icon={<FiBookOpen size={24} />}
+        eyebrow="Recipes"
+        title="Add Recipe Ingredient"
+        subtitle="Tie ingredients (and quantities) to one of your menu items."
+        actions={
+          <Button
+            variant="outlined"
+            startIcon={<FiArrowLeft size={16} />}
+            onClick={() => navigate(-1)}
+            sx={{
+              bgcolor: "rgba(255,255,255,0.18)",
+              color: "var(--color-primary-contrast,white)",
+              border: "1px solid rgba(255,255,255,0.35)",
+              "&:hover": { bgcolor: "rgba(255,255,255,0.28)" },
+            }}
+          >
+            Back
+          </Button>
+        }
+      />
+      <Paper
+        elevation={0}
+        sx={{
+          p: { xs: 2, sm: 3 },
+          borderRadius: 3,
+          bgcolor: "background.paper",
+        }}
       >
-        Back
-      </Button>
-      <Typography variant="h5" sx={{ fontWeight: 700, mb: 3 }}>
-        Add Recipe Ingredient
-      </Typography>
 
       <Box component="form" onSubmit={handleSubmit}>
         <Stack spacing={2.5}>
@@ -167,7 +178,8 @@ function AddIngredientComponent({
           </Stack>
         </Stack>
       </Box>
-    </Paper>
+      </Paper>
+    </>
   );
 }
 
