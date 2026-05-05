@@ -2,6 +2,7 @@ import { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { UserContext } from "../../context/UserContext";
 import { postLogin } from "../../api/AuthApis";
+import tokenService from "../../services/tokenService";
 import toast from "react-hot-toast";
 import LoginComponent from "./LoginComponent";
 import { getAllBusinessProfiles } from "../../api/BusinessProfile";
@@ -78,6 +79,7 @@ function LoginController() {
       const response = await postLogin(credentials);
       const loginData = response?.data?.data;
       const access = loginData?.tokens?.access;
+      const refresh = loginData?.tokens?.refresh;
       const username = loginData?.username;
       const userType = loginData?.user_type;
       const permissions = loginData?.permissions || [];
@@ -88,6 +90,11 @@ function LoginController() {
         throw new Error("Invalid login response");
       }
 
+      // Save refresh token so the axios interceptor can use it to silently
+      // mint a fresh access token when this one expires.
+      if (refresh) {
+        tokenService.setRefreshToken(refresh);
+      }
       login(access, username, userType, permissions, enabledModules, tenant);
       toast.success(response?.data?.message || "Login successfully");
       const target = isPlatformAdminHost()

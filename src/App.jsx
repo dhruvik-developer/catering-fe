@@ -148,13 +148,13 @@ const App = () => {
         const primaryColor = resolvePrimaryColor(apiColorCode);
         dispatch(setPrimaryColor(primaryColor));
 
-        // Tab title becomes "<first word of caters_name> Admin" so a tenant
-        // called "Pruthvi - A Luxury Catering" shows as "Pruthvi Admin".
+        // Tab title becomes "<first word of caters_name> Catering" so a tenant
+        // called "Pruthvi - A Luxury Catering" shows as "Pruthvi Catering".
         if (!isPlatformAdminHost()) {
           const catersName = profileList[0]?.caters_name?.trim();
           if (catersName) {
             const firstWord = catersName.split(/[\s-]+/)[0];
-            document.title = `${firstWord} Admin`;
+            document.title = `${firstWord} Catering`;
           }
         }
       } catch {

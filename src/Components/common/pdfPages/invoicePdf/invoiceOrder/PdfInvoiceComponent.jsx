@@ -110,7 +110,7 @@ function PdfInvoiceComponent({
                   >
                     {businessProfile?.caters_name || "Radha Caterers"}
                   </h2>
-                  <p className="text-sm text-white/90 font-medium whitespace-nowrap">
+                  <p className="text-sm text-white/90 font-medium leading-snug">
                     {businessProfile?.godown_address ||
                       "Radha Caterers, second floor, Krishna Row House, Parvati Nagar, Nana Varachha, Surat, Gujarat 395006."}
                   </p>
@@ -145,11 +145,8 @@ function PdfInvoiceComponent({
 
                 {/* Logo & Ref */}
                 {/* Logo & Ref */}
-                <div className="flex flex-col items-end w-1/3">
-                  <div className="text-right mt-16">
-                    <p className="text-xs text-white/80 font-bold tracking-widest uppercase mb-1">
-                      Invoice Number
-                    </p>
+                <div className="flex flex-col items-end w-1/3 mt-20">
+                  <div className="text-right mt-20">
                     <p className="text-sm font-bold text-white bg-white/20 border border-white/30 px-3 py-1.5 rounded-lg shadow-inner">
                       {uniqueKey}
                     </p>
@@ -161,7 +158,7 @@ function PdfInvoiceComponent({
                   <BaseImage
                     src={businessProfile?.logo || "/logo1.png"}
                     alt="radha Logo"
-                    className="w-28 h-auto object-contain drop-shadow-sm"
+                    className="w-28 h-28 object-contain drop-shadow-sm"
                   />
                 </div>
               </div>

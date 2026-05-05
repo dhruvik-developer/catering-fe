@@ -16,7 +16,10 @@
  * For React components, prefer the `useTranslated` hook or `<TText>` wrapper.
  */
 
-const CACHE_PREFIX = "i18n_dyn_v1_";
+// Bump the version suffix to invalidate cached entries when the sanitizer
+// rules change (we did this when we found MyMemory was leaking <g id="N">
+// segment-preservation tags into cached values).
+const CACHE_PREFIX = "i18n_dyn_v2_";
 
 const cacheKey = (text, source, target) =>
   `${CACHE_PREFIX}${source}_${target}_${text}`;
@@ -45,6 +48,34 @@ const writeCache = (key, value) => {
 
 // ---------- providers ----------
 
+// Strip artefacts MyMemory injects into its "translatedText" payload.
+// Examples we've actually seen:
+//   "<g id=\"1\"> ઉંધીયુ</g>"            -> segment-preservation wrapper
+//   "MYMEMORY WARNING: ..."              -> rate-limit / quota notes prepended
+//   "QUERY LENGTH LIMIT EXCEEDED. ..."   -> input too long
+// If the cleaned result is empty or still looks like a warning, treat the
+// translation as failed so the caller can fall back to the source string.
+const sanitizeMyMemoryOutput = (raw) => {
+  if (typeof raw !== "string") return "";
+  let out = raw;
+
+  // Drop the <g id="N">…</g> / <x …/> placeholders MyMemory wraps around segments.
+  out = out.replace(/<\/?g[^>]*>/gi, "");
+  out = out.replace(/<x\b[^>]*\/?>/gi, "");
+  // Decode the most common HTML entities that show up in responses.
+  out = out
+    .replace(/&amp;/g, "&")
+    .replace(/&lt;/g, "<")
+    .replace(/&gt;/g, ">")
+    .replace(/&quot;/g, '"')
+    .replace(/&#39;/g, "'");
+
+  out = out.trim();
+  if (/^MYMEMORY WARNING/i.test(out)) return "";
+  if (/QUERY LENGTH LIMIT EXCEEDED/i.test(out)) return "";
+  return out;
+};
+
 // MyMemory — free, no key, ~5000 chars/day per IP. Good enough for prototyping.
 async function mymemoryProvider(text, source, target) {
   const url =
@@ -53,9 +84,9 @@ async function mymemoryProvider(text, source, target) {
   const res = await fetch(url);
   if (!res.ok) throw new Error(`MyMemory ${res.status}`);
   const data = await res.json();
-  const out = data?.responseData?.translatedText;
-  if (!out) throw new Error("MyMemory: no translation in response");
-  return out;
+  const cleaned = sanitizeMyMemoryOutput(data?.responseData?.translatedText);
+  if (!cleaned) throw new Error("MyMemory: empty / warning response");
+  return cleaned;
 }
 
 // Swap-in candidates, all match the (text, source, target) => Promise<string> shape:

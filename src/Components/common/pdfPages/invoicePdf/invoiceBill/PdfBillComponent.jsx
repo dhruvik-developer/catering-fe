@@ -160,7 +160,7 @@ function PdfBillComponent({
                   >
                     {businessProfile?.caters_name || "Radha Caterers"}
                   </h2>
-                  <p className="text-sm text-white/90 font-medium whitespace-nowrap">
+                  <p className="text-sm text-white/90 font-medium leading-snug">
                     {businessProfile?.godown_address ||
                       "Radha Caterers, second floor, Krishna Row House, Parvati Nagar, Nana Varachha, Surat, Gujarat 395006."}
                   </p>
@@ -203,7 +203,7 @@ function PdfBillComponent({
                   <BaseImage
                     src={businessProfile?.logo || "/logo1.png"}
                     alt="radha Logo"
-                    className="w-28 h-auto object-contain drop-shadow-sm"
+                    className="w-28 h-28 object-contain drop-shadow-sm"
                   />
                 </div>
               </div>

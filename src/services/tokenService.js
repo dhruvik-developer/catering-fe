@@ -1,6 +1,7 @@
 import { getTenantScopedStorageKey } from "./tenantRuntime";
 
 const TOKEN_STORAGE_KEY = "accessToken";
+const REFRESH_TOKEN_STORAGE_KEY = "refreshToken";
 const USERNAME_STORAGE_KEY = "username";
 const USER_TYPE_STORAGE_KEY = "userType";
 const PERMISSIONS_STORAGE_KEY = "permissions";
@@ -11,6 +12,13 @@ export const USER_ROLE_ADMIN = "admin";
 let accessToken =
   typeof window !== "undefined"
     ? window.localStorage.getItem(getTenantScopedStorageKey(TOKEN_STORAGE_KEY))
+    : null;
+
+let refreshToken =
+  typeof window !== "undefined"
+    ? window.localStorage.getItem(
+        getTenantScopedStorageKey(REFRESH_TOKEN_STORAGE_KEY),
+      )
     : null;
 
 const storage = {
@@ -30,6 +38,7 @@ const storage = {
 
 const tokenService = {
   getToken: () => accessToken,
+  getRefreshToken: () => refreshToken,
   getUsername: () =>
     storage.get(USERNAME_STORAGE_KEY),
   getUserType: () =>
@@ -75,6 +84,18 @@ const tokenService = {
     }
 
     storage.remove(TOKEN_STORAGE_KEY);
+  },
+  setRefreshToken: (token) => {
+    refreshToken = token;
+
+    if (typeof window === "undefined") return;
+
+    if (token) {
+      storage.set(REFRESH_TOKEN_STORAGE_KEY, token);
+      return;
+    }
+
+    storage.remove(REFRESH_TOKEN_STORAGE_KEY);
   },
   setUsername: (username) => {
     if (typeof window === "undefined") return;
@@ -134,10 +155,12 @@ const tokenService = {
   },
   clearAuth: () => {
     accessToken = null;
+    refreshToken = null;
 
     if (typeof window === "undefined") return;
 
     storage.remove(TOKEN_STORAGE_KEY);
+    storage.remove(REFRESH_TOKEN_STORAGE_KEY);
     storage.remove(USERNAME_STORAGE_KEY);
     storage.remove(USER_TYPE_STORAGE_KEY);
     storage.remove(PERMISSIONS_STORAGE_KEY);
