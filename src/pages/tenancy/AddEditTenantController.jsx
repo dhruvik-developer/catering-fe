@@ -61,6 +61,44 @@ const buildDomainPayload = (domains = []) => {
   }));
 };
 
+const toIsoDate = (date) => {
+  const y = date.getFullYear();
+  const m = String(date.getMonth() + 1).padStart(2, "0");
+  const d = String(date.getDate()).padStart(2, "0");
+  return `${y}-${m}-${d}`;
+};
+
+// Auto-compute subscription window from the selected plan.
+// end = today + trial_days + billing cycle. Lifetime plans have no end date.
+const computeSubscriptionDates = (plan) => {
+  if (!plan) return { start: "", end: "" };
+
+  const trialDays = Number(plan.trial_days) || 0;
+  const cycle = String(plan.billing_cycle || plan.interval || "").toLowerCase();
+
+  const start = new Date();
+  const end = new Date(start);
+  end.setDate(end.getDate() + trialDays);
+
+  switch (cycle) {
+    case "monthly":
+      end.setMonth(end.getMonth() + 1);
+      break;
+    case "quarterly":
+      end.setMonth(end.getMonth() + 3);
+      break;
+    case "yearly":
+      end.setFullYear(end.getFullYear() + 1);
+      break;
+    case "lifetime":
+      return { start: toIsoDate(start), end: "" };
+    default:
+      break;
+  }
+
+  return { start: toIsoDate(start), end: toIsoDate(end) };
+};
+
 function AddEditTenantController() {
   const navigate = useNavigate();
   const { id } = useParams();
@@ -142,6 +180,20 @@ function AddEditTenantController() {
 
   const onChange = (e) => {
     const { name, value } = e.target;
+
+    if (name === "subscription_plan") {
+      const plan = plans.find((p) => String(p.id) === String(value));
+      const dates = computeSubscriptionDates(plan);
+      setForm((prev) => ({
+        ...prev,
+        subscription_plan: value,
+        subscription_start_date: plan ? dates.start : prev.subscription_start_date,
+        subscription_end_date: plan ? dates.end : prev.subscription_end_date,
+      }));
+      setErrors((prev) => ({ ...prev, [name]: "" }));
+      return;
+    }
+
     setForm((prev) => ({ ...prev, [name]: value }));
     setErrors((prev) => ({ ...prev, [name]: "" }));
   };

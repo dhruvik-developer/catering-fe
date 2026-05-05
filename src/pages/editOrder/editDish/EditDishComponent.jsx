@@ -1269,7 +1269,7 @@ function EditDishComponent({
         open={!!activeDishModal}
         onClose={closeDishModal} fullWidth
         maxWidth="md"
-        PaperProps={{ sx: { maxHeight: "85vh" } }}
+        slotProps={{ paper: { sx: { maxHeight: "85vh" } } }}
       >
         <DialogTitle sx={{ pb: 1 }}>
           <Stack

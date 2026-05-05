@@ -592,14 +592,16 @@ const Header = ({ toggleSidebar }) => {
             anchorEl={lowStockAnchor}
             open={Boolean(lowStockAnchor)}
             onClose={closeLowStock}
-            PaperProps={{
-              sx: {
-                width: 340,
-                maxHeight: 420,
-                mt: 1,
-                bgcolor: "var(--app-surface-strong)",
-                border: "1px solid var(--app-border)",
-                boxShadow: "var(--app-shadow)",
+            slotProps={{
+              paper: {
+                sx: {
+                  width: 340,
+                  maxHeight: 420,
+                  mt: 1,
+                  bgcolor: "var(--app-surface-strong)",
+                  border: "1px solid var(--app-border)",
+                  boxShadow: "var(--app-shadow)",
+                },
               },
             }}
             anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
@@ -769,14 +771,16 @@ const Header = ({ toggleSidebar }) => {
             anchorEl={upcomingAnchor}
             open={Boolean(upcomingAnchor)}
             onClose={closeUpcoming}
-            PaperProps={{
-              sx: {
-                width: 340,
-                maxHeight: 420,
-                mt: 1,
-                bgcolor: "var(--app-surface-strong)",
-                border: "1px solid var(--app-border)",
-                boxShadow: "var(--app-shadow)",
+            slotProps={{
+              paper: {
+                sx: {
+                  width: 340,
+                  maxHeight: 420,
+                  mt: 1,
+                  bgcolor: "var(--app-surface-strong)",
+                  border: "1px solid var(--app-border)",
+                  boxShadow: "var(--app-shadow)",
+                },
               },
             }}
             anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
@@ -1021,13 +1025,15 @@ const Header = ({ toggleSidebar }) => {
             anchorEl={profileAnchor}
             open={Boolean(profileAnchor)}
             onClose={closeProfile}
-            PaperProps={{
-              sx: {
-                width: 180,
-                mt: 1,
-                bgcolor: "var(--app-surface-strong)",
-                border: "1px solid var(--app-border)",
-                boxShadow: "var(--app-shadow)",
+            slotProps={{
+              paper: {
+                sx: {
+                  width: 180,
+                  mt: 1,
+                  bgcolor: "var(--app-surface-strong)",
+                  border: "1px solid var(--app-border)",
+                  boxShadow: "var(--app-shadow)",
+                },
               },
             }}
             anchorOrigin={{ vertical: "bottom", horizontal: "right" }}

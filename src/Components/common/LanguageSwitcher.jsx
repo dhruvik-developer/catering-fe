@@ -60,13 +60,15 @@ const LanguageSwitcher = () => {
         anchorEl={anchorEl}
         open={open}
         onClose={close}
-        PaperProps={{
-          sx: {
-            mt: 1,
-            minWidth: 160,
-            bgcolor: "var(--app-surface-strong)",
-            border: "1px solid var(--app-border)",
-            boxShadow: "var(--app-shadow)",
+        slotProps={{
+          paper: {
+            sx: {
+              mt: 1,
+              minWidth: 160,
+              bgcolor: "var(--app-surface-strong)",
+              border: "1px solid var(--app-border)",
+              boxShadow: "var(--app-shadow)",
+            },
           },
         }}
         anchorOrigin={{ vertical: "bottom", horizontal: "right" }}

@@ -164,12 +164,14 @@ const UserModelsComponent = ({ loading, tenants = [] }) => {
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               sx={{ minWidth: 220 }}
-              InputProps={{
-                startAdornment: (
-                  <InputAdornment position="start">
-                    <FiSearch />
-                  </InputAdornment>
-                ),
+              slotProps={{
+                input: {
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <FiSearch />
+                    </InputAdornment>
+                  ),
+                },
               }}
             />
             <TextField

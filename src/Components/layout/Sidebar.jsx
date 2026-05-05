@@ -267,17 +267,19 @@ function Sidebar() {
             }
           : undefined
       }
-      PaperProps={{
-        sx: {
-          width: SIDEBAR_WIDTH,
-          bgcolor: "rgba(255,255,255,0.9)",
-          backgroundImage:
-            "linear-gradient(180deg, rgba(255,255,255,0.96), rgba(248,250,252,0.9))",
-          backdropFilter: "blur(18px)",
-          border: 0,
-          borderRight: 1,
-          borderColor: "var(--app-border)",
-          boxShadow: "10px 0 36px -34px rgba(15, 23, 42, 0.55)",
+      slotProps={{
+        paper: {
+          sx: {
+            width: SIDEBAR_WIDTH,
+            bgcolor: "rgba(255,255,255,0.9)",
+            backgroundImage:
+              "linear-gradient(180deg, rgba(255,255,255,0.96), rgba(248,250,252,0.9))",
+            backdropFilter: "blur(18px)",
+            border: 0,
+            borderRight: 1,
+            borderColor: "var(--app-border)",
+            boxShadow: "10px 0 36px -34px rgba(15, 23, 42, 0.55)",
+          },
         },
       }}
     >
@@ -414,9 +416,11 @@ function Sidebar() {
                 </Avatar>
                 <ListItemText
                   primary={t(item.labelKey, { defaultValue: item.name })}
-                  primaryTypographyProps={{
-                    fontWeight: 600,
-                    fontSize: "0.95rem",
+                  slotProps={{
+                    primary: {
+                      fontWeight: 600,
+                      fontSize: "0.95rem",
+                    },
                   }}
                 />
               </ListItemButton>

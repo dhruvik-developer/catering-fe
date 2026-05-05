@@ -180,11 +180,13 @@ function AddEditSubscriptionPlanComponent({
             onChange={onChange}
             error={!!errors.price}
             helperText={errors.price || ""}
-            InputProps={{
-              startAdornment: (
-                <InputAdornment position="start">₹</InputAdornment>
-              ),
-              inputProps: { min: 0, step: "0.01" },
+            slotProps={{
+              input: {
+                startAdornment: (
+                  <InputAdornment position="start">₹</InputAdornment>
+                ),
+              },
+              htmlInput: { min: 0, step: "0.01" },
             }}
           />
           <TextField
@@ -210,7 +212,7 @@ function AddEditSubscriptionPlanComponent({
             value={form.max_users}
             onChange={onChange}
             helperText="0 means unlimited users"
-            InputProps={{ inputProps: { min: 0, step: 1 } }}
+            slotProps={{ htmlInput: { min: 0, step: 1 } }}
           />
           <TextField
             fullWidth
@@ -220,7 +222,7 @@ function AddEditSubscriptionPlanComponent({
             value={form.trial_days}
             onChange={onChange}
             helperText="0 disables the free trial"
-            InputProps={{ inputProps: { min: 0, step: 1 } }}
+            slotProps={{ htmlInput: { min: 0, step: 1 } }}
           />
         </Box>
 

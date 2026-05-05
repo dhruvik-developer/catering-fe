@@ -380,19 +380,21 @@ function AddEditTenantComponent({
                   : "")
               }
               sx={{ gridColumn: { sm: "span 2" } }}
-              InputProps={{
-                endAdornment: (
-                  <InputAdornment position="end">
-                    <IconButton
-                      size="small"
-                      edge="end"
-                      onClick={() => setShowPassword((s) => !s)}
-                      disabled={isEdit}
-                    >
-                      {showPassword ? <FaEyeSlash /> : <FaEye />}
-                    </IconButton>
-                  </InputAdornment>
-                ),
+              slotProps={{
+                input: {
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      <IconButton
+                        size="small"
+                        edge="end"
+                        onClick={() => setShowPassword((s) => !s)}
+                        disabled={isEdit}
+                      >
+                        {showPassword ? <FaEyeSlash /> : <FaEye />}
+                      </IconButton>
+                    </InputAdornment>
+                  ),
+                },
               }}
             />
           </Box>
