@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { logError } from "../../../utils/logger";
 import {
   Avatar,
   Box,
@@ -43,7 +44,7 @@ const GroundCategoryMaster = () => {
         toast.error(res?.data?.message || "Failed to fetch categories");
       }
     } catch (error) {
-      console.error(error);
+      logError(error);
     } finally {
       setLoading(false);
     }

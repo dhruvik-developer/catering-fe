@@ -1,4 +1,5 @@
 import { useCallback, useState, useEffect } from "react";
+import { logError } from "../../../utils/logger";
 import {
   Avatar,
   Box,
@@ -57,7 +58,7 @@ const EventGroundChecklist = () => {
         );
       }
     } catch (error) {
-      console.error(error);
+      logError(error);
       toast.error("Failed to load ground categories");
     } finally {
       setLoading(false);
@@ -115,7 +116,7 @@ const EventGroundChecklist = () => {
             }
             fetchCategories();
           } catch (error) {
-            console.error(error);
+            logError(error);
           }
         }
       });
@@ -155,7 +156,7 @@ const EventGroundChecklist = () => {
             toast.success("Item deleted successfully");
             fetchCategories();
           } catch (error) {
-            console.error(error);
+            logError(error);
           }
         }
       });

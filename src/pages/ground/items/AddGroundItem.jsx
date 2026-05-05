@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { FiX } from "react-icons/fi";
 import toast from "react-hot-toast";
 import { createGroundItem, updateGroundItem } from "../../../api/GroundApis";
+import { logError } from "../../../utils/logger";
 
 // eslint-disable-next-line react/prop-types
 const AddGroundItem = ({ isOpen, onClose, onSuccess, categories = [], editData = null }) => {
@@ -73,7 +74,7 @@ const AddGroundItem = ({ isOpen, onClose, onSuccess, categories = [], editData =
         toast.error(res?.data?.message || `Failed to ${isEditMode ? "update" : "create"} item`);
       }
     } catch (error) {
-      console.error(error);
+      logError(error);
     } finally {
       setLoading(false);
     }

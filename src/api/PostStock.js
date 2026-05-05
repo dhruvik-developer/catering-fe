@@ -1,5 +1,6 @@
 import toast from "react-hot-toast";
 import ApiInstance from "../services/ApiInstance";
+import { logError } from "../utils/logger";
 
 export const addStockCategory = async (name) => {
   try {
@@ -17,7 +18,7 @@ export const addStockCategory = async (name) => {
       return null;
     }
   } catch (error) {
-    console.error("Add Category API Error:", error);
+    logError("Add Category API Error:", error);
     toast.error("Failed to add category");
     return null;
   }
@@ -39,7 +40,7 @@ export const addStockItem = async (itemData) => {
       return null;
     }
   } catch (error) {
-    console.error("Add Stock Item API Error:", error);
+    logError("Add Stock Item API Error:", error);
     toast.error("Failed to add item");
     return null;
   }
@@ -61,7 +62,7 @@ export const increaseStockItem = async (stockData) => {
       return null;
     }
   } catch (error) {
-    console.error("Increase Stock API Error:", error);
+    logError("Increase Stock API Error:", error);
     toast.error("Failed to add stock");
     return null;
   }
@@ -83,7 +84,7 @@ export const decreaseStockItem = async (stockData) => {
       return null;
     }
   } catch (error) {
-    console.error("Decrease Stock API Error:", error);
+    logError("Decrease Stock API Error:", error);
     toast.error("Failed to remove stock");
     return null;
   }

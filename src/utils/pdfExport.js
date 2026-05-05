@@ -1,5 +1,7 @@
 import html2pdf from "html2pdf.js";
 import html2canvas from "html2canvas";
+import DOMPurify from "dompurify";
+import { logError } from "./logger";
 import {
   ensureUnicodeWebFontsReady,
   PDF_UNICODE_DEFAULT_FONT,
@@ -29,11 +31,23 @@ export function clearPdfTemplateCache() {
   defaultFormatterPromise = null;
 }
 
+// DOMParser doesn't execute scripts during parse, but the moment we attach
+// the parsed nodes to the live document any `<img onerror>`, `<svg onload>`
+// or `<iframe srcdoc>` fires. Templates are admin-authored, but DOMPurify
+// gives us a hardened, audited stripper for defense-in-depth before the tree
+// touches the DOM. We allow <style> because the template ships its own page
+// CSS; DOMPurify keeps it but still blocks everything dangerous.
+const TEMPLATE_PURIFY_CONFIG = {
+  ADD_TAGS: ["style"],
+  FORBID_TAGS: ["script", "iframe", "object", "embed", "base", "meta", "link"],
+};
+
 function applyTemplateWrap(clone, templateHtml) {
   if (!templateHtml) return clone;
+  const safeHtml = DOMPurify.sanitize(templateHtml, TEMPLATE_PURIFY_CONFIG);
   let parsed;
   try {
-    parsed = new DOMParser().parseFromString(templateHtml, "text/html");
+    parsed = new DOMParser().parseFromString(safeHtml, "text/html");
   } catch {
     return clone;
   }
@@ -403,7 +417,7 @@ export async function exportToPDF(
       toast.success("PDF downloaded successfully!", { id: toastId });
     }
   } catch (err) {
-    console.error("PDF generation failed:", err);
+    logError("PDF generation failed:", err);
     if (toast?.error && toastId) {
       toast.error("Failed to generate PDF.", { id: toastId });
     }
@@ -513,7 +527,7 @@ export async function generatePdfBlob(
     await applyUnicodeFontToHtml2PdfWorker(worker);
     return await worker.output("blob");
   } catch (err) {
-    console.error("PDF preview generation failed:", err);
+    logError("PDF preview generation failed:", err);
     return null;
   } finally {
     if (wrapper && wrapper.parentNode) {
@@ -683,7 +697,7 @@ export async function shareToWhatsApp(
       window.open(whatsappUrl, "_blank");
     }
   } catch (err) {
-    console.error("WhatsApp share failed:", err);
+    logError("WhatsApp share failed:", err);
     if (toast?.error && toastId) {
       toast.error("Failed to share PDF.", { id: toastId });
     }

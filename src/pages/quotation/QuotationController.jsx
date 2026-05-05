@@ -10,6 +10,7 @@ import { updateQuotation } from "../../api/PostQuotation";
 import { addPayment } from "../../api/PostAllOrder";
 import { useQuotations } from "../../hooks/useQuotations";
 import { useTranslation } from "react-i18next";
+import { logError } from "../../utils/logger";
 
 function QuotationController() {
   const { t } = useTranslation();
@@ -224,12 +225,12 @@ function QuotationController() {
           }
         } catch (error) {
           toast.error(t("quotation.messages.confirmFailed"));
-          console.error(error);
+          logError(error);
         }
       }
     } catch (error) {
       toast.error(t("quotation.messages.confirmFailed"));
-      console.error(error);
+      logError(error);
     }
   };
 

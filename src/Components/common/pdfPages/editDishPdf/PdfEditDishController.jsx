@@ -6,6 +6,7 @@ import toast from "react-hot-toast";
 import { exportToPDF } from "../../../../utils/pdfExport";
 import { getAllBusinessProfiles } from "../../../../api/BusinessProfile";
 import { generatePdfFilename } from "../../../../utils/generatePdfFilename";
+import { logError } from "../../../../utils/logger";
 
 const PDFViewPage = () => {
   const location = useLocation();
@@ -52,7 +53,7 @@ const PDFViewPage = () => {
         }
       }
     } catch (error) {
-      console.error("Error updating event booking:", error);
+      logError("Error updating event booking:", error);
     }
   };
 

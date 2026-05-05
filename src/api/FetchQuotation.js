@@ -1,5 +1,6 @@
 import toast from "react-hot-toast";
 import ApiInstance from "../services/ApiInstance";
+import { logError } from "../utils/logger";
 
 export const getQuotation = async (params = {}) => {
   try {
@@ -18,6 +19,6 @@ export const getSingleQuotation = async (id) => {
     return response;
   } catch (error) {
     toast.error("Error fetching quotation details");
-    console.error("API Error:", error);
+    logError("Fetch Quotation API Error:", error);
   }
 };

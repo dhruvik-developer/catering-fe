@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import ExpenseComponent from "./ExpenseComponent";
 import { getExpenses, getExpenseCategories } from "../../api/FetchExpense";
+import { logError } from "../../utils/logger";
 import {
   createExpense,
   updateExpense,
@@ -328,7 +329,7 @@ function ExpenseController() {
       } catch (error) {
         Swal.close();
         toast.error("Error deleting some expenses. Please try again.");
-        console.error("Error deleting expenses:", error);
+        logError("Error deleting expenses:", error);
         return;
       }
     }

@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { FiUsers, FiPlus, FiEdit2, FiTrash2, FiX, FiCheckCircle, FiDollarSign } from "react-icons/fi";
+import { logError } from "../../utils/logger";
 import {
   getWaiterTypes,
   createWaiterType,
@@ -23,7 +24,7 @@ const waitersFromApi = async (setWaiterTypes, setLoading) => {
   } catch (err) {
     setWaiterTypes([]);
     toast.error("Error fetching waiter types");
-    console.error(err);
+    logError(err);
   } finally {
     setLoading(false);
   }
@@ -62,7 +63,7 @@ const WaiterTypeManagement = () => {
       setIsAddModalOpen(false);
       waitersFromApi(setWaiterTypes, setLoading);
     } catch (error) {
-      console.error(error);
+      logError(error);
       toast.error("Failed to add waiter type");
     }
   };
@@ -88,7 +89,7 @@ const WaiterTypeManagement = () => {
       setEditMode((prev) => ({ ...prev, [type.id]: false }));
       waitersFromApi(setWaiterTypes, setLoading);
     } catch (error) {
-      console.error(error);
+      logError(error);
       toast.error("Failed to update waiter type");
     }
   };
@@ -115,7 +116,7 @@ const WaiterTypeManagement = () => {
             toast.success("Waiter type deleted successfully");
             waitersFromApi(setWaiterTypes, setLoading);
           } catch (error) {
-            console.error(error);
+            logError(error);
             toast.error("Failed to delete waiter type");
           }
         }

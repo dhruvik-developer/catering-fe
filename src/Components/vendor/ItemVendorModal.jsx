@@ -1,5 +1,6 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import toast from "react-hot-toast";
+import { logError } from "../../utils/logger";
 import {
   assignItemVendor,
   getItemVendorAssignments,
@@ -30,7 +31,7 @@ const ItemVendorModal = ({ isOpen, onClose, session, eventId }) => {
       });
       setAssignments(newAssignments);
     } catch (err) {
-      console.error(err);
+      logError(err);
       toast.error("Failed to load item configuration");
     } finally {
       setLoading(false);
@@ -67,7 +68,7 @@ const ItemVendorModal = ({ isOpen, onClose, session, eventId }) => {
         },
       }));
     } catch (err) {
-      console.error(err);
+      logError(err);
       toast.error("Failed to update item configuration");
     }
   };

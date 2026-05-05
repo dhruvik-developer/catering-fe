@@ -295,7 +295,10 @@ const CategoryTable = ({
               {filteredData.length > 0 ? (
                 <Grid container spacing={1.5}>
                   {filteredData.map((item) => {
-                    const isItem = item.hasOwnProperty("category");
+                    const isItem = Object.prototype.hasOwnProperty.call(
+                      item,
+                      "category"
+                    );
                     return (
                       <Grid key={item.id} size={{ xs: 12, sm: 6, xl: 4 }}>
                         <Paper

@@ -1,5 +1,6 @@
 import toast from "react-hot-toast";
 import ApiInstance from "../services/ApiInstance";
+import { logError } from "../utils/logger";
 
 export const updateEventBooking = async (id, data) => {
   try {
@@ -12,7 +13,7 @@ export const updateEventBooking = async (id, data) => {
       return null;
     }
   } catch (error) {
-    console.error("Error updating event booking:", error);
+    logError("Error updating event booking:", error);
     toast.error("Something went wrong! Please try again.");
     return null;
   }

@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { logError } from "../../../utils/logger";
 import {
   Avatar,
   Box,
@@ -57,7 +58,7 @@ const GroundItemMaster = () => {
         setCategories(catRes.data.data.filter((c) => c.is_active));
       }
     } catch (error) {
-      console.error(error);
+      logError(error);
     } finally {
       setLoading(false);
     }
@@ -71,7 +72,7 @@ const GroundItemMaster = () => {
         setItems(res.data.data);
       }
     } catch (error) {
-      console.error(error);
+      logError(error);
     } finally {
       setLoading(false);
     }

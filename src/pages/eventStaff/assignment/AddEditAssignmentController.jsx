@@ -1,6 +1,7 @@
 import { useState, useEffect, useMemo } from "react";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import toast from "react-hot-toast";
+import { logError } from "../../../utils/logger";
 import {
   createAssignment,
   getSingleAssignment,
@@ -112,7 +113,7 @@ function AddEditAssignmentController() {
         }
       } catch (error) {
         toast.error("Error loading required data");
-        console.error("API Error:", error);
+        logError("API Error:", error);
       } finally {
         setLoading(false);
       }
@@ -398,7 +399,7 @@ function AddEditAssignmentController() {
             }
           } catch (err) {
             failCount++;
-            console.error(
+            logError(
               `Failed to assign ${staffObj?.name || "staff"}:`,
               err
             );
@@ -425,7 +426,7 @@ function AddEditAssignmentController() {
         error?.response?.data?.message ||
           `Error ${mode === "add" ? "creating" : "updating"} assignment`
       );
-      console.error("API Error:", error);
+      logError("API Error:", error);
 
       if (
         error?.response?.data &&

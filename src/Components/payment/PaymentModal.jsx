@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
+import { logError } from "../../utils/logger";
 import {
   FiX,
   FiDollarSign,
@@ -64,7 +65,7 @@ function PaymentModal({ isOpen, onClose, bookingId, onPaymentSuccess }) {
         toast.error("Failed to fetch payment details.");
       }
     } catch (error) {
-      console.error(error);
+      logError(error);
       toast.error("Error fetching payment details.");
     } finally {
       setLoading(false);
@@ -127,7 +128,7 @@ function PaymentModal({ isOpen, onClose, bookingId, onPaymentSuccess }) {
         onClose();
       }
     } catch (error) {
-      console.error(error);
+      logError(error);
     } finally {
       setSubmitting(false);
     }

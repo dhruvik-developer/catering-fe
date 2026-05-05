@@ -5,6 +5,7 @@ import ViewOrderDetailsComponent from "./ViewOrderDetailsComponent";
 import { getSingleOrder } from "../../api/FetchAllOrder";
 import { getAllBusinessProfiles } from "../../api/BusinessProfile";
 import { updateEventBooking } from "../../api/PutEventBooking";
+import { logError } from "../../utils/logger";
 function ViewOrderDetailsController() {
   const { id } = useParams();
   const navigate = useNavigate();
@@ -24,7 +25,7 @@ function ViewOrderDetailsController() {
       }
     } catch (error) {
       toast.error("Error fetching order details");
-      console.error("API Error:", error);
+      logError("API Error:", error);
     } finally {
       setLoading(false);
     }
@@ -38,7 +39,7 @@ function ViewOrderDetailsController() {
         setCatererNameProfile(response.data[0].cater_name || "");
       }
     } catch (error) {
-      console.error("Error fetching business profile:", error);
+      logError("Error fetching business profile:", error);
     }
   };
 
@@ -144,7 +145,7 @@ function ViewOrderDetailsController() {
         await fetchOrderDetails(); // Refresh data
       }
     } catch (error) {
-      console.error("Error saving ground management:", error);
+      logError("Error saving ground management:", error);
       toast.error("Failed to save ground management");
     }
   };

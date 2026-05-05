@@ -1,6 +1,7 @@
 /* eslint-disable react/prop-types */
 import { useState, useEffect } from "react";
 import { format } from "date-fns";
+import { logError } from "../../utils/logger";
 
 function StaffWithdrawalModal({
   isOpen,
@@ -50,7 +51,7 @@ function StaffWithdrawalModal({
 
       await onSave(payload);
     } catch (error) {
-      console.error(error);
+      logError(error);
     } finally {
       setLoading(false);
     }

@@ -4,6 +4,7 @@ import { getRules } from "../../../api/FetchRules";
 import RuleComponent from "./RuleComponent";
 import { useLocation, useNavigate } from "react-router-dom";
 import { updateRule } from "../../../api/PutRules";
+import { logError } from "../../../utils/logger";
 
 function RuleController() {
   const isFetched = useRef(false);
@@ -30,7 +31,7 @@ function RuleController() {
       }
     } catch (error) {
       toast.error("Error fetching rules");
-      console.error("API Error:", error);
+      logError("API Error:", error);
     } finally {
       setLoading(false);
     }

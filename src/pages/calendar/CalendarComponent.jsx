@@ -34,7 +34,7 @@ const MAX_VISIBLE = 2;
 function parseDate(str) {
   if (!str) return null;
   // dd-mm-yyyy or dd/mm/yyyy
-  const ddmmyyyy = str.match(/^(\d{1,2})[\-\/](\d{1,2})[\-\/](\d{4})$/);
+  const ddmmyyyy = str.match(/^(\d{1,2})[-/](\d{1,2})[-/](\d{4})$/);
   if (ddmmyyyy) {
     return new Date(
       Number(ddmmyyyy[3]),
@@ -43,7 +43,7 @@ function parseDate(str) {
     );
   }
   // yyyy-mm-dd
-  const yyyymmdd = str.match(/^(\d{4})[\-\/](\d{1,2})[\-\/](\d{1,2})/);
+  const yyyymmdd = str.match(/^(\d{4})[-/](\d{1,2})[-/](\d{1,2})/);
   if (yyyymmdd) {
     return new Date(
       Number(yyyymmdd[1]),

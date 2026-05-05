@@ -1,5 +1,4 @@
 /* eslint-disable react/prop-types */
-import React from "react";
 import BaseImage from "../BaseImage";
 import { Rules } from "../rules";
 import * as mapper from "../../../utils/orderMasterDataMapping";

@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import FixedStaffPaymentComponent from "./FixedStaffPaymentComponent";
+import { logError } from "../../../utils/logger";
 import {
   getFixedStaffPaymentSummary,
   createFixedSalaryPayment,
@@ -34,7 +35,7 @@ function FixedStaffPaymentController() {
       }
     } catch (error) {
       toast.error("Error fetching fixed staff payment summary");
-      console.error(error);
+      logError(error);
       setSummaryData(null);
     } finally {
       setLoading(false);
@@ -93,7 +94,7 @@ function FixedStaffPaymentController() {
       toast.error(
         `Failed to ${modalMode} salary payment. Please check your inputs.`
       );
-      console.error(error);
+      logError(error);
     }
   };
   
@@ -110,7 +111,7 @@ function FixedStaffPaymentController() {
       }
     } catch (error) {
        toast.error("Failed to record withdrawal.");
-       console.error(error);
+       logError(error);
     }
   };
   
@@ -142,7 +143,7 @@ function FixedStaffPaymentController() {
       }
     } catch (err) {
       toast.error("Error processing event payment");
-      console.error(err);
+      logError(err);
     }
   };
 

@@ -3,6 +3,7 @@ import { toast } from "react-hot-toast";
 import { executeConfirmationRequest } from "../../api/requestActions";
 import { queryClient } from "../../lib/queryClient";
 import i18n from "../../i18n";
+import { logError } from "../../utils/logger";
 
 const QUERY_KEY_BY_ENDPOINT = {
   "/categories": ["categories"],
@@ -56,7 +57,7 @@ const DeleteConfirmation = async ({
       }
     } catch (error) {
       toast.error(i18n.t("confirmDelete.error", { name: itemName }));
-      console.error("Delete API Error:", error);
+      logError("Delete API Error:", error);
     }
   }
 };

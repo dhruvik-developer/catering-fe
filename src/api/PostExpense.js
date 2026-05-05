@@ -1,5 +1,6 @@
 import toast from "react-hot-toast";
 import ApiInstance from "../services/ApiInstance";
+import { logError } from "../utils/logger";
 
 export const createExpense = async (data) => {
   try {
@@ -17,11 +18,13 @@ export const createExpense = async (data) => {
       return null;
     }
   } catch (error) {
-    console.error("Error creating expense:", error);
+    logError("Error creating expense:", error);
+    // Avoid leaking the raw response body into the toast — use a friendly
+    // message only. The backend's structured `message` already comes through
+    // logError when running in dev.
     toast.error(
-      error?.response?.data
-        ? JSON.stringify(error.response.data).substring(0, 100)
-        : "Something went wrong! Please try again."
+      error?.response?.data?.message ||
+        "Something went wrong! Please try again."
     );
     return null;
   }
@@ -38,7 +41,7 @@ export const updateExpense = async (id, data) => {
       return null;
     }
   } catch (error) {
-    console.error("Error updating expense:", error);
+    logError("Error updating expense:", error);
     toast.error("Something went wrong! Please try again.");
     return null;
   }
@@ -60,7 +63,7 @@ export const createExpenseCategory = async (name) => {
       return null;
     }
   } catch (error) {
-    console.error("Error creating expense category:", error);
+    logError("Error creating expense category:", error);
     toast.error("Error creating expense category");
     return null;
   }
@@ -71,7 +74,7 @@ export const deleteExpense = async (id) => {
     const response = await ApiInstance.delete(`/expenses/${id}/`);
     return response;
   } catch (error) {
-    console.error("Error deleting expense:", error);
+    logError("Error deleting expense:", error);
     throw error;
   }
 };

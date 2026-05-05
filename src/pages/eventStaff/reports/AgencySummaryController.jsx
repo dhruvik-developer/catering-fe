@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import toast from "react-hot-toast";
 import { getAgencySummary } from "../../../api/EventStaffApis";
 import AgencySummaryComponent from "./AgencySummaryComponent";
+import { logError } from "../../../utils/logger";
 
 function AgencySummaryController() {
   const hasFetched = useRef(false);
@@ -21,7 +22,7 @@ function AgencySummaryController() {
       }
     } catch (error) {
       toast.error("Error fetching report data");
-      console.error("API Error:", error);
+      logError("API Error:", error);
     } finally {
       setLoading(false);
     }

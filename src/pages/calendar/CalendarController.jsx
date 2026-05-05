@@ -3,6 +3,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 import toast from "react-hot-toast";
 import { getAllOrder } from "../../api/FetchAllOrder";
 import CalendarComponent from "./CalendarComponent";
+import { logError } from "../../utils/logger";
 
 function CalendarController() {
   const navigate = useNavigate();
@@ -21,7 +22,7 @@ function CalendarController() {
       }
     } catch (error) {
       toast.error("Error fetching orders");
-      console.error("API Error:", error);
+      logError("API Error:", error);
     } finally {
       setLoading(false);
     }

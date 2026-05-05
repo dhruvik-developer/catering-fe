@@ -4,6 +4,26 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/png" href="/food.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!--
+      Conservative CSP defenses that don't depend on listing every CDN. These
+      block injection vectors with no legitimate use in this app and won't
+      break Google Translate, MUI inline styles, or tenant-uploaded logos.
+        - object-src 'none': no <object>/<embed>/<applet> ever — pure win.
+        - base-uri 'self': stops <base href="https://attacker"> hijacks of
+          relative URLs (a real, common XSS-pivot technique).
+        - form-action 'self': forms can only submit back to this origin —
+          stops a planted <form action="https://attacker">.
+      A full script-src/style-src allowlist is the bigger win but needs to
+      be derived from runtime testing across all features (PDFs, maps,
+      i18n) before being turned on; track that as follow-up.
+    -->
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="object-src 'none'; base-uri 'self'; form-action 'self';"
+    />
+    <!-- Don't leak full URLs (which can include tenant subdomains and IDs in
+         path segments) to third-party sites in the Referer header. -->
+    <meta name="referrer" content="strict-origin-when-cross-origin" />
     <title>Admin</title>
     <style>
       /* Hide every visible artefact the Google Translate widget injects so it

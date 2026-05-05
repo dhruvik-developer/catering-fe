@@ -4,15 +4,16 @@ import {
   ensureSuccessfulResponse,
   getApiErrorMessage,
 } from "../utils/apiResponse";
+import { logError } from "../utils/logger";
 
 const handleQueryError = (errorLabel, fallbackMessage, error) => {
-  console.error(errorLabel, error);
+  logError(errorLabel, error);
   toast.error(fallbackMessage);
   return null;
 };
 
 const handleMutationError = (errorLabel, fallbackMessage, error) => {
-  console.error(errorLabel, error);
+  logError(errorLabel, error);
   toast.error(getApiErrorMessage(error, fallbackMessage));
   return null;
 };

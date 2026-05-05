@@ -555,14 +555,19 @@ function ViewOrderDetailsComponent({
                           <Chip
                             icon={<FiFileText size={14} />}
                             label="Checklist PDF"
-                            onClick={() => navigate(`/view-session-checklist/${session.id}`)}
+                            onClick={() =>
+                              handleOpenSessionChecklistPreview(
+                                orderDetails.id,
+                                session.id
+                              )
+                            }
                             variant="outlined"
                             sx={{ fontWeight: 600, cursor: "pointer" }}
                           />
                           <Chip
                             icon={<FiTag size={14} />}
                             label="Dish Tags"
-                            onClick={() => navigate(`/dish-tag-engine/${session.id}`)}
+                            onClick={() => handleOpenTags(session)}
                             variant="outlined"
                             sx={{ fontWeight: 600, cursor: "pointer" }}
                           />

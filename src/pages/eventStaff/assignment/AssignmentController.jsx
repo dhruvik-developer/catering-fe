@@ -4,6 +4,7 @@ import AssignmentComponent from "./AssignmentComponent";
 import toast from "react-hot-toast";
 import { getAllAssignments } from "../../../api/EventStaffApis";
 import DeleteConfirmation from "../../../Components/common/DeleteConfirmation";
+import { logError } from "../../../utils/logger";
 
 function AssignmentController() {
   const navigate = useNavigate();
@@ -25,7 +26,7 @@ function AssignmentController() {
       }
     } catch (error) {
       toast.error("Error fetching event assignments");
-      console.error("API Error:", error);
+      logError("API Error:", error);
     } finally {
       setLoading(false);
     }

@@ -1,5 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useState, useEffect } from "react";
+import { logError } from "../../../utils/logger";
 import {
   useLocation,
   useNavigate,
@@ -68,7 +69,7 @@ function EditDishContoller() {
       const data = response?.data?.data ?? response?.data;
       if (Array.isArray(data)) setWaiterTypes(data);
     } catch (error) {
-      console.error("Error fetching waiter types:", error);
+      logError("Error fetching waiter types:", error);
     } finally {
       setIsLoadingWaiterTypes(false);
     }
@@ -277,7 +278,7 @@ function EditDishContoller() {
       }
     } catch (error) {
       toast.error("Failed to fetch order details");
-      console.error("Fetch Error:", error);
+      logError("Fetch Error:", error);
     } finally {
       setLoading(false);
     }

@@ -9,17 +9,59 @@ const ENABLED_MODULES_STORAGE_KEY = "enabledModules";
 const TENANT_STORAGE_KEY = "tenant";
 export const USER_ROLE_ADMIN = "admin";
 
-let accessToken =
-  typeof window !== "undefined"
-    ? window.localStorage.getItem(getTenantScopedStorageKey(TOKEN_STORAGE_KEY))
-    : null;
+// Decode the payload of a JWT without verifying the signature. We can't verify
+// the signature on the client (we don't have the secret), but reading `exp`
+// lets us drop expired/garbled tokens before the first API call. Returns null
+// if the token isn't a well-formed JWT.
+const decodeJwtPayload = (token) => {
+  if (typeof token !== "string") return null;
+  const parts = token.split(".");
+  if (parts.length !== 3) return null;
+  try {
+    const base64 = parts[1].replace(/-/g, "+").replace(/_/g, "/");
+    const padded = base64 + "=".repeat((4 - (base64.length % 4)) % 4);
+    const json = atob(padded);
+    return JSON.parse(json);
+  } catch {
+    return null;
+  }
+};
 
-let refreshToken =
-  typeof window !== "undefined"
-    ? window.localStorage.getItem(
-        getTenantScopedStorageKey(REFRESH_TOKEN_STORAGE_KEY),
-      )
-    : null;
+const isJwtExpired = (token) => {
+  const payload = decodeJwtPayload(token);
+  if (!payload || typeof payload.exp !== "number") {
+    // No exp claim or unparseable token — treat as invalid so the caller can
+    // clear it. (A legitimate access token should always carry exp.)
+    return true;
+  }
+  // 30s clock skew so we don't bounce a user whose token is about to expire.
+  return Date.now() >= (payload.exp - 30) * 1000;
+};
+
+const readStoredAccessToken = () => {
+  if (typeof window === "undefined") return null;
+  return window.localStorage.getItem(getTenantScopedStorageKey(TOKEN_STORAGE_KEY));
+};
+
+const readStoredRefreshToken = () => {
+  if (typeof window === "undefined") return null;
+  return window.localStorage.getItem(
+    getTenantScopedStorageKey(REFRESH_TOKEN_STORAGE_KEY),
+  );
+};
+
+// Drop a stale/tampered access token at boot. We keep the refresh token —
+// the axios interceptor can use it to mint a fresh access token on the next
+// request, and if it's also dead the interceptor will redirect to /login.
+let accessToken = readStoredAccessToken();
+if (accessToken && isJwtExpired(accessToken)) {
+  if (typeof window !== "undefined") {
+    window.localStorage.removeItem(getTenantScopedStorageKey(TOKEN_STORAGE_KEY));
+  }
+  accessToken = null;
+}
+
+let refreshToken = readStoredRefreshToken();
 
 const storage = {
   get: (key) =>

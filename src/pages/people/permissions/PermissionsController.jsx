@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import toast from "react-hot-toast";
+import { logError } from "../../../utils/logger";
 import { 
     getPermissionModules, 
     getPermissionUsers, 
@@ -102,7 +103,7 @@ function PermissionsController() {
             const res = await getPermissionUsers(type);
             setUsers(getCollectionResponse(res));
         } catch (error) {
-            console.error(`Error fetching ${type} permission users:`, error);
+            logError(`Error fetching ${type} permission users:`, error);
             toast.error(`Failed to load ${type} list`);
         } finally {
             setLoading(false);
@@ -119,7 +120,7 @@ function PermissionsController() {
             );
             setCurrentPermissions(normalizedPermissions);
         } catch (error) {
-            console.error("Error fetching selected user permissions:", error);
+            logError("Error fetching selected user permissions:", error);
             toast.error("Failed to fetch permissions for selection");
         } finally {
             setLoading(false);
@@ -144,7 +145,7 @@ function PermissionsController() {
             });
             toast.success("Permissions updated successfully");
         } catch (error) {
-            console.error("Error updating permissions:", error);
+            logError("Error updating permissions:", error);
             toast.error("Failed to update permissions");
         } finally {
             setIsSaving(false);

@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import { getAllBusinessProfiles } from "../../api/BusinessProfile";
 import { getSingleOrder, updateEventBooking } from "../../api/FetchAllOrder";
 import Loader from "../../Components/common/Loader";
+import { logError } from "../../utils/logger";
 
 function ShareOutsourcedController() {
   const location = useLocation();
@@ -26,7 +27,10 @@ function ShareOutsourcedController() {
       try {
         const res = await getAllBusinessProfiles();
         if (res?.status && res?.data?.length > 0) setBusinessProfile(res.data[0]);
-      } catch (_) {}
+      } catch (err) {
+        // Non-fatal: app still renders without the profile chrome.
+        logError("Share outsourced: failed to load business profile", err);
+      }
     };
     fetchProfile();
   }, []);
@@ -77,7 +81,10 @@ function ShareOutsourcedController() {
           try {
             const [dd, mm, yyyy] = firstVendor.delivery_date.split("-");
             if (dd && mm && yyyy) setSelectedDate(new Date(yyyy, mm - 1, dd));
-          } catch (e) {}
+          } catch (err) {
+            // Bad date string from vendor row — fall through; date stays null.
+            logError("Share outsourced: bad delivery_date format", err);
+          }
         }
         
         if (firstVendor.delivery_address) {
@@ -209,7 +216,7 @@ function ShareOutsourcedController() {
         },
       });
     } catch (err) {
-      console.error(err);
+      logError(err);
       toast.error("Failed to save outsourced items to backend!");
     } finally {
       setLoading(false);

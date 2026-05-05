@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
 import SettingsComponent from "./SettingsComponent";
 import { extractColorsFromImage } from "../../utils/colorUtils";
+import { logError } from "../../utils/logger";
 import {
   getAllBusinessProfiles,
   createBusinessProfile,
@@ -156,7 +157,7 @@ function SettingsController() {
       const colors = await extractColorsFromImage(source);
       setExtractedColors(colors);
     } catch (error) {
-      console.error("Failed to extract colors:", error);
+      logError("Failed to extract colors:", error);
     }
   }, []);
 
@@ -190,7 +191,7 @@ function SettingsController() {
         }
       }
     } catch (error) {
-      console.error("Failed to load business profile:", error);
+      logError("Failed to load business profile:", error);
     }
   }, [handleExtractColors]);
 
@@ -221,7 +222,7 @@ function SettingsController() {
             formatterDetails = detail;
           }
         } catch (error) {
-          console.error("PDF formatter detail error:", error);
+          logError("PDF formatter detail error:", error);
         }
         setPdfFormatterForm(buildPdfFormatterForm(formatterDetails));
         setPdfFormatterDirty(false);
@@ -232,7 +233,7 @@ function SettingsController() {
       }
     } catch (error) {
       toast.error("Failed to load PDF formats");
-      console.error("PDF formatter list error:", error);
+      logError("PDF formatter list error:", error);
     } finally {
       setPdfFormatterLoading(false);
     }
@@ -328,7 +329,7 @@ function SettingsController() {
         setPdfFormatterForm(buildPdfFormatterForm(detail));
       }
     } catch (error) {
-      console.error("PDF formatter detail error:", error);
+      logError("PDF formatter detail error:", error);
     }
   };
 
@@ -395,7 +396,7 @@ function SettingsController() {
       } else {
         toast.error(error?.message || "Failed to save PDF format.");
       }
-      console.error("PDF formatter save error:", error);
+      logError("PDF formatter save error:", error);
     } finally {
       setPdfFormatterSaving(false);
     }
@@ -424,7 +425,7 @@ function SettingsController() {
       await fetchPdfFormatters(pdfFormatterFilters);
     } catch (error) {
       toast.error("Failed to delete PDF format.");
-      console.error("PDF formatter delete error:", error);
+      logError("PDF formatter delete error:", error);
     } finally {
       setPdfFormatterDeletingId(null);
     }
@@ -450,7 +451,7 @@ function SettingsController() {
       setPdfFormatterPreviewHtml(html || "");
     } catch (error) {
       toast.error("Failed to load HTML preview.");
-      console.error("PDF formatter preview error:", error);
+      logError("PDF formatter preview error:", error);
     } finally {
       setPdfFormatterPreviewLoading(false);
     }
@@ -468,7 +469,7 @@ function SettingsController() {
       openHtmlDocument(html);
     } catch (error) {
       toast.error("Failed to open HTML preview.");
-      console.error("PDF formatter open error:", error);
+      logError("PDF formatter open error:", error);
     } finally {
       setPdfFormatterPreviewLoading(false);
     }
@@ -572,7 +573,7 @@ function SettingsController() {
         toast.error("Profile save response invalid. Please retry.");
       }
     } catch (error) {
-      console.error("Save error:", error);
+      logError("Save error:", error);
     } finally {
       setLoading(false);
     }

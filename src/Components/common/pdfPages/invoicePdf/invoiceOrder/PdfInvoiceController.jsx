@@ -9,6 +9,7 @@ import { exportToPDF } from "../../../../../utils/pdfExport";
 import { getAllBusinessProfiles } from "../../../../../api/BusinessProfile";
 import { generatePdfFilename } from "../../../../../utils/generatePdfFilename";
 import { usePdfCategorizer } from "../../../../../hooks/usePdfCategorizer";
+import { logError } from "../../../../../utils/logger";
 
 function PdfInvoiceController() {
   const { id } = useParams();
@@ -61,7 +62,7 @@ function PdfInvoiceController() {
               setPdfInvoice(selectedInvoice);
             }
           } catch (error) {
-            console.error(
+            logError(
               "Failed to fetch full order details for invoice PDF:",
               error
             );
@@ -75,7 +76,7 @@ function PdfInvoiceController() {
       }
     } catch (error) {
       toast.error("Error fetching invoice");
-      console.error("API Error:", error);
+      logError("API Error:", error);
     } finally {
       setLoading(false);
     }

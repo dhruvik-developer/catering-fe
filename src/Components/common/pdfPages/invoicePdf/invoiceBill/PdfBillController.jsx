@@ -7,6 +7,7 @@ import { useParams } from "react-router-dom";
 import { exportToPDF } from "../../../../../utils/pdfExport";
 import { getAllBusinessProfiles } from "../../../../../api/BusinessProfile";
 import { generatePdfFilename } from "../../../../../utils/generatePdfFilename";
+import { logError } from "../../../../../utils/logger";
 function PdfBillController() {
   const { id } = useParams();
   const [loading, setLoading] = useState(true);
@@ -51,7 +52,7 @@ function PdfBillController() {
       }
     } catch (error) {
       toast.error("Error fetching invoice");
-      console.error("API Error:", error);
+      logError("API Error:", error);
     } finally {
       setLoading(false);
     }

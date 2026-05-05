@@ -4,6 +4,7 @@ import { FiX, FiSearch, FiSave, FiBox, FiTag, FiChevronRight } from "react-icons
 import toast from "react-hot-toast";
 import { getGroundCategories } from "../../api/GroundApis";
 import Loader from "../common/Loader";
+import { logError } from "../../utils/logger";
 
 /**
  * GroundManagementModal
@@ -66,7 +67,7 @@ const GroundManagementModal = ({ isOpen, onClose, onSave, existingData, sessionN
         }
       }
     } catch (error) {
-      console.error(error);
+      logError(error);
       toast.error("Failed to load ground categories");
     } finally {
       setLoading(false);

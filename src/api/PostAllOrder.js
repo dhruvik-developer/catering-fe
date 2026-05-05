@@ -1,5 +1,6 @@
 import toast from "react-hot-toast";
 import ApiInstance from "../services/ApiInstance";
+import { logError } from "../utils/logger";
 
 // Re-export updateEventBooking as updateOrder for backward compatibility
 // Both use the same PUT /event-bookings/:id/ endpoint
@@ -17,7 +18,7 @@ export const addPayment = async (paymentPayload) => {
     }
   } catch (error) {
     toast.error("Failed to process payment");
-    console.error(error);
+    logError("Add Payment API Error:", error);
     return null;
   }
 };

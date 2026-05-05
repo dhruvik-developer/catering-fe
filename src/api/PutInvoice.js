@@ -1,5 +1,6 @@
 import toast from "react-hot-toast";
 import ApiInstance from "../services/ApiInstance";
+import { logError } from "../utils/logger";
 
 export const updatePayment = async (id, paymentData) => {
   try {
@@ -12,7 +13,7 @@ export const updatePayment = async (id, paymentData) => {
       return null;
     }
   } catch (error) {
-    console.error("Upadte Payment API Error:", error);
+    logError("Update Payment API Error:", error);
     toast.error("Failed to update payment");
     return null;
   }

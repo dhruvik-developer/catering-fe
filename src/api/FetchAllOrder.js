@@ -1,6 +1,7 @@
 import toast from "react-hot-toast";
 import ApiInstance from "../services/ApiInstance";
 import { getRecipes } from "./recipes";
+import { logError } from "../utils/logger";
 
 const inFlightAllOrderRequests = new Map();
 
@@ -158,7 +159,7 @@ export const getSingleOrder = async (id) => {
     return response;
   } catch (error) {
     toast.error("Error fetching order details");
-    console.error("API Error:", error);
+    logError("Fetch Order API Error:", error);
   }
 };
 
@@ -168,7 +169,7 @@ export const updateEventBooking = async (id, data) => {
     return response;
   } catch (error) {
     toast.error("Error updating order");
-    console.error("API Error:", error);
+    logError("Fetch Order API Error:", error);
     throw error;
   }
 };
@@ -286,7 +287,7 @@ export const fetchEventIngredientList = async (eventId) => {
     return response;
   } catch (error) {
     toast.error("Error fetching event ingredient list");
-    console.error("Error fetching event ingredient list:", error);
+    logError("Error fetching event ingredient list:", error);
     return null;
   }
 };

@@ -4,6 +4,7 @@ import toast from "react-hot-toast";
 import { getSingleOrder } from "../../api/FetchAllOrder";
 import SessionChecklistPreviewComponent from "./SessionChecklistPreviewComponent";
 import { exportToPDF } from "../../utils/pdfExport";
+import { logError } from "../../utils/logger";
 
 function SessionChecklistPreviewController() {
   const { eventId, sessionId } = useParams();
@@ -21,7 +22,7 @@ function SessionChecklistPreviewController() {
         }
       } catch (error) {
         toast.error("Error fetching checklist data");
-        console.error(error);
+        logError(error);
       } finally {
         setLoading(false);
       }
@@ -60,7 +61,7 @@ function SessionChecklistPreviewController() {
         pagebreak: { mode: ["css", "legacy"], avoid: ["tr", "td"] },
       });
     } catch (error) {
-      console.error(error);
+      logError(error);
       toast.error("Failed to generate PDF");
     }
   };

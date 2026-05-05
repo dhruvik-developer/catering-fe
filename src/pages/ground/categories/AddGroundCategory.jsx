@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { FiX } from "react-icons/fi";
 import toast from "react-hot-toast";
 import { createGroundCategory, updateGroundCategory } from "../../../api/GroundApis";
+import { logError } from "../../../utils/logger";
 
 // eslint-disable-next-line react/prop-types
 const AddGroundCategory = ({ isOpen, onClose, onSuccess, editData = null }) => {
@@ -65,7 +66,7 @@ const AddGroundCategory = ({ isOpen, onClose, onSuccess, editData = null }) => {
         toast.error(res?.data?.message || `Failed to ${isEditMode ? "update" : "create"} category`);
       }
     } catch (error) {
-      console.error(error);
+      logError(error);
     } finally {
       setLoading(false);
     }

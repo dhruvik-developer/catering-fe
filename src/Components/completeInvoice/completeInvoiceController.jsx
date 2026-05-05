@@ -5,6 +5,7 @@ import toast from "react-hot-toast";
 import { getInvoice } from "../../api/FetchInvoice";
 import { useNavigate, useParams } from "react-router-dom";
 import { updatePayment } from "../../api/PutInvoice";
+import { logError } from "../../utils/logger";
 
 function CompleteInvoiceController() {
   const { id } = useParams();
@@ -47,7 +48,7 @@ function CompleteInvoiceController() {
       }
     } catch (error) {
       toast.error("Error fetching invoice data");
-      console.error("API Error:", error);
+      logError("API Error:", error);
     } finally {
       setLoading(false);
     }
@@ -124,7 +125,7 @@ function CompleteInvoiceController() {
         navigate(-1);
       }
     } catch (error) {
-      console.error("Error updating payment:", error);
+      logError("Error updating payment:", error);
     }
   };
 

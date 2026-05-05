@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import toast from "react-hot-toast";
+import { logError } from "../../../utils/logger";
 import {
   createRole,
   createStaff,
@@ -184,7 +185,7 @@ function AddEditStaffController() {
           }
         }
       } catch (error) {
-        console.error("Error fetching data:", error);
+        logError("Error fetching data:", error);
         toast.error(getApiErrorMessage(error, "Error loading form data"));
 
         if (mode === "edit" && id) {
@@ -374,7 +375,7 @@ function AddEditStaffController() {
       setIsAddRoleModalOpen(false);
       resetRoleModal();
     } catch (error) {
-      console.error("Add Role Error:", error);
+      logError("Add Role Error:", error);
 
       const message = getApiErrorMessage(error, "Error creating role");
       const normalizedMessage = message.toLowerCase();
@@ -520,7 +521,7 @@ function AddEditStaffController() {
         toast.error("Operation failed. Please try again.");
       }
     } catch (error) {
-      console.error("API Error:", error);
+      logError("API Error:", error);
 
       toast.error(
         getApiErrorMessage(

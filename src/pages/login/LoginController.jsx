@@ -9,6 +9,7 @@ import { getAllBusinessProfiles } from "../../api/BusinessProfile";
 import { getDefaultRouteForAccess } from "../../utils/accessControl";
 import { isPlatformAdminHost } from "../../services/tenantRuntime";
 import { getApiErrorMessage } from "../../utils/apiResponse";
+import { logError } from "../../utils/logger";
 
 function LoginController() {
   const [credentials, setCredentials] = useState({
@@ -38,7 +39,7 @@ function LoginController() {
           typeof logoUrl === "string" && logoUrl.trim() ? logoUrl : ""
         );
       } catch (error) {
-        console.error("Failed to load login logo:", error);
+        logError("Failed to load login logo:", error);
         setBusinessLogo("");
       } finally {
         setIsLogoLoading(false);

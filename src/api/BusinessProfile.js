@@ -1,6 +1,7 @@
 import toast from "react-hot-toast";
 import ApiInstance from "../services/ApiInstance";
 import { isPlatformAdminHost } from "../services/tenantRuntime";
+import { logError } from "../utils/logger";
 
 let businessProfilesInFlightRequest = null;
 let businessProfilesCache = null;
@@ -28,7 +29,7 @@ export const createBusinessProfile = async (payload) => {
     return response.data;
   } catch (error) {
     toast.error("Error creating business profile");
-    console.error("API Error:", error);
+    logError("Business Profile API Error:", error);
   }
 };
 
@@ -42,7 +43,7 @@ export const updateBusinessProfile = async (id, payload) => {
     return response.data;
   } catch (error) {
     toast.error("Error updating business profile");
-    console.error("API Error:", error);
+    logError("Business Profile API Error:", error);
   }
 };
 
@@ -69,7 +70,7 @@ export const getAllBusinessProfiles = async () => {
       })
       .catch((error) => {
         // Suppress error toast here as it might be empty on first load.
-        console.error("API Error:", error);
+        logError("Business Profile API Error:", error);
         return { status: false, data: [] };
       })
       .finally(() => {
@@ -79,7 +80,7 @@ export const getAllBusinessProfiles = async () => {
     return await businessProfilesInFlightRequest;
   } catch (error) {
     // Suppress error toast here as it might be empty on first load.
-    console.error("API Error:", error);
+    logError("Business Profile API Error:", error);
     return { status: false, data: [] };
   }
 };

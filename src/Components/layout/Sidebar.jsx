@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { useDispatch, useSelector } from "react-redux";
+import { logError } from "../../utils/logger";
 import {
   Avatar,
   Box,
@@ -229,7 +230,7 @@ function Sidebar() {
             : [];
         setBusinessLogo(profileList[0]?.logo || "");
       } catch (error) {
-        console.error("Failed to load business logo:", error);
+        logError("Failed to load business logo:", error);
         setBusinessLogo("");
       } finally {
         setIsLogoLoading(false);

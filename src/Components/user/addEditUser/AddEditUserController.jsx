@@ -106,7 +106,6 @@ function AddEditUserController() {
           `Failed to ${mode === "editUser" ? "update password" : "add user"}`
         )
       );
-      console.log("API Error:", error);
     }
   };
 

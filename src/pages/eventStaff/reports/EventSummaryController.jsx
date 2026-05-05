@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import Swal from "sweetalert2";
+import { logError } from "../../../utils/logger";
 import {
   getAllAssignments,
   updateAssignment,
@@ -59,7 +60,7 @@ function EventSummaryController() {
       }
     } catch (error) {
       toast.error("Error fetching report data");
-      console.error("API Error:", error);
+      logError("API Error:", error);
     } finally {
       setLoading(false);
     }
@@ -137,7 +138,7 @@ function EventSummaryController() {
         }
       } catch (error) {
         toast.error("Error processing payment update");
-        console.error("Payment Update Error:", error);
+        logError("Payment Update Error:", error);
       }
     }
   };

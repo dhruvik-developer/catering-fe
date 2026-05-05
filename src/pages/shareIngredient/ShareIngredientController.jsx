@@ -8,6 +8,7 @@ import { getSingleOrder } from "../../api/FetchAllOrder";
 import { getAllBusinessProfiles } from "../../api/BusinessProfile";
 import { assignIngredientVendor } from "../../api/VendorAssignmentApis";
 import { useVendors } from "../../hooks/useVendors";
+import { logError } from "../../utils/logger";
 
 function ShareIngredientController() {
   const location = useLocation();
@@ -89,7 +90,7 @@ function ShareIngredientController() {
           setBusinessProfile(response.data[0]);
         }
       } catch (error) {
-        console.error("Error fetching business profile:", error);
+        logError("Error fetching business profile:", error);
       }
     };
     fetchProfile();
@@ -545,7 +546,7 @@ function ShareIngredientController() {
         toast.success("Vendors assigned successfully!");
         navigate(-1);
       } catch (error) {
-         console.error(error);
+         logError(error);
          toast.error("Failed to assign vendors.");
       }
     }

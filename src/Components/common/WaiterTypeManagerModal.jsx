@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { FiX, FiPlus, FiTrash2, FiCheck } from "react-icons/fi";
 import toast from "react-hot-toast";
+import { logError } from "../../utils/logger";
 import {
   createWaiterType,
   updateWaiterType,
@@ -77,7 +78,7 @@ export default function WaiterTypeManagerModal({
       }
       onUpdated?.();
     } catch (error) {
-      console.error(error);
+      logError(error);
       toast.error("Failed to save waiter type");
     }
   };
@@ -93,7 +94,7 @@ export default function WaiterTypeManagerModal({
       toast.success("Waiter type deleted");
       onUpdated?.();
     } catch (error) {
-      console.error(error);
+      logError(error);
       toast.error("Failed to delete waiter type");
     }
   };

@@ -2,6 +2,7 @@
 import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import ViewIngredientComponent from "./ViewIngredientComponent";
 import { useEffect, useMemo, useState } from "react";
+import { logError } from "../../utils/logger";
 import {
   fetchEventIngredientList,
   getSingleOrder,
@@ -93,7 +94,7 @@ function ViewIngredientController() {
       }
     } catch (error) {
       toast.error("Error fetching orders");
-      console.error("API Error:", error);
+      logError("API Error:", error);
     } finally {
       setLoading(false);
     }
@@ -109,7 +110,7 @@ function ViewIngredientController() {
       }
     } catch (error) {
       toast.error("Error fetching orders");
-      console.error("API Error:", error);
+      logError("API Error:", error);
     } finally {
       setLoading(false);
     }
@@ -168,7 +169,7 @@ function ViewIngredientController() {
       return true;
     } catch (error) {
       toast.error("Failed to update quantity");
-      console.error("Update error:", error);
+      logError("Update error:", error);
       return false;
     }
   };
@@ -195,7 +196,7 @@ function ViewIngredientController() {
       fetchIngredientList();
       return true;
     } catch (err) {
-      console.error("Order-local ingredient save failed:", err);
+      logError("Order-local ingredient save failed:", err);
       return false;
     }
   };

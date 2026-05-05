@@ -7,6 +7,7 @@ import { useParams } from "react-router-dom";
 import { getAllBusinessProfiles } from "../../../../../api/BusinessProfile";
 import { usePdfCategorizer } from "../../../../../hooks/usePdfCategorizer";
 import { exportToPDF } from "../../../../../utils/pdfExport";
+import { logError } from "../../../../../utils/logger";
 
 function PdfAllOrderController() {
   const pdfMargin = 16;
@@ -35,7 +36,7 @@ function PdfAllOrderController() {
       }
     } catch (error) {
       toast.error("Error fetching orders");
-      console.error("API Error:", error);
+      logError("API Error:", error);
     } finally {
       setLoading(false);
     }
@@ -79,7 +80,7 @@ function PdfAllOrderController() {
         pagebreak: { mode: ["css", "legacy"] ,avoid: ["tr", "td"],},
       });
     } catch (error) {
-      console.error(error);
+      logError(error);
       toast.error("Failed to generate PDF");
     }
   };

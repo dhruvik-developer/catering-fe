@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import Swal from "sweetalert2";
+import { logError } from "../../../utils/logger";
 import {
   getAllAssignments,
   updateAssignment,
@@ -60,7 +61,7 @@ function StaffDetailPage() {
       }
     } catch (error) {
       toast.error("Error fetching staff details");
-      console.error(error);
+      logError(error);
     } finally {
       setLoading(false);
     }
@@ -126,7 +127,7 @@ function StaffDetailPage() {
         }
       } catch (err) {
         toast.error("Error processing payment");
-        console.error(err);
+        logError(err);
       }
     }
   };

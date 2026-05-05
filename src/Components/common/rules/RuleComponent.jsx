@@ -19,7 +19,6 @@ function RuleComponent({
   if (loading) {
     return <Loader message="Loading Rules..." />;
   }
-  console.log("is_rule", is_rule);
   return (
     <>
       {/* To display in PDF */}

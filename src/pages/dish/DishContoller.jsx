@@ -7,6 +7,7 @@ import { getWaiterTypes } from "../../api/EventStaffApis";
 import { createEventBooking } from "../../api/PostEventBooking";
 import { useCategories } from "../../hooks/useCategories";
 import { translateTimeLabel } from "./dishI18n";
+import { logError } from "../../utils/logger";
 
 function DishContoller() {
   const { t } = useTranslation();
@@ -64,7 +65,7 @@ function DishContoller() {
         console.warn("Unexpected waiter-types payload", response?.data);
       }
     } catch (error) {
-      console.error("Error fetching waiter types:", error);
+      logError("Error fetching waiter types:", error);
     } finally {
       setIsLoadingWaiterTypes(false);
     }

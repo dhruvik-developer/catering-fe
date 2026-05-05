@@ -5,6 +5,7 @@ import toast from "react-hot-toast";
 import { useCategories } from "../../../hooks/useCategories";
 import { useIngredientItems } from "../../../hooks/useIngredientItems";
 import { useCreateRecipeMutation } from "../../../hooks/useRecipeMutations";
+import { logError } from "../../../utils/logger";
 
 function AddIngredientController() {
   const [selectedItem, setSelectedItem] = useState(null);
@@ -96,7 +97,7 @@ function AddIngredientController() {
       navigate(-1);
     } catch (error) {
       toast.error("Error adding recipe ingredients");
-      console.error("Add Recipe API Error:", error);
+      logError("Add Recipe API Error:", error);
     }
   };
 

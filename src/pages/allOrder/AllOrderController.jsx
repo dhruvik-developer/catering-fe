@@ -2,6 +2,7 @@ import { useState } from "react";
 import toast from "react-hot-toast";
 import { useQueryClient } from "@tanstack/react-query";
 import AllOrderComponent from "./AllOrderComponent";
+import { logError } from "../../utils/logger";
 
 // Parse date string in dd-mm-yyyy OR yyyy-mm-dd format
 function parseDate(str) {
@@ -617,12 +618,12 @@ function AllOrderController() {
           }
         } catch (error) {
           toast.error(t("allOrders.messages.confirmFailed"));
-          console.error(error);
+          logError(error);
         }
       }
     } catch (error) {
       toast.error(t("allOrders.messages.confirmFailed"));
-      console.error(error);
+      logError(error);
     }
   };
 

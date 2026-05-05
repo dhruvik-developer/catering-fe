@@ -1,5 +1,6 @@
 import toast from "react-hot-toast";
 import ApiInstance from "../services/ApiInstance";
+import { logError } from "../utils/logger";
 
 export const updateRule = async (id, rules) => {
   try {
@@ -12,7 +13,7 @@ export const updateRule = async (id, rules) => {
       return null;
     }
   } catch (error) {
-    console.error("Add Rule API Error:", error);
+    logError("Add Rule API Error:", error);
     toast.error("Failed to add rule");
     return null;
   }

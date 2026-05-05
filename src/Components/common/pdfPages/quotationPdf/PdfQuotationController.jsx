@@ -9,6 +9,7 @@ import { getAllBusinessProfiles } from "../../../../api/BusinessProfile";
 import { generatePdfFilename } from "../../../../utils/generatePdfFilename";
 import { usePdfCategorizer } from "../../../../hooks/usePdfCategorizer";
 import { exportToPDF } from "../../../../utils/pdfExport";
+import { logError } from "../../../../utils/logger";
 
 function PdfQuotationController() {
   const { id } = useParams();
@@ -46,7 +47,7 @@ function PdfQuotationController() {
       }
     } catch (error) {
       toast.error("Error fetching quotation");
-      console.error("API Error:", error);
+      logError("API Error:", error);
     } finally {
       setLoading(false);
     }
@@ -83,7 +84,7 @@ function PdfQuotationController() {
       });
       await exportToPDF("pdf-content", fileName, toast, pdfDownloadOptions);
     } catch (error) {
-      console.error(error);
+      logError(error);
       toast.error("Failed to generate PDF");
     }
   };

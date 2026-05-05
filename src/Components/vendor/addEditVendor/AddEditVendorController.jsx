@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { useIngredientCategories } from "../../../hooks/useIngredientCategories";
+import { logError } from "../../../utils/logger";
 import {
   useCreateVendorMutation,
   useUpdateVendorMutation,
@@ -253,7 +254,7 @@ function AddEditVendorController() {
           `Failed to ${mode === "edit" ? "update" : "add"} vendor`
         )
       );
-      console.error("Vendor submit error:", error);
+      logError("Vendor submit error:", error);
     }
   };
 

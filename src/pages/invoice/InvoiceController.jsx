@@ -3,6 +3,7 @@ import InvoiceComponent from "./InvoiceComponent";
 import toast from "react-hot-toast";
 import { getInvoice } from "../../api/FetchInvoice";
 import { useNavigate } from "react-router-dom";
+import { logError } from "../../utils/logger";
 
 function InvoiceController() {
   const [loading, setLoading] = useState(true);
@@ -76,7 +77,7 @@ function InvoiceController() {
       }
     } catch (error) {
       toast.error(`JS Error: ${error.message}`);
-      console.error("Fetch Invoice Exception:", error);
+      logError("Fetch Invoice Exception:", error);
     } finally {
       setLoading(false);
     }

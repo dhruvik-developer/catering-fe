@@ -7,6 +7,7 @@ import { useRecipes } from "../../hooks/useRecipes";
 
 import { useIngredientItems } from "../../hooks/useIngredientItems";
 import { useUpdateItemCostsMutation } from "../../hooks/useCategoryMutations";
+import { logError } from "../../utils/logger";
 import {
   useCreateRecipeMutation,
   useDeleteRecipeMutation,
@@ -262,7 +263,7 @@ function ViewItemRecipeController({
       setEditIngredientsList([]);
       setIsEditing(false);
     } catch (error) {
-      console.error("Save Edit Recipe API Error:", error);
+      logError("Save Edit Recipe API Error:", error);
       toast.error("Error updating recipe ingredients");
     } finally {
       setSaving(false);
@@ -354,7 +355,7 @@ function ViewItemRecipeController({
       await refetchRecipes();
       setIsAdding(false);
     } catch (error) {
-      console.error("Add Recipe API Error:", error);
+      logError("Add Recipe API Error:", error);
       toast.error("Error adding recipe ingredient");
     } finally {
       setAddSaving(false);

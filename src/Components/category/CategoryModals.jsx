@@ -1,6 +1,7 @@
 /* eslint-disable react/prop-types */
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { logError } from "../../utils/logger";
 import {
   FiX,
   FiFolder,
@@ -461,7 +462,7 @@ export const AddIngredientModal = ({ isOpen, onClose, onSuccess }) => {
         toast.error("Some recipe entries could not be saved");
       }
     } catch (error) {
-      console.error("Add Recipe API Error:", error);
+      logError("Add Recipe API Error:", error);
       toast.error("Error saving recipe ingredients");
     } finally {
       setSaving(false);

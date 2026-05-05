@@ -1,6 +1,7 @@
 /* eslint-disable react/prop-types */
 import { useState, useEffect } from "react";
 import { format, parse, parseISO, addDays, addMonths, subDays, differenceInDays, differenceInMonths, isBefore, getDaysInMonth } from "date-fns";
+import { logError } from "../../utils/logger";
 
 function FixedStaffSalaryModal({
   isOpen,
@@ -76,7 +77,7 @@ function FixedStaffSalaryModal({
             );
           }
         } catch (e) {
-            console.error(" error parsing start/end date: ", e);
+            logError(" error parsing start/end date: ", e);
         }
         try {
           if (initialData.payment_date) {
@@ -86,7 +87,7 @@ function FixedStaffSalaryModal({
             );
           }
         } catch(e) {
-            console.error(" error parsing payment date: ", e);
+            logError(" error parsing payment date: ", e);
         }
 
         setFormData({
@@ -174,7 +175,7 @@ function FixedStaffSalaryModal({
            }
         }
       } catch (err) {
-        console.warn("Date calc error:", err);
+        logError("Date calc error:", err);
       }
 
       return nextData;
@@ -212,7 +213,7 @@ function FixedStaffSalaryModal({
 
       await onSave(payload);
     } catch (error) {
-      console.error(error);
+      logError(error);
     } finally {
       setLoading(false);
     }
