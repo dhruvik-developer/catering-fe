@@ -16,6 +16,7 @@ import { LuArrowDownUp } from "react-icons/lu";
 import { FiFolder, FiTag, FiSearch, FiEdit2 } from "react-icons/fi";
 import ViewItemRecipeController from "../../pages/itemRecipe/ViewItemRecipeController";
 import EmptyState from "../common/EmptyState";
+import TText from "../common/TText";
 
 const CategoryTable = ({
   categories = [],
@@ -157,7 +158,7 @@ const CategoryTable = ({
                         color={isActive ? "primary.main" : "text.primary"}
                         title={category.name}
                        sx={{ fontWeight: 700 }}>
-                        {category.name}
+                        <TText>{category.name}</TText>
                       </Typography>
                       <Typography
                         variant="caption"
@@ -261,11 +262,11 @@ const CategoryTable = ({
                       <FiFolder size={16} />
                     </IconButton>
                   )}
-                  {activeCategory?.name}
+                  <TText>{activeCategory?.name || ""}</TText>
                   {viewingSubCategoryId && (
                     <>
                       <span style={{ margin: '0 8px', opacity: 0.5 }}>/</span>
-                      {currentViewingSubCategory?.name}
+                      <TText>{currentViewingSubCategory?.name || ""}</TText>
                     </>
                   )}
                 </Typography>
@@ -351,7 +352,7 @@ const CategoryTable = ({
                                     : "text.primary"
                                 }
                                sx={{ fontWeight: 700 }}>
-                                {item.name}
+                                <TText>{item.name}</TText>
                               </Typography>
                               {!isItem && (
                                 <Typography variant="caption" color="text.secondary">

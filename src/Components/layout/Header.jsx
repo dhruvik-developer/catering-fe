@@ -40,6 +40,7 @@ import usePermissions from "../../hooks/usePermissions";
 import { getDefaultRouteForAccess } from "../../utils/accessControl";
 import { isPlatformAdminHost } from "../../services/tenantRuntime";
 import LanguageSwitcher from "../common/LanguageSwitcher";
+import TText from "../common/TText";
 
 // Parse date string in dd-mm-yyyy OR yyyy-mm-dd format
 function parseDate(str) {
@@ -524,7 +525,7 @@ const Header = ({ toggleSidebar }) => {
 
                   color="inherit" noWrap
                  sx={{ fontWeight: 600 }}>
-                  {crumb.label}
+                  <TText>{crumb.label}</TText>
                 </Typography>
               ) : (
                 <MuiLink
@@ -539,7 +540,7 @@ const Header = ({ toggleSidebar }) => {
                   }}
                 >
                   <Typography variant="body2" noWrap component="span">
-                    {crumb.label}
+                    <TText>{crumb.label}</TText>
                   </Typography>
                 </MuiLink>
               )

@@ -11,6 +11,7 @@ import PropTypes from "prop-types";
 import "./index.css";
 import PrivateRoute from "./routes/PrivateRoute";
 import Layout from "./Components/layout/Layout";
+import Loader from "./Components/common/Loader";
 import TenantsController from "./pages/tenancy/TenantsController";
 import { UserProvider } from "./context/UserContext";
 import { BASE_PATH } from "./utils/Config";
@@ -128,7 +129,13 @@ const App = () => {
     // ThemeBridge then builds the MUI theme from it and also mirrors the value
     // to the --color-primary / --color-primary-contrast CSS custom properties
     // that Tailwind-based pages still depend on during the migration.
-    const applyPrimaryColor = async () => {
+    // Also sets the browser tab title from the tenant's business name.
+    const applyTenantBranding = async () => {
+      // Default tab title for the platform admin host where there's no tenant.
+      if (isPlatformAdminHost()) {
+        document.title = "SuperAdmin Portal";
+      }
+
       try {
         const response = await getAllBusinessProfiles();
         const profileList = Array.isArray(response?.data)
@@ -140,12 +147,22 @@ const App = () => {
         const apiColorCode = profileList[0]?.color_code;
         const primaryColor = resolvePrimaryColor(apiColorCode);
         dispatch(setPrimaryColor(primaryColor));
+
+        // Tab title becomes "<first word of caters_name> Admin" so a tenant
+        // called "Pruthvi - A Luxury Catering" shows as "Pruthvi Admin".
+        if (!isPlatformAdminHost()) {
+          const catersName = profileList[0]?.caters_name?.trim();
+          if (catersName) {
+            const firstWord = catersName.split(/[\s-]+/)[0];
+            document.title = `${firstWord} Admin`;
+          }
+        }
       } catch {
         dispatch(setPrimaryColor(DEFAULT_PRIMARY_FROM_STORE));
       }
     };
 
-    applyPrimaryColor();
+    applyTenantBranding();
   }, [dispatch]);
 
   return (
@@ -180,7 +197,7 @@ const App = () => {
             }
           }}
         />
-        <Suspense fallback={<div>Loading...</div>}>
+        <Suspense fallback={<Loader />}>
           <Routes>
             <Route path="/login" element={<Login />} />
 

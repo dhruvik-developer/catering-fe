@@ -1,8 +1,20 @@
-import i18n from "./index";
+import { LANGUAGE_STORAGE_KEY } from "./index";
 
 const FALLBACK = "en";
 
 const normalize = (lang) => (lang || FALLBACK).slice(0, 2).toLowerCase();
+
+// User-selected language now lives in localStorage (LanguageSwitcher writes it)
+// because i18next is pinned to English — live UI translation is handled by the
+// Google Translate widget. Helpers that pick from stored multi-lang fields
+// should still honour the user's choice.
+const getActiveLanguage = () => {
+  try {
+    return normalize(localStorage.getItem(LANGUAGE_STORAGE_KEY));
+  } catch {
+    return FALLBACK;
+  }
+};
 
 /**
  * Pick a localized value from API data.
@@ -13,7 +25,7 @@ const normalize = (lang) => (lang || FALLBACK).slice(0, 2).toLowerCase();
  */
 export const pickLocalized = (source, field) => {
   if (source == null) return "";
-  const lang = normalize(i18n.resolvedLanguage || i18n.language);
+  const lang = getActiveLanguage();
 
   if (typeof source === "string") return source;
 
@@ -36,10 +48,8 @@ export const pickLocalized = (source, field) => {
  * Hook-style version that re-renders when the language changes.
  * Use inside React components instead of pickLocalized.
  */
-import { useTranslation } from "react-i18next";
 export const useLocalized = () => {
-  const { i18n: i18nInstance } = useTranslation();
-  const lang = normalize(i18nInstance.resolvedLanguage || i18nInstance.language);
+  const lang = getActiveLanguage();
 
   return (source, field) => {
     if (source == null) return "";

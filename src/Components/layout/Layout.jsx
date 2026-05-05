@@ -1,5 +1,6 @@
 import Sidebar from "./Sidebar";
 import Header from "./Header";
+import TranslationGate from "./TranslationGate";
 import { Outlet, useNavigate, useLocation } from "react-router-dom";
 import { useEffect, useContext } from "react";
 import { useDispatch } from "react-redux";
@@ -53,8 +54,10 @@ const Layout = () => {
             flexDirection: "column",
           }}
         >
-          <Box sx={{ flex: 1 }}>
-            <Outlet />
+          <Box sx={{ flex: 1, display: "flex", flexDirection: "column" }}>
+            <TranslationGate>
+              <Outlet />
+            </TranslationGate>
           </Box>
         </Box>
       </Box>

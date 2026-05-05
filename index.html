@@ -4,10 +4,72 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/png" href="/food.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <!-- <link href="/dist/styles.css" rel="stylesheet"> -->
-    <title>radha Admin</title>
+    <title>Admin</title>
+    <style>
+      /* Hide every visible artefact the Google Translate widget injects so it
+         runs invisibly. Google randomly mounts the gadget icon, banner,
+         tooltip and spinner into the page; the translation engine still works
+         when these are CSS-hidden, so we kill them all. */
+      .skiptranslate,
+      iframe.skiptranslate,
+      iframe.goog-te-banner-frame,
+      .goog-te-banner-frame.skiptranslate,
+      .goog-te-spinner-pos,
+      .goog-te-spinner-animation,
+      .goog-te-spinner,
+      .goog-te-balloon-frame,
+      #goog-gt-tt,
+      .goog-tooltip,
+      .goog-tooltip:hover,
+      .goog-text-highlight,
+      .goog-te-gadget,
+      .goog-te-gadget-simple,
+      .goog-te-gadget-icon,
+      .goog-te-menu-frame,
+      .goog-te-menu-value,
+      .goog-logo-link,
+      #goog-gt-,
+      [id^="goog-gt-"],
+      [class*="goog-te-"],
+      [class*="VIpgJd-"],
+      [class^="VIpgJd-"] {
+        display: none !important;
+        visibility: hidden !important;
+        opacity: 0 !important;
+        height: 0 !important;
+        width: 0 !important;
+        background-color: transparent !important;
+        box-shadow: none !important;
+        pointer-events: none !important;
+      }
+      /* The widget's wrapper element we mount in <body>. Force-hide regardless
+         of what Google injects inside it. */
+      #google_translate_element,
+      #google_translate_element * {
+        display: none !important;
+        visibility: hidden !important;
+      }
+      /* Google adds `top: 40px` to <body> to make room for its banner — undo. */
+      body {
+        top: 0 !important;
+        position: static !important;
+      }
+      /* Google sometimes flips the cursor to a wait spinner during retranslate. */
+      html[style*="cursor"],
+      body[style*="cursor"] {
+        cursor: auto !important;
+      }
+      /* Last-resort: any image Google injects (the rainbow translate icon) */
+      img[src*="translate"][src*="google"],
+      img[src*="gstatic.com/images/branding/translate"] {
+        display: none !important;
+      }
+    </style>
   </head>
   <body>
+    <!-- Google Translate widget — drives the page-wide live translation that
+         covers UI text + API data. Mounted hidden; LanguageSwitcher flips its
+         hidden <select> at runtime. -->
     <div id="google_translate_element" style="display: none"></div>
     <script type="text/javascript">
       function googleTranslateElementInit() {
@@ -16,6 +78,7 @@
             pageLanguage: "en",
             includedLanguages: "en,gu,hi",
             autoDisplay: false,
+            layout: google.translate.TranslateElement.InlineLayout.SIMPLE,
           },
           "google_translate_element",
         );
