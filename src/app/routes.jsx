@@ -68,6 +68,9 @@ const GroundCategoryMaster = lazy(() => import("../pages/ground/categories/Groun
 const GroundItemMaster = lazy(() => import("../pages/ground/items/GroundItemMaster"));
 const EventGroundChecklist = lazy(() => import("../pages/ground/checklist/EventGroundChecklist"));
 
+// Tenant dashboard — events overview with click-through to /view-order-details/:id
+const TenantDashboard = lazy(() => import("../pages/dashboard/DashboardController"));
+
 // SuperAdmin (platform admin host) Modules
 const SuperAdminDashboard = lazy(() => import("../pages/superAdmin/DashboardController"));
 const SuperAdminSubscriptionPlans = lazy(() => import("../pages/superAdmin/SubscriptionPlansController"));
@@ -135,6 +138,7 @@ export {
   GroundItemMaster,
   EventGroundChecklist,
   PermissionsController,
+  TenantDashboard,
   SuperAdminDashboard,
   SuperAdminSubscriptionPlans,
   SuperAdminUserModels,

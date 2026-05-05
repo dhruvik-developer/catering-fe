@@ -22,6 +22,9 @@ const MODULE_ALIASES = {
 };
 
 const ROUTE_ACCESS = [
+  // Tenant dashboard — shows event overview with click-through, so
+  // booking-view is the right gate.
+  { path: "/dashboard", permission: "event_bookings.view" },
   { path: "/settings", permission: "business_profiles.view" },
 
   { path: "/dish", permission: ["event_session.view", "dishes.view"] },

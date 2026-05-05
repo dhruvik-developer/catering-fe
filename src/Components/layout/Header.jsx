@@ -8,7 +8,6 @@ import {
   Breadcrumbs,
   Button,
   Divider,
-  IconButton,
   Link as MuiLink,
   ListItemIcon,
   Menu,
@@ -19,7 +18,6 @@ import {
 } from "@mui/material";
 import { TbLogout2 } from "react-icons/tb";
 import {
-  FiMenu,
   FiChevronDown,
   FiUsers,
   FiAlertTriangle,
@@ -177,7 +175,7 @@ const parentRoutes = {
   "ground-items": "/ground-checklist",
 };
 
-const Header = ({ toggleSidebar }) => {
+const Header = () => {
   const { t } = useTranslation();
   const { username, logout, permissions, enabledModules } =
     useContext(UserContext);
@@ -479,20 +477,6 @@ const Header = ({ toggleSidebar }) => {
           spacing={1}
           sx={{ alignItems: "center", minWidth: 0 }}
         >
-          {!isAdminHost && (
-            <IconButton
-              edge="start"
-              onClick={toggleSidebar}
-              sx={{
-                color: "inherit",
-                "&:hover": { bgcolor: "rgba(255,255,255,0.15)" },
-              }}
-              aria-label="toggle sidebar"
-            >
-              <FiMenu />
-            </IconButton>
-          )}
-
           <Breadcrumbs
             separator={<FiChevronRight size={12} />}
             aria-label="breadcrumb"

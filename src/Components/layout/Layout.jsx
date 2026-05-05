@@ -3,15 +3,12 @@ import Header from "./Header";
 import TranslationGate from "./TranslationGate";
 import { Outlet, useNavigate, useLocation } from "react-router-dom";
 import { useEffect, useContext } from "react";
-import { useDispatch } from "react-redux";
 import { Box } from "@mui/material";
 import { UserContext } from "../../context/UserContext";
-import { toggleSidebar } from "../../redux/uiSlice";
 
 const Layout = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const dispatch = useDispatch();
   const { token, logout } = useContext(UserContext);
 
   useEffect(() => {
@@ -40,7 +37,7 @@ const Layout = () => {
           minWidth: 0,
         }}
       >
-        <Header toggleSidebar={() => dispatch(toggleSidebar())} />
+        <Header />
         <Box
           key={location.pathname}
           sx={{

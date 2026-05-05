@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { useDispatch, useSelector } from "react-redux";
 import { logError } from "../../utils/logger";
 import {
   Avatar,
@@ -25,10 +24,9 @@ import {
   TaskAdd01Icon,
   TransactionHistoryIcon,
 } from "@hugeicons/core-free-icons";
-import { FiUsers, FiGrid, FiShield, FiKey } from "react-icons/fi";
+import { FiUsers, FiGrid, FiShield, FiKey, FiHome } from "react-icons/fi";
 import usePermissions from "../../hooks/usePermissions";
 import { getAllBusinessProfiles } from "../../api/BusinessProfile";
-import { setSidebarOpen } from "../../redux/uiSlice";
 import { isPlatformAdminHost } from "../../services/tenantRuntime";
 
 const SIDEBAR_WIDTH = 288;
@@ -38,6 +36,13 @@ const hugeIcon = (icon) => (
 );
 
 const tenantMenuItems = [
+  {
+    name: "Dashboard",
+    labelKey: "sidebar.dashboard",
+    path: "/dashboard",
+    icon: <FiHome size={22} />,
+    requiredPermission: "event_bookings.view",
+  },
   {
     name: "Create Dish",
     labelKey: "sidebar.createDish",
@@ -150,6 +155,7 @@ const isAdminHost = isPlatformAdminHost();
 const menuItems = isAdminHost ? adminMenuItems : tenantMenuItems;
 
 const activePaths = {
+  "/dashboard": ["/dashboard"],
   "/dish": ["/dish", "/edit-dish", "/edit-item", "/pdf", "/edit-order-pdf"],
   "/category": [
     "/category",
@@ -212,8 +218,6 @@ const activePaths = {
 function Sidebar() {
   const location = useLocation();
   const { t } = useTranslation();
-  const dispatch = useDispatch();
-  const open = useSelector((s) => s.ui.sidebarOpen);
   const { hasPermission } = usePermissions();
   const [businessLogo, setBusinessLogo] = useState("");
   const [isLogoLoading, setIsLogoLoading] = useState(!isAdminHost);
@@ -239,35 +243,25 @@ function Sidebar() {
     fetchBusinessLogo();
   }, []);
 
-  const close = () => {
-    if (isAdminHost) return;
-    dispatch(setSidebarOpen(false));
-  };
-
   const isMenuItemActive = (itemPath) =>
     activePaths[itemPath]?.some((p) => location.pathname.startsWith(p)) ||
     location.pathname === itemPath;
 
-  const drawerVariant = isAdminHost ? "permanent" : "temporary";
-  const drawerOpen = isAdminHost ? true : open;
-
+  // Sidebar is permanent for every host — admin and tenant alike. It sits
+  // beside the page content (position: relative inside the flex Layout) and
+  // never closes; navigation never dismisses it.
   return (
     <Drawer
       anchor="left"
-      variant={drawerVariant}
-      open={drawerOpen}
-      onClose={close}
-      sx={
-        isAdminHost
-          ? {
-              width: SIDEBAR_WIDTH,
-              flexShrink: 0,
-              "& .MuiDrawer-paper": {
-                position: "relative",
-              },
-            }
-          : undefined
-      }
+      variant="permanent"
+      open
+      sx={{
+        width: SIDEBAR_WIDTH,
+        flexShrink: 0,
+        "& .MuiDrawer-paper": {
+          position: "relative",
+        },
+      }}
       slotProps={{
         paper: {
           sx: {
@@ -339,11 +333,7 @@ function Sidebar() {
               {t("sidebar.logoHint")}
             </Typography>
             {hasPermission("business_profiles.view") && (
-              <Link
-                to="/settings"
-                onClick={close}
-                style={{ textDecoration: "none" }}
-              >
+              <Link to="/settings" style={{ textDecoration: "none" }}>
                 <Typography
                   variant="caption"
                   color="primary.main"
@@ -380,7 +370,7 @@ function Sidebar() {
               <ListItemButton
                 component={Link}
                 to={item.path}
-                onClick={close} selected={active}
+                selected={active}
                 sx={{
                   borderRadius: 2,
                   py: 1.25,

@@ -77,6 +77,7 @@ import {
   GroundCategoryMaster,
   GroundItemMaster,
   EventGroundChecklist,
+  TenantDashboard,
   SuperAdminDashboard,
   SuperAdminSubscriptionPlans,
   SuperAdminUserModels,
@@ -218,6 +219,9 @@ const App = () => {
                   </>
                 ) : (
                   <>
+                    {/* Tenant dashboard — events overview with click-through */}
+                    <Route path="/dashboard" element={<TenantDashboard />} />
+
                     {/* All main routes */}
                     <Route path="/dish" element={<Dish />} />
                 <Route path="/category" element={<Category />} />
