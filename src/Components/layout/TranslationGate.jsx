@@ -3,8 +3,10 @@ import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import { Box } from "@mui/material";
 import Loader from "../common/Loader";
-import { LANGUAGE_STORAGE_KEY } from "../../i18n";
-import { APP_LANGUAGE_CHANGED_EVENT } from "../../hooks/useTranslated";
+import {
+  APP_LANGUAGE_CHANGED_EVENT,
+  readActiveLanguagePreference,
+} from "../../services/languagePreference";
 
 /**
  * Hides the page content for a brief window after every route change while
@@ -22,13 +24,7 @@ import { APP_LANGUAGE_CHANGED_EVENT } from "../../hooks/useTranslated";
 const HIDE_MS = 350;
 
 const readActiveLanguage = () => {
-  try {
-    return (localStorage.getItem(LANGUAGE_STORAGE_KEY) || "en")
-      .slice(0, 2)
-      .toLowerCase();
-  } catch {
-    return "en";
-  }
+  return readActiveLanguagePreference("en");
 };
 
 const TranslationGate = ({ children }) => {

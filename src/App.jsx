@@ -17,6 +17,11 @@ import { UserProvider } from "./context/UserContext";
 import { BASE_PATH } from "./utils/Config";
 import { isPlatformAdminHost } from "./services/tenantRuntime";
 import { getAllBusinessProfiles } from "./api/BusinessProfile";
+import {
+  applyLanguagePreference,
+  isSupportedLanguageCode,
+  normalizeLanguageCode,
+} from "./services/languagePreference";
 import { setPrimaryColor, DEFAULT_PRIMARY_COLOR as DEFAULT_PRIMARY_FROM_STORE } from "./redux/themeSlice";
 import usePermissions from "./hooks/usePermissions";
 import {
@@ -156,6 +161,14 @@ const App = () => {
           if (catersName) {
             const firstWord = catersName.split(/[\s-]+/)[0];
             document.title = `${firstWord} Catering`;
+          }
+
+          const selectedLanguage = profileList[0]?.selected_language;
+          if (isSupportedLanguageCode(selectedLanguage)) {
+            applyLanguagePreference(normalizeLanguageCode(selectedLanguage), {
+              reloadIfNeeded: false,
+              retryWidget: true,
+            });
           }
         }
       } catch {
