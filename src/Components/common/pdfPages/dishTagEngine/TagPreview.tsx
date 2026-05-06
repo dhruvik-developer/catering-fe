@@ -31,8 +31,8 @@ export const TagPreview: React.FC<TagPreviewProps> = ({
     border,
     borderColor = "#e5e7eb",
     borderWidth = 2,
-    showCaterer = true,
-    pattern = "none", // missing previously
+    showCaterer = false,
+    pattern = "none",
   } = config as any;
 
   const tagStyle: React.CSSProperties = {
@@ -40,7 +40,7 @@ export const TagPreview: React.FC<TagPreviewProps> = ({
     height: `${height}px`,
     backgroundColor,
     backgroundImage: pattern !== "none" ? pattern : "none",
-    backgroundSize: "100px 100px", // simplified fallback for patternSize
+    backgroundSize: "100px 100px",
     color: textColor,
     fontFamily,
     textAlign: alignment,
@@ -48,8 +48,7 @@ export const TagPreview: React.FC<TagPreviewProps> = ({
       border !== "none" ? `${borderWidth}px ${border} ${borderColor}` : "none",
     display: "flex",
     flexDirection: "column",
-    justifyContent: "center", // centered by default, layout positioning overrides per element
-    alignItems: "center",
+    justifyContent: "space-between",
     padding: "16px",
     boxSizing: "border-box",
     borderRadius: "8px",
@@ -80,48 +79,48 @@ export const TagPreview: React.FC<TagPreviewProps> = ({
         />
       )}
 
-      {/* Session Name */}
-      <div
-        style={{
-          fontSize: "11px",
-          fontWeight: 600,
-          opacity: 0.7,
-          visibility: showSession ? "visible" : "hidden",
-          transform: `translate(${layout.sessionName?.x || 0}px, ${layout.sessionName?.y || 0}px)`,
-          position: layout.sessionName ? "absolute" : "static",
-        }}
-      >
-        {sessionName || "Session"}
-      </div>
+      {/* Top: Session Name — only when explicitly enabled */}
+      {showSession && sessionName ? (
+        <div
+          style={{
+            fontSize: "11px",
+            fontWeight: 600,
+            opacity: 0.7,
+            transform: `translate(${layout.sessionName?.x || 0}px, ${layout.sessionName?.y || 0}px)`,
+          }}
+        >
+          {sessionName}
+        </div>
+      ) : null}
 
+      {/* Center: Dish Name (auto-centered via margin auto in flex column) */}
       <div
         style={{
           fontSize: `${fontSize}px`,
           fontWeight: "bold",
           lineHeight: 1.2,
           wordBreak: "break-word",
-          marginBottom:
-            !layout.dishName && showCaterer && dish.caterer ? "8px" : "0",
+          marginTop: "auto",
+          marginBottom: "auto",
           transform: `translate(${layout.dishName?.x || 0}px, ${layout.dishName?.y || 0}px)`,
-          position: layout.dishName ? "absolute" : "static",
         }}
       >
         {dish.name}
       </div>
 
-      {showCaterer && dish.caterer && (
+      {/* Bottom: Caterer Name — only when explicitly enabled */}
+      {showCaterer && dish.caterer ? (
         <div
           style={{
             fontSize: `${Math.max(10, fontSize * 0.45)}px`,
             fontWeight: 600,
             opacity: 0.8,
             transform: `translate(${layout.catererName?.x || 0}px, ${layout.catererName?.y || 0}px)`,
-            position: layout.catererName ? "absolute" : "static",
           }}
         >
           {dish.caterer}
         </div>
-      )}
+      ) : null}
     </div>
   );
 };

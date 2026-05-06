@@ -60,10 +60,28 @@ function PdfBillComponent({
   const total_remain_amount = calculatedPendingAmount.toFixed(2);
 
   // Extra service display logic
+  const toExtraServiceArray = (raw) => {
+    if (Array.isArray(raw)) return raw;
+    if (typeof raw === "string") {
+      try {
+        const parsed = JSON.parse(raw);
+        return Array.isArray(parsed) ? parsed : parsed ? [parsed] : [];
+      } catch {
+        return [];
+      }
+    }
+    if (raw && typeof raw === "object") return [raw];
+    return [];
+  };
+
   const allExtraServices = sessions.flatMap((session, idx) =>
-    (session?.extra_service || [])
+    toExtraServiceArray(session?.extra_service)
       .filter(
-        (service) => Object.keys(service).length > 0 && service.service_name
+        (service) =>
+          service &&
+          typeof service === "object" &&
+          Object.keys(service).length > 0 &&
+          service.service_name
       )
       .map((service) => ({
         ...service,

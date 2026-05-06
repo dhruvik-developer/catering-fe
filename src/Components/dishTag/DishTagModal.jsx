@@ -1,5 +1,6 @@
 /* eslint-disable react/prop-types */
 import { useState, useEffect } from "react";
+import { createPortal } from "react-dom";
 import { FiX, FiLayout, FiGrid } from "react-icons/fi";
 import "./DishTagModal.css";
 import { FONT_LIST, fontToCssValue } from "../../services/fontService";
@@ -476,34 +477,40 @@ export default function DishTagModal({
         </div>
       </div>
 
-      {/* Actual Print Layout - hidden natively, shown only via CSS in print */}
-      <div className="hidden print:block absolute -left-2499.75 top-0 print:static print:auto w-full">
-        <PrintLayout
-          dishes={allDishes.map((name, index) => ({
-            id: index + 1,
-            name: typeof name === "string" ? name : name?.name || "Unknown",
-            caterer: settings.catererName || "radha Catering",
-          }))}
-          config={{
-            width: Number(settings.width) || 300,
-            height: Number(settings.height) || 200,
-            fontFamily: settings.fontFamily,
-            fontSize: Number(settings.fontSize) || 24,
-            alignment: settings.textAlign || "center",
-            backgroundColor: settings.bgColor,
-            textColor: settings.textColor,
-            border: settings.borderStyle || "solid",
-            borderColor: settings.borderColor,
-            borderWidth: Number(settings.borderWidth) || 2,
-            showCaterer: settings.showCaterer,
-            pattern: settings.pattern,
-            layout: settings.layout,
-            logo: settings.logo,
-            sessionName: session?.event_time,
-            showSession: settings.showSession,
-          }}
-        />
-      </div>
+      {/* Actual Print Layout — rendered into document.body via portal so it
+          escapes the modal's fixed/overflow:hidden context. Kept off-screen
+          during normal viewing; the body.dish-tag-print rules in index.css
+          repositions and reveals #print-area during print. */}
+      {createPortal(
+        <div className="dish-tag-print-portal">
+          <PrintLayout
+            dishes={allDishes.map((name, index) => ({
+              id: index + 1,
+              name: typeof name === "string" ? name : name?.name || "Unknown",
+              caterer: settings.catererName || "radha Catering",
+            }))}
+            config={{
+              width: Number(settings.width) || 300,
+              height: Number(settings.height) || 200,
+              fontFamily: settings.fontFamily,
+              fontSize: Number(settings.fontSize) || 24,
+              alignment: settings.textAlign || "center",
+              backgroundColor: settings.bgColor,
+              textColor: settings.textColor,
+              border: settings.borderStyle || "solid",
+              borderColor: settings.borderColor,
+              borderWidth: Number(settings.borderWidth) || 2,
+              showCaterer: settings.showCaterer,
+              pattern: settings.pattern,
+              layout: settings.layout,
+              logo: settings.logo,
+              sessionName: session?.event_time,
+              showSession: settings.showSession,
+            }}
+          />
+        </div>,
+        document.body
+      )}
     </div>
   );
 }

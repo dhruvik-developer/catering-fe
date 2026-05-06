@@ -480,6 +480,18 @@ iframe.goog-te-banner-frame {
 }
 
 /* Dish Tag Print Styles */
+/* Keep the print-portal off-screen during normal viewing. It always lives in
+   the DOM (so React can update it instantly), but is invisible to the user. */
+.dish-tag-print-portal {
+  position: absolute;
+  left: -100000px;
+  top: 0;
+  width: 0;
+  height: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
 @media print {
   @page {
     margin: 0;
@@ -490,21 +502,41 @@ iframe.goog-te-banner-frame {
     print-color-adjust: exact !important;
   }
   body.dish-tag-print * {
-    visibility: hidden;
+    visibility: hidden !important;
   }
-  body.dish-tag-print #print-area,
-  body.dish-tag-print #print-area * {
-    visibility: visible;
+  body.dish-tag-print .dish-tag-print-portal,
+  body.dish-tag-print .dish-tag-print-portal * {
+    visibility: visible !important;
+  }
+  body.dish-tag-print .dish-tag-print-portal {
+    position: absolute !important;
+    left: 0 !important;
+    top: 0 !important;
+    width: 100% !important;
+    height: auto !important;
+    overflow: visible !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    pointer-events: auto !important;
   }
   body.dish-tag-print #print-area {
-    position: absolute;
-    left: 0;
-    top: 0;
-    width: 100%;
-    margin: 0;
-    padding: 0;
+    position: static !important;
+    width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    background: #fff !important;
     -webkit-print-color-adjust: exact !important;
     print-color-adjust: exact !important;
+  }
+  body.dish-tag-print #print-area .print-page {
+    box-shadow: none !important;
+    margin: 0 auto !important;
+    page-break-after: always;
+    break-after: page;
+  }
+  body.dish-tag-print #print-area .print-page:last-child {
+    page-break-after: auto;
+    break-after: auto;
   }
 }
 
