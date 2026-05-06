@@ -918,14 +918,15 @@ const Header = () => {
           </Menu>
 
           {!isAdminHost && (
-            <Divider
-              orientation="vertical"
-              flexItem
-              sx={{ my: 1, bgcolor: "rgba(255,255,255,0.3)" }}
-            />
+            <>
+              <Divider
+                orientation="vertical"
+                flexItem
+                sx={{ my: 1, bgcolor: "rgba(255,255,255,0.3)" }}
+              />
+              <LanguageSwitcher />
+            </>
           )}
-
-          <LanguageSwitcher />
 
           {canViewOrders && (
             <Button
