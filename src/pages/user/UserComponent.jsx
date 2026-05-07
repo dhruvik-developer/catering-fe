@@ -1,18 +1,14 @@
 /* eslint-disable react/prop-types */
-import {
-  Avatar,
-  Box,
-  Button,
-  Paper,
-  Stack,
-  Typography,
-} from "@mui/material";
+import { Button, Paper } from "@mui/material";
 import Loader from "../../Components/common/Loader";
 import UsersTable from "../../Components/user/UserTable";
 import PageHero from "../../Components/common/PageHero";
-import { FiUsers, FiUserPlus, FiBook } from "react-icons/fi";
+import { FiUsers, FiUserPlus } from "react-icons/fi";
 
+// `navigate` prop kept on the signature so the controller can keep passing it
+// without a runtime warning, even though Add Rule moved to the user dropdown.
 function UserComponent({
+  // eslint-disable-next-line no-unused-vars
   navigate,
   loading,
   users,
@@ -35,24 +31,14 @@ function UserComponent({
         title="Users"
         subtitle={`${users?.length || 0} user${users?.length !== 1 ? "s" : ""} registered`}
         actions={
-          <>
-            <Button
-              variant="contained"
-              startIcon={<FiUserPlus size={15} />}
-              onClick={onUserAdd}
-              sx={heroActionSx}
-            >
-              Add User
-            </Button>
-            <Button
-              variant="outlined"
-              startIcon={<FiBook size={15} />}
-              onClick={() => navigate("/add-rule", { state: "addrule" })}
-              sx={heroActionSx}
-            >
-              Add Rule
-            </Button>
-          </>
+          <Button
+            variant="contained"
+            startIcon={<FiUserPlus size={15} />}
+            onClick={onUserAdd}
+            sx={heroActionSx}
+          >
+            Add User
+          </Button>
         }
       />
       <Paper

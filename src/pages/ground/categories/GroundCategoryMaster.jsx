@@ -1,5 +1,5 @@
-import { useState, useEffect } from "react";
-import { logError } from "../../../utils/logger";
+import { useState } from "react";
+import { useQueryClient } from "@tanstack/react-query";
 import {
   Avatar,
   Box,
@@ -20,40 +20,25 @@ import {
 import { FiSearch } from "react-icons/fi";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { MenuRestaurantIcon } from "@hugeicons/core-free-icons";
-import toast from "react-hot-toast";
 import Loader from "../../../Components/common/Loader";
 import EmptyState from "../../../Components/common/EmptyState";
 import PageHero from "../../../Components/common/PageHero";
-import { getGroundCategories } from "../../../api/GroundApis";
 import AddGroundCategory from "./AddGroundCategory";
 import usePermissions from "../../../hooks/usePermissions";
+import {
+  GROUND_CATEGORIES_QUERY_KEY,
+  useGroundCategories,
+} from "../../../hooks/useGround";
 
 const GroundCategoryMaster = () => {
   const { hasPermission } = usePermissions();
-  const [categories, setCategories] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const queryClient = useQueryClient();
   const [searchTerm, setSearchTerm] = useState("");
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
 
-  const fetchCategories = async () => {
-    try {
-      setLoading(true);
-      const res = await getGroundCategories();
-      if (res?.data?.status) {
-        setCategories(res.data.data);
-      } else {
-        toast.error(res?.data?.message || "Failed to fetch categories");
-      }
-    } catch (error) {
-      logError(error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    fetchCategories();
-  }, []);
+  // React-Query backed: list re-fetches automatically after any successful
+  // create/edit/delete (here or anywhere else in the app).
+  const { data: categories = [], isLoading: loading } = useGroundCategories();
 
   const filteredCategories = categories.filter((cat) =>
     cat.name?.toLowerCase().includes(searchTerm.toLowerCase())
@@ -61,7 +46,7 @@ const GroundCategoryMaster = () => {
 
   const handleAddSuccess = () => {
     setIsAddModalOpen(false);
-    fetchCategories();
+    queryClient.invalidateQueries({ queryKey: GROUND_CATEGORIES_QUERY_KEY });
   };
   const canCreateGround = hasPermission("ground.create");
 

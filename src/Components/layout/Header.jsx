@@ -21,6 +21,7 @@ import {
   FiChevronDown,
   FiUsers,
   FiAlertTriangle,
+  FiBook,
   FiCalendar,
   FiClipboard,
   FiHome,
@@ -1060,6 +1061,21 @@ const Header = () => {
                 </ListItemIcon>
                 <Typography variant="body2" sx={{ fontWeight: 500 }}>
                   {t("header.users")}
+                </Typography>
+              </MenuItem>
+            )}
+            {canViewUsers && (
+              <MenuItem
+                onClick={() => {
+                  closeProfile();
+                  navigate("/add-rule", { state: "addrule" });
+                }}
+              >
+                <ListItemIcon>
+                  <FiBook size={16} />
+                </ListItemIcon>
+                <Typography variant="body2" sx={{ fontWeight: 500 }}>
+                  {t("header.rule", { defaultValue: "Rule" })}
                 </Typography>
               </MenuItem>
             )}

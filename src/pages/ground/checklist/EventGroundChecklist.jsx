@@ -197,7 +197,14 @@ const EventGroundChecklist = () => {
               variant="outlined"
               color="primary"
               onClick={() => {
-                setEditItemData(null);
+                // Seed the form with the currently-viewed category so it
+                // arrives pre-selected. No `id` field, so AddGroundItem
+                // still treats this as a create (not an edit).
+                setEditItemData(
+                  activeCategory?.id
+                    ? { category: activeCategory.id }
+                    : null
+                );
                 setShowAddItem(true);
               }}
             >

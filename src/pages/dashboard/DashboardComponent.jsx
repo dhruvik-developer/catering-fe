@@ -645,13 +645,6 @@ const DashboardComponent = ({
               >
                 {greeting}, {displayName}
               </Typography>
-              <Typography
-                variant="body2"
-                sx={{ opacity: 0.85, mt: 0.5, maxWidth: 520 }}
-              >
-                Tap any event below to jump straight into its details — orders,
-                sessions, payments, and assignments live one click away.
-              </Typography>
             </Box>
           </Stack>
           <Stack

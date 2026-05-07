@@ -118,13 +118,17 @@ const tenantMenuItems = [
     requiredPermission: "ground.view",
   },
   {
-    // Tenant-admin only: manage branches inside this tenant. Gated by the
-    // adminOnly flag below — non-admin tenant users won't see this row.
+    // Two gates:
+    //   1. adminOnly — only main tenant admins manage branches
+    //   2. requiredPermission — also hidden when the tenant's subscription
+    //      doesn't include the branches module (backend ships nothing
+    //      branch-shaped in enabled_modules in that case).
     name: "Branches",
     labelKey: "sidebar.branches",
     path: "/branches",
     icon: <FiGitBranch size={22} />,
     adminOnly: true,
+    requiredPermission: "branches.view",
   },
 ];
 

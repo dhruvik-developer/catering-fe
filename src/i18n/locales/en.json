@@ -47,6 +47,7 @@
     "inDays": "In {{count}} days",
     "calendar": "Calendar",
     "users": "Users",
+    "rule": "Rule",
     "settings": "Settings",
     "logout": "Logout",
     "logoutSuccess": "Logout successfully!",

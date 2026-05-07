@@ -1,6 +1,6 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
+import { useQueryClient } from "@tanstack/react-query";
 import ExpenseComponent from "./ExpenseComponent";
-import { getExpenses, getExpenseCategories } from "../../api/FetchExpense";
 import { logError } from "../../utils/logger";
 import {
   createExpense,
@@ -12,44 +12,30 @@ import toast from "react-hot-toast";
 import Swal from "sweetalert2";
 import DeleteConfirmation from "../../Components/common/DeleteConfirmation";
 import usePermissions from "../../hooks/usePermissions";
+import {
+  EXPENSES_QUERY_KEY,
+  EXPENSE_CATEGORIES_QUERY_KEY,
+  useExpenseCategories,
+  useExpenses,
+} from "../../hooks/useExpenses";
 
 function ExpenseController() {
   const { hasPermission } = usePermissions();
-  const [expenses, setExpenses] = useState([]);
-  const [categories, setCategories] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const queryClient = useQueryClient();
   const [filterCategory, setFilterCategory] = useState("");
 
-  const fetchExpenses = async () => {
-    try {
-      const response = await getExpenses();
-      if (response?.data?.status) {
-        setExpenses(response.data.data);
-      } else {
-        setExpenses([]);
-      }
-    } catch {
-      toast.error("Error fetching expenses");
-    } finally {
-      setLoading(false);
-    }
-  };
+  // React-Query backed: any successful create/update/delete (in this page or
+  // anywhere else in the app) invalidates these keys and the list re-fetches
+  // automatically — no manual fetch wiring required.
+  const { data: expenses = [], isLoading: loadingExpenses } = useExpenses();
+  const { data: categories = [], isLoading: loadingCategories } =
+    useExpenseCategories();
+  const loading = loadingExpenses || loadingCategories;
 
-  const fetchCategories = async () => {
-    try {
-      const response = await getExpenseCategories();
-      if (response?.data?.status) {
-        setCategories(response.data.data);
-      }
-    } catch {
-      toast.error("Error fetching expense categories");
-    }
-  };
-
-  useEffect(() => {
-    fetchExpenses();
-    fetchCategories();
-  }, []);
+  const invalidateExpenses = () =>
+    queryClient.invalidateQueries({ queryKey: EXPENSES_QUERY_KEY });
+  const invalidateCategories = () =>
+    queryClient.invalidateQueries({ queryKey: EXPENSE_CATEGORIES_QUERY_KEY });
 
   // Client-side filtering
   const filteredExpenses = filterCategory
@@ -139,7 +125,7 @@ function ExpenseController() {
     if (formValues) {
       const response = await createExpense(formValues);
       if (response) {
-        fetchExpenses();
+        invalidateExpenses();
       }
     }
   };
@@ -212,7 +198,7 @@ function ExpenseController() {
     if (formValues) {
       const response = await updateExpense(expense.id, formValues);
       if (response) {
-        fetchExpenses();
+        invalidateExpenses();
       }
     }
   };
@@ -228,7 +214,7 @@ function ExpenseController() {
       apiEndpoint: "/expenses",
       name: "expense",
       successMessage: "Expense deleted successfully!",
-      onSuccess: fetchExpenses,
+      onSuccess: invalidateExpenses,
     });
   };
 
@@ -262,7 +248,7 @@ function ExpenseController() {
     if (name) {
       const response = await createExpenseCategory(name);
       if (response) {
-        fetchCategories();
+        invalidateCategories();
         Swal.close();
       }
     }
@@ -321,7 +307,7 @@ function ExpenseController() {
             html: `Removing <strong>${i + 1} / ${categoryExpenses.length}</strong> expenses`,
           });
         }
-        await fetchExpenses();
+        await invalidateExpenses();
         Swal.close();
         toast.success(
           `${categoryExpenses.length} expense(s) deleted successfully!`
@@ -341,8 +327,8 @@ function ExpenseController() {
       name: `expense category "${catName}"`,
       successMessage: "Expense category deleted successfully!",
       onSuccess: () => {
-        fetchCategories();
-        fetchExpenses();
+        invalidateCategories();
+        invalidateExpenses();
       },
     });
   };

@@ -1,5 +1,5 @@
-import { useState, useEffect } from "react";
-import { logError } from "../../../utils/logger";
+import { useMemo, useState } from "react";
+import { useQueryClient } from "@tanstack/react-query";
 import {
   Avatar,
   Box,
@@ -22,66 +22,35 @@ import {
 import { FiSearch } from "react-icons/fi";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { StickyNote02Icon } from "@hugeicons/core-free-icons";
-import toast from "react-hot-toast";
 import Loader from "../../../Components/common/Loader";
 import EmptyState from "../../../Components/common/EmptyState";
 import PageHero from "../../../Components/common/PageHero";
-import { getGroundItems, getGroundCategories } from "../../../api/GroundApis";
 import AddGroundItem from "./AddGroundItem";
 import usePermissions from "../../../hooks/usePermissions";
+import {
+  GROUND_ITEMS_QUERY_KEY,
+  useGroundCategories,
+  useGroundItems,
+} from "../../../hooks/useGround";
 
 const GroundItemMaster = () => {
   const { hasPermission } = usePermissions();
-  const [items, setItems] = useState([]);
-  const [categories, setCategories] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const queryClient = useQueryClient();
 
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("");
-
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
 
-  const fetchInitialData = async () => {
-    try {
-      setLoading(true);
-      const [itemsRes, catRes] = await Promise.all([
-        getGroundItems(),
-        getGroundCategories(),
-      ]);
-
-      if (itemsRes?.data?.status) {
-        setItems(itemsRes.data.data);
-      } else {
-        toast.error(itemsRes?.data?.message || "Failed to fetch items");
-      }
-
-      if (catRes?.data?.status) {
-        setCategories(catRes.data.data.filter((c) => c.is_active));
-      }
-    } catch (error) {
-      logError(error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const fetchItems = async () => {
-    try {
-      setLoading(true);
-      const res = await getGroundItems();
-      if (res?.data?.status) {
-        setItems(res.data.data);
-      }
-    } catch (error) {
-      logError(error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    fetchInitialData();
-  }, []);
+  // React-Query backed: items + categories auto-refresh after every
+  // successful create/update/delete (here or anywhere else in the app).
+  const { data: items = [], isLoading: loadingItems } = useGroundItems();
+  const { data: rawCategories = [], isLoading: loadingCategories } =
+    useGroundCategories();
+  const categories = useMemo(
+    () => rawCategories.filter((c) => c.is_active),
+    [rawCategories]
+  );
+  const loading = loadingItems || loadingCategories;
 
   const filteredItems = items.filter((item) => {
     const matchesSearch = item.name
@@ -95,7 +64,7 @@ const GroundItemMaster = () => {
 
   const handleAddSuccess = () => {
     setIsAddModalOpen(false);
-    fetchItems();
+    queryClient.invalidateQueries({ queryKey: GROUND_ITEMS_QUERY_KEY });
   };
   const canCreateGround = hasPermission("ground.create");
 

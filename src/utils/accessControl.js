@@ -19,6 +19,9 @@ const MODULE_ALIASES = {
   notes: ["notes"],
   permissions: ["permissions", "access_control"],
   users: ["users"],
+  // Branches feature is gated by the tenant's enabled_modules. Backend may
+  // ship any of these module names depending on its naming, so accept all.
+  branches: ["branches", "branch_profiles", "branch_profile"],
 };
 
 const ROUTE_ACCESS = [
@@ -119,6 +122,10 @@ const ROUTE_ACCESS = [
   { path: "/add-user", permission: "users.create" },
   { path: "/edit-user", permission: "users.update" },
   { path: "/add-rule", permission: "users.update" },
+
+  { path: "/branches", permission: "branches.view" },
+  { path: "/add-branch", permission: "branches.create" },
+  { path: "/edit-branch", permission: "branches.update" },
 ];
 
 const DEFAULT_ACCESS_ORDER = [
