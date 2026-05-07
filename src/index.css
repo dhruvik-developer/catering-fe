@@ -648,7 +648,7 @@ button[class*="text-white"]:hover {
   }
   100% {
     opacity: 1;
-    transform: translateY(0) scale(1);
+    transform: none;
   }
 }
 /* Apply animation to common modal wrappers and cards */
@@ -672,6 +672,10 @@ tbody tr:hover {
 }
 
 /* 9. Layout Animations (Page Transitions) */
+/* NOTE: end states use `transform: none` (not `translateY(0)`).
+   With `animation-fill-mode: forwards`, any non-`none` transform left on the
+   element creates a containing block for `position: fixed` descendants, which
+   traps modals inside their parent instead of covering the viewport. */
 @keyframes slideUpFade {
   from {
     opacity: 0;
@@ -679,7 +683,7 @@ tbody tr:hover {
   }
   to {
     opacity: 1;
-    transform: translateY(0);
+    transform: none;
   }
 }
 
@@ -690,7 +694,7 @@ tbody tr:hover {
   }
   to {
     opacity: 1;
-    transform: translateY(0);
+    transform: none;
   }
 }
 

@@ -2,6 +2,7 @@
 import { useState, useEffect } from "react";
 import { format } from "date-fns";
 import { logError } from "../../utils/logger";
+import Portal from "../common/Portal";
 
 function StaffWithdrawalModal({
   isOpen,
@@ -58,6 +59,7 @@ function StaffWithdrawalModal({
   };
 
   return (
+    <Portal>
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
       <div className="bg-white rounded-2xl shadow-xl w-full max-w-md overflow-hidden animate-fade-in-up">
         <div className="bg-gradient-to-r from-red-400 to-red-500 px-6 py-4 flex justify-between items-center">
@@ -144,6 +146,7 @@ function StaffWithdrawalModal({
         </form>
       </div>
     </div>
+    </Portal>
   );
 }
 

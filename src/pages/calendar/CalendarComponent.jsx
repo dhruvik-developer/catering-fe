@@ -13,6 +13,7 @@ import {
 } from "react-icons/fi";
 import Loader from "../../Components/common/Loader";
 import PageHero from "../../Components/common/PageHero";
+import Portal from "../../Components/common/Portal";
 
 const MONTH_NAMES = [
   "January",
@@ -349,7 +350,7 @@ function CalendarComponent({ orders, loading, navigate }) {
 
       {/* Right Slide-out Sidebar */}
       {selectedDate && (
-        <>
+        <Portal>
           <div
             className="fixed inset-0 bg-black/20 z-40"
             onClick={() => setSelectedDate(null)}
@@ -520,7 +521,7 @@ function CalendarComponent({ orders, loading, navigate }) {
               })}
             </div>
           </div>
-        </>
+        </Portal>
       )}
 
       <style>{`

@@ -10,6 +10,7 @@ import {
 } from "../../api/EventStaffApis";
 import Loader from "../../Components/common/Loader";
 import PageHero from "../../Components/common/PageHero";
+import Portal from "../../Components/common/Portal";
 
 const waitersFromApi = async (setWaiterTypes, setLoading) => {
   setLoading(true);
@@ -146,6 +147,7 @@ const WaiterTypeManagement = () => {
 
       {/* Add Modal */}
       {isAddModalOpen && (
+        <Portal>
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-gray-900/50 backdrop-blur-sm p-4">
           <div className="w-full max-w-md rounded-2xl bg-white shadow-2xl overflow-hidden animate-in zoom-in-95 duration-200">
             {/* Modal Header */}
@@ -241,6 +243,7 @@ const WaiterTypeManagement = () => {
             </div>
           </div>
         </div>
+        </Portal>
       )}
 
       {/* Lists */}

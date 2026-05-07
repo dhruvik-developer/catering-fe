@@ -354,12 +354,57 @@ function ShareIngredientComponent({
                       </p>
                       {(() => {
                         const numericTotal = parseFloat(item.totalQuantity) || 0;
+                        const unitMatch = String(item.totalQuantity).match(/[\d.]+\s*([a-zA-Z]+)/);
+                        const unit = unitMatch ? unitMatch[1] : item.quantityType || "";
+
+                        // If a manual split has been saved on the View
+                        // Ingredient page, surface it verbatim here so the
+                        // share flow reflects what the user actually decided.
+                        const saved = item.savedAllocation;
+                        if (saved) {
+                          const sg = Number(saved.godown_qty) || 0;
+                          const sv = Number(saved.vendor_qty) || 0;
+                          const left = Math.max(0, numericTotal - sg - sv);
+                          const savedVendors = Array.isArray(saved.vendors)
+                            ? saved.vendors
+                            : [];
+                          return (
+                            <div className="mt-1 space-y-1">
+                              <div className="flex flex-wrap items-center gap-1.5">
+                                {sg > 0 && (
+                                  <span className="inline-flex items-center gap-1 text-[11px] font-semibold text-[var(--color-primary-text)] bg-[var(--color-primary-tint)] border border-[var(--color-primary-border)] px-2 py-0.5 rounded-full">
+                                    🏭 Godown: {sg} {unit}
+                                    {sg < numericTotal && <span className="text-[9px]">(saved)</span>}
+                                  </span>
+                                )}
+                                {savedVendors.length > 0
+                                  ? savedVendors.map((vendorRow, vi) => (
+                                      <span
+                                        key={`${vendorRow.id}-${vi}`}
+                                        className="inline-flex items-center gap-1 text-[11px] font-semibold text-[var(--color-primary)] bg-[var(--color-primary-tint)] border border-[var(--color-primary-border)]/50 px-2 py-0.5 rounded-full"
+                                      >
+                                        🛒 {vendorRow.name || "Vendor"}: {vendorRow.qty} {unit}
+                                        <span className="text-[9px]">(saved)</span>
+                                      </span>
+                                    ))
+                                  : sv > 0 && (
+                                      <span className="inline-flex items-center gap-1 text-[11px] font-semibold text-[var(--color-primary)] bg-[var(--color-primary-tint)] border border-[var(--color-primary-border)]/50 px-2 py-0.5 rounded-full">
+                                        🛒 Vendor: {sv} {unit}
+                                        <span className="text-[9px]">(saved)</span>
+                                      </span>
+                                    )}
+                              </div>
+                              <p className={`text-sm font-semibold ${left === 0 ? "text-[var(--color-primary)]" : "text-amber-600"}`}>
+                                {left === 0 ? "✅" : "⚠️"} Remaining: {left} {unit}
+                              </p>
+                            </div>
+                          );
+                        }
+
                         const godownQty = isGodownSource ? (item.godownQuantity || 0) : 0;
                         const isVendorAssigned = item.vendor && item.vendor.id !== "godown";
                         const remainingVal = isVendorAssigned ? 0 : Math.max(0, numericTotal - godownQty);
                         const vendorCoverage = isVendorAssigned ? Math.max(0, numericTotal - godownQty) : 0;
-                        const unitMatch = String(item.totalQuantity).match(/[\d.]+\s*([a-zA-Z]+)/);
-                        const unit = unitMatch ? unitMatch[1] : item.quantityType || "";
                         return (
                           <div className="mt-1 space-y-1">
                             {/* Source breakdown */}

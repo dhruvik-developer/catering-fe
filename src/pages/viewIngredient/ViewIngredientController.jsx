@@ -268,6 +268,109 @@ function ViewIngredientController() {
     return success;
   };
 
+  // Persist a manual godown/vendor split for one ingredient on one session.
+  // payload: {
+  //   source: "godown" | "vendor" | "both",
+  //   godown_qty: number,
+  //   vendor_qty: number,
+  //   vendors: [{ id, name, mobile_no, qty }, …]
+  // }
+  // Writes:
+  //   - `ingredients_required[itemName].allocation` — canonical split with the
+  //     full multi-vendor array.
+  //   - `assigned_vendors[itemName]` — legacy single-vendor object, populated
+  //     from the largest-qty vendor so existing PDF generators / share flows
+  //     keep showing a sensible primary vendor.
+  const handleSaveAllocation = async (sessionId, itemName, payload) => {
+    try {
+      const response = await getSingleOrder(id);
+      if (!response?.data?.status) {
+        toast.error("Failed to fetch order data");
+        return false;
+      }
+
+      const orderData = response.data.data;
+      const vendorsList = Array.isArray(payload.vendors) ? payload.vendors : [];
+      // Largest-qty vendor is the "primary" — gets mirrored into the legacy
+      // single-vendor field. Picking the largest is what users typically mean
+      // by "main supplier" for the line item.
+      const primaryVendor = vendorsList.length
+        ? [...vendorsList].sort((a, b) => (b.qty || 0) - (a.qty || 0))[0]
+        : null;
+      const primaryVendorObj = primaryVendor
+        ? {
+            id: primaryVendor.id,
+            name: primaryVendor.name,
+            mobile_no: primaryVendor.mobile_no || "",
+          }
+        : null;
+
+      const updatedSessions = (orderData.sessions || []).map((session) => {
+        if (String(session.id) !== String(sessionId)) return session;
+
+        const ingredientsRequired = { ...(session.ingredients_required || {}) };
+        const existing = ingredientsRequired[itemName];
+        const merged =
+          typeof existing === "object" && existing !== null
+            ? { ...existing }
+            : { quantity: existing || "" };
+
+        merged.allocation = {
+          source: payload.source,
+          godown_qty: payload.godown_qty,
+          vendor_qty: payload.vendor_qty,
+          vendors: vendorsList,
+          // Keep the singular `vendor` field too for any older reader that
+          // doesn't know about `vendors`.
+          vendor: primaryVendorObj,
+        };
+        if (payload.source === "godown") {
+          delete merged.vendor;
+        } else if (primaryVendorObj) {
+          merged.vendor = primaryVendorObj;
+        }
+        ingredientsRequired[itemName] = merged;
+
+        // Legacy single-vendor mirror.
+        const assignedVendors = { ...(session.assigned_vendors || {}) };
+        if (payload.source === "godown") {
+          assignedVendors[itemName] = {
+            id: "godown",
+            name: "Godown",
+            delivery_date: "",
+            delivery_time: "",
+            delivery_address: "",
+          };
+        } else if (primaryVendorObj) {
+          const prior = assignedVendors[itemName] || {};
+          assignedVendors[itemName] = {
+            ...prior,
+            id: primaryVendorObj.id,
+            name: primaryVendorObj.name,
+            mobile_no:
+              primaryVendorObj.mobile_no || prior.mobile_no || "",
+          };
+        }
+
+        return {
+          ...session,
+          ingredients_required: ingredientsRequired,
+          assigned_vendors: assignedVendors,
+        };
+      });
+
+      await updateOrder(id, { sessions: updatedSessions });
+      toast.success("Allocation saved");
+      fetchViewIngredient();
+      fetchIngredientList();
+      return true;
+    } catch (error) {
+      logError("Save allocation failed:", error);
+      toast.error("Failed to save allocation");
+      return false;
+    }
+  };
+
   // sessionLabel: when ShareSession button clicked, filter to only that session's quantities
   const handleShareIngredients = (categoryName, sessionLabel, mode) => {
     const categoryData = eventIngredientsList.find(
@@ -640,6 +743,7 @@ function ViewIngredientController() {
         onAddOrderLocalIngredients={handleAddOrderLocalIngredients}
         onReplaceOrderLocalIngredients={handleReplaceOrderLocalIngredients}
         onDeleteOrderLocalIngredient={handleDeleteOrderLocalIngredient}
+        onSaveAllocation={handleSaveAllocation}
       />
     </div>
   );

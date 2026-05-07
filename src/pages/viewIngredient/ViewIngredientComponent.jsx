@@ -19,6 +19,7 @@ import {
 import Grid from "@mui/material/Grid";
 import Loader from "../../Components/common/Loader";
 import AddOrderIngredientsModal from "../../Components/common/AddOrderIngredientsModal";
+import IngredientAllocationModal from "../../Components/viewIngredient/IngredientAllocationModal";
 import {
   FiAlertTriangle,
   FiArrowLeft,
@@ -135,6 +136,7 @@ function ViewIngredientComponent({
   onAddOrderLocalIngredients,
   onReplaceOrderLocalIngredients,
   onDeleteOrderLocalIngredient,
+  onSaveAllocation,
 }) {
   const outsourcedItemsList = React.useMemo(() => {
     if (!viewIngredient?.sessions) return [];
@@ -161,6 +163,66 @@ function ViewIngredientComponent({
   const [savingEdit, setSavingEdit] = React.useState(false);
 
   const [orderLocalModal, setOrderLocalModal] = React.useState(null);
+  // { sessionId, itemName, categoryName, requiredQty, requiredUnit,
+  //   godownAvailable, currentAllocation, currentVendor }
+  const [allocationModal, setAllocationModal] = React.useState(null);
+
+  // Read the stored allocation (Phase 1 manual split) for an item across the
+  // sessions visible on this page. We don't merge across sessions: if a
+  // session-filter is active we use that session's value, otherwise the first
+  // session that has an allocation wins.
+  const getStoredAllocationForItem = React.useCallback(
+    (itemName) => {
+      if (!viewIngredient?.sessions) return null;
+      for (const session of viewIngredient.sessions) {
+        if (sessionIdFilter && String(session.id) !== String(sessionIdFilter))
+          continue;
+        if (
+          !sessionIdFilter &&
+          sessionFilter &&
+          session.event_time !== sessionFilter
+        )
+          continue;
+        const req = session.ingredients_required || {};
+        const entry = req[itemName];
+        if (entry && typeof entry === "object" && entry.allocation) {
+          return { allocation: entry.allocation, sessionId: session.id };
+        }
+      }
+      return null;
+    },
+    [viewIngredient, sessionFilter, sessionIdFilter]
+  );
+
+  // Pick the "primary" sessionId to write allocations to. When the page is
+  // filtered to one session that's the obvious answer; otherwise we fall back
+  // to the first session that has this item required.
+  const getPrimarySessionIdForItem = React.useCallback(
+    (itemName) => {
+      const sessions = viewIngredient?.sessions || [];
+      if (sessionIdFilter) return sessionIdFilter;
+      if (sessionFilter) {
+        const s = sessions.find((x) => x.event_time === sessionFilter);
+        if (s) return s.id;
+      }
+      const s = sessions.find(
+        (sess) =>
+          sess.ingredients_required && sess.ingredients_required[itemName]
+      );
+      return s?.id || sessions[0]?.id || null;
+    },
+    [viewIngredient, sessionFilter, sessionIdFilter]
+  );
+
+  const handleAllocationSave = async (payload) => {
+    if (!allocationModal || !onSaveAllocation) return;
+    const ok = await onSaveAllocation(
+      allocationModal.sessionId,
+      allocationModal.itemName,
+      payload
+    );
+    if (ok) setAllocationModal(null);
+  };
 
   const orderLocalKeys = React.useMemo(() => {
     const s = new Set();
@@ -1097,11 +1159,34 @@ function ViewIngredientComponent({
                           (v) => v.id !== "godown"
                         );
 
-                        const remaining = totalRequiredValue - convertedGodown;
-                        const totalQuantity = hasNonGodownVendor
+                        // If a manual split has been saved (Phase 1 allocation
+                        // editor), it overrides the auto-derived godown/vendor
+                        // numbers below so the card reflects the user's choice.
+                        const storedAllocationEntry = getStoredAllocationForItem(
+                          item.item
+                        );
+                        const storedAllocation =
+                          storedAllocationEntry?.allocation || null;
+
+                        const effectiveGodown = storedAllocation
+                          ? Number(storedAllocation.godown_qty) || 0
+                          : convertedGodown;
+                        const effectiveVendor = storedAllocation
+                          ? Number(storedAllocation.vendor_qty) || 0
+                          : Math.max(0, totalRequiredValue - convertedGodown);
+
+                        const remaining = totalRequiredValue - effectiveGodown;
+                        const totalQuantity = storedAllocation
+                          ? Math.max(
+                              0,
+                              totalRequiredValue -
+                                effectiveGodown -
+                                effectiveVendor
+                            )
+                          : hasNonGodownVendor
                           ? 0
                           : Math.max(0, remaining);
-                        const isFromGodown = godownRaw > 0;
+                        const isFromGodown = effectiveGodown > 0;
                         const isOrderLocal = orderLocalKeys.has(item.item);
 
                         return (
@@ -1437,26 +1522,43 @@ function ViewIngredientComponent({
                                   <Stack
                                     direction="row"
                                     spacing={0.75} useFlexGap
-                                    sx={{ flexWrap: "wrap", mb: 0.75 }}
+                                    sx={{ flexWrap: "wrap", alignItems: "center", mb: 0.75 }}
                                   >
                                     {isFromGodown ? (
                                       <Chip
                                         size="small"
-                                        label={`Godown: ${godownRaw} ${godownUnit}${
-                                          convertedGodown < totalRequiredValue
-                                            ? " (partial)"
-                                            : ""
-                                        }`}
+                                        label={(() => {
+                                          // When the saved allocation drives
+                                          // the chip, the qty is already in
+                                          // requiredUnit. Otherwise we want to
+                                          // show the *raw* godown qty in the
+                                          // *raw* godown unit (e.g. "40 KG"),
+                                          // not the auto-converted grams —
+                                          // that was the "40000 KG" bug.
+                                          const qty = storedAllocation
+                                            ? effectiveGodown
+                                            : godownRaw;
+                                          const unit = storedAllocation
+                                            ? requiredUnit ||
+                                              item.quantity_type ||
+                                              ""
+                                            : godownUnit;
+                                          const partial =
+                                            effectiveGodown < totalRequiredValue
+                                              ? " (partial)"
+                                              : "";
+                                          return `Godown: ${qty} ${unit}${partial}`;
+                                        })()}
                                         icon={
                                           <span>
-                                            {convertedGodown >=
+                                            {effectiveGodown >=
                                             totalRequiredValue
                                               ? "✅"
                                               : "🏭"}
                                           </span>
                                         }
                                         color={
-                                          convertedGodown >= totalRequiredValue
+                                          effectiveGodown >= totalRequiredValue
                                             ? "success"
                                             : "primary"
                                         }
@@ -1471,7 +1573,43 @@ function ViewIngredientComponent({
                                         sx={{ fontWeight: 600 }}
                                       />
                                     )}
-                                    {hasNonGodownVendor ? (
+                                    {storedAllocation ? (
+                                      // Phase 2: render one chip per vendor in
+                                      // the saved split. Falls back to a single
+                                      // aggregated chip when the saved data is
+                                      // pre-Phase-2 (no `vendors` array).
+                                      Array.isArray(storedAllocation.vendors) &&
+                                      storedAllocation.vendors.length > 0 ? (
+                                        storedAllocation.vendors.map((sv, vi) => (
+                                          <Chip
+                                            key={`${sv.id}-${vi}`}
+                                            size="small"
+                                            label={`${sv.name || "Vendor"}: ${sv.qty} ${
+                                              requiredUnit ||
+                                              item.quantity_type ||
+                                              ""
+                                            }`}
+                                            icon={<span>🛒</span>}
+                                            color="primary"
+                                            variant="outlined"
+                                            sx={{ fontWeight: 600 }}
+                                          />
+                                        ))
+                                      ) : effectiveVendor > 0 ? (
+                                        <Chip
+                                          size="small"
+                                          label={`Vendor: ${effectiveVendor} ${
+                                            requiredUnit ||
+                                            item.quantity_type ||
+                                            ""
+                                          }`}
+                                          icon={<span>🛒</span>}
+                                          color="primary"
+                                          variant="outlined"
+                                          sx={{ fontWeight: 600 }}
+                                        />
+                                      ) : null
+                                    ) : hasNonGodownVendor ? (
                                       <Chip
                                         size="small"
                                         label={`Vendor: ${Math.max(
@@ -1496,6 +1634,45 @@ function ViewIngredientComponent({
                                           sx={{ fontWeight: 600 }}
                                         />
                                       )
+                                    )}
+                                    {onSaveAllocation && (
+                                      <Chip
+                                        size="small"
+                                        label="Edit Allocation"
+                                        icon={<FiEdit2 size={12} />}
+                                        clickable
+                                        onClick={() => {
+                                          const sid = getPrimarySessionIdForItem(
+                                            item.item
+                                          );
+                                          if (!sid) return;
+                                          const currentVendorObj =
+                                            (storedAllocation &&
+                                              storedAllocation.vendor) ||
+                                            itemVendors.find(
+                                              (v) => v.id !== "godown"
+                                            ) ||
+                                            null;
+                                          setAllocationModal({
+                                            sessionId: sid,
+                                            itemName: item.item,
+                                            categoryName: category.name,
+                                            requiredQty: totalRequiredValue,
+                                            requiredUnit:
+                                              requiredUnit ||
+                                              item.quantity_type ||
+                                              "",
+                                            godownAvailable: convertedGodown,
+                                            currentAllocation: storedAllocation,
+                                            currentVendor: currentVendorObj,
+                                          });
+                                        }}
+                                        sx={{
+                                          ml: "auto",
+                                          fontWeight: 600,
+                                          cursor: "pointer",
+                                        }}
+                                      />
                                     )}
                                   </Stack>
                                   <Divider sx={{ my: 0.75 }} />
@@ -1592,6 +1769,19 @@ function ViewIngredientComponent({
         initialRows={orderLocalModal?.initialRows || []}
         mode={orderLocalModal?.mode || "add"}
         onSave={handleOrderLocalSave}
+      />
+
+      <IngredientAllocationModal
+        isOpen={!!allocationModal}
+        onClose={() => setAllocationModal(null)}
+        onSave={handleAllocationSave}
+        itemName={allocationModal?.itemName || ""}
+        categoryName={allocationModal?.categoryName || ""}
+        requiredQty={allocationModal?.requiredQty || 0}
+        requiredUnit={allocationModal?.requiredUnit || ""}
+        godownAvailable={allocationModal?.godownAvailable || 0}
+        currentAllocation={allocationModal?.currentAllocation || null}
+        currentVendor={allocationModal?.currentVendor || null}
       />
     </Box>
   );

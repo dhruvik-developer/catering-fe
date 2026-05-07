@@ -14,6 +14,7 @@ import { FaTimes } from "react-icons/fa";
 import { motion, AnimatePresence } from "framer-motion";
 import Loader from "../../Components/common/Loader";
 import Dropdown from "../../Components/common/formDropDown/DropDown";
+import Portal from "../../Components/common/Portal";
 
 function ViewItemRecipeComponent({
   loading,
@@ -611,6 +612,7 @@ function ViewItemRecipeComponent({
   // If used as a modal/popup
   if (onClose) {
     return (
+      <Portal>
       <AnimatePresence mode="wait">
         <motion.div
           key="modal-backdrop"
@@ -631,6 +633,7 @@ function ViewItemRecipeComponent({
           </motion.div>
         </motion.div>
       </AnimatePresence>
+      </Portal>
     );
   }
 

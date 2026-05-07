@@ -96,81 +96,96 @@ function AddOrderIngredientsModal({
         </div>
       }
     >
-      <div className="flex flex-col gap-3">
+      <div className="flex flex-col gap-2">
+        {/* Table-style header row — visible only on sm+. On mobile each row
+            stacks vertically and placeholder text inside the inputs already
+            tells the user what the field is. */}
+        <div
+          className="hidden sm:grid items-end gap-2 px-3 pb-1"
+          style={{
+            gridTemplateColumns: "minmax(0,1fr) 6rem 6rem 8rem 2rem",
+          }}
+        >
+          <div className="text-[10px] font-bold tracking-wider text-gray-500 uppercase">
+            Ingredient
+          </div>
+          <div className="text-[10px] font-bold tracking-wider text-gray-500 uppercase">
+            Qty
+          </div>
+          <div className="text-[10px] font-bold tracking-wider text-gray-500 uppercase">
+            Unit
+          </div>
+          <div className="text-[10px] font-bold tracking-wider text-gray-500 uppercase">
+            Category
+          </div>
+          <div />
+        </div>
+
         {rows.map((row, idx) => (
           <div
             key={idx}
-            className="flex flex-col sm:flex-row gap-2 p-3 border border-gray-100 rounded-lg bg-gray-50/50"
+            className="grid grid-cols-1 sm:grid items-center gap-2 p-3 border border-gray-100 rounded-lg bg-gray-50/50"
+            style={{
+              gridTemplateColumns:
+                "minmax(0,1fr) 6rem 6rem 8rem 2rem",
+            }}
           >
-            <div className="flex-1 min-w-0">
-              <label className="block text-[10px] font-bold tracking-wider text-gray-500 uppercase mb-1">
-                Ingredient
-              </label>
-              <input
-                type="text"
-                value={row.ingredient}
-                onChange={(e) =>
-                  updateRow(idx, { ingredient: e.target.value })
-                }
-                placeholder="e.g. Turmeric"
-                className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm bg-white focus:outline-none focus:border-[var(--color-primary)] focus:ring-2 focus:ring-[var(--color-primary)]/15"
-              />
-            </div>
-            <div className="w-full sm:w-24">
-              <label className="block text-[10px] font-bold tracking-wider text-gray-500 uppercase mb-1">
-                Qty
-              </label>
-              <input
-                type="number"
-                step="any"
-                min="0"
-                value={row.quantity}
-                onChange={(e) =>
-                  updateRow(idx, { quantity: e.target.value })
-                }
-                placeholder="0"
-                className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm bg-white focus:outline-none focus:border-[var(--color-primary)] focus:ring-2 focus:ring-[var(--color-primary)]/15"
-              />
-            </div>
-            <div className="w-full sm:w-24">
-              <label className="block text-[10px] font-bold tracking-wider text-gray-500 uppercase mb-1">
-                Unit
-              </label>
-              <select
-                value={row.unit}
-                onChange={(e) => updateRow(idx, { unit: e.target.value })}
-                className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm bg-white focus:outline-none focus:border-[var(--color-primary)]"
-              >
-                {UNITS.map((u) => (
-                  <option key={u} value={u}>
-                    {u}
-                  </option>
-                ))}
-              </select>
-            </div>
-            <div className="w-full sm:w-32">
-              <label className="block text-[10px] font-bold tracking-wider text-gray-500 uppercase mb-1">
-                Category
-              </label>
-              <input
-                type="text"
-                value={row.category}
-                onChange={(e) =>
-                  updateRow(idx, { category: e.target.value })
-                }
-                placeholder="Other"
-                className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm bg-white focus:outline-none focus:border-[var(--color-primary)]"
-              />
-            </div>
-            {rows.length > 1 && (
+            <input
+              type="text"
+              value={row.ingredient}
+              onChange={(e) =>
+                updateRow(idx, { ingredient: e.target.value })
+              }
+              placeholder="Ingredient (e.g. Turmeric)"
+              aria-label="Ingredient"
+              className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm bg-white focus:outline-none focus:border-[var(--color-primary)] focus:ring-2 focus:ring-[var(--color-primary)]/15"
+            />
+            <input
+              type="number"
+              step="any"
+              min="0"
+              value={row.quantity}
+              onChange={(e) =>
+                updateRow(idx, { quantity: e.target.value })
+              }
+              placeholder="Qty"
+              aria-label="Quantity"
+              className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm bg-white focus:outline-none focus:border-[var(--color-primary)] focus:ring-2 focus:ring-[var(--color-primary)]/15"
+            />
+            <select
+              value={row.unit}
+              onChange={(e) => updateRow(idx, { unit: e.target.value })}
+              aria-label="Unit"
+              className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm bg-white focus:outline-none focus:border-[var(--color-primary)]"
+            >
+              {UNITS.map((u) => (
+                <option key={u} value={u}>
+                  {u}
+                </option>
+              ))}
+            </select>
+            <input
+              type="text"
+              value={row.category}
+              onChange={(e) =>
+                updateRow(idx, { category: e.target.value })
+              }
+              placeholder="Category"
+              aria-label="Category"
+              className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm bg-white focus:outline-none focus:border-[var(--color-primary)]"
+            />
+            {rows.length > 1 ? (
               <button
                 type="button"
                 onClick={() => removeRow(idx)}
-                className="self-end sm:self-center p-2 rounded-lg text-red-400 hover:text-red-600 hover:bg-red-50 cursor-pointer"
+                className="justify-self-end sm:justify-self-center p-2 rounded-lg text-red-400 hover:text-red-600 hover:bg-red-50 cursor-pointer"
                 title="Remove row"
+                aria-label="Remove row"
               >
                 <FiTrash2 size={16} />
               </button>
+            ) : (
+              <div className="hidden sm:block" />
             )}
           </div>
         ))}

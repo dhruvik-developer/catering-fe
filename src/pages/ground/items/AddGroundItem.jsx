@@ -3,6 +3,7 @@ import { FiX } from "react-icons/fi";
 import toast from "react-hot-toast";
 import { createGroundItem, updateGroundItem } from "../../../api/GroundApis";
 import { logError } from "../../../utils/logger";
+import Portal from "../../../Components/common/Portal";
 
 // eslint-disable-next-line react/prop-types
 const AddGroundItem = ({ isOpen, onClose, onSuccess, categories = [], editData = null }) => {
@@ -81,6 +82,7 @@ const AddGroundItem = ({ isOpen, onClose, onSuccess, categories = [], editData =
   };
 
   return (
+    <Portal>
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-gray-900/50 backdrop-blur-sm fade-in">
       <div className="bg-white rounded-2xl shadow-xl w-full max-w-md overflow-hidden relative slide-up">
         <div className="px-6 py-4 border-b border-gray-100 flex justify-between items-center bg-gray-50/50">
@@ -197,6 +199,7 @@ const AddGroundItem = ({ isOpen, onClose, onSuccess, categories = [], editData =
         </form>
       </div>
     </div>
+    </Portal>
   );
 };
 

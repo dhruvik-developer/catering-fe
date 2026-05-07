@@ -23,30 +23,33 @@ import { useCreateRecipeMutation } from "../../hooks/useRecipeMutations";
 import { useCategories } from "../../hooks/useCategories";
 
 import { useIngredientItems } from "../../hooks/useIngredientItems";
+import Portal from "../common/Portal";
 
 // ==================== MODAL WRAPPER ====================
 const ModalWrapper = ({ isOpen, onClose, children }) => {
   if (!isOpen) return null;
   return (
-    <AnimatePresence>
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        exit={{ opacity: 0 }}
-        className="fixed inset-0 z-50 flex items-center justify-center bg-gray-900/60 backdrop-blur-sm p-4"
-        onClick={onClose}
-      >
+    <Portal>
+      <AnimatePresence>
         <motion.div
-          initial={{ scale: 0.95, opacity: 0, y: 10 }}
-          animate={{ scale: 1, opacity: 1, y: 0 }}
-          exit={{ scale: 0.95, opacity: 0, y: 10 }}
-          transition={{ type: "spring", duration: 0.4, bounce: 0.25 }}
-          onClick={(e) => e.stopPropagation()}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          className="fixed inset-0 z-50 flex items-center justify-center bg-gray-900/60 backdrop-blur-sm p-4"
+          onClick={onClose}
         >
-          {children}
+          <motion.div
+            initial={{ scale: 0.95, opacity: 0, y: 10 }}
+            animate={{ scale: 1, opacity: 1, y: 0 }}
+            exit={{ scale: 0.95, opacity: 0, y: 10 }}
+            transition={{ type: "spring", duration: 0.4, bounce: 0.25 }}
+            onClick={(e) => e.stopPropagation()}
+          >
+            {children}
+          </motion.div>
         </motion.div>
-      </motion.div>
-    </AnimatePresence>
+      </AnimatePresence>
+    </Portal>
   );
 };
 

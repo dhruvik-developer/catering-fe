@@ -5,6 +5,7 @@ import toast from "react-hot-toast";
 import { getGroundCategories } from "../../api/GroundApis";
 import Loader from "../common/Loader";
 import { logError } from "../../utils/logger";
+import Portal from "../common/Portal";
 
 /**
  * GroundManagementModal
@@ -128,6 +129,7 @@ const GroundManagementModal = ({ isOpen, onClose, onSave, existingData, sessionN
   if (!isOpen) return null;
 
   return (
+    <Portal>
     <div className="fixed inset-0 z-50 flex items-center justify-center">
       {/* Backdrop */}
       <div
@@ -337,6 +339,7 @@ const GroundManagementModal = ({ isOpen, onClose, onSave, existingData, sessionN
         </div>
       </div>
     </div>
+    </Portal>
   );
 };
 

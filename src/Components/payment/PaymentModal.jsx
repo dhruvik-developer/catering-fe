@@ -12,6 +12,7 @@ import "react-datepicker/dist/react-datepicker.css";
 import toast from "react-hot-toast";
 import { getInvoice } from "../../api/FetchInvoice";
 import { updatePayment } from "../../api/PutInvoice";
+import Portal from "../common/Portal";
 
 const PAYMENT_MODES = [
   { value: "CASH", label: "CASH" },
@@ -137,6 +138,7 @@ function PaymentModal({ isOpen, onClose, bookingId, onPaymentSuccess }) {
   if (!isOpen) return null;
 
   return (
+    <Portal>
     <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/50 backdrop-blur-sm px-4">
       <div className="bg-white rounded-2xl w-full max-w-md shadow-2xl relative overflow-hidden animate-in fade-in zoom-in duration-200">
         {/* Header */}
@@ -332,6 +334,7 @@ function PaymentModal({ isOpen, onClose, bookingId, onPaymentSuccess }) {
         )}
       </div>
     </div>
+    </Portal>
   );
 }
 

@@ -1,5 +1,6 @@
 /* eslint-disable react/prop-types */
 import { FiX } from "react-icons/fi";
+import { createPortal } from "react-dom";
 
 function FormModal({
   isOpen,
@@ -13,7 +14,13 @@ function FormModal({
 }) {
   if (!isOpen) return null;
 
-  return (
+  // Render to document.body via portal. Without this, the modal lives inside
+  // the scrolled content area; when a parent briefly creates a containing
+  // block (page-enter transform animation, backdrop-filter on a card, etc.),
+  // `position: fixed` resolves against the parent — not the viewport — and
+  // the modal appears at the top of the scroll container instead of the
+  // visible screen, forcing the user to scroll up to find it.
+  return createPortal(
     <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-slate-950/50 p-2 sm:p-4 backdrop-blur-sm">
       <div
         className={`flex w-full ${widthClass} max-h-[95vh] sm:max-h-[90vh] flex-col overflow-hidden rounded-t-2xl sm:rounded-2xl bg-white shadow-2xl`}
@@ -48,7 +55,8 @@ function FormModal({
           </div>
         ) : null}
       </div>
-    </div>
+    </div>,
+    document.body
   );
 }
 

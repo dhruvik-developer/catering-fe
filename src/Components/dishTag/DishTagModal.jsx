@@ -114,9 +114,9 @@ export default function DishTagModal({
     overflow: "hidden",
   });
 
-  return (
-    <div className="fixed inset-0 z-50 flex bg-gray-900 bg-opacity-50 sm:p-4 print:static print:h-auto print:p-0 print:bg-transparent print:overflow-visible print:block">
-      <div className="flex flex-col w-full bg-white sm:rounded-2xl shadow-xl overflow-hidden relative print:static print:h-auto print:overflow-visible print:shadow-none print:rounded-none print:w-auto print:block">
+  return createPortal(
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-gray-900/50 backdrop-blur-sm sm:p-4 print:static print:h-auto print:p-0 print:bg-transparent print:overflow-visible print:block">
+      <div className="flex flex-col w-full h-full max-h-full sm:max-h-[calc(100vh-2rem)] bg-white sm:rounded-2xl shadow-xl overflow-hidden relative print:static print:h-auto print:max-h-none print:overflow-visible print:shadow-none print:rounded-none print:w-auto print:block">
         {/* Header */}
         <div className="flex items-center justify-between px-6 py-4 border-b border-gray-200 print:hidden sm:flex">
           <h2 className="text-xl font-bold tracking-tight text-gray-800">
@@ -511,6 +511,7 @@ export default function DishTagModal({
         </div>,
         document.body
       )}
-    </div>
+    </div>,
+    document.body
   );
 }

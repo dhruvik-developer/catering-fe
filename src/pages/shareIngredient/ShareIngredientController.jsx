@@ -149,12 +149,38 @@ function ShareIngredientController() {
                     });
                   }
 
+                  // Phase 1: surface a manual godown/vendor split saved on
+                  // the View Ingredient page so the share flow reflects what
+                  // the user actually decided rather than the auto-derive.
+                  let savedAllocation = null;
+                  if (viewIngredient?.sessions) {
+                    for (const session of viewIngredient.sessions) {
+                      if (
+                        selectedCategoryPayload?.sessionLabel &&
+                        session.event_time !==
+                          selectedCategoryPayload.sessionLabel
+                      )
+                        continue;
+                      const reqEntry =
+                        (session.ingredients_required || {})[item.item];
+                      if (
+                        reqEntry &&
+                        typeof reqEntry === "object" &&
+                        reqEntry.allocation
+                      ) {
+                        savedAllocation = reqEntry.allocation;
+                        break;
+                      }
+                    }
+                  }
+
                   return {
                     itemName: item.item,
                     totalQuantity: item.total_quantity,
                     quantityType: item.quantity_type || "",
                     godownQuantity: parseFloat(item.godown_quantity || 0),
                     vendor: attachedVendor,
+                    savedAllocation,
                   };
                 }),
               },
@@ -179,11 +205,33 @@ function ShareIngredientController() {
       });
       setCheckedItems(initChecked);
       setModifiedData(initModified);
-      // Initialise sources: godown items default to 'godown', rest to 'vendor'
+      // Initialise sources: respect a saved allocation first; otherwise fall
+      // back to the auto-derive default (godown items → godown, rest → vendor).
       const initSources = {};
       allItems.forEach((item, idx) => {
+        let savedSource = null;
+        if (viewIngredient?.sessions) {
+          for (const session of viewIngredient.sessions) {
+            if (
+              selectedCategoryPayload?.sessionLabel &&
+              session.event_time !== selectedCategoryPayload.sessionLabel
+            )
+              continue;
+            const reqEntry =
+              (session.ingredients_required || {})[item.item];
+            if (
+              reqEntry &&
+              typeof reqEntry === "object" &&
+              reqEntry.allocation?.source
+            ) {
+              savedSource = reqEntry.allocation.source;
+              break;
+            }
+          }
+        }
         const isGodown = parseFloat(item.godown_quantity || 0) > 0;
-        initSources[`0-${idx}`] = isGodown ? "godown" : "vendor";
+        initSources[`0-${idx}`] =
+          savedSource || (isGodown ? "godown" : "vendor");
       });
       setItemSources(initSources);
 

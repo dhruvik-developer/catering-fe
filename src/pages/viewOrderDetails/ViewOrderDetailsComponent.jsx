@@ -43,17 +43,25 @@ const statusChipColor = (status) => {
 };
 
 function InfoBlock({ icon, label, value, valueVariant = "body1" }) {
+  // Both Typographies use `component="div"`/`"span"` explicitly: callers may
+  // pass a value containing block-level nodes (Box + nested Typography), so
+  // the outer Typography MUST render as <div> to avoid <p>-inside-<p> nesting.
   return (
     <Stack spacing={0.5}>
       <Typography
         variant="caption"
+        component="span"
         color="primary.main"
-
         sx={{ fontWeight: 700, textTransform: "uppercase", letterSpacing: 0.5, display: "inline-flex", alignItems: "center", gap: 0.75 }}
       >
         {icon} {label}
       </Typography>
-      <Typography variant={valueVariant} color="text.primary" sx={{ fontWeight: 600 }}>
+      <Typography
+        variant={valueVariant}
+        component="div"
+        color="text.primary"
+        sx={{ fontWeight: 600 }}
+      >
         {value || "—"}
       </Typography>
     </Stack>

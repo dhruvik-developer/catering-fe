@@ -7,6 +7,17 @@ import App from "./App";
 import { queryClient } from "./lib/queryClient";
 import "./i18n";
 
+// Bare localhost has no tenant/admin scope, so the app has no business profile
+// to load. Redirect to admin.localhost so the platform admin UI mounts instead.
+// Tenant subdomains (e.g. tenant1.localhost) are left alone.
+if (typeof window !== "undefined" && window.location.hostname === "localhost") {
+  const { protocol, port, pathname, search, hash } = window.location;
+  const portSuffix = port ? `:${port}` : "";
+  window.location.replace(
+    `${protocol}//admin.localhost${portSuffix}${pathname}${search}${hash}`
+  );
+}
+
 // --- Google Translate × React reconciler interop ---
 // The Google Translate page widget walks the DOM and replaces text nodes with
 // <font> wrappers in-place. React's reconciler keeps a fiber map pointing at

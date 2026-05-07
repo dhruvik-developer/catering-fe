@@ -7,6 +7,7 @@ import {
   updateWaiterType,
   deleteWaiterType,
 } from "../../api/EventStaffApis";
+import Portal from "./Portal";
 
 export default function WaiterTypeManagerModal({
   isOpen,
@@ -102,6 +103,7 @@ export default function WaiterTypeManagerModal({
   const localRendered = localTypes;
 
   return (
+    <Portal>
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4">
       <div className="w-full max-w-3xl rounded-xl border border-gray-200 bg-white shadow-xl">
         <div className="flex items-center justify-between border-b border-gray-200 px-5 py-4">
@@ -189,5 +191,6 @@ export default function WaiterTypeManagerModal({
         </div>
       </div>
     </div>
+    </Portal>
   );
 }
