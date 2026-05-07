@@ -16,6 +16,8 @@ function AddEditUserController() {
     username: "",
     email: "",
     password: "",
+    // Empty string = unassigned. Backend accepts null to clear.
+    branch_profile_id: "",
   });
 
   const [errors, setErrors] = useState({});
@@ -26,6 +28,10 @@ function AddEditUserController() {
         username: state.username || "",
         email: state.email || "",
         password: "",
+        branch_profile_id:
+          state.branch_profile?.id ??
+          state.branch_profile_id ??
+          "",
       });
     }
   }, [mode, state]);
@@ -86,6 +92,12 @@ function AddEditUserController() {
 
         if (form.email.trim()) {
           payload.email = form.email.trim();
+        }
+
+        // Per the multi-branch backend contract, send branch_profile_id when
+        // the admin picked one; omit otherwise (the backend keeps it null).
+        if (form.branch_profile_id) {
+          payload.branch_profile_id = form.branch_profile_id;
         }
 
         response = await addUser(payload);

@@ -1,4 +1,5 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
+import { UserContext } from "../../context/UserContext";
 import { Link, useLocation } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { logError } from "../../utils/logger";
@@ -24,7 +25,7 @@ import {
   TaskAdd01Icon,
   TransactionHistoryIcon,
 } from "@hugeicons/core-free-icons";
-import { FiUsers, FiGrid, FiShield, FiKey, FiHome } from "react-icons/fi";
+import { FiUsers, FiGrid, FiShield, FiKey, FiHome, FiGitBranch } from "react-icons/fi";
 import usePermissions from "../../hooks/usePermissions";
 import { getAllBusinessProfiles } from "../../api/BusinessProfile";
 import { isPlatformAdminHost } from "../../services/tenantRuntime";
@@ -115,6 +116,15 @@ const tenantMenuItems = [
     path: "/ground-checklist",
     icon: hugeIcon(TaskAdd01Icon),
     requiredPermission: "ground.view",
+  },
+  {
+    // Tenant-admin only: manage branches inside this tenant. Gated by the
+    // adminOnly flag below — non-admin tenant users won't see this row.
+    name: "Branches",
+    labelKey: "sidebar.branches",
+    path: "/branches",
+    icon: <FiGitBranch size={22} />,
+    adminOnly: true,
   },
 ];
 
@@ -219,6 +229,8 @@ function Sidebar() {
   const location = useLocation();
   const { t } = useTranslation();
   const { hasPermission } = usePermissions();
+  const { userType } = useContext(UserContext);
+  const isTenantAdmin = String(userType || "").toLowerCase() === "admin";
   const [businessLogo, setBusinessLogo] = useState("");
   const [isLogoLoading, setIsLogoLoading] = useState(!isAdminHost);
 
@@ -362,6 +374,11 @@ function Sidebar() {
             item.requiredPermission &&
             !hasPermission(item.requiredPermission)
           ) {
+            return null;
+          }
+          // Tenant-admin-only rows (e.g. Branches) are hidden from
+          // regular tenant users.
+          if (item.adminOnly && !isTenantAdmin) {
             return null;
           }
           const active = isMenuItemActive(item.path);

@@ -177,7 +177,7 @@ const parentRoutes = {
 
 const Header = () => {
   const { t } = useTranslation();
-  const { username, logout, permissions, enabledModules } =
+  const { username, logout, permissions, enabledModules, branchProfile } =
     useContext(UserContext);
   const { hasPermission } = usePermissions();
   const navigate = useNavigate();
@@ -983,16 +983,39 @@ const Header = () => {
             }
           >
             {!isAdminHost && (
-              <Typography
-                variant="body2"
-                sx={{ fontWeight: 700,
-                  color: "var(--color-primary)",
-                  display: { xs: "none", sm: "inline" },
+              <Box
+                sx={{
+                  display: { xs: "none", sm: "flex" },
+                  flexDirection: "column",
+                  alignItems: "flex-end",
                   mr: 1,
+                  lineHeight: 1.1,
                 }}
               >
-                {displayName}
-              </Typography>
+                <Typography
+                  variant="body2"
+                  sx={{
+                    fontWeight: 700,
+                    color: "var(--color-primary)",
+                  }}
+                >
+                  {displayName}
+                </Typography>
+                {branchProfile?.name && (
+                  <Typography
+                    variant="caption"
+                    sx={{
+                      fontWeight: 600,
+                      color: "var(--color-primary)",
+                      opacity: 0.75,
+                      mt: "1px",
+                    }}
+                  >
+                    {branchProfile.name}
+                    {branchProfile.is_main ? " · main" : ""}
+                  </Typography>
+                )}
+              </Box>
             )}
             <Avatar
               sx={{

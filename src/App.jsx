@@ -82,6 +82,9 @@ import {
   GroundCategoryMaster,
   GroundItemMaster,
   EventGroundChecklist,
+  BranchController,
+  AddEditBranchController,
+  BranchDetailController,
   TenantDashboard,
   SuperAdminDashboard,
   SuperAdminSubscriptionPlans,
@@ -389,6 +392,12 @@ const App = () => {
                 <Route path="/ground-categories" element={<GroundCategoryMaster />} />
                 <Route path="/ground-items" element={<GroundItemMaster />} />
                 <Route path="/ground-checklist" element={<EventGroundChecklist />} />
+
+                {/* Branch Management (tenant admin) */}
+                <Route path="/branches" element={<BranchController />} />
+                <Route path="/branches/:id" element={<BranchDetailController />} />
+                <Route path="/add-branch" element={<AddEditBranchController />} />
+                <Route path="/edit-branch/:id" element={<AddEditBranchController />} />
 
                 {/* Edit order routes */}
                 <Route path="/edit-dish/:id" element={<EditDish />} />

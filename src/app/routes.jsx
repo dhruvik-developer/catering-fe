@@ -68,6 +68,11 @@ const GroundCategoryMaster = lazy(() => import("../pages/ground/categories/Groun
 const GroundItemMaster = lazy(() => import("../pages/ground/items/GroundItemMaster"));
 const EventGroundChecklist = lazy(() => import("../pages/ground/checklist/EventGroundChecklist"));
 
+// Branch Management Module (tenant admin only)
+const BranchController = lazy(() => import("../pages/branches/BranchController"));
+const AddEditBranchController = lazy(() => import("../pages/branches/AddEditBranchController"));
+const BranchDetailController = lazy(() => import("../pages/branches/BranchDetailController"));
+
 // Tenant dashboard — events overview with click-through to /view-order-details/:id
 const TenantDashboard = lazy(() => import("../pages/dashboard/DashboardController"));
 
@@ -137,6 +142,9 @@ export {
   GroundCategoryMaster,
   GroundItemMaster,
   EventGroundChecklist,
+  BranchController,
+  AddEditBranchController,
+  BranchDetailController,
   PermissionsController,
   TenantDashboard,
   SuperAdminDashboard,

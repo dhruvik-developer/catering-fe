@@ -86,6 +86,7 @@ function LoginController() {
       const permissions = loginData?.permissions || [];
       const tenant = loginData?.tenant || null;
       const enabledModules = tenant?.enabled_modules || [];
+      const branchProfile = loginData?.branch_profile || null;
 
       if (!access || !username || !userType) {
         throw new Error("Invalid login response");
@@ -96,7 +97,15 @@ function LoginController() {
       if (refresh) {
         tokenService.setRefreshToken(refresh);
       }
-      login(access, username, userType, permissions, enabledModules, tenant);
+      login(
+        access,
+        username,
+        userType,
+        permissions,
+        enabledModules,
+        tenant,
+        branchProfile
+      );
       toast.success(response?.data?.message || "Login successfully");
       const target = isPlatformAdminHost()
         ? "/dashboard"

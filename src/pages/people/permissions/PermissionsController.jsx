@@ -62,6 +62,10 @@ function PermissionsController() {
     const [selectedType, setSelectedType] = useState("staff"); // 'staff' or 'vendor'
     const [currentPermissions, setCurrentPermissions] = useState([]);
     const [isSaving, setIsSaving] = useState(false);
+    // Branch filter — empty string means "All branches". The actual filter
+    // runs in the component using `branch_profile.id` on each user row,
+    // so it stays in sync with what the backend already returns.
+    const [branchFilter, setBranchFilter] = useState("");
 
     useEffect(() => {
         fetchInitialData();
@@ -159,6 +163,8 @@ function PermissionsController() {
             modules={modules}
             users={users} selectedType={selectedType} selectedId={selectedId}
             currentPermissions={currentPermissions}
+            branchFilter={branchFilter}
+            onBranchFilterChange={setBranchFilter}
             onTypeChange={handleTypeChange}
             onSelectSubject={handleSelectSubject}
             togglePermission={togglePermission}

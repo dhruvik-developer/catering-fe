@@ -18,6 +18,9 @@ const UserProvider = ({ children }) => {
     tokenService.getEnabledModules()
   );
   const [tenant, setTenant] = useState(() => tokenService.getTenant());
+  const [branchProfile, setBranchProfileState] = useState(() =>
+    tokenService.getBranchProfile()
+  );
 
   // Function to log in and store the token
   const login = (
@@ -26,7 +29,8 @@ const UserProvider = ({ children }) => {
     nextUserType,
     userPermissions = [],
     nextEnabledModules = [],
-    nextTenant = null
+    nextTenant = null,
+    nextBranchProfile = null
   ) => {
     const normalizedPermissions = normalizeAccessList(userPermissions);
     const normalizedEnabledModules = normalizeAccessList(nextEnabledModules);
@@ -37,12 +41,22 @@ const UserProvider = ({ children }) => {
     tokenService.setPermissions(normalizedPermissions);
     tokenService.setEnabledModules(normalizedEnabledModules);
     tokenService.setTenant(nextTenant);
+    tokenService.setBranchProfile(nextBranchProfile);
     setToken(accessToken);
     setUsername(username);
     setUserType(nextUserType);
     setPermissions(normalizedPermissions);
     setEnabledModules(normalizedEnabledModules);
     setTenant(nextTenant);
+    setBranchProfileState(nextBranchProfile);
+  };
+
+  // Update just the branch profile (e.g., after admin reassigns the
+  // current user to a different branch). Persists to storage so it
+  // survives page reloads.
+  const setBranchProfile = (next) => {
+    tokenService.setBranchProfile(next);
+    setBranchProfileState(next);
   };
 
   // Function to log out and clear stored token
@@ -54,6 +68,7 @@ const UserProvider = ({ children }) => {
     setPermissions([]);
     setEnabledModules([]);
     setTenant(null);
+    setBranchProfileState(null);
   };
 
   return (
@@ -65,6 +80,8 @@ const UserProvider = ({ children }) => {
         permissions,
         enabledModules,
         tenant,
+        branchProfile,
+        setBranchProfile,
         login,
         logout,
       }}

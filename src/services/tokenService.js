@@ -7,6 +7,7 @@ const USER_TYPE_STORAGE_KEY = "userType";
 const PERMISSIONS_STORAGE_KEY = "permissions";
 const ENABLED_MODULES_STORAGE_KEY = "enabledModules";
 const TENANT_STORAGE_KEY = "tenant";
+const BRANCH_PROFILE_STORAGE_KEY = "branchProfile";
 export const USER_ROLE_ADMIN = "admin";
 
 // Decode the payload of a JWT without verifying the signature. We can't verify
@@ -115,6 +116,16 @@ const tokenService = {
       return null;
     }
   },
+  getBranchProfile: () => {
+    if (typeof window === "undefined") return null;
+    const branchProfile = storage.get(BRANCH_PROFILE_STORAGE_KEY);
+    try {
+      return branchProfile ? JSON.parse(branchProfile) : null;
+    } catch (e) {
+      console.error("Error parsing branch profile from localStorage", e);
+      return null;
+    }
+  },
   setToken: (token) => {
     accessToken = token;
 
@@ -195,6 +206,19 @@ const tokenService = {
 
     storage.remove(TENANT_STORAGE_KEY);
   },
+  setBranchProfile: (branchProfile) => {
+    if (typeof window === "undefined") return;
+
+    if (branchProfile && typeof branchProfile === "object") {
+      storage.set(
+        BRANCH_PROFILE_STORAGE_KEY,
+        JSON.stringify(branchProfile)
+      );
+      return;
+    }
+
+    storage.remove(BRANCH_PROFILE_STORAGE_KEY);
+  },
   clearAuth: () => {
     accessToken = null;
     refreshToken = null;
@@ -208,6 +232,7 @@ const tokenService = {
     storage.remove(PERMISSIONS_STORAGE_KEY);
     storage.remove(ENABLED_MODULES_STORAGE_KEY);
     storage.remove(TENANT_STORAGE_KEY);
+    storage.remove(BRANCH_PROFILE_STORAGE_KEY);
   },
 };
 

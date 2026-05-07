@@ -1,5 +1,5 @@
 /* eslint-disable react/prop-types */
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import {
   Avatar,
   Box,
@@ -8,11 +8,13 @@ import {
   Checkbox,
   Chip,
   IconButton,
+  MenuItem,
   Paper,
   Skeleton,
   Stack,
   Tab,
   Tabs,
+  TextField,
   Typography,
 } from "@mui/material";
 import Grid from "@mui/material/Grid";
@@ -25,6 +27,7 @@ import {
   FiUsers,
   FiLock,
 } from "react-icons/fi";
+import { useBranches } from "../../../hooks/useBranches";
 
 function PermissionsComponent({
   loading,
@@ -34,11 +37,23 @@ function PermissionsComponent({
   selectedType,
   selectedId,
   currentPermissions,
+  branchFilter,
+  onBranchFilterChange,
   onTypeChange,
   onSelectSubject,
   togglePermission,
   onSave,
 }) {
+  const { data: branches = [] } = useBranches();
+  // Build a quick lookup so each user row can show its branch label without
+  // having to refetch — the user payload already carries `branch_profile`.
+  const filteredSubjects = useMemo(() => {
+    if (!branchFilter) return users;
+    return users.filter((u) => {
+      const id = u?.branch_profile?.id;
+      return id != null && String(id) === String(branchFilter);
+    });
+  }, [users, branchFilter]);
   const [expandedModules, setExpandedModules] = useState([]);
 
   const toggleModule = (moduleName) => {
@@ -49,7 +64,7 @@ function PermissionsComponent({
     );
   };
 
-  const subjects = users;
+  const subjects = filteredSubjects;
 
   return (
     <Stack
@@ -84,6 +99,25 @@ function PermissionsComponent({
             <Tab label="Staff" value="staff" />
             <Tab label="Vendor" value="vendor" />
           </Tabs>
+
+          {branches && branches.length > 0 && (
+            <TextField
+              select
+              fullWidth
+              size="small"
+              label="Filter by branch"
+              value={branchFilter || ""}
+              onChange={(e) => onBranchFilterChange(e.target.value)}
+              sx={{ mt: 1.5 }}
+            >
+              <MenuItem value="">All branches</MenuItem>
+              {branches.map((b) => (
+                <MenuItem key={b.id} value={String(b.id)}>
+                  {b.name}
+                </MenuItem>
+              ))}
+            </TextField>
+          )}
         </Box>
 
         <Box sx={{ flex: 1, overflowY: "auto", p: 1.5 }}>
@@ -152,6 +186,22 @@ function PermissionsComponent({
                       >
                         {sub.phone}
                       </Typography>
+                    )}
+                    {sub.branch_profile?.name && (
+                      <Box sx={{ mt: 0.25 }}>
+                        <Chip
+                          size="small"
+                          label={sub.branch_profile.name}
+                          sx={{
+                            height: 16,
+                            fontSize: "0.625rem",
+                            fontWeight: 700,
+                            bgcolor: (t) =>
+                              t.palette.primary.light + "26",
+                            color: "primary.main",
+                          }}
+                        />
+                      </Box>
                     )}
                   </Box>
                 </Box>

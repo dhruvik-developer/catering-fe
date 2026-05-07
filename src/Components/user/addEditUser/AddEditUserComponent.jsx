@@ -5,6 +5,7 @@ import {
   Button,
   IconButton,
   InputAdornment,
+  MenuItem,
   Paper,
   Stack,
   TextField,
@@ -13,6 +14,7 @@ import {
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { FiArrowLeft, FiUserPlus } from "react-icons/fi";
 import PageHero from "../../common/PageHero";
+import { useBranches } from "../../../hooks/useBranches";
 
 function AddEditUserComponent({
   navigate,
@@ -24,6 +26,13 @@ function AddEditUserComponent({
 }) {
   const isEdit = mode === "editUser";
   const [showPassword, setShowPassword] = useState(false);
+  // Branch dropdown is only meaningful when adding a new user. Edit mode is
+  // password-only (matching the existing API). The list 404s gracefully on
+  // single-branch tenants (returns []).
+  const { data: branches = [], isLoading: branchesLoading } = useBranches(
+    {},
+    { enabled: !isEdit }
+  );
 
   return (
     <>
@@ -86,6 +95,29 @@ function AddEditUserComponent({
                 error={!!errors.email}
                 helperText={errors.email || "Optional"}
               />
+
+              <TextField
+                fullWidth
+                select
+                label="Branch"
+                name="branch_profile_id"
+                value={form.branch_profile_id || ""}
+                onChange={onInputChange}
+                disabled={branchesLoading}
+                helperText={
+                  branchesLoading
+                    ? "Loading branches..."
+                    : "Optional. Assigning a branch limits this user to that branch."
+                }
+              >
+                <MenuItem value="">— No branch —</MenuItem>
+                {branches.map((b) => (
+                  <MenuItem key={b.id} value={b.id}>
+                    {b.name}
+                    {b.branch_code ? ` (${b.branch_code})` : ""}
+                  </MenuItem>
+                ))}
+              </TextField>
             </>
           )}
 
