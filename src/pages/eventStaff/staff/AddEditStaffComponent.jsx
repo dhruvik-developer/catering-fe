@@ -1,5 +1,12 @@
 /* eslint-disable react/prop-types */
-import { FiCheckCircle, FiPhone, FiUser, FiUsers } from "react-icons/fi";
+import {
+  FiCheckCircle,
+  FiPhone,
+  FiPlus,
+  FiTrash2,
+  FiUser,
+  FiUsers,
+} from "react-icons/fi";
 import { BiMoney } from "react-icons/bi";
 import Loader from "../../../Components/common/Loader";
 import RoleDropdown from "../../../Components/eventStaff/RoleDropdown";
@@ -27,6 +34,9 @@ function AddEditStaffComponent({
   handleCloseAddRoleModal,
   handleChange,
   handleStaffTypeChange,
+  handleAgencyServiceChange,
+  handleAddAgencyService,
+  handleRemoveAgencyService,
   handleStatusToggle,
   handleSubmit,
   handleCancel,
@@ -401,6 +411,111 @@ function AddEditStaffComponent({
                     {errors.per_person_rate ? (
                       <p className="text-red-500 text-xs font-medium pl-1">
                         {errors.per_person_rate}
+                      </p>
+                    ) : null}
+                  </div>
+                ) : null}
+
+                {formData.staff_type === "Agency" ? (
+                  <div className="space-y-3 md:col-span-2">
+                    <div className="flex items-center justify-between gap-2 flex-wrap">
+                      <label className="flex items-center gap-2 text-sm font-semibold text-gray-700">
+                        <BiMoney
+                          className="text-[var(--color-primary-text)]"
+                          size={18}
+                        />{" "}
+                        Agency Services & Rates{" "}
+                        <span className="text-red-500">*</span>
+                      </label>
+                      <button
+                        type="button"
+                        onClick={handleAddAgencyService}
+                        className="inline-flex items-center gap-1 rounded-lg border border-[var(--color-primary)] bg-white px-3 py-1.5 text-xs font-semibold text-[var(--color-primary)] hover:bg-[var(--color-primary-soft)] transition-colors"
+                      >
+                        <FiPlus size={12} /> Add service
+                      </button>
+                    </div>
+                    <p className="text-xs text-gray-500 -mt-1">
+                      List the services this agency provides and the per-person rate for each.
+                    </p>
+
+                    {/* Header row, hidden on mobile so the inputs stack cleanly. */}
+                    <div
+                      className="hidden sm:grid items-end gap-2 px-3 pb-1"
+                      style={{
+                        gridTemplateColumns: "minmax(0,1fr) 10rem 2.25rem",
+                      }}
+                    >
+                      <div className="text-[10px] font-bold tracking-wider text-gray-500 uppercase">
+                        Service
+                      </div>
+                      <div className="text-[10px] font-bold tracking-wider text-gray-500 uppercase">
+                        Rate (INR)
+                      </div>
+                      <div />
+                    </div>
+
+                    <div className="space-y-2">
+                      {(formData.agency_services || []).map((row, idx) => (
+                        <div
+                          key={idx}
+                          className="grid grid-cols-1 sm:grid items-center gap-2 p-3 border border-gray-200 rounded-lg bg-gray-50/50"
+                          style={{
+                            gridTemplateColumns:
+                              "minmax(0,1fr) 10rem 2.25rem",
+                          }}
+                        >
+                          <input
+                            type="text"
+                            value={row.service_name}
+                            onChange={(e) =>
+                              handleAgencyServiceChange(
+                                idx,
+                                "service_name",
+                                e.target.value
+                              )
+                            }
+                            placeholder="Service (e.g. Waiter, Chef)"
+                            aria-label="Service name"
+                            className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm bg-white focus:outline-none focus:border-[var(--color-primary)] focus:ring-2 focus:ring-[var(--color-primary)]/15"
+                          />
+                          <div className="relative">
+                            <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 font-bold text-xs">
+                              INR
+                            </span>
+                            <input
+                              type="number"
+                              min="0"
+                              step="0.01"
+                              value={row.rate}
+                              onChange={(e) =>
+                                handleAgencyServiceChange(
+                                  idx,
+                                  "rate",
+                                  e.target.value
+                                )
+                              }
+                              placeholder="500"
+                              aria-label="Rate"
+                              className="w-full pl-12 pr-3 py-2 border border-gray-200 rounded-lg text-sm bg-white focus:outline-none focus:border-[var(--color-primary)] focus:ring-2 focus:ring-[var(--color-primary)]/15"
+                            />
+                          </div>
+                          <button
+                            type="button"
+                            onClick={() => handleRemoveAgencyService(idx)}
+                            className="justify-self-end sm:justify-self-center p-2 rounded-lg text-red-400 hover:text-red-600 hover:bg-red-50"
+                            title="Remove service"
+                            aria-label="Remove service"
+                          >
+                            <FiTrash2 size={16} />
+                          </button>
+                        </div>
+                      ))}
+                    </div>
+
+                    {errors.agency_services ? (
+                      <p className="text-red-500 text-xs font-medium pl-1">
+                        {errors.agency_services}
                       </p>
                     ) : null}
                   </div>

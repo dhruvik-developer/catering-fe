@@ -54,12 +54,25 @@ function CompleteInvoiceComponent({
   const totalAmount = completeInvoice?.total_amount || trueTotalAmount;
 
   // The actual advance amount from the backend payment object
-  const advancePaid = completeInvoice?.advance_amount || 0;
-  
-  const calculatedPending = completeInvoice?.payment_status === "PAID" 
-    ? 0 
-    : (Number(totalAmount) - Number(advancePaid));
-    
+  const advancePaid = Number(completeInvoice?.advance_amount || 0);
+  const settlementSaved = Number(completeInvoice?.settlement_amount || 0);
+  // Live preview: also subtract whatever the user is currently typing in
+  // the form so the "Pending" cell updates immediately, before submit.
+  const newTransaction = Number(formData?.transaction_amount || 0);
+  const newSettlement = Number(formData?.settlement_amount || 0);
+
+  const calculatedPending =
+    completeInvoice?.payment_status === "PAID"
+      ? 0
+      : Math.max(
+          0,
+          Number(totalAmount) -
+            advancePaid -
+            settlementSaved -
+            newTransaction -
+            newSettlement
+        );
+
   const total_remain_amount = calculatedPending;
   return (
     <div className="p-6 bg-white rounded-xl shadow-lg">
@@ -169,20 +182,20 @@ function CompleteInvoiceComponent({
 
               {/* Extra Charges Items */}
               {completeInvoice?.sessions &&
-                completeInvoice.sessions.map(
-                  (session) =>
-                    session.extra_service &&
-                    session.extra_service.map((service, index) => (
-                      <div
-                        key={`${session.id}-${index}`}
-                        className="grid grid-cols-2"
-                      >
-                        <div className="p-2 pl-4">{service?.extra}</div>
-                        <div className="p-2 text-right pr-4">
-                          {service?.amount}
+                completeInvoice.sessions.map((session) =>
+                  Array.isArray(session?.extra_service)
+                    ? session.extra_service.map((service, index) => (
+                        <div
+                          key={`${session.id}-${index}`}
+                          className="grid grid-cols-2"
+                        >
+                          <div className="p-2 pl-4">{service?.extra}</div>
+                          <div className="p-2 text-right pr-4">
+                            {service?.amount}
+                          </div>
                         </div>
-                      </div>
-                    ))
+                      ))
+                    : null
                 )}
 
               {/* Total Extra Charges */}

@@ -225,12 +225,14 @@ function InvoiceComponent({
       ) : (
         <Grid container spacing={2}>
           {invoice.map((invo) => {
+            // Trust the backend-computed pending. Earlier this re-derived
+            // pending as `total - advance - transaction`, but the backend
+            // already includes the latest transaction inside advance, so
+            // that double-counted and showed ₹0 for partial bills.
             const calculatedPending =
               invo.payment_status === "PAID"
                 ? 0
-                : Number(invo.total_amount || 0) -
-                  Number(invo.advance_amount || 0) -
-                  Number(invo.transaction_amount || 0);
+                : Number(invo.pending_amount || 0);
 
             const dateLabel =
               invo.sessions?.length > 0

@@ -380,7 +380,14 @@ export const getWaiterRows = (waiterService) => {
 };
 
 export const getExtraServiceRows = (extraServices) => {
-  return (extraServices || [])
+  // Backend sometimes ships extra_service as an object map instead of an
+  // array, so coerce to a list before filter/map.
+  const list = Array.isArray(extraServices)
+    ? extraServices
+    : extraServices && typeof extraServices === "object"
+      ? Object.values(extraServices)
+      : [];
+  return list
     .filter((s) => s && (s.service_name || s.amount))
     .map((s) => [
       safeText(s.service_name || s.name),

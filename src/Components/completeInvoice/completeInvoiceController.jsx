@@ -34,6 +34,7 @@ function CompleteInvoiceController() {
               advance_amount: item.advance_amount,
               pending_amount: item.pending_amount,
               transaction_amount: item.transaction_amount,
+              settlement_amount: item.settlement_amount,
               total_amount: item.total_amount,
             };
           })

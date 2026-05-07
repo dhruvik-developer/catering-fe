@@ -27,6 +27,7 @@ import {
   FiUser,
   FiFileText,
   FiTag,
+  FiGrid,
 } from "react-icons/fi";
 import Loader from "../../Components/common/Loader";
 import { format } from "date-fns";
@@ -541,79 +542,85 @@ function ViewOrderDetailsComponent({
                     )}
                   </Grid>
 
-                  {/* Session action chips */}
+                  {/* Session action chips — shared style so all four read as
+                      a single button group, not a mix of plain + tinted. */}
                   <Divider sx={{ my: 2 }} />
-                  <Stack direction="row" spacing={1} useFlexGap sx={{ flexWrap: "wrap" }}>
-                    {session.selected_items &&
-                      Object.keys(session.selected_items).length > 0 && (
-                        <>
-                          <Chip
-                            label="Selected Dishes"
-                            onClick={() => showDishes(session)}
-                            variant="outlined"
-                            sx={{
-                              fontWeight: 600,
-                              cursor: "pointer",
-                              bgcolor: (t) => t.palette.primary.light + "1f",
-                              color: "primary.main",
-                              borderColor: "primary.light",
-                            }}
-                            title="View category-wise selected dishes and assign vendors"
-                          />
-                          <Chip
-                            icon={<FiFileText size={14} />}
-                            label="Checklist PDF"
-                            onClick={() =>
-                              handleOpenSessionChecklistPreview(
-                                orderDetails.id,
-                                session.id
-                              )
-                            }
-                            variant="outlined"
-                            sx={{ fontWeight: 600, cursor: "pointer" }}
-                          />
-                          <Chip
-                            icon={<FiTag size={14} />}
-                            label="Dish Tags"
-                            onClick={() => handleOpenTags(session)}
-                            variant="outlined"
-                            sx={{ fontWeight: 600, cursor: "pointer" }}
-                          />
-                        </>
-                      )}
-
-                    <Chip
-                      icon={<FiBox size={14} />}
-                      label={
-                        <Stack direction="row" spacing={0.75} sx={{ alignItems: "center" }}>
-                          <span>Ground Mgmt</span>
-                          {groundItemCount > 0 && (
-                            <Box
-                              sx={{
-                                bgcolor: "primary.main",
-                                color: "primary.contrastText",
-                                px: 0.75,
-                                py: 0.1,
-                                borderRadius: 99,
-                                fontSize: "0.65rem",
-                                fontWeight: 700,
-                              }}
-                            >
-                              {groundItemCount}
-                            </Box>
+                  {(() => {
+                    const actionChipSx = {
+                      fontWeight: 600,
+                      cursor: "pointer",
+                      bgcolor: (t) => t.palette.primary.light + "1f",
+                      color: "primary.main",
+                      borderColor: "primary.light",
+                      "& .MuiChip-icon": { color: "primary.main" },
+                      "&:hover": {
+                        bgcolor: (t) => t.palette.primary.light + "33",
+                      },
+                    };
+                    return (
+                      <Stack direction="row" spacing={1} useFlexGap sx={{ flexWrap: "wrap" }}>
+                        {session.selected_items &&
+                          Object.keys(session.selected_items).length > 0 && (
+                            <>
+                              <Chip
+                                icon={<FiGrid size={14} />}
+                                label="Selected Dishes"
+                                onClick={() => showDishes(session)}
+                                variant="outlined"
+                                sx={actionChipSx}
+                                title="View category-wise selected dishes and assign vendors"
+                              />
+                              <Chip
+                                icon={<FiFileText size={14} />}
+                                label="Checklist PDF"
+                                onClick={() =>
+                                  handleOpenSessionChecklistPreview(
+                                    orderDetails.id,
+                                    session.id
+                                  )
+                                }
+                                variant="outlined"
+                                sx={actionChipSx}
+                              />
+                              <Chip
+                                icon={<FiTag size={14} />}
+                                label="Dish Tags"
+                                onClick={() => handleOpenTags(session)}
+                                variant="outlined"
+                                sx={actionChipSx}
+                              />
+                            </>
                           )}
-                        </Stack>
-                      }
-                      onClick={() => setGroundMgmtSession(session)}
-                      variant="outlined"
-                      sx={{
-                        fontWeight: 600,
-                        cursor: "pointer",
-                        bgcolor: (t) => t.palette.primary.light + "1f",
-                        color: "primary.main",
-                      }}
-                    />
-                  </Stack>
+
+                        <Chip
+                          icon={<FiBox size={14} />}
+                          label={
+                            <Stack direction="row" spacing={0.75} sx={{ alignItems: "center" }}>
+                              <span>Ground Mgmt</span>
+                              {groundItemCount > 0 && (
+                                <Box
+                                  sx={{
+                                    bgcolor: "primary.main",
+                                    color: "primary.contrastText",
+                                    px: 0.75,
+                                    py: 0.1,
+                                    borderRadius: 99,
+                                    fontSize: "0.65rem",
+                                    fontWeight: 700,
+                                  }}
+                                >
+                                  {groundItemCount}
+                                </Box>
+                              )}
+                            </Stack>
+                          }
+                          onClick={() => setGroundMgmtSession(session)}
+                          variant="outlined"
+                          sx={actionChipSx}
+                        />
+                      </Stack>
+                    );
+                  })()}
 
                   {/* Managers assigned */}
                   {session.managers_assigned &&

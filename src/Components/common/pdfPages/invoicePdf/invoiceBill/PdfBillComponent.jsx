@@ -600,9 +600,9 @@ function PdfBillComponent({
                       </span>
                     </div>
 
-                    {pdfInvoice?.settlement_amount > 0 && (
-                      <div className="flex justify-between items-center text-[var(--color-primary-tint)] pt-2">
-                        <span className="font-medium">Discount Amount:</span>
+                    {Number(pdfInvoice?.settlement_amount) > 0 && (
+                      <div className="flex justify-between items-center text-[var(--color-primary)] pt-2">
+                        <span className="font-medium">Settlement Amount:</span>
                         <span className="font-bold">
                           - ₹ {formatAmount(pdfInvoice?.settlement_amount)}
                         </span>

@@ -68,6 +68,9 @@ function AddEditStaffController() {
     fixed_salary: "",
     joining_date: new Date().toISOString().split("T")[0],
     per_person_rate: "0.00",
+    // Agency-only: list of { service_name, rate } the agency provides.
+    // One blank row by default so the user has somewhere to type.
+    agency_services: [{ service_name: "", rate: "" }],
     is_active: true,
     login_enabled: false,
     login_username: "",
@@ -132,6 +135,13 @@ function AddEditStaffController() {
         data.per_person_rate !== null && data.per_person_rate !== undefined
           ? String(data.per_person_rate)
           : "0.00",
+      agency_services:
+        Array.isArray(data.agency_services) && data.agency_services.length > 0
+          ? data.agency_services.map((s) => ({
+              service_name: String(s?.service_name ?? ""),
+              rate: s?.rate !== null && s?.rate !== undefined ? String(s.rate) : "",
+            }))
+          : [{ service_name: "", rate: "" }],
       is_active: data.is_active !== undefined ? data.is_active : true,
       login_enabled: existingLogin,
       login_username: data.login_username || data.linked_username || "",
@@ -305,6 +315,14 @@ function AddEditStaffController() {
       fixed_salary: staffType === "Fixed" ? prev.fixed_salary : "",
       per_person_rate:
         staffType === "Fixed" ? "0.00" : prev.per_person_rate || "0.00",
+      // Keep at least one blank row when switching back to Agency so the
+      // repeater always has somewhere to type.
+      agency_services:
+        staffType === "Agency"
+          ? prev.agency_services && prev.agency_services.length > 0
+            ? prev.agency_services
+            : [{ service_name: "", rate: "" }]
+          : prev.agency_services,
     }));
 
     setErrors((prev) => ({
@@ -312,7 +330,41 @@ function AddEditStaffController() {
       fixed_salary: null,
       per_person_rate: null,
       joining_date: null,
+      agency_services: null,
     }));
+  };
+
+  const handleAgencyServiceChange = (index, field, value) => {
+    setFormData((prev) => {
+      const next = (prev.agency_services || []).map((row, i) =>
+        i === index ? { ...row, [field]: value } : row
+      );
+      return { ...prev, agency_services: next };
+    });
+    if (errors.agency_services) {
+      setErrors((prev) => ({ ...prev, agency_services: null }));
+    }
+  };
+
+  const handleAddAgencyService = () => {
+    setFormData((prev) => ({
+      ...prev,
+      agency_services: [
+        ...(prev.agency_services || []),
+        { service_name: "", rate: "" },
+      ],
+    }));
+  };
+
+  const handleRemoveAgencyService = (index) => {
+    setFormData((prev) => {
+      const list = prev.agency_services || [];
+      // Always keep at least one row so the repeater is never empty.
+      const next = list.length <= 1
+        ? [{ service_name: "", rate: "" }]
+        : list.filter((_, i) => i !== index);
+      return { ...prev, agency_services: next };
+    });
   };
 
   const handleAddRoleSubmit = async (e) => {
@@ -438,6 +490,27 @@ function AddEditStaffController() {
         "Per person rate is required and must be greater than 0";
     }
 
+    if (formData.staff_type === "Agency") {
+      const validRows = (formData.agency_services || []).filter(
+        (s) => String(s.service_name || "").trim() && Number(s.rate) > 0
+      );
+      if (validRows.length === 0) {
+        nextErrors.agency_services =
+          "Add at least one service with a name and rate greater than 0";
+      } else {
+        // Catch half-filled rows: name without rate, or rate without name.
+        const halfFilled = (formData.agency_services || []).some((s) => {
+          const hasName = String(s.service_name || "").trim().length > 0;
+          const hasRate = String(s.rate || "").trim().length > 0;
+          return hasName !== hasRate;
+        });
+        if (halfFilled) {
+          nextErrors.agency_services =
+            "Each service row needs both a service name and a rate";
+        }
+      }
+    }
+
     if (formData.login_enabled) {
       if (!formData.login_username.trim()) {
         nextErrors.login_username = "Login username is required";
@@ -489,6 +562,18 @@ function AddEditStaffController() {
           : null,
         per_person_rate:
           formData.staff_type === "Fixed" ? "0.00" : formData.per_person_rate,
+        // Only ship agency_services when staff_type is Agency. For other
+        // types we send [] so the backend clears any stale entries left
+        // over from a previous Agency configuration.
+        agency_services:
+          formData.staff_type === "Agency"
+            ? (formData.agency_services || [])
+                .map((s) => ({
+                  service_name: String(s.service_name || "").trim(),
+                  rate: String(s.rate || "").trim(),
+                }))
+                .filter((s) => s.service_name && Number(s.rate) > 0)
+            : [],
         is_active: formData.is_active,
         joining_date: formData.joining_date || null,
       };
@@ -575,6 +660,9 @@ function AddEditStaffController() {
       handleCloseAddRoleModal={handleCloseAddRoleModal}
       handleChange={handleChange}
       handleStaffTypeChange={handleStaffTypeChange}
+      handleAgencyServiceChange={handleAgencyServiceChange}
+      handleAddAgencyService={handleAddAgencyService}
+      handleRemoveAgencyService={handleRemoveAgencyService}
       handleStatusToggle={handleStatusToggle}
       handleSubmit={handleSubmit}
       handleCancel={handleCancel}
