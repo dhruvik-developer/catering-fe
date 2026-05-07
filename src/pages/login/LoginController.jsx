@@ -87,6 +87,13 @@ function LoginController() {
       const tenant = loginData?.tenant || null;
       const enabledModules = tenant?.enabled_modules || [];
       const branchProfile = loginData?.branch_profile || null;
+      // Three-tier branch role flags from the updated login response. We
+      // pass them as a single bag so UserContext keeps a small surface.
+      const branchRoleFlags = {
+        branch_role: loginData?.branch_role ?? null,
+        is_main_tenant_admin: Boolean(loginData?.is_main_tenant_admin),
+        is_branch_admin: Boolean(loginData?.is_branch_admin),
+      };
 
       if (!access || !username || !userType) {
         throw new Error("Invalid login response");
@@ -104,7 +111,8 @@ function LoginController() {
         permissions,
         enabledModules,
         tenant,
-        branchProfile
+        branchProfile,
+        branchRoleFlags
       );
       toast.success(response?.data?.message || "Login successfully");
       const target = isPlatformAdminHost()

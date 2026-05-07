@@ -193,6 +193,9 @@ function BranchTable({ branches, onEdit, onView, onDelete }) {
             <TableCell sx={{ fontWeight: 700 }}>Manager</TableCell>
             <TableCell sx={{ fontWeight: 700 }}>Phone</TableCell>
             <TableCell sx={{ fontWeight: 700 }} align="center">
+              Users
+            </TableCell>
+            <TableCell sx={{ fontWeight: 700 }} align="center">
               Status
             </TableCell>
             <TableCell sx={{ fontWeight: 700 }} align="center">
@@ -227,6 +230,9 @@ function BranchTable({ branches, onEdit, onView, onDelete }) {
               </TableCell>
               <TableCell sx={{ color: "text.secondary" }}>
                 {branch.phone_number || "—"}
+              </TableCell>
+              <TableCell align="center" sx={{ fontWeight: 700 }}>
+                {Number(branch.users_count ?? 0)}
               </TableCell>
               <TableCell align="center">
                 <StatusBadge active={branch.is_active} />

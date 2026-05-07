@@ -229,8 +229,10 @@ function Sidebar() {
   const location = useLocation();
   const { t } = useTranslation();
   const { hasPermission } = usePermissions();
-  const { userType } = useContext(UserContext);
-  const isTenantAdmin = String(userType || "").toLowerCase() === "admin";
+  const { isMainTenantAdmin } = useContext(UserContext);
+  // Branches management is for the *main* tenant admin only — branch admins
+  // and branch users must not see it (per backend doc).
+  const isTenantAdmin = Boolean(isMainTenantAdmin);
   const [businessLogo, setBusinessLogo] = useState("");
   const [isLogoLoading, setIsLogoLoading] = useState(!isAdminHost);
 

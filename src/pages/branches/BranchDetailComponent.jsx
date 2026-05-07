@@ -192,6 +192,13 @@ function BranchDetailComponent({
               label="Manager"
               value={branch.manager_username}
             />
+            {branch.created_by_username && (
+              <FieldRow
+                icon={<FiUser size={16} />}
+                label="Created by"
+                value={branch.created_by_username}
+              />
+            )}
           </Paper>
         </Grid>
 
@@ -218,9 +225,12 @@ function BranchDetailComponent({
               </Typography>
               <Chip
                 size="small"
-                label={`${users?.length || 0} user${
-                  users?.length !== 1 ? "s" : ""
-                }`}
+                label={(() => {
+                  const count = Number(
+                    branch?.users_count ?? users?.length ?? 0
+                  );
+                  return `${count} user${count !== 1 ? "s" : ""}`;
+                })()}
                 sx={{ fontWeight: 700 }}
               />
             </Stack>

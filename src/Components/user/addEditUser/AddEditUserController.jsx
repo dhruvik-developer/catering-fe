@@ -1,9 +1,10 @@
 import toast from "react-hot-toast";
 import AddEditUserComponent from "./AddEditUserComponent";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { addUser, updateUserPassword } from "../../../api/PostUsers";
 import { getApiMessage } from "../../../utils/apiResponse";
+import { UserContext } from "../../../context/UserContext";
 
 function AddEditUserController() {
   const { id } = useParams();
@@ -11,13 +12,21 @@ function AddEditUserController() {
   const navigate = useNavigate();
   const { state } = location || {};
   const mode = state?.mode || (id ? "editUser" : "addUser");
+  const { isMainTenantAdmin, isBranchAdmin } = useContext(UserContext);
 
   const [form, setForm] = useState({
     username: "",
+    first_name: "",
+    last_name: "",
     email: "",
     password: "",
     // Empty string = unassigned. Backend accepts null to clear.
     branch_profile_id: "",
+    // Three-tier role. Branch admin can only create branch_user (backend
+    // enforces); for main admin we let them pick branch_admin or branch_user.
+    // main_admin is intentionally NOT an option here — that role is set only
+    // during tenant creation.
+    branch_role: "branch_user",
   });
 
   const [errors, setErrors] = useState({});
@@ -26,12 +35,15 @@ function AddEditUserController() {
     if (mode === "editUser" && state) {
       setForm({
         username: state.username || "",
+        first_name: state.first_name || "",
+        last_name: state.last_name || "",
         email: state.email || "",
         password: "",
         branch_profile_id:
           state.branch_profile?.id ??
           state.branch_profile_id ??
           "",
+        branch_role: state.branch_role || "branch_user",
       });
     }
   }, [mode, state]);
@@ -90,14 +102,27 @@ function AddEditUserController() {
           password: form.password,
         };
 
+        if (form.first_name.trim()) {
+          payload.first_name = form.first_name.trim();
+        }
+        if (form.last_name.trim()) {
+          payload.last_name = form.last_name.trim();
+        }
         if (form.email.trim()) {
           payload.email = form.email.trim();
         }
 
-        // Per the multi-branch backend contract, send branch_profile_id when
-        // the admin picked one; omit otherwise (the backend keeps it null).
-        if (form.branch_profile_id) {
-          payload.branch_profile_id = form.branch_profile_id;
+        // Branch admin: don't send branch_profile_id or branch_role — the
+        // backend forces both to the admin's own branch + branch_user. Main
+        // admin: send whatever they picked.
+        if (isMainTenantAdmin) {
+          if (form.branch_profile_id) {
+            payload.branch_profile_id = form.branch_profile_id;
+          }
+          // Set is_staff to mirror the role choice. Backend rejects this
+          // pair from a branch admin anyway.
+          payload.branch_role = form.branch_role || "branch_user";
+          payload.is_staff = form.branch_role === "branch_admin";
         }
 
         response = await addUser(payload);
@@ -128,6 +153,8 @@ function AddEditUserController() {
       form={form} errors={errors}
       onInputChange={onInputChange}
       onSubmit={handleSubmit}
+      isMainTenantAdmin={isMainTenantAdmin}
+      isBranchAdmin={isBranchAdmin}
     />
   );
 }

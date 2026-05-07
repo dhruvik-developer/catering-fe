@@ -23,15 +23,19 @@ function AddEditUserComponent({
   errors,
   onSubmit,
   onInputChange,
+  isMainTenantAdmin = false,
+  // eslint-disable-next-line no-unused-vars
+  isBranchAdmin = false,
 }) {
   const isEdit = mode === "editUser";
   const [showPassword, setShowPassword] = useState(false);
-  // Branch dropdown is only meaningful when adding a new user. Edit mode is
-  // password-only (matching the existing API). The list 404s gracefully on
-  // single-branch tenants (returns []).
+  // Branch + role dropdowns only matter when (a) we're creating a new user
+  // and (b) the current user is a main tenant admin. Branch admins have
+  // these fields auto-set on the server, so we hide them entirely.
+  const showBranchAndRole = !isEdit && isMainTenantAdmin;
   const { data: branches = [], isLoading: branchesLoading } = useBranches(
     {},
-    { enabled: !isEdit }
+    { enabled: showBranchAndRole }
   );
 
   return (
@@ -96,28 +100,45 @@ function AddEditUserComponent({
                 helperText={errors.email || "Optional"}
               />
 
-              <TextField
-                fullWidth
-                select
-                label="Branch"
-                name="branch_profile_id"
-                value={form.branch_profile_id || ""}
-                onChange={onInputChange}
-                disabled={branchesLoading}
-                helperText={
-                  branchesLoading
-                    ? "Loading branches..."
-                    : "Optional. Assigning a branch limits this user to that branch."
-                }
-              >
-                <MenuItem value="">— No branch —</MenuItem>
-                {branches.map((b) => (
-                  <MenuItem key={b.id} value={b.id}>
-                    {b.name}
-                    {b.branch_code ? ` (${b.branch_code})` : ""}
-                  </MenuItem>
-                ))}
-              </TextField>
+              {showBranchAndRole && (
+                <>
+                  <TextField
+                    fullWidth
+                    select
+                    label="Branch"
+                    name="branch_profile_id"
+                    value={form.branch_profile_id || ""}
+                    onChange={onInputChange}
+                    disabled={branchesLoading}
+                    helperText={
+                      branchesLoading
+                        ? "Loading branches..."
+                        : "Optional. Assigning a branch limits this user to that branch."
+                    }
+                  >
+                    <MenuItem value="">— No branch —</MenuItem>
+                    {branches.map((b) => (
+                      <MenuItem key={b.id} value={b.id}>
+                        {b.name}
+                        {b.branch_code ? ` (${b.branch_code})` : ""}
+                      </MenuItem>
+                    ))}
+                  </TextField>
+
+                  <TextField
+                    fullWidth
+                    select
+                    label="Role"
+                    name="branch_role"
+                    value={form.branch_role || "branch_user"}
+                    onChange={onInputChange}
+                    helperText="Branch admin can manage their own branch. Branch user has data-only access."
+                  >
+                    <MenuItem value="branch_user">Branch User</MenuItem>
+                    <MenuItem value="branch_admin">Branch Admin</MenuItem>
+                  </TextField>
+                </>
+              )}
             </>
           )}
 

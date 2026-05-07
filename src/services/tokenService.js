@@ -8,6 +8,10 @@ const PERMISSIONS_STORAGE_KEY = "permissions";
 const ENABLED_MODULES_STORAGE_KEY = "enabledModules";
 const TENANT_STORAGE_KEY = "tenant";
 const BRANCH_PROFILE_STORAGE_KEY = "branchProfile";
+// Bag of branch-role flags returned by /api/login/. Stored as one JSON blob
+// so we don't fan out into 3 separate keys.
+//   { branch_role, is_main_tenant_admin, is_branch_admin }
+const BRANCH_ROLE_STORAGE_KEY = "branchRoleFlags";
 export const USER_ROLE_ADMIN = "admin";
 
 // Decode the payload of a JWT without verifying the signature. We can't verify
@@ -126,6 +130,30 @@ const tokenService = {
       return null;
     }
   },
+  getBranchRoleFlags: () => {
+    if (typeof window === "undefined")
+      return {
+        branch_role: null,
+        is_main_tenant_admin: false,
+        is_branch_admin: false,
+      };
+    const raw = storage.get(BRANCH_ROLE_STORAGE_KEY);
+    try {
+      const parsed = raw ? JSON.parse(raw) : null;
+      return {
+        branch_role: parsed?.branch_role ?? null,
+        is_main_tenant_admin: Boolean(parsed?.is_main_tenant_admin),
+        is_branch_admin: Boolean(parsed?.is_branch_admin),
+      };
+    } catch (e) {
+      console.error("Error parsing branch role flags from localStorage", e);
+      return {
+        branch_role: null,
+        is_main_tenant_admin: false,
+        is_branch_admin: false,
+      };
+    }
+  },
   setToken: (token) => {
     accessToken = token;
 
@@ -219,6 +247,21 @@ const tokenService = {
 
     storage.remove(BRANCH_PROFILE_STORAGE_KEY);
   },
+  setBranchRoleFlags: (flags) => {
+    if (typeof window === "undefined") return;
+    if (flags && typeof flags === "object") {
+      storage.set(
+        BRANCH_ROLE_STORAGE_KEY,
+        JSON.stringify({
+          branch_role: flags.branch_role ?? null,
+          is_main_tenant_admin: Boolean(flags.is_main_tenant_admin),
+          is_branch_admin: Boolean(flags.is_branch_admin),
+        })
+      );
+      return;
+    }
+    storage.remove(BRANCH_ROLE_STORAGE_KEY);
+  },
   clearAuth: () => {
     accessToken = null;
     refreshToken = null;
@@ -233,6 +276,7 @@ const tokenService = {
     storage.remove(ENABLED_MODULES_STORAGE_KEY);
     storage.remove(TENANT_STORAGE_KEY);
     storage.remove(BRANCH_PROFILE_STORAGE_KEY);
+    storage.remove(BRANCH_ROLE_STORAGE_KEY);
   },
 };
 
