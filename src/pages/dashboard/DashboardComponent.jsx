@@ -927,65 +927,19 @@ const DashboardComponent = ({
               value={stats.completed}
               total={stats.total || 1}
               color="#10b981"
-              sub="Bookings marked done out of all bookings"
             />
             <ProgressBlock
               label="Bookings this month"
               value={stats.thisMonthCount}
               total={stats.total || 1}
               color="#6366f1"
-              sub="Share of total falling in the current month"
             />
             <ProgressBlock
               label="Cancellations"
               value={stats.cancelled}
               total={stats.total || 1}
               color="#ef4444"
-              sub="Bookings flagged cancelled"
             />
-            <Box
-              sx={{
-                p: 1.75,
-                borderRadius: 2,
-                bgcolor: "var(--color-primary-soft)",
-                border: "1px dashed var(--color-primary-border)",
-              }}
-            >
-              <Stack
-                direction="row"
-                spacing={1.25}
-                sx={{ alignItems: "center" }}
-              >
-                <Avatar
-                  variant="rounded"
-                  sx={{
-                    bgcolor: "var(--color-primary)",
-                    color: "var(--color-primary-contrast)",
-                    width: 36,
-                    height: 36,
-                  }}
-                >
-                  <FiDollarSign size={18} />
-                </Avatar>
-                <Box sx={{ flex: 1 }}>
-                  <Typography
-                    variant="caption"
-                    sx={{
-                      fontWeight: 800,
-                      letterSpacing: 0.4,
-                      textTransform: "uppercase",
-                      color: "var(--color-primary)",
-                    }}
-                  >
-                    Tip
-                  </Typography>
-                  <Typography variant="body2" color="text.secondary">
-                    Click any card above to drill into bookings, payments, and
-                    session-level checklists.
-                  </Typography>
-                </Box>
-              </Stack>
-            </Box>
             {stats.cancelled > 0 && (
               <Stack
                 direction="row"

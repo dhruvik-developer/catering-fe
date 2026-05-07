@@ -168,8 +168,41 @@ const App = () => {
 
           const selectedLanguage = profileList[0]?.selected_language;
           if (isSupportedLanguageCode(selectedLanguage)) {
-            applyLanguagePreference(normalizeLanguageCode(selectedLanguage), {
-              reloadIfNeeded: false,
+            const target = normalizeLanguageCode(selectedLanguage);
+
+            // Google Translate locks in its language at page-load based on
+            // the googtrans cookie. On a fresh device the cookie hasn't been
+            // set yet, so the widget initialises in English and our later
+            // dropdown-trigger sometimes silently no-ops (timing-dependent).
+            //
+            // Detect that case and force ONE reload so Google sees the
+            // freshly-set cookie at next load and renders the page in the
+            // tenant's chosen language. The sessionStorage flag stops the
+            // reload-loop after that — subsequent mounts find the cookie
+            // already aligned and proceed normally.
+            const expectedCookie = target === "en" ? "/en/en" : `/en/${target}`;
+            const currentGoogtrans =
+              typeof document !== "undefined"
+                ? document.cookie
+                    .split("; ")
+                    .find((row) => row.startsWith("googtrans="))
+                    ?.split("=")[1]
+                : null;
+            const cookieAlreadyMatches = currentGoogtrans === expectedCookie;
+            const sessionFlagKey = "tenantLangApplied";
+            const alreadyReloadedThisSession =
+              typeof sessionStorage !== "undefined" &&
+              sessionStorage.getItem(sessionFlagKey) === target;
+
+            if (!cookieAlreadyMatches && typeof sessionStorage !== "undefined") {
+              sessionStorage.setItem(sessionFlagKey, target);
+            }
+
+            applyLanguagePreference(target, {
+              // Allow the reload fallback only when (a) the cookie isn't
+              // already set to the right value AND (b) we haven't already
+              // reloaded once this session for this language.
+              reloadIfNeeded: !cookieAlreadyMatches && !alreadyReloadedThisSession,
               retryWidget: true,
             });
           }

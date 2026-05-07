@@ -3,7 +3,7 @@ import toast from "react-hot-toast";
 import { getRules } from "../../../api/FetchRules";
 import RuleComponent from "./RuleComponent";
 import { useLocation, useNavigate } from "react-router-dom";
-import { updateRule } from "../../../api/PutRules";
+import { createRule, updateRule } from "../../../api/PutRules";
 import { logError } from "../../../utils/logger";
 
 function RuleController() {
@@ -15,17 +15,32 @@ function RuleController() {
   const [title, setTitle] = useState("Special Note");
   const [rules, setRules] = useState([]);
   const [loading, setLoading] = useState(true);
+  // Real DB id of the note row, or null if no row exists yet. Drives
+  // create-vs-update on save.
+  const [noteId, setNoteId] = useState(null);
 
   const fetchRules = async () => {
     try {
       const res = await getRules();
       if (res?.data?.status) {
-        const noteData = res.data.data[0];
-        setTitle(noteData.title);
-        const cleanedContent = noteData.content.map((rule) =>
-          rule.replace(/^•\s*/, "")
-        );
-        setRules(cleanedContent);
+        // First-time tenants have no rule row yet — that's expected, not
+        // an error. Fall through with an empty list and a default title;
+        // the form below seeds one blank input so the user can add the
+        // first rule.
+        const noteData = Array.isArray(res.data.data)
+          ? res.data.data[0]
+          : null;
+        if (noteData) {
+          setNoteId(noteData.id ?? null);
+          setTitle(noteData.title || "Special Note");
+          const content = Array.isArray(noteData.content)
+            ? noteData.content
+            : [];
+          setRules(content.map((rule) => String(rule).replace(/^•\s*/, "")));
+        } else {
+          setNoteId(null);
+          setRules([]);
+        }
       } else {
         toast.error("Unable to fetch rules");
       }
@@ -80,19 +95,22 @@ function RuleController() {
   // };
 
   const handleSave = async () => {
-    const id = 1;
-    if (id && rules.length) {
-      const formattedRules = rules.filter((rule) => rule.trim() !== "");
-      const payload = {
-        content: formattedRules,
-      };
-      const response = await updateRule(id, payload);
-      if (response.data.status) {
-        fetchRules();
-        navigate("/user");
-      }
-    } else {
-      toast.error("Cannot add rule. Missing ID or rules.");
+    const formattedRules = rules.filter((rule) => rule.trim() !== "");
+    if (formattedRules.length === 0) {
+      toast.error("Add at least one rule before saving.");
+      return;
+    }
+
+    // First-time tenants have no row yet, so POST instead of PUT. Update
+    // path runs only when we already loaded an existing note id.
+    const payload = { content: formattedRules };
+    const response = noteId
+      ? await updateRule(noteId, payload)
+      : await createRule({ ...payload, title });
+
+    if (response?.data?.status) {
+      fetchRules();
+      navigate("/user");
     }
   };
 
