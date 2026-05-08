@@ -15,7 +15,10 @@ import Loader from "./Components/common/Loader";
 import TenantsController from "./pages/tenancy/TenantsController";
 import { UserProvider } from "./context/UserContext";
 import { BASE_PATH } from "./utils/Config";
-import { isPlatformAdminHost } from "./services/tenantRuntime";
+import {
+  isPlatformAdminHost,
+  isPublicMarketingHost,
+} from "./services/tenantRuntime";
 import { getAllBusinessProfiles } from "./api/BusinessProfile";
 import {
   applyLanguagePreference,
@@ -92,6 +95,10 @@ import {
   SuperAdminAccessControl,
   AddEditTenantController,
   AddEditSubscriptionPlanController,
+  SuperAdminLeads,
+  PublicLayout,
+  PublicLandingPage,
+  PublicContactPage,
 } from "./app/routes";
 
 const DEFAULT_PRIMARY_COLOR = "#845cbd";
@@ -130,7 +137,45 @@ const resolvePrimaryColor = (value) => {
   return DEFAULT_PRIMARY_COLOR;
 };
 
-const App = () => {
+const PublicMarketingApp = () => (
+  <Router basename={BASE_PATH}>
+    <Toaster
+      position="top-center"
+      reverseOrder={false}
+      toastOptions={{
+        duration: 3500,
+        style: {
+          borderRadius: "12px",
+          background: "#ffffff",
+          color: "#1e1a2e",
+          fontSize: "14px",
+          fontWeight: 600,
+          padding: "12px 18px",
+          boxShadow:
+            "0 16px 48px -10px rgba(132, 92, 189, 0.22), 0 4px 12px -4px rgba(15, 23, 42, 0.08)",
+          border: "1px solid #ece6f7",
+        },
+        success: {
+          iconTheme: { primary: "#845cbd", secondary: "#ffffff" },
+        },
+        error: {
+          iconTheme: { primary: "#ef4444", secondary: "#ffffff" },
+        },
+      }}
+    />
+    <Suspense fallback={<Loader />}>
+      <Routes>
+        <Route element={<PublicLayout />}>
+          <Route index element={<PublicLandingPage />} />
+          <Route path="contact" element={<PublicContactPage />} />
+          <Route path="*" element={<Navigate to="/" replace />} />
+        </Route>
+      </Routes>
+    </Suspense>
+  </Router>
+);
+
+const SaaSApp = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -264,6 +309,7 @@ const App = () => {
                     <Route path="/edit-subscription-plan/:id" element={<AddEditSubscriptionPlanController />} />
                     <Route path="/admin-users" element={<SuperAdminUserModels />} />
                     <Route path="/access-control" element={<SuperAdminAccessControl />} />
+                    <Route path="/leads" element={<SuperAdminLeads />} />
                     <Route path="/" element={<Navigate to="/dashboard" replace />} />
                   </>
                 ) : (
@@ -486,5 +532,11 @@ const App = () => {
     </UserProvider>
   );
 };
+
+// Top-level switch: bare localhost / apex domain renders the public marketing
+// site. Anything else (admin.*, tenant.*) renders the existing SaaS app.
+// Hooks live inside the two child components so the rules of hooks hold.
+const App = () =>
+  isPublicMarketingHost() ? <PublicMarketingApp /> : <SaaSApp />;
 
 export default App;

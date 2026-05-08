@@ -83,6 +83,12 @@ const SuperAdminUserModels = lazy(() => import("../pages/superAdmin/UserModelsCo
 const SuperAdminAccessControl = lazy(() => import("../pages/superAdmin/AccessControlController"));
 const AddEditTenantController = lazy(() => import("../pages/tenancy/AddEditTenantController"));
 const AddEditSubscriptionPlanController = lazy(() => import("../pages/superAdmin/AddEditSubscriptionPlanController"));
+const SuperAdminLeads = lazy(() => import("../pages/superAdmin/LeadsController"));
+
+// Public marketing site (rendered when on bare localhost / apex domain)
+const PublicLayout = lazy(() => import("../Components/public/PublicLayout"));
+const PublicLandingPage = lazy(() => import("../pages/public/LandingPage"));
+const PublicContactPage = lazy(() => import("../pages/public/ContactPage"));
 
 export {
   Login,
@@ -153,4 +159,8 @@ export {
   SuperAdminAccessControl,
   AddEditTenantController,
   AddEditSubscriptionPlanController,
+  SuperAdminLeads,
+  PublicLayout,
+  PublicLandingPage,
+  PublicContactPage,
 };

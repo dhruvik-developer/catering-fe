@@ -25,7 +25,7 @@ import {
   TaskAdd01Icon,
   TransactionHistoryIcon,
 } from "@hugeicons/core-free-icons";
-import { FiUsers, FiGrid, FiShield, FiKey, FiHome, FiGitBranch } from "react-icons/fi";
+import { FiUsers, FiGrid, FiShield, FiKey, FiHome, FiGitBranch, FiInbox } from "react-icons/fi";
 import usePermissions from "../../hooks/usePermissions";
 import { getAllBusinessProfiles } from "../../api/BusinessProfile";
 import { isPlatformAdminHost } from "../../services/tenantRuntime";
@@ -162,6 +162,12 @@ const adminMenuItems = [
     labelKey: "sidebar.userModels",
     path: "/admin-users",
     icon: <FiShield size={22} />,
+  },
+  {
+    name: "Leads",
+    labelKey: "sidebar.leads",
+    path: "/leads",
+    icon: <FiInbox size={22} />,
   },
 ];
 

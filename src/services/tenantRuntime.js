@@ -21,6 +21,22 @@ export const isPlatformAdminHost = () => {
   return hostname === "admin.localhost" || hostname.startsWith("admin.");
 };
 
+// Bare localhost or the apex production domain (e.g. trayza.in / www.trayza.in)
+// renders the public marketing website instead of the SaaS app shell. Anything
+// with a leading subdomain (admin., tenant1., etc.) falls through to the
+// existing admin/tenant flow.
+export const isPublicMarketingHost = () => {
+  const hostname = getRuntimeHostname();
+  if (isPlatformAdminHost()) return false;
+  if (hostname === "localhost" || hostname === "127.0.0.1") return true;
+  if (hostname.startsWith("www.")) return true;
+  // Apex domain with no subdomain (one dot or none): trayza.in -> public.
+  // Subdomains like tenant1.trayza.in stay in the SaaS app.
+  const parts = hostname.split(".").filter(Boolean);
+  if (parts.length <= 2 && !hostname.endsWith(".localhost")) return true;
+  return false;
+};
+
 export const getApiBaseUrl = () => {
   const explicitBaseUrl = trimSlashes(import.meta.env.VITE_API_BASE_URL || "");
   const forceStaticBaseUrl =

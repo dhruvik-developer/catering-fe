@@ -1,0 +1,151 @@
+/* -----------------------------------------------------------------------
+ * Public marketing website theme (scoped under .public-site)
+ *
+ * The admin app sets `html, body, #root { overflow: hidden; height: 100vh }`
+ * so its sidebar layout doesn't double-scroll. Marketing pages need natural
+ * page scroll, so when the public layout mounts we add `is-public-host` to
+ * <body> (see PublicLayout.jsx) and reset the offending rules below.
+ *
+ * All design tokens (colors, gradients, shadows) live in `.public-site` so
+ * they only apply inside the marketing tree — the existing admin theme is
+ * untouched.
+ * ----------------------------------------------------------------------- */
+
+body.is-public-host,
+body.is-public-host #root,
+body.is-public-host html {
+  overflow: visible !important;
+  overflow-x: hidden !important;
+  overflow-y: auto !important;
+  height: auto !important;
+}
+
+body.is-public-host {
+  background: #fbfaff !important;
+}
+
+.public-site {
+  /* Premium SaaS palette — purple primary, cream/off-white surface */
+  --ps-primary: #845cbd;
+  --ps-primary-strong: #6d3fb1;
+  --ps-primary-soft: #f3edff;
+  --ps-primary-tint: #faf6ff;
+  --ps-foreground: #1e1a2e;
+  --ps-muted: #6b6582;
+  --ps-border: #ece6f7;
+  --ps-card: #ffffff;
+  --ps-bg: #fbfaff;
+  --ps-accent: #f3edff;
+  --ps-accent-foreground: #5b3a9a;
+
+  --ps-gradient-primary: linear-gradient(135deg, #845cbd 0%, #b486ec 100%);
+  --ps-gradient-hero: linear-gradient(160deg, #6d3fb1 0%, #b27adb 50%, #ec84c8 100%);
+  --ps-gradient-subtle: linear-gradient(135deg, #f7f2ff 0%, #fdfbff 100%);
+  --ps-gradient-text: linear-gradient(120deg, #6d3fb1 0%, #b27adb 50%, #ec84c8 100%);
+
+  --ps-shadow-card: 0 4px 24px -4px rgba(132, 92, 189, 0.10);
+  --ps-shadow-elevated: 0 16px 48px -10px rgba(132, 92, 189, 0.22);
+
+  font-family: "Inter", "DM Sans", system-ui, -apple-system, BlinkMacSystemFont,
+    "Segoe UI", Roboto, sans-serif;
+  color: var(--ps-foreground);
+  background: var(--ps-bg);
+}
+
+.public-site h1,
+.public-site h2,
+.public-site h3,
+.public-site h4 {
+  font-family: "Playfair Display", "DM Serif Display", Georgia, serif;
+  letter-spacing: -0.01em;
+}
+
+.public-site .ps-text-gradient {
+  background: var(--ps-gradient-text);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+}
+
+.public-site .ps-bg-gradient-primary {
+  background-image: var(--ps-gradient-primary);
+}
+.public-site .ps-bg-gradient-hero {
+  background-image: var(--ps-gradient-hero);
+}
+.public-site .ps-bg-gradient-subtle {
+  background-image: var(--ps-gradient-subtle);
+}
+
+.public-site .ps-shadow-card {
+  box-shadow: var(--ps-shadow-card);
+}
+.public-site .ps-shadow-elevated {
+  box-shadow: var(--ps-shadow-elevated);
+}
+
+.public-site .ps-card {
+  background: var(--ps-card);
+  border: 1px solid var(--ps-border);
+  border-radius: 1rem;
+  box-shadow: var(--ps-shadow-card);
+}
+
+/* The admin app overrides scrollbar globally; public site keeps a slightly
+   wider scrollbar for the long landing page. */
+body.is-public-host::-webkit-scrollbar {
+  width: 10px;
+}
+body.is-public-host::-webkit-scrollbar-thumb {
+  background-color: rgba(132, 92, 189, 0.25);
+}
+body.is-public-host::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(132, 92, 189, 0.45);
+}
+
+/* ===== animations ===== */
+@keyframes psFadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.public-site .ps-fade-up {
+  animation: psFadeUp 0.7s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+/* The admin app applies `button:hover { transform: translateY(-2px) }` and
+   strong shadow globally. That fights with our gradient CTAs which already
+   have their own opacity-based hover. Reset inside the public site so our
+   buttons feel calmer. */
+.public-site button:hover:not(:disabled),
+.public-site .ps-link:hover {
+  transform: none !important;
+  box-shadow: none !important;
+}
+.public-site button:active:not(:disabled) {
+  transform: scale(0.99) !important;
+}
+
+/* Inputs in public site — keep neutral, override admin's lift effect */
+.public-site input:focus,
+.public-site textarea:focus,
+.public-site select:focus {
+  transform: none !important;
+  box-shadow: 0 0 0 3px rgba(132, 92, 189, 0.18) !important;
+}
+
+/* Decorative gradient blobs */
+.public-site .ps-blob {
+  position: absolute;
+  border-radius: 9999px;
+  filter: blur(80px);
+  pointer-events: none;
+  z-index: 0;
+}
