@@ -413,12 +413,14 @@ function SettingsComponent({
                   </label>
                   {isEditing ? (
                     <input
-                      type="text"
+                      type="tel"
                       name="phone_number"
                       value={formData.phone_number}
                       onChange={handleInputChange}
-                      placeholder="Primary contact number"
+                      placeholder="10-digit mobile number"
                       autoComplete="off"
+                      maxLength={10}
+                      inputMode="numeric"
                       className="w-full p-3 border-2 border-[var(--color-primary-border)] rounded-xl bg-white focus:outline-none focus:border-[var(--color-primary)] focus:ring-2 focus:ring-[var(--color-primary)]/20 transition-all text-gray-800 font-medium"
                     />
                   ) : (
@@ -438,12 +440,14 @@ function SettingsComponent({
                   </label>
                   {isEditing ? (
                     <input
-                      type="text"
+                      type="tel"
                       name="whatsapp_number"
                       value={formData.whatsapp_number}
                       onChange={handleInputChange}
-                      placeholder="WhatsApp contact number"
+                      placeholder="10-digit WhatsApp number"
                       autoComplete="off"
+                      maxLength={10}
+                      inputMode="numeric"
                       className="w-full p-3 border-2 border-[var(--color-primary-border)] rounded-xl bg-white focus:outline-none focus:border-[var(--color-primary)] focus:ring-2 focus:ring-[var(--color-primary)]/20 transition-all text-gray-800 font-medium"
                     />
                   ) : (

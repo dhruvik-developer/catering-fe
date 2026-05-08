@@ -18,6 +18,10 @@ import {
 import toast from "react-hot-toast";
 import usePermissions from "../../hooks/usePermissions";
 import { extractArray, normalizeQueryParams } from "../../utils/queryData";
+import {
+  getPhoneValidationError,
+  sanitizePhoneInput,
+} from "../../utils/phoneValidation";
 import Swal from "sweetalert2";
 
 const ALLOWED_LOGO_MIME_TYPES = [
@@ -276,7 +280,7 @@ function SettingsController() {
     }
 
     if (name === "phone_number" || name === "whatsapp_number") {
-      const formattedValue = value.replace(/[^0-9]/g, "").slice(0, 10);
+      const formattedValue = sanitizePhoneInput(value);
       setFormData((prev) => ({
         ...prev,
         [name]: formattedValue,
@@ -514,13 +518,15 @@ function SettingsController() {
       return;
     }
 
-    if (formData.phone_number && formData.phone_number.length !== 10) {
-      toast.error("Phone number must be exactly 10 digits");
+    const phoneError = getPhoneValidationError(formData.phone_number);
+    if (phoneError) {
+      toast.error(`Phone number: ${phoneError}`);
       return;
     }
-    
-    if (formData.whatsapp_number && formData.whatsapp_number.length !== 10) {
-      toast.error("WhatsApp number must be exactly 10 digits");
+
+    const whatsappError = getPhoneValidationError(formData.whatsapp_number);
+    if (whatsappError) {
+      toast.error(`WhatsApp number: ${whatsappError}`);
       return;
     }
 

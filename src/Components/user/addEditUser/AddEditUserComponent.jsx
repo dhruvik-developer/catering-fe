@@ -15,6 +15,7 @@ import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { FiArrowLeft, FiUserPlus } from "react-icons/fi";
 import PageHero from "../../common/PageHero";
 import { useBranches } from "../../../hooks/useBranches";
+import PasswordStrengthHints from "../../common/formInputs/PasswordStrengthHints";
 
 function AddEditUserComponent({
   navigate,
@@ -77,7 +78,13 @@ function AddEditUserComponent({
       <Box component="form" onSubmit={onSubmit}>
         <Stack spacing={2.5}>
           {!isEdit && (
-            <>
+            <Box
+              sx={{
+                display: "grid",
+                gap: 2,
+                gridTemplateColumns: { xs: "1fr", sm: "1fr 1fr" },
+              }}
+            >
               <TextField
                 fullWidth
                 label="User Name"
@@ -139,46 +146,79 @@ function AddEditUserComponent({
                   </TextField>
                 </>
               )}
-            </>
+
+              <Box>
+                <TextField
+                  fullWidth
+                  label="Password"
+                  type={showPassword ? "text" : "password"}
+                  placeholder={errors.password || "Enter Password"}
+                  name="password"
+                  value={form.password}
+                  onChange={onInputChange}
+                  autoComplete="new-password"
+                  error={!!errors.password}
+                  helperText={errors.password || ""}
+                  slotProps={{
+                    input: {
+                      endAdornment: (
+                        <InputAdornment position="end">
+                          <IconButton
+                            size="small"
+                            edge="end"
+                            onClick={() => setShowPassword((s) => !s)}
+                          >
+                            {showPassword ? <FaEyeSlash /> : <FaEye />}
+                          </IconButton>
+                        </InputAdornment>
+                      ),
+                    },
+                  }}
+                />
+                <PasswordStrengthHints value={form.password} alwaysShow />
+              </Box>
+            </Box>
           )}
 
           {isEdit && (
-            <Typography variant="body2" color="text.secondary">
-              User profile update API abhi backend me available nahi hai. Yahan
-              se sirf password change hota hai.
-            </Typography>
-          )}
+            <>
+              <Typography variant="body2" color="text.secondary">
+                User profile update API abhi backend me available nahi hai. Yahan
+                se sirf password change hota hai.
+              </Typography>
 
-          <TextField
-            fullWidth
-            label={isEdit ? "New Password" : "Password"}
-            type={showPassword ? "text" : "password"}
-            placeholder={
-              errors.password ||
-              (isEdit ? "Enter New Password" : "Enter Password")
-            }
-            name="password"
-            value={form.password}
-            onChange={onInputChange}
-            autoComplete="new-password"
-            error={!!errors.password}
-            helperText={errors.password || ""}
-            slotProps={{
-              input: {
-                endAdornment: (
-                  <InputAdornment position="end">
-                    <IconButton
-                      size="small"
-                      edge="end"
-                      onClick={() => setShowPassword((s) => !s)}
-                    >
-                      {showPassword ? <FaEyeSlash /> : <FaEye />}
-                    </IconButton>
-                  </InputAdornment>
-                ),
-              },
-            }}
-          />
+              <Box sx={{ maxWidth: { sm: 480 } }}>
+                <TextField
+                  fullWidth
+                  label="New Password"
+                  type={showPassword ? "text" : "password"}
+                  placeholder={errors.password || "Enter New Password"}
+                  name="password"
+                  value={form.password}
+                  onChange={onInputChange}
+                  autoComplete="new-password"
+                  error={!!errors.password}
+                  helperText={errors.password || ""}
+                  slotProps={{
+                    input: {
+                      endAdornment: (
+                        <InputAdornment position="end">
+                          <IconButton
+                            size="small"
+                            edge="end"
+                            onClick={() => setShowPassword((s) => !s)}
+                          >
+                            {showPassword ? <FaEyeSlash /> : <FaEye />}
+                          </IconButton>
+                        </InputAdornment>
+                      ),
+                    },
+                  }}
+                />
+                <PasswordStrengthHints value={form.password} alwaysShow />
+              </Box>
+            </>
+          )}
 
           <Stack direction="row" sx={{ justifyContent: "center" }}>
             <Button

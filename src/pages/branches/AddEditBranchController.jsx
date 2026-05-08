@@ -9,6 +9,10 @@ import {
   updateBranch,
 } from "../../api/branches";
 import { logError } from "../../utils/logger";
+import {
+  getPhoneValidationError,
+  sanitizePhoneInput,
+} from "../../utils/phoneValidation";
 
 const blankForm = () => ({
   name: "",
@@ -89,9 +93,13 @@ function AddEditBranchController() {
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
+    let nextValue = type === "checkbox" ? checked : value;
+    if (name === "phone_number") {
+      nextValue = sanitizePhoneInput(value);
+    }
     setForm((prev) => ({
       ...prev,
-      [name]: type === "checkbox" ? checked : value,
+      [name]: nextValue,
     }));
     if (errors[name]) {
       setErrors((prev) => ({ ...prev, [name]: null }));
@@ -108,8 +116,9 @@ function AddEditBranchController() {
     ) {
       next.email = "Enter a valid email";
     }
-    if (form.phone_number.trim() && !/^\d{6,15}$/.test(form.phone_number.trim())) {
-      next.phone_number = "Phone must be 6–15 digits";
+    const phoneError = getPhoneValidationError(form.phone_number);
+    if (phoneError) {
+      next.phone_number = phoneError;
     }
     setErrors(next);
     return Object.keys(next).length === 0;

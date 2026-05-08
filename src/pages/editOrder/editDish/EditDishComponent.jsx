@@ -315,17 +315,13 @@ function EditDishComponent({
                 <TextField
                   fullWidth
                   name="mobile_no"
+                  type="tel"
                   value={formData.mobile_no}
                   onChange={handleChange}
-                  slotProps={{ htmlInput: { maxLength: 10 } }}
+                  slotProps={{ htmlInput: { maxLength: 10, inputMode: "numeric" } }}
                   placeholder={errors.mobile_no || "10-digit mobile"}
                   error={!!errors.mobile_no}
                   helperText={errors.mobile_no || ""}
-                  onInput={(e) =>
-                    (e.target.value = e.target.value
-                      .replace(/[^0-9]/g, "")
-                      .slice(0, 10))
-                  }
                 />
               </Grid>
               <Grid size={{ xs: 12, md: 6, lg: 3 }}>

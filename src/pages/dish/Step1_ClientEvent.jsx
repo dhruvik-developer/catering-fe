@@ -171,10 +171,11 @@ function Step1_ClientEvent({
               fullWidth
               label={t("dishFlow.client.mobileNumber")}
               name="mobile_no"
+              type="tel"
               value={formData.mobile_no || ""}
               onChange={handleChange}
               placeholder={errors.mobile_no || t("dishFlow.client.mobilePlaceholder")}
-              slotProps={{ htmlInput: { maxLength: 10 } }}
+              slotProps={{ htmlInput: { maxLength: 10, inputMode: "numeric" } }}
               error={Boolean(errors.mobile_no)}
               helperText={errors.mobile_no || undefined}
             />

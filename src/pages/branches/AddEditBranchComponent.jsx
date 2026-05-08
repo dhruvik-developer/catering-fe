@@ -167,10 +167,13 @@ function AddEditBranchComponent({
                 fullWidth
                 label="Phone Number"
                 name="phone_number"
+                type="tel"
+                placeholder="10-digit mobile number"
                 value={form.phone_number}
                 onChange={onChange}
                 error={Boolean(errors.phone_number)}
                 helperText={errors.phone_number || " "}
+                slotProps={{ htmlInput: { maxLength: 10, inputMode: "numeric" } }}
               />
             </Grid>
             <Grid size={{ xs: 12, sm: 6 }}>

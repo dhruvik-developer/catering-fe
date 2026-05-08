@@ -1,4 +1,5 @@
 /* eslint-disable react/prop-types */
+import { useState } from "react";
 import {
   Alert,
   Avatar,
@@ -7,6 +8,7 @@ import {
   Divider,
   FormControlLabel,
   IconButton,
+  InputAdornment,
   MenuItem,
   Paper,
   Select,
@@ -17,10 +19,11 @@ import {
 } from "@mui/material";
 import Grid from "@mui/material/Grid";
 import { AnimatePresence, motion } from "framer-motion";
-import { FaTimes } from "react-icons/fa";
+import { FaEye, FaEyeSlash, FaTimes } from "react-icons/fa";
 import { FiArrowLeft, FiPlus, FiTruck } from "react-icons/fi";
 import Loader from "../../common/Loader";
 import PageHero from "../../common/PageHero";
+import PasswordStrengthHints from "../../common/formInputs/PasswordStrengthHints";
 
 function AddEditVendorComponent({
   navigate,
@@ -38,6 +41,7 @@ function AddEditVendorComponent({
   handleAddCategoryRow,
 }) {
   const isEdit = mode === "edit";
+  const [showPassword, setShowPassword] = useState(false);
 
   if (loading) {
     return (
@@ -94,26 +98,34 @@ function AddEditVendorComponent({
 
       <Box component="form" onSubmit={onSubmit}>
         <Stack spacing={2.5}>
-          <TextField
-            fullWidth
-            label="Vendor Name *"
-            placeholder="Enter vendor name"
-            name="name"
-            value={form.name}
-            onChange={onInputChange}
-            error={!!errors.name}
-            helperText={errors.name || ""}
-          />
-          <TextField
-            fullWidth
-            label="Mobile Number"
-            placeholder="Enter mobile number"
-            name="mobile_no"
-            value={form.mobile_no}
-            onChange={onInputChange}
-            error={!!errors.mobile_no}
-            helperText={errors.mobile_no || ""}
-          />
+          <Grid container spacing={2}>
+            <Grid size={{ xs: 12, md: 6 }}>
+              <TextField
+                fullWidth
+                label="Vendor Name *"
+                placeholder="Enter vendor name"
+                name="name"
+                value={form.name}
+                onChange={onInputChange}
+                error={!!errors.name}
+                helperText={errors.name || ""}
+              />
+            </Grid>
+            <Grid size={{ xs: 12, md: 6 }}>
+              <TextField
+                fullWidth
+                label="Mobile Number"
+                placeholder="10-digit mobile number"
+                name="mobile_no"
+                type="tel"
+                value={form.mobile_no}
+                onChange={onInputChange}
+                error={!!errors.mobile_no}
+                helperText={errors.mobile_no || ""}
+                slotProps={{ htmlInput: { maxLength: 10, inputMode: "numeric" } }}
+              />
+            </Grid>
+          </Grid>
           <TextField
             fullWidth
             multiline
@@ -188,11 +200,11 @@ function AddEditVendorComponent({
                   <TextField
                     fullWidth
                     label={`Login Password${hasExistingLogin ? "" : " *"}`}
-                    type="password"
+                    type={showPassword ? "text" : "password"}
                     placeholder={
                       hasExistingLogin
                         ? "Leave blank to keep current password"
-                        : "Minimum 4 characters"
+                        : "Create a strong password"
                     }
                     name="login_password"
                     value={form.login_password}
@@ -200,6 +212,26 @@ function AddEditVendorComponent({
                     autoComplete="new-password"
                     error={!!errors.login_password}
                     helperText={errors.login_password || ""}
+                    slotProps={{
+                      input: {
+                        endAdornment: (
+                          <InputAdornment position="end">
+                            <IconButton
+                              size="small"
+                              edge="end"
+                              onClick={() => setShowPassword((s) => !s)}
+                              aria-label={showPassword ? "Hide password" : "Show password"}
+                            >
+                              {showPassword ? <FaEyeSlash /> : <FaEye />}
+                            </IconButton>
+                          </InputAdornment>
+                        ),
+                      },
+                    }}
+                  />
+                  <PasswordStrengthHints
+                    value={form.login_password}
+                    alwaysShow={!hasExistingLogin}
                   />
                 </Grid>
                 <Grid size={12}>

@@ -15,6 +15,11 @@ import {
   getCollectionResponse,
   getEntityResponse,
 } from "../../../utils/apiResponse";
+import {
+  getPhoneValidationError,
+  sanitizePhoneInput,
+} from "../../../utils/phoneValidation";
+import { getPasswordValidationError } from "../../../utils/passwordValidation";
 import AddEditStaffComponent from "./AddEditStaffComponent";
 
 const ADD_NEW_ROLE_OPTION_VALUE = "__ADD_NEW__";
@@ -237,7 +242,7 @@ function AddEditStaffController() {
     }
 
     if (name === "phone") {
-      const formattedValue = value.replace(/[^0-9]/g, "").slice(0, 10);
+      const formattedValue = sanitizePhoneInput(value);
       setFormData((prev) => ({ ...prev, phone: formattedValue }));
       if (errors.phone) {
         setErrors((prev) => ({ ...prev, phone: null }));
@@ -459,10 +464,9 @@ function AddEditStaffController() {
 
     if (!formData.name.trim()) nextErrors.name = "Name is required";
 
-    if (!formData.phone.trim()) {
-      nextErrors.phone = "Phone number is required";
-    } else if (!/^\d{10}$/.test(formData.phone)) {
-      nextErrors.phone = "Phone number must be exactly 10 digits";
+    const phoneError = getPhoneValidationError(formData.phone, { required: true });
+    if (phoneError) {
+      nextErrors.phone = phoneError;
     }
 
     if (!formData.role || !String(formData.role).trim()) {
@@ -516,13 +520,11 @@ function AddEditStaffController() {
         nextErrors.login_username = "Login username is required";
       }
 
-      if (!hasExistingLogin && !formData.login_password.trim()) {
-        nextErrors.login_password = "Login password is required";
-      } else if (
-        formData.login_password.trim() &&
-        formData.login_password.trim().length < 4
-      ) {
-        nextErrors.login_password = "Password must be at least 4 characters";
+      const passwordError = getPasswordValidationError(formData.login_password, {
+        required: !hasExistingLogin,
+      });
+      if (passwordError) {
+        nextErrors.login_password = passwordError;
       }
 
       if (

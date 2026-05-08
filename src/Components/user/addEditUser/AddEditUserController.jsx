@@ -4,6 +4,7 @@ import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { useContext, useEffect, useState } from "react";
 import { addUser, updateUserPassword } from "../../../api/PostUsers";
 import { getApiMessage } from "../../../utils/apiResponse";
+import { getPasswordValidationError } from "../../../utils/passwordValidation";
 import { UserContext } from "../../../context/UserContext";
 
 function AddEditUserController() {
@@ -70,10 +71,9 @@ function AddEditUserController() {
       }
     }
 
-    if (!password.trim()) {
-      newErrors.password = "Password is required";
-    } else if (password.length < 4) {
-      newErrors.password = "Password must be at least 4 characters";
+    const passwordError = getPasswordValidationError(password, { required: true });
+    if (passwordError) {
+      newErrors.password = passwordError;
     }
 
     setErrors(newErrors);

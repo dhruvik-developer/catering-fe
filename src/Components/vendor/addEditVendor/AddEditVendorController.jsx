@@ -9,6 +9,11 @@ import {
 } from "../../../hooks/useVendorMutations";
 import { useVendorById } from "../../../hooks/useVendors";
 import { getApiErrorMessage } from "../../../utils/apiResponse";
+import {
+  getPhoneValidationError,
+  sanitizePhoneInput,
+} from "../../../utils/phoneValidation";
+import { getPasswordValidationError } from "../../../utils/passwordValidation";
 import AddEditVendorComponent from "./AddEditVendorComponent";
 
 function AddEditVendorController() {
@@ -96,7 +101,7 @@ function AddEditVendorController() {
     const { name, value, type, checked } = e.target;
 
     if (name === "mobile_no") {
-      const formattedValue = value.replace(/[^0-9]/g, "").slice(0, 10);
+      const formattedValue = sanitizePhoneInput(value);
       setForm((prev) => ({ ...prev, mobile_no: formattedValue }));
       if (errors.mobile_no) {
         setErrors((prev) => ({ ...prev, mobile_no: "" }));
@@ -171,8 +176,9 @@ function AddEditVendorController() {
       nextErrors.name = "Vendor name is required";
     }
 
-    if (form.mobile_no && form.mobile_no.length !== 10) {
-      nextErrors.mobile_no = "Mobile number must be exactly 10 digits";
+    const mobileError = getPhoneValidationError(form.mobile_no);
+    if (mobileError) {
+      nextErrors.mobile_no = mobileError;
     }
 
     if (form.login_enabled) {
@@ -180,13 +186,11 @@ function AddEditVendorController() {
         nextErrors.login_username = "Login username is required";
       }
 
-      if (!hasExistingLogin && !form.login_password.trim()) {
-        nextErrors.login_password = "Login password is required";
-      } else if (
-        form.login_password.trim() &&
-        form.login_password.trim().length < 4
-      ) {
-        nextErrors.login_password = "Password must be at least 4 characters";
+      const passwordError = getPasswordValidationError(form.login_password, {
+        required: !hasExistingLogin,
+      });
+      if (passwordError) {
+        nextErrors.login_password = passwordError;
       }
 
       if (

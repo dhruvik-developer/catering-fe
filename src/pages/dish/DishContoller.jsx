@@ -8,6 +8,10 @@ import { createEventBooking } from "../../api/PostEventBooking";
 import { useCategories } from "../../hooks/useCategories";
 import { translateTimeLabel } from "./dishI18n";
 import { logError } from "../../utils/logger";
+import {
+  isValidIndianMobile,
+  sanitizePhoneInput,
+} from "../../utils/phoneValidation";
 
 function DishContoller() {
   const { t } = useTranslation();
@@ -113,8 +117,7 @@ function DishContoller() {
   const handleChange = (e) => {
     const { name, value } = e.target;
     if (name === "mobile_no") {
-      let formattedValue = value.replace(/[^0-9]/g, "");
-      formattedValue = formattedValue.slice(0, 10);
+      const formattedValue = sanitizePhoneInput(value);
 
       setFormData({ ...formData, [name]: formattedValue });
     } else if (["per_dish_amount", "estimated_persons"].includes(name)) {
@@ -343,6 +346,8 @@ function DishContoller() {
       newErrors.mobile_no = t("dishFlow.validation.mobileRequired");
     } else if (formData.mobile_no.length !== 10) {
       newErrors.mobile_no = t("dishFlow.validation.mobileTenDigits");
+    } else if (!isValidIndianMobile(formData.mobile_no)) {
+      newErrors.mobile_no = t("dishFlow.validation.mobileInvalidStart");
     }
 
     // if (!formData.reference.trim()) newErrors.reference = "Reference is required";
@@ -443,6 +448,8 @@ function DishContoller() {
       newErrors.mobile_no = t("dishFlow.validation.mobileRequired");
     } else if (formData.mobile_no.length !== 10) {
       newErrors.mobile_no = t("dishFlow.validation.mobileTenDigits");
+    } else if (!isValidIndianMobile(formData.mobile_no)) {
+      newErrors.mobile_no = t("dishFlow.validation.mobileInvalidStart");
     }
 
     if (!formData.schedule || formData.schedule.length === 0) {

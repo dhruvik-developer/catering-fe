@@ -18,6 +18,10 @@ import {
   getSelectedItemId,
   getSelectedItemName,
 } from "../../../utils/categoryTree";
+import {
+  isValidIndianMobile,
+  sanitizePhoneInput,
+} from "../../../utils/phoneValidation";
 
 function EditDishContoller() {
   const { id } = useParams();
@@ -330,8 +334,7 @@ function EditDishContoller() {
   const handleChange = (e) => {
     const { name, value } = e.target;
     if (name === "mobile_no") {
-      let formattedValue = value.replace(/[^0-9]/g, "");
-      formattedValue = formattedValue.slice(0, 10);
+      const formattedValue = sanitizePhoneInput(value);
       setFormData({ ...formData, [name]: formattedValue });
     } else if (["per_dish_amount", "estimated_persons"].includes(name)) {
       const numericValue = value.replace(/[^0-9]/g, "");
@@ -562,6 +565,8 @@ function EditDishContoller() {
       newErrors.mobile_no = "Mobile number is required";
     } else if (formData.mobile_no.length !== 10) {
       newErrors.mobile_no = "Mobile number must be exactly 10 digits";
+    } else if (!isValidIndianMobile(formData.mobile_no)) {
+      newErrors.mobile_no = "Mobile number must start with 6, 7, 8, or 9";
     }
 
     // if (!formData.reference.trim()) newErrors.reference = "Reference is required";

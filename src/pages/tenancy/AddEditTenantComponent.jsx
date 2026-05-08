@@ -31,6 +31,7 @@ import {
 } from "react-icons/fi";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import PageHero from "../../Components/common/PageHero";
+import PasswordStrengthHints from "../../Components/common/formInputs/PasswordStrengthHints";
 
 const SectionCard = ({ icon, title, subtitle, children }) => (
   <Card
@@ -215,9 +216,13 @@ function AddEditTenantComponent({
               fullWidth
               label="Contact phone"
               name="contact_phone"
+              type="tel"
+              placeholder="10-digit mobile number"
               value={form.contact_phone}
               onChange={onChange}
-              sx={{ gridColumn: { sm: "span 2" } }}
+              error={!!errors.contact_phone}
+              helperText={errors.contact_phone || ""}
+              slotProps={{ htmlInput: { maxLength: 10, inputMode: "numeric" } }}
             />
           </Box>
         </SectionCard>
@@ -352,40 +357,44 @@ function AddEditTenantComponent({
               autoComplete="off"
               disabled={isEdit}
             />
-            <TextField
-              fullWidth
-              label="Admin Password"
-              name="admin_password"
-              type={showPassword ? "text" : "password"}
-              value={form.admin_password}
-              onChange={onChange}
-              autoComplete="new-password"
-              disabled={isEdit}
-              error={!!errors.admin_password}
-              helperText={
-                errors.admin_password ||
-                (isEdit
-                  ? "Use the operations portal to reset tenant passwords"
-                  : "")
-              }
-              sx={{ gridColumn: { sm: "span 2" } }}
-              slotProps={{
-                input: {
-                  endAdornment: (
-                    <InputAdornment position="end">
-                      <IconButton
-                        size="small"
-                        edge="end"
-                        onClick={() => setShowPassword((s) => !s)}
-                        disabled={isEdit}
-                      >
-                        {showPassword ? <FaEyeSlash /> : <FaEye />}
-                      </IconButton>
-                    </InputAdornment>
-                  ),
-                },
-              }}
-            />
+            <Box>
+              <TextField
+                fullWidth
+                label="Admin Password"
+                name="admin_password"
+                type={showPassword ? "text" : "password"}
+                value={form.admin_password}
+                onChange={onChange}
+                autoComplete="new-password"
+                disabled={isEdit}
+                error={!!errors.admin_password}
+                helperText={
+                  errors.admin_password ||
+                  (isEdit
+                    ? "Use the operations portal to reset tenant passwords"
+                    : "")
+                }
+                slotProps={{
+                  input: {
+                    endAdornment: (
+                      <InputAdornment position="end">
+                        <IconButton
+                          size="small"
+                          edge="end"
+                          onClick={() => setShowPassword((s) => !s)}
+                          disabled={isEdit}
+                        >
+                          {showPassword ? <FaEyeSlash /> : <FaEye />}
+                        </IconButton>
+                      </InputAdornment>
+                    ),
+                  },
+                }}
+              />
+              {!isEdit && (
+                <PasswordStrengthHints value={form.admin_password} alwaysShow />
+              )}
+            </Box>
           </Box>
         </SectionCard>
 

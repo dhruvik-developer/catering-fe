@@ -10,6 +10,11 @@ import {
 } from "../../api/TenancyApis";
 import { getPermissionModules } from "../../api/AccessControlApis";
 import { getApiMessage } from "../../utils/apiResponse";
+import {
+  getPhoneValidationError,
+  sanitizePhoneInput,
+} from "../../utils/phoneValidation";
+import { getPasswordValidationError } from "../../utils/passwordValidation";
 import { queryClient } from "../../lib/queryClient";
 
 const EMPTY_FORM = {
@@ -194,7 +199,8 @@ function AddEditTenantController() {
       return;
     }
 
-    setForm((prev) => ({ ...prev, [name]: value }));
+    const nextValue = name === "contact_phone" ? sanitizePhoneInput(value) : value;
+    setForm((prev) => ({ ...prev, [name]: nextValue }));
     setErrors((prev) => ({ ...prev, [name]: "" }));
   };
 
@@ -252,9 +258,23 @@ function AddEditTenantController() {
     ) {
       newErrors.contact_email = "Enter a valid email";
     }
-    if (!isEdit && form.admin_username.trim() && !form.admin_password.trim()) {
-      newErrors.admin_password =
-        "Password is required when an admin username is provided";
+
+    const contactPhoneError = getPhoneValidationError(form.contact_phone);
+    if (contactPhoneError) {
+      newErrors.contact_phone = contactPhoneError;
+    }
+    if (!isEdit && form.admin_username.trim()) {
+      const adminPasswordError = getPasswordValidationError(form.admin_password, {
+        required: true,
+      });
+      if (adminPasswordError) {
+        newErrors.admin_password = adminPasswordError;
+      }
+    } else if (!isEdit && form.admin_password.trim()) {
+      const adminPasswordError = getPasswordValidationError(form.admin_password);
+      if (adminPasswordError) {
+        newErrors.admin_password = adminPasswordError;
+      }
     }
 
     // Domain validation for user-provided hostnames.
