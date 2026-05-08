@@ -30,10 +30,15 @@ const ensureFontsLoaded = () => {
 const PublicLayout = () => {
   useEffect(() => {
     ensureFontsLoaded();
+    // Mark BOTH <html> and <body>. The admin shell sets `html, body { overflow:
+    // hidden; height: 100% }` so we have to override the rule on the html
+    // element too — page scroll lives on <html>, not <body>.
+    document.documentElement.classList.add("is-public-host");
     document.body.classList.add("is-public-host");
     const previousTitle = document.title;
     document.title = "Trayza — Catering Business Management Platform";
     return () => {
+      document.documentElement.classList.remove("is-public-host");
       document.body.classList.remove("is-public-host");
       document.title = previousTitle;
     };
